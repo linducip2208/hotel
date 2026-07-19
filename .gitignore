@@ -41,3 +41,9 @@ yarn-error.log
 
 # License pairing v3 — encrypted lock file, never commit
 storage/app/.license.lock
+
+# Backup / zip archives
+*.zip
+*.rar
+*.7z
+*.tar.gz
