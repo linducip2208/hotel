@@ -142,7 +142,7 @@
         $isFinance = !in_array($roleName, ['front_office', 'cashier', 'housekeeping', 'pos_server', 'pos_cashier']);
         $isRevenue = !in_array($roleName, ['housekeeping', 'pos_server', 'pos_cashier']);
         $isMarketing = $isRevenue;
-        $isSistem  = in_array($roleName, ['super_owner', 'it_admin']);
+        $isSistem  = in_array($roleName, ['super_owner', 'it_admin', 'manager']);
     @endphp
 
     {{-- ═══ 1. 🏠 Beranda ═══ --}}
