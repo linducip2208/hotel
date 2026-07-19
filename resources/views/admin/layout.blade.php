@@ -13,6 +13,34 @@
     .scrollbar-thin::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:3px}
     .nav-chevron{transition:transform .2s}
     [aria-expanded="true"] .nav-chevron{transform:rotate(90deg)}
+
+    @media (max-width: 1023px) {
+        aside { width: 220px; }
+        .lg\:pl-72 { padding-left: 220px; }
+        h1 { font-size: 1.5rem; }
+        h2 { font-size: 1.25rem; }
+    }
+
+    @media (max-width: 640px) {
+        h1 { font-size: 1.25rem; }
+        h2 { font-size: 1.125rem; }
+    }
+
+    @media print {
+        aside, header, nav, button, .no-print, footer { display: none !important; }
+        .lg\:pl-72, main { padding-left: 0 !important; margin-left: 0 !important; }
+        body { background: white !important; font-size: 12px; }
+        .shadow, .border { box-shadow: none !important; border: 1px solid #e2e8f0 !important; }
+        a { text-decoration: none; color: inherit; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
 </style>
 </head>
 <body class="h-full bg-slate-50 font-sans antialiased text-slate-800"

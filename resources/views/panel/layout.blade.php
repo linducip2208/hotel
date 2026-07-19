@@ -31,6 +31,18 @@
         .print\:hidden { display: none !important; }
     }
 
+    @media (max-width: 1023px) {
+        aside { width: 220px; }
+        .lg\:pl-72 { padding-left: 220px; }
+        h1 { font-size: 1.5rem; }
+        h2 { font-size: 1.25rem; }
+    }
+
+    @media (max-width: 640px) {
+        h1 { font-size: 1.25rem; }
+        h2 { font-size: 1.125rem; }
+    }
+
     @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after {
             animation-duration: 0.01ms !important;
