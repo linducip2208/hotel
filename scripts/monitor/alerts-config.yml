@@ -1,0 +1,209 @@
+# HotelHub HMS — Alert Configuration
+# External monitoring setup reference
+#
+# This file serves as a template/checklist for setting up
+# production monitoring. It is NOT consumed by any tool automatically.
+# Configure each section in the respective service's UI/API.
+
+# ═══════════════════════════════════════════════════════════════════
+# 1. UptimeRobot — HTTP(S) uptime monitor
+# ═══════════════════════════════════════════════════════════════════
+#
+# Setup at: https://uptimerobot.com/dashboard
+#
+uptimerobot:
+  monitors:
+    # Main hotel website
+    - friendly_name: "HotelHub - Main Site"
+      url: "https://hotel.example.com"
+      type: HTTP
+      interval: 300                 # 5 minutes
+      timeout: 30
+      keyword: "HotelHub"           # keyword must appear in response body
+      alert_contacts: "ops_email|slack_webhook"
+
+    # API health check
+    - friendly_name: "HotelHub - Health API"
+      url: "https://hotel.example.com/api/health"
+      type: HTTP
+      interval: 60                  # 1 minute
+      timeout: 10
+      http_method: GET
+      alert_contacts: "ops_email|slack_webhook"
+
+    # License server (if separate)
+    - friendly_name: "HotelHub - License Server"
+      url: "https://license.hotelhub.id/api/health"
+      type: HTTP
+      interval: 300
+      timeout: 10
+      alert_contacts: "ops_email"
+
+    # Booking engine
+    - friendly_name: "HotelHub - Booking Engine"
+      url: "https://hotel.example.com/booking"
+      type: HTTP
+      interval: 300
+      timeout: 30
+      keyword: "Book Now"
+      alert_contacts: "ops_email"
+
+  alert_contacts:
+    ops_email: "ops@hotelhub.id"
+    slack_webhook: "https://hooks.slack.com/services/XXX/YYY/ZZZ"
+
+# ═══════════════════════════════════════════════════════════════════
+# 2. LibreNMS — SNMP Server Monitoring
+# ═══════════════════════════════════════════════════════════════════
+#
+# Setup at: https://librenms.org/
+# Add device via: ./addhost.php <hostname> <community> v2c
+#
+librenms:
+  servers:
+    - hostname: "license-vps.hotelhub.id"
+      snmp_community: "hotelhub_snmp"
+      alerts:
+        cpu_warning: 80
+        cpu_critical: 95
+        memory_warning: 80
+        memory_critical: 95
+        disk_warning: 80
+        disk_critical: 90
+        load_average: 4.0
+
+    - hostname: "hotel-prod-vps.hotelhub.id"
+      snmp_community: "hotelhub_snmp"
+      alerts:
+        cpu_warning: 80
+        cpu_critical: 95
+        memory_warning: 80
+        memory_critical: 95
+        disk_warning: 80
+        disk_critical: 90
+        load_average: 4.0
+
+  snmp_services:
+    - server: host
+    - http: port 80,443
+    - mysql: port 3306
+    - redis: port 6379
+
+# ═══════════════════════════════════════════════════════════════════
+# 3. Sentry — Application Error Tracking
+# ═══════════════════════════════════════════════════════════════════
+#
+# Setup at: https://sentry.io/
+# Configure SENTRY_LARAVEL_DSN in .env
+#
+sentry:
+  # These rules are configured in Sentry's UI (not in code)
+  alert_rules:
+    # Critical: notify immediately
+    - name: "500 errors spike"
+      condition: "events:error level:error in 5m > 10"
+      action: "notify ops@hotelhub.id, slack #alerts"
+      frequency: 5m
+
+    - name: "Payment failure spike"
+      condition: "events:error transaction:/api/payment in 15m > 5"
+      action: "notify ops@hotelhub.id"
+      frequency: 15m
+
+    - name: "License verification failure"
+      condition: "events:error channel:license in 10m > 3"
+      action: "notify ops@hotelhub.id, slack #license-alerts"
+      frequency: 10m
+
+    - name: "Database connection errors"
+      condition: "events:error message:*SQLSTATE* in 5m > 5"
+      action: "notify ops@hotelhub.id, slack #alerts"
+      frequency: 5m
+
+    - name: "Queue worker stalled"
+      condition: "metric:queue.pending > 100 for 10m"
+      action: "notify ops@hotelhub.id"
+      frequency: 10m
+
+    - name: "Slow response times"
+      condition: "metric:p95_response_time > 3000 for 5m"
+      action: "notify slack #alerts"
+      frequency: 15m
+
+    - name: "Heartbeat missed"
+      condition: "events:error event:heartbeat.failed in 30m > 3"
+      action: "notify ops@hotelhub.id"
+
+# ═══════════════════════════════════════════════════════════════════
+# 4. Logwatch / Fail2Ban — Server security
+# ═══════════════════════════════════════════════════════════════════
+fail2ban:
+  jails:
+    - name: sshd
+      enabled: true
+      maxretry: 5
+      bantime: 3600
+      findtime: 600
+
+    - name: nginx-laravel
+      enabled: true
+      filter: nginx-403
+      logpath: /var/log/nginx/hotelhub.access.log
+      maxretry: 20
+      bantime: 1800
+
+    - name: nginx-login
+      enabled: true
+      filter: nginx-login
+      logpath: /var/log/nginx/hotelhub.access.log
+      maxretry: 8
+      bantime: 600
+
+# ═══════════════════════════════════════════════════════════════════
+# 5. Grafana / Prometheus — Metrics dashboard (optional advanced)
+# ═══════════════════════════════════════════════════════════════════
+#
+# Export Laravel metrics via:
+#   composer require spatie/laravel-prometheus
+# Configure /metrics endpoint for Prometheus scraping.
+#
+grafana:
+  dashboards:
+    - name: "HotelHub - Application Metrics"
+      panels:
+        - request_rate: rate of HTTP requests
+        - response_time_p95: 95th percentile latency
+        - error_rate: % of 5xx responses
+        - queue_depth: pending jobs per queue
+        - active_bookings: count of confirmed reservations
+        - license_status: valid/grace/degraded count
+        - cache_hit_ratio: Redis cache hit rate
+        - db_connections: active database connections
+
+# ═══════════════════════════════════════════════════════════════════
+# 6. Cron job health check — Dead Man's Snitch alternative
+# ═══════════════════════════════════════════════════════════════════
+#
+# Each critical cron job should ping a healthcheck endpoint:
+#   https://healthchecks.io (or self-hosted)
+#
+cron_healthchecks:
+  - name: "DB Backup"
+    schedule: "0 2 * * *"
+    url: "https://hc-ping.com/db-backup-uuid"
+    grace: 2h
+
+  - name: "File Backup"
+    schedule: "0 3 * * *"
+    url: "https://hc-ping.com/file-backup-uuid"
+    grace: 2h
+
+  - name: "License Heartbeat"
+    schedule: "*/5 * * * *"
+    url: "https://hc-ping.com/license-hb-uuid"
+    grace: 15m
+
+  - name: "Night Audit"
+    schedule: "5 2 * * *"
+    url: "https://hc-ping.com/night-audit-uuid"
+    grace: 1h

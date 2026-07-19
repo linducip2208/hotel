@@ -1,0 +1,98 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: ../..
+      dockerfile: scripts/license-server/Dockerfile
+    image: hotelhub/license-server:latest
+    container_name: hotelhub-license-app
+    restart: unless-stopped
+    env_file:
+      - ../../.env
+    environment:
+      APP_ENV: production
+      APP_MODE: vendor
+      LICENSE_SERVER_ROLE: issuer
+    volumes:
+      - license-storage:/var/www/storage
+      - license-keys:/var/www/storage/app/keys
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - license-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  mariadb:
+    image: mariadb:10.11
+    container_name: hotelhub-license-db
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-license_root_secret}
+      MARIADB_DATABASE: ${DB_DATABASE:-hotel_license}
+      MARIADB_USER: ${DB_USERNAME:-hotel}
+      MARIADB_PASSWORD: ${DB_PASSWORD:-license_app_secret}
+    volumes:
+      - license-dbdata:/var/lib/mysql
+      - ./mariadb-init:/docker-entrypoint-initdb.d:ro
+    networks:
+      - license-net
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --max_connections=200
+      --innodb_buffer_pool_size=256M
+      --innodb_log_file_size=128M
+
+  redis:
+    image: redis:7-alpine
+    container_name: hotelhub-license-redis
+    restart: unless-stopped
+    command: >
+      redis-server
+      --requirepass ${REDIS_PASSWORD:-redis_license_secret}
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+      --save 900 1
+      --save 300 10
+      --appendonly yes
+    volumes:
+      - license-redisdata:/data
+    networks:
+      - license-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-redis_license_secret}", "ping"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  license-storage:
+    driver: local
+  license-keys:
+    driver: local
+  license-dbdata:
+    driver: local
+  license-redisdata:
+    driver: local
+
+networks:
+  license-net:
+    driver: bridge

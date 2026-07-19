@@ -1,0 +1,16 @@
+{
+    "presets": [
+        { "name": "OpenAI", "api_format": "openai_compatible", "base_url": "https://api.openai.com/v1/", "default_model_suggest": "gpt-4o-mini" },
+        { "name": "Anthropic", "api_format": "anthropic", "base_url": "https://api.anthropic.com/", "default_model_suggest": "claude-haiku-4-5-20251001" },
+        { "name": "Google Gemini", "api_format": "gemini", "base_url": "https://generativelanguage.googleapis.com/", "default_model_suggest": "gemini-1.5-flash" },
+        { "name": "DeepSeek", "api_format": "openai_compatible", "base_url": "https://api.deepseek.com/v1/", "default_model_suggest": "deepseek-chat" },
+        { "name": "Mistral", "api_format": "openai_compatible", "base_url": "https://api.mistral.ai/v1/", "default_model_suggest": "mistral-small-latest" },
+        { "name": "Groq", "api_format": "openai_compatible", "base_url": "https://api.groq.com/openai/v1/", "default_model_suggest": "llama-3.3-70b-versatile" },
+        { "name": "OpenRouter", "api_format": "openai_compatible", "base_url": "https://openrouter.ai/api/v1/", "default_model_suggest": "openrouter/auto" },
+        { "name": "Together AI", "api_format": "openai_compatible", "base_url": "https://api.together.xyz/v1/", "default_model_suggest": "meta-llama/Llama-3.3-70B-Instruct-Turbo" },
+        { "name": "Fireworks", "api_format": "openai_compatible", "base_url": "https://api.fireworks.ai/inference/v1/", "default_model_suggest": "accounts/fireworks/models/llama-v3p3-70b-instruct" },
+        { "name": "xAI Grok", "api_format": "openai_compatible", "base_url": "https://api.x.ai/v1/", "default_model_suggest": "grok-2-latest" },
+        { "name": "Ollama (local)", "api_format": "openai_compatible", "base_url": "http://localhost:11434/v1/", "default_model_suggest": "llama3.2" }
+    ],
+    "note": "Templates for autofill convenience only. Code never references this file at runtime — owner inputs everything in admin UI."
+}

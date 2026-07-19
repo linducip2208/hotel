@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Offline — HotelHub HMS</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            display: flex; align-items: center; justify-content: center;
+            min-height: 100vh; background: #f8fafc; color: #334155;
+        }
+        .container { text-align: center; padding: 2rem; max-width: 400px; }
+        .icon { width: 64px; height: 64px; margin: 0 auto 1.5rem; background: #e2e8f0; border-radius: 20px;
+                display: flex; align-items: center; justify-content: center; }
+        .icon svg { width: 32px; height: 32px; color: #94a3b8; }
+        h1 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
+        p { font-size: 0.875rem; color: #64748b; margin-bottom: 1.5rem; line-height: 1.5; }
+        button {
+            background: #4f46e5; color: #fff; border: none; padding: 10px 24px;
+            border-radius: 12px; font-size: 0.875rem; font-weight: 600; cursor: pointer;
+            transition: background 0.15s;
+        }
+        button:hover { background: #4338ca; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="icon">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636a9 9 0 010 12.728M5.636 5.636a9 9 0 000 12.728M8.464 8.464a5 5 0 010 7.072m7.072-7.072a5 5 0 010 7.072M12 12h.01"/>
+        </svg>
+    </div>
+    <h1>You are offline</h1>
+    <p>Please check your internet connection and try again.</p>
+    <button onclick="location.reload()">Try Again</button>
+</div>
+</body>
+</html>

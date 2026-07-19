@@ -1,0 +1,51 @@
+name: Deploy Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Git tag/release to deploy (e.g. v1.2.3)'
+        required: true
+
+concurrency:
+  group: production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
+
+      - name: Verify tag exists
+        run: git rev-parse --verify ${{ inputs.tag }}
+
+      - name: SSH deploy to production
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.PROD_HOST }}
+          username: ${{ secrets.PROD_USER }}
+          key: ${{ secrets.PROD_SSH_KEY }}
+          script: |
+            cd /var/www/hotel
+            git fetch --tags
+            git checkout ${{ inputs.tag }}
+            composer install --no-dev --optimize-autoloader --no-interaction
+            npm ci --omit=dev
+            npm run build
+            php artisan down --secret=prod-deploy
+            php artisan migrate --force
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+            php artisan event:cache
+            sudo supervisorctl restart hotel-worker:* || true
+            php artisan up
+
+      - name: Notify deploy success
+        if: success()
+        run: |
+          echo "✓ Deployed ${{ inputs.tag }} to production"

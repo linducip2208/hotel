@@ -1,0 +1,11 @@
+{
+    "presets": [
+        { "name": "Midtrans Sandbox", "api_format": "embed_flow", "base_url": "https://api.sandbox.midtrans.com/", "extra_config": {"charge_endpoint": "v2/charge"} },
+        { "name": "Midtrans Production", "api_format": "embed_flow", "base_url": "https://api.midtrans.com/", "extra_config": {"charge_endpoint": "v2/charge"} },
+        { "name": "Xendit", "api_format": "redirect_flow", "base_url": "https://api.xendit.co/", "extra_config": {"charge_endpoint": "v2/invoices"} },
+        { "name": "DOKU", "api_format": "redirect_flow", "base_url": "https://api.doku.com/", "extra_config": {"charge_endpoint": "checkout/v1/payment"} },
+        { "name": "iPaymu", "api_format": "redirect_flow", "base_url": "https://my.ipaymu.com/", "extra_config": {"charge_endpoint": "api/v2/payment"} },
+        { "name": "Faspay", "api_format": "redirect_flow", "base_url": "https://web.faspay.co.id/" },
+        { "name": "Stripe", "api_format": "direct_charge", "base_url": "https://api.stripe.com/", "extra_config": {"charge_endpoint": "v1/payment_intents"} }
+    ]
+}

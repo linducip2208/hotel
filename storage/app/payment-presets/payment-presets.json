@@ -1,0 +1,174 @@
+[
+  {
+    "name": "Midtrans",
+    "api_format": "redirect",
+    "base_url": "https://app.midtrans.com/snap/snap.js",
+    "sandbox_url": "https://app.sandbox.midtrans.com/snap/snap.js",
+    "supported_methods": ["virtual_account", "credit_card", "qris", "gopay", "shopee_pay", "bank_transfer"],
+    "documentation_url": "https://docs.midtrans.com",
+    "fields": [
+      {"key": "server_key", "label": "Server Key", "type": "password", "required": true, "placeholder": "SB-Mid-server-xxxxx"},
+      {"key": "client_key", "label": "Client Key", "type": "password", "required": true, "placeholder": "SB-Mid-client-xxxxx"},
+      {"key": "merchant_id", "label": "Merchant ID", "type": "text", "required": true, "placeholder": "G123456"},
+      {"key": "is_production", "label": "Mode Production", "type": "toggle", "required": false}
+    ]
+  },
+  {
+    "name": "Xendit",
+    "api_format": "redirect",
+    "base_url": "https://api.xendit.co",
+    "sandbox_url": "https://api.xendit.co",
+    "supported_methods": ["virtual_account", "credit_card", "qris", "ewallet", "retail_outlet"],
+    "documentation_url": "https://docs.xendit.co",
+    "fields": [
+      {"key": "api_key", "label": "API Key", "type": "password", "required": true, "placeholder": "xnd_development_xxxxx"},
+      {"key": "webhook_token", "label": "Webhook Verification Token", "type": "password", "required": false, "placeholder": "wh_xxxxx"},
+      {"key": "is_production", "label": "Mode Production", "type": "toggle", "required": false}
+    ]
+  },
+  {
+    "name": "DOKU",
+    "api_format": "redirect",
+    "base_url": "https://api.doku.com",
+    "sandbox_url": "https://api-sandbox.doku.com",
+    "supported_methods": ["virtual_account", "credit_card", "qris", "ewallet"],
+    "documentation_url": "https://docs.doku.com",
+    "fields": [
+      {"key": "client_id", "label": "Client ID", "type": "text", "required": true, "placeholder": "BRN-xxxxx"},
+      {"key": "shared_key", "label": "Shared Key", "type": "password", "required": true, "placeholder": "SK-xxxxx"},
+      {"key": "merchant_id", "label": "Merchant ID", "type": "text", "required": false, "placeholder": "MCH-xxxxx"},
+      {"key": "is_production", "label": "Mode Production", "type": "toggle", "required": false}
+    ]
+  },
+  {
+    "name": "iPaymu",
+    "api_format": "redirect",
+    "base_url": "https://my.ipaymu.com/api",
+    "sandbox_url": "https://sandbox.ipaymu.com/api",
+    "supported_methods": ["virtual_account", "qris", "bank_transfer", "convenience_store"],
+    "documentation_url": "https://ipaymu.com/api",
+    "fields": [
+      {"key": "va", "label": "Virtual Account (VA)", "type": "text", "required": true, "placeholder": "000000xxxxxx"},
+      {"key": "api_key", "label": "API Key", "type": "password", "required": true, "placeholder": "SANDBOXxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"},
+      {"key": "is_production", "label": "Mode Production", "type": "toggle", "required": false}
+    ]
+  },
+  {
+    "name": "Faspay",
+    "api_format": "redirect",
+    "base_url": "https://faspay.co.id/api",
+    "sandbox_url": "https://sandbox.faspay.co.id/api",
+    "supported_methods": ["virtual_account", "credit_card", "ewallet", "bank_transfer"],
+    "documentation_url": "https://faspay.co.id/docs",
+    "fields": [
+      {"key": "merchant_id", "label": "Merchant ID", "type": "text", "required": true, "placeholder": "FPxxxxx"},
+      {"key": "merchant_name", "label": "Nama Merchant", "type": "text", "required": true, "placeholder": "Hotel Anda"},
+      {"key": "password", "label": "Password / Passphrase", "type": "password", "required": true, "placeholder": "********"},
+      {"key": "is_production", "label": "Mode Production", "type": "toggle", "required": false}
+    ]
+  },
+  {
+    "name": "OY! Indonesia",
+    "api_format": "redirect",
+    "base_url": "https://api.oyindonesia.com",
+    "sandbox_url": "https://api-stg.oyindonesia.com",
+    "supported_methods": ["virtual_account", "qris", "ewallet", "bank_transfer", "disbursement"],
+    "documentation_url": "https://docs.oyindonesia.com",
+    "fields": [
+      {"key": "api_key", "label": "API Key", "type": "password", "required": true, "placeholder": "xxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"},
+      {"key": "username", "label": "Username", "type": "text", "required": true, "placeholder": "partner@hotel.com"},
+      {"key": "is_production", "label": "Mode Production", "type": "toggle", "required": false}
+    ]
+  },
+  {
+    "name": "Tripay",
+    "api_format": "redirect",
+    "base_url": "https://tripay.co.id/api",
+    "sandbox_url": "https://tripay.co.id/api-sandbox",
+    "supported_methods": ["virtual_account", "qris", "bank_transfer", "convenience_store"],
+    "documentation_url": "https://tripay.co.id/developer",
+    "fields": [
+      {"key": "api_key", "label": "API Key", "type": "password", "required": true, "placeholder": "API-xxxxx"},
+      {"key": "private_key", "label": "Private Key", "type": "password", "required": true, "placeholder": "PRIVATE-xxxxx"},
+      {"key": "merchant_code", "label": "Kode Merchant", "type": "text", "required": true, "placeholder": "Txxxxx"},
+      {"key": "is_production", "label": "Mode Production", "type": "toggle", "required": false}
+    ]
+  },
+  {
+    "name": "Paydisini",
+    "api_format": "redirect",
+    "base_url": "https://paydisini.co.id/api",
+    "sandbox_url": "https://paydisini.co.id/api",
+    "supported_methods": ["virtual_account", "qris", "ewallet", "bank_transfer"],
+    "documentation_url": "https://paydisini.co.id/api",
+    "fields": [
+      {"key": "api_key", "label": "API Key", "type": "password", "required": true, "placeholder": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"},
+      {"key": "is_production", "label": "Mode Production", "type": "toggle", "required": false}
+    ]
+  },
+  {
+    "name": "Nicepay",
+    "api_format": "redirect",
+    "base_url": "https://api.nicepay.co.id",
+    "sandbox_url": "https://dev-api.nicepay.co.id",
+    "supported_methods": ["virtual_account", "credit_card", "qris", "ewallet"],
+    "documentation_url": "https://docs.nicepay.co.id",
+    "fields": [
+      {"key": "merchant_id", "label": "Merchant ID", "type": "text", "required": true, "placeholder": "NICExxxx"},
+      {"key": "merchant_token", "label": "Merchant Token", "type": "password", "required": true, "placeholder": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"},
+      {"key": "is_production", "label": "Mode Production", "type": "toggle", "required": false}
+    ]
+  },
+  {
+    "name": "Duithape",
+    "api_format": "redirect",
+    "base_url": "https://api.duithape.com",
+    "sandbox_url": "https://api.duithape.com",
+    "supported_methods": ["virtual_account", "qris", "bank_transfer", "ewallet"],
+    "documentation_url": "https://docs.duithape.com",
+    "fields": [
+      {"key": "api_key", "label": "API Key", "type": "password", "required": true, "placeholder": "DTH-xxxxx"},
+      {"key": "merchant_code", "label": "Kode Merchant", "type": "text", "required": true, "placeholder": "DTM-xxxxx"},
+      {"key": "is_production", "label": "Mode Production", "type": "toggle", "required": false}
+    ]
+  },
+  {
+    "name": "DigiAsia / KASPRO",
+    "api_format": "redirect",
+    "base_url": "https://api.kaspro.id",
+    "sandbox_url": "https://api.kaspro.id",
+    "supported_methods": ["virtual_account", "qris", "ewallet", "bank_transfer"],
+    "documentation_url": "https://kaspro.id/docs",
+    "fields": [
+      {"key": "api_key", "label": "API Key", "type": "password", "required": true, "placeholder": "KASPRO-xxxxx"},
+      {"key": "client_id", "label": "Client ID", "type": "text", "required": true, "placeholder": "CL-xxxxx"},
+      {"key": "is_production", "label": "Mode Production", "type": "toggle", "required": false}
+    ]
+  },
+  {
+    "name": "Finpay",
+    "api_format": "redirect",
+    "base_url": "https://api.finpay.co.id",
+    "sandbox_url": "https://api-sandbox.finpay.co.id",
+    "supported_methods": ["virtual_account", "credit_card", "qris", "ewallet"],
+    "documentation_url": "https://finpay.co.id/docs",
+    "fields": [
+      {"key": "merchant_id", "label": "Merchant ID", "type": "text", "required": true, "placeholder": "FP-xxxxx"},
+      {"key": "api_key", "label": "API Key", "type": "password", "required": true, "placeholder": "sk-xxxxx"},
+      {"key": "is_production", "label": "Mode Production", "type": "toggle", "required": false}
+    ]
+  },
+  {
+    "name": "Eseku",
+    "api_format": "redirect",
+    "base_url": "https://api.eseku.co.id",
+    "sandbox_url": "https://api.eseku.co.id",
+    "supported_methods": ["virtual_account", "qris", "ewallet", "bank_transfer"],
+    "documentation_url": "https://eseku.co.id/docs",
+    "fields": [
+      {"key": "api_key", "label": "API Key", "type": "password", "required": true, "placeholder": "ESEKU-xxxxx"},
+      {"key": "client_id", "label": "Client ID", "type": "text", "required": true, "placeholder": "CL-xxxxx"},
+      {"key": "is_production", "label": "Mode Production", "type": "toggle", "required": false}
+    ]
+  }
+]

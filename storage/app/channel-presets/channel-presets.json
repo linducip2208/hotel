@@ -1,0 +1,103 @@
+[
+  {
+    "name": "Booking.com",
+    "api_format": "booking_com",
+    "documentation_url": "https://connect.booking.com",
+    "supports_ari_push": true,
+    "supports_booking_pull": true,
+    "auth_type": "basic_http",
+    "base_url": "https://supply-xml.booking.com/hotels/ota/",
+    "fields": ["hotel_code", "username", "password"]
+  },
+  {
+    "name": "Agoda",
+    "api_format": "agoda",
+    "documentation_url": "https://connect.agoda.com",
+    "supports_ari_push": true,
+    "supports_booking_pull": true,
+    "auth_type": "api_key",
+    "base_url": "https://ycs.agoda.com/api/v1/",
+    "fields": ["hotel_id", "api_key", "secret_key"]
+  },
+  {
+    "name": "Traveloka",
+    "api_format": "traveloka",
+    "documentation_url": "https://developers.traveloka.com",
+    "supports_ari_push": true,
+    "supports_booking_pull": true,
+    "auth_type": "hmac",
+    "base_url": "https://api.traveloka.com/v2/",
+    "fields": ["hotel_id", "api_key", "api_secret"]
+  },
+  {
+    "name": "Tiket.com",
+    "api_format": "tiket_com",
+    "documentation_url": "https://docs.tiket.com",
+    "supports_ari_push": true,
+    "supports_booking_pull": true,
+    "auth_type": "api_key",
+    "base_url": "https://api.tiket.com/hotel/v1/",
+    "fields": ["hotel_id", "api_key"]
+  },
+  {
+    "name": "Expedia",
+    "api_format": "expedia_eqc",
+    "documentation_url": "https://developers.expediagroup.com",
+    "supports_ari_push": true,
+    "supports_booking_pull": true,
+    "auth_type": "oauth2",
+    "base_url": "https://services.expediapartnercentral.com/products/v1/",
+    "oauth_base_url": "https://services.expediapartnercentral.com/",
+    "fields": ["hotel_id", "client_id", "client_secret", "refresh_token"]
+  },
+  {
+    "name": "Airbnb",
+    "api_format": "airbnb",
+    "documentation_url": "https://airbnb.com/host/resources",
+    "supports_ari_push": true,
+    "supports_booking_pull": true,
+    "auth_type": "oauth2",
+    "base_url": "https://api.airbnb.com/v2/",
+    "fields": ["listing_id", "api_key", "access_token"]
+  },
+  {
+    "name": "Trip.com",
+    "api_format": "trip_com",
+    "documentation_url": "https://connect.trip.com",
+    "supports_ari_push": true,
+    "supports_booking_pull": true,
+    "auth_type": "api_key",
+    "base_url": "https://api.trip.com/connect/v1/",
+    "fields": ["hotel_id", "api_key", "api_secret"]
+  },
+  {
+    "name": "Mister Aladin",
+    "api_format": "mister_aladin",
+    "documentation_url": "https://developer.misteraladin.com",
+    "supports_ari_push": true,
+    "supports_booking_pull": true,
+    "auth_type": "api_key",
+    "base_url": "https://api.misteraladin.com/hotel/v1/",
+    "fields": ["hotel_id", "api_key"]
+  },
+  {
+    "name": "Pegipegi",
+    "api_format": "pegipegi",
+    "documentation_url": "https://developer.pegipegi.com",
+    "supports_ari_push": true,
+    "supports_booking_pull": true,
+    "auth_type": "api_key",
+    "base_url": "https://api.pegipegi.com/hotel/v2/",
+    "fields": ["hotel_id", "api_key", "api_secret"]
+  },
+  {
+    "name": "RedDoorz",
+    "api_format": "reddoorz_api",
+    "documentation_url": "https://reddoorz.com/partner",
+    "supports_ari_push": true,
+    "supports_booking_pull": true,
+    "auth_type": "api_key",
+    "base_url": "https://api.reddoorz.com",
+    "fields": ["hotel_id", "api_key"]
+  }
+]

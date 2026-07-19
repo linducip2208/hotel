@@ -1,0 +1,302 @@
+================================================================================
+HOTEL MANAGEMENT SYSTEM (HMS) — COMMERCIAL LICENSE AGREEMENT
+LISENSI KOMERSIAL — SISTEM MANAJEMEN HOTEL (HMS)
+================================================================================
+
+Version / Versi      : 1.0
+Effective / Berlaku  : 2026-04-28
+Governing Law / Hukum: Republik Indonesia, Jurisdiksi Pengadilan Jakarta Pusat
+
+This License is bilingual. In case of conflict between the English and
+Indonesian text, the Indonesian version shall prevail.
+
+Lisensi ini bilingual. Jika terdapat perbedaan antara teks Bahasa Inggris dan
+Bahasa Indonesia, versi Bahasa Indonesia yang berlaku.
+
+================================================================================
+1. DEFINITIONS / DEFINISI
+================================================================================
+
+EN: "Software" means the Hotel Management System source code, binaries, assets,
+documentation, and updates licensed under this Agreement. "Licensor" means the
+copyright owner that issued this license. "Licensee" means the legal entity or
+natural person identified in the purchase invoice. "Activation Key" means the
+unique XXXXX-XXXXX-XXXXX-XXXXX string issued at time of purchase. "Production
+Domain" means the single FQDN bound to the Activation Key via the pairing
+wizard. "Staging Domain" means one (1) additional non-public domain used for
+testing.
+
+ID: "Perangkat Lunak" berarti source code, binary, asset, dokumentasi, dan
+update Hotel Management System yang dilisensikan berdasarkan Perjanjian ini.
+"Pemberi Lisensi" adalah pemilik hak cipta yang menerbitkan lisensi ini.
+"Penerima Lisensi" adalah badan hukum atau individu yang tercantum di invoice
+pembelian. "Activation Key" adalah string unik berformat XXXXX-XXXXX-XXXXX-XXXXX
+yang diterbitkan saat pembelian. "Domain Produksi" adalah satu FQDN yang
+di-bind ke Activation Key melalui wizard pairing. "Domain Staging" adalah satu
+(1) domain tambahan non-publik untuk testing.
+
+================================================================================
+2. GRANT OF LICENSE / PEMBERIAN LISENSI
+================================================================================
+
+EN: Subject to payment of the license fee and continued compliance with this
+Agreement, Licensor grants Licensee a non-exclusive, non-transferable,
+non-sublicensable, perpetual right to:
+
+  (a) Install one (1) copy of the Software on one (1) Production Domain plus
+      one (1) Staging Domain owned or operated by Licensee;
+  (b) Use the Software to operate hotel(s), villa(s), guesthouse(s), or
+      hospitality property(ies) listed in the purchase invoice;
+  (c) Modify the source code for Licensee's internal operational needs;
+  (d) Receive Software updates and technical support during the support window
+      stated in the invoice (default: 12 months from activation).
+
+ID: Tunduk pada pembayaran biaya lisensi dan kepatuhan berkelanjutan terhadap
+Perjanjian ini, Pemberi Lisensi memberikan kepada Penerima Lisensi hak yang
+non-eksklusif, tidak dapat dialihkan, tidak dapat di-sublisensikan, dan berlaku
+seumur hidup untuk:
+
+  (a) Memasang satu (1) salinan Perangkat Lunak pada satu (1) Domain Produksi
+      ditambah satu (1) Domain Staging milik atau dioperasikan oleh Penerima
+      Lisensi;
+  (b) Menggunakan Perangkat Lunak untuk mengoperasikan hotel, villa, guesthouse,
+      atau properti perhotelan lain yang tercantum di invoice pembelian;
+  (c) Memodifikasi source code untuk kebutuhan operasional internal Penerima
+      Lisensi;
+  (d) Menerima update Perangkat Lunak dan dukungan teknis selama periode
+      support yang tercantum di invoice (default: 12 bulan sejak aktivasi).
+
+================================================================================
+3. RESTRICTIONS / PEMBATASAN
+================================================================================
+
+EN: Licensee SHALL NOT:
+
+  (a) Resell, redistribute, sublicense, rent, lease, or lend the Software in
+      whole or in substantial part, in source or binary form, to any third
+      party;
+  (b) Remove, alter, or obscure copyright notices, license notices, or branding
+      embedded in the Software's source code or admin interface, except where
+      Licensee has separately purchased a "White-Label Add-on";
+  (c) Use a single Activation Key on more than one (1) Production Domain.
+      Subdomains are considered separate domains. Mass-deploy patterns
+      (creating multiple installs from one license) are strictly prohibited;
+  (d) Share, publish, or leak the Activation Key or the source code on public
+      repositories, file-sharing services, or any platform accessible to
+      non-employees of Licensee;
+  (e) Reverse engineer, attempt to bypass, disable, or circumvent the license
+      pairing system, anti-tamper checks, heartbeat mechanism, or any DRM
+      component of the Software;
+  (f) Use the Software to operate a Software-as-a-Service offering targeting
+      multiple unrelated property owners, without first acquiring the separate
+      "SaaS Reseller License";
+  (g) Use the Software in any manner that violates Indonesian law or the laws
+      of the jurisdiction where the Software is operated.
+
+ID: Penerima Lisensi DILARANG:
+
+  (a) Menjual kembali, mendistribusikan ulang, men-sublisensikan, menyewakan,
+      meminjamkan Perangkat Lunak baik seluruhnya maupun sebagian besar, dalam
+      bentuk source atau binary, kepada pihak ketiga manapun;
+  (b) Menghapus, mengubah, atau menyamarkan pemberitahuan hak cipta,
+      pemberitahuan lisensi, atau branding yang tertanam di source code atau
+      admin interface Perangkat Lunak, kecuali Penerima Lisensi membeli "Add-on
+      White-Label" terpisah;
+  (c) Menggunakan satu Activation Key pada lebih dari satu (1) Domain Produksi.
+      Subdomain dianggap domain terpisah. Pola mass-deploy (membuat banyak
+      instalasi dari satu lisensi) dilarang keras;
+  (d) Membagikan, mempublikasikan, atau membocorkan Activation Key atau source
+      code di repository publik, layanan file-sharing, atau platform manapun
+      yang dapat diakses oleh non-karyawan Penerima Lisensi;
+  (e) Melakukan reverse engineering, mencoba bypass, men-disable, atau
+      mengakali sistem pairing lisensi, anti-tamper, mekanisme heartbeat, atau
+      komponen DRM lain dari Perangkat Lunak;
+  (f) Menggunakan Perangkat Lunak untuk mengoperasikan layanan
+      Software-as-a-Service yang melayani banyak pemilik properti yang tidak
+      berelasi, tanpa terlebih dahulu membeli "SaaS Reseller License" terpisah;
+  (g) Menggunakan Perangkat Lunak dengan cara yang melanggar hukum Indonesia
+      atau hukum di yurisdiksi tempat Perangkat Lunak dioperasikan.
+
+================================================================================
+4. LICENSE PAIRING & DOMAIN BINDING / PAIRING LISENSI & PENGUNCIAN DOMAIN
+================================================================================
+
+EN: This Software employs a domain-bound activation system ("Pairing System").
+On first access, the Software displays an activation wizard; Licensee must
+paste the Activation Key, which the Software then binds to the request's host
+header. Once bound, the Software writes an encrypted license lock file
+(".license.lock") that is required for the Software to operate. Bypass attempts
+trigger automatic license revocation.
+
+If Licensee migrates to a new domain, Licensee must revoke the old binding via
+the marketplace user portal before activating on the new domain. Re-pair on
+the new domain uses the same Activation Key.
+
+ID: Perangkat Lunak ini menggunakan sistem aktivasi yang di-bind ke domain
+("Sistem Pairing"). Saat akses pertama, Perangkat Lunak menampilkan wizard
+aktivasi; Penerima Lisensi harus paste Activation Key, yang lalu di-bind ke
+host header request. Setelah di-bind, Perangkat Lunak menulis file
+".license.lock" terenkripsi yang wajib ada agar Perangkat Lunak dapat berfungsi.
+Upaya bypass akan men-trigger pencabutan lisensi otomatis.
+
+Jika Penerima Lisensi pindah ke domain baru, Penerima Lisensi wajib men-revoke
+binding lama via portal user marketplace sebelum aktivasi di domain baru. Re-pair
+di domain baru menggunakan Activation Key yang sama.
+
+================================================================================
+5. UPDATES & SUPPORT / UPDATE & DUKUNGAN
+================================================================================
+
+EN: During the support window (default 12 months), Licensee receives:
+  - Minor and patch version updates (e.g., 1.0.0 → 1.x.x);
+  - Email/ticket support with response SLA per the support tier purchased;
+  - Bug fixes and security patches.
+
+Major version upgrades (e.g., 1.x → 2.x) are subject to a separate upgrade fee.
+After support window expiry, the Software continues to operate perpetually,
+but Licensee no longer receives updates, security patches, or support. Renewal
+of support is available at the rates published on the marketplace.
+
+ID: Selama periode support (default 12 bulan), Penerima Lisensi menerima:
+  - Update versi minor dan patch (misal 1.0.0 → 1.x.x);
+  - Dukungan email/ticket dengan SLA respons sesuai tier support yang dibeli;
+  - Bug fix dan security patch.
+
+Upgrade versi mayor (misal 1.x → 2.x) tunduk pada biaya upgrade terpisah.
+Setelah periode support berakhir, Perangkat Lunak tetap dapat dioperasikan
+seumur hidup, namun Penerima Lisensi tidak lagi menerima update, security
+patch, maupun support. Perpanjangan support tersedia dengan tarif yang
+dipublikasikan di marketplace.
+
+================================================================================
+6. DATA OWNERSHIP / KEPEMILIKAN DATA
+================================================================================
+
+EN: All hotel operational data — including reservations, guest records,
+financial entries, room rates, and inventory — entered into or generated by
+the Software belongs exclusively to Licensee. Licensor has no access to
+Licensee's production database and no right to inspect, copy, or disclose
+Licensee's data, except to the extent strictly required to provide support
+when Licensee voluntarily uploads data for troubleshooting.
+
+ID: Seluruh data operasional hotel — termasuk reservasi, data tamu, entri
+keuangan, harga kamar, dan inventory — yang dimasukkan ke atau dihasilkan oleh
+Perangkat Lunak adalah milik eksklusif Penerima Lisensi. Pemberi Lisensi tidak
+memiliki akses ke database produksi Penerima Lisensi dan tidak berhak
+memeriksa, menyalin, atau mengungkapkan data Penerima Lisensi, kecuali dalam
+batasan yang diperlukan untuk memberikan dukungan ketika Penerima Lisensi
+secara sukarela mengunggah data untuk troubleshooting.
+
+================================================================================
+7. WARRANTY DISCLAIMER / PENYANGKALAN GARANSI
+================================================================================
+
+EN: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR UNINTERRUPTED
+OPERATION. LICENSEE ACCEPTS ALL RISK ARISING FROM THE USE, MODIFICATION, AND
+DEPLOYMENT OF THE SOFTWARE.
+
+ID: PERANGKAT LUNAK INI DISEDIAKAN "APA ADANYA" (AS IS), TANPA GARANSI APAPUN,
+TERSURAT MAUPUN TERSIRAT, TERMASUK NAMUN TIDAK TERBATAS PADA GARANSI
+KELAYAKAN JUAL, KESESUAIAN UNTUK TUJUAN TERTENTU, NON-PELANGGARAN, ATAU
+OPERASI TANPA GANGGUAN. PENERIMA LISENSI MENERIMA SELURUH RISIKO YANG TIMBUL
+DARI PENGGUNAAN, MODIFIKASI, DAN DEPLOYMENT PERANGKAT LUNAK.
+
+================================================================================
+8. LIMITATION OF LIABILITY / PEMBATASAN TANGGUNG JAWAB
+================================================================================
+
+EN: To the maximum extent permitted by applicable law, Licensor's total
+aggregate liability arising out of or related to this Agreement shall not
+exceed the amount actually paid by Licensee for the Software during the twelve
+(12) months preceding the event giving rise to the claim. In no event shall
+Licensor be liable for indirect, incidental, special, consequential, or
+punitive damages, loss of profits, loss of data, loss of goodwill, or business
+interruption.
+
+ID: Sejauh diperbolehkan oleh hukum yang berlaku, total tanggung jawab agregat
+Pemberi Lisensi yang timbul dari atau terkait dengan Perjanjian ini tidak akan
+melebihi jumlah yang sebenarnya dibayarkan oleh Penerima Lisensi untuk
+Perangkat Lunak selama dua belas (12) bulan sebelum kejadian yang menimbulkan
+klaim. Pemberi Lisensi tidak bertanggung jawab atas kerugian tidak langsung,
+insidental, khusus, konsekuensial, atau punitif, kehilangan keuntungan,
+kehilangan data, kehilangan goodwill, atau gangguan bisnis.
+
+================================================================================
+9. THIRD-PARTY INTEGRATIONS / INTEGRASI PIHAK KETIGA
+================================================================================
+
+EN: The Software supports BYOK (Bring-Your-Own-Key) integration with
+third-party services (payment gateways, OTAs, AI providers, SMS, WhatsApp,
+door locks, etc.). Licensee is solely responsible for procuring credentials,
+complying with each third party's terms of service, and bearing all costs
+billed by those third parties. Licensor disclaims liability for outages,
+deprecations, pricing changes, or breaches by third-party providers.
+
+ID: Perangkat Lunak mendukung integrasi BYOK (Bring-Your-Own-Key) dengan
+layanan pihak ketiga (payment gateway, OTA, AI provider, SMS, WhatsApp, door
+lock, dll.). Penerima Lisensi sepenuhnya bertanggung jawab untuk pengadaan
+kredensial, kepatuhan terhadap syarat layanan masing-masing pihak ketiga, dan
+menanggung seluruh biaya yang ditagihkan oleh pihak ketiga tersebut. Pemberi
+Lisensi tidak bertanggung jawab atas gangguan, deprecation, perubahan harga,
+atau pelanggaran oleh penyedia pihak ketiga.
+
+================================================================================
+10. TERMINATION / PENGAKHIRAN
+================================================================================
+
+EN: Licensor may terminate this Agreement and revoke the Activation Key
+immediately upon Licensee's material breach of any restriction in Section 3.
+Upon termination, Licensee must cease all use of the Software, delete all
+copies, and destroy the .license.lock file. Sections 6, 7, 8, and 11 survive
+termination.
+
+ID: Pemberi Lisensi dapat mengakhiri Perjanjian ini dan men-revoke Activation
+Key dengan segera apabila Penerima Lisensi melakukan pelanggaran material
+terhadap Pasal 3. Setelah pengakhiran, Penerima Lisensi wajib menghentikan
+seluruh penggunaan Perangkat Lunak, menghapus seluruh salinan, dan
+memusnahkan file .license.lock. Pasal 6, 7, 8, dan 11 tetap berlaku setelah
+pengakhiran.
+
+================================================================================
+11. GOVERNING LAW & DISPUTE RESOLUTION / HUKUM YANG BERLAKU & PENYELESAIAN
+================================================================================
+
+EN: This Agreement is governed by the laws of the Republic of Indonesia.
+Any dispute shall first be resolved through good-faith negotiation. Failing
+resolution within 30 days, the dispute shall be submitted to the District
+Court of Central Jakarta (Pengadilan Negeri Jakarta Pusat).
+
+ID: Perjanjian ini tunduk pada hukum Republik Indonesia. Setiap perselisihan
+akan diselesaikan terlebih dahulu melalui musyawarah dengan itikad baik.
+Apabila penyelesaian tidak tercapai dalam 30 hari, perselisihan diajukan ke
+Pengadilan Negeri Jakarta Pusat.
+
+================================================================================
+12. ENTIRE AGREEMENT / PERJANJIAN MENYELURUH
+================================================================================
+
+EN: This Agreement, together with the purchase invoice and any signed
+addendum, constitutes the entire agreement between the parties and supersedes
+all prior or contemporaneous communications. Amendments require a written
+addendum signed by both parties.
+
+ID: Perjanjian ini, bersama dengan invoice pembelian dan addendum tertulis
+yang ditandatangani, merupakan keseluruhan perjanjian antara para pihak dan
+menggantikan seluruh komunikasi sebelumnya. Perubahan harus dituangkan dalam
+addendum tertulis yang ditandatangani oleh kedua pihak.
+
+================================================================================
+                              END OF AGREEMENT
+================================================================================
+
+By activating the Software via the pairing wizard, Licensee acknowledges that
+Licensee has read this Agreement, understands its terms, and agrees to be
+bound by it.
+
+Dengan mengaktivasi Perangkat Lunak melalui wizard pairing, Penerima Lisensi
+mengakui telah membaca Perjanjian ini, memahami ketentuannya, dan setuju
+untuk terikat olehnya.
+
+================================================================================

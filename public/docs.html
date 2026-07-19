@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Panduan Penggunaan — Hotel HMS</title>
+<meta name="description" content="Panduan lengkap penggunaan Hotel Management System berbasis Laravel 11">
+<style>
+:root {
+  --primary:#4f46e5;
+  --primary-light:#ede9fe;
+  --primary-dark:#3730a3;
+  --green:#059669;
+  --amber:#d97706;
+  --red:#dc2626;
+  --sidebar-w:280px;
+  --toc-w:220px;
+  --radius:12px;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
+  --border:#e5e7eb;
+  --text:#111827;
+  --muted:#6b7280;
+  --bg:#f9fafb;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.7;color:var(--text);background:#fff}
+
+/* ── TOPBAR ── */
+.topbar{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;height:60px;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+.topbar-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+.topbar-brand .logo{
+  width:32px;height:32px;border-radius:8px;
+  background:linear-gradient(135deg,var(--primary),#7c3aed);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:800;font-size:14px;
+}
+.topbar-brand span{font-weight:700;font-size:15px}
+.topbar-brand small{color:var(--muted);font-size:12px;font-weight:400;margin-left:4px}
+.topbar-nav{display:flex;align-items:center;gap:8px}
+.topbar-nav a{
+  font-size:13px;color:var(--muted);text-decoration:none;padding:6px 12px;
+  border-radius:8px;transition:all .15s;
+}
+.topbar-nav a:hover{background:var(--bg);color:var(--primary)}
+.btn-wa{
+  background:#25d366!important;color:#fff!important;font-weight:600!important;
+  display:flex!important;align-items:center;gap:6px;
+}
+.btn-wa:hover{background:#1fba59!important}
+.menu-toggle{display:none;background:none;border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:18px}
+
+/* ── LAYOUT ── */
+.layout{
+  display:grid;
+  grid-template-columns:var(--sidebar-w) minmax(0,1fr) var(--toc-w);
+  max-width:1380px;margin:0 auto;
+  min-height:calc(100vh - 60px);
+}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  position:sticky;top:60px;align-self:start;
+  height:calc(100vh - 60px);overflow-y:auto;
+  padding:20px 12px;border-right:1px solid var(--border);
+  background:var(--bg);
+}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.sidebar-section{margin-bottom:24px}
+.sidebar-label{
+  font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.07em;color:var(--muted);padding:0 10px;margin-bottom:6px;
+}
+.sidebar-item{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 10px;border-radius:8px;
+  font-size:13.5px;color:var(--text);text-decoration:none;
+  transition:all .12s;cursor:pointer;border:none;background:none;width:100%;text-align:left;
+}
+.sidebar-item:hover{background:var(--primary-light);color:var(--primary)}
+.sidebar-item.active{background:var(--primary);color:#fff;font-weight:600}
+.sidebar-item .icon{font-size:16px;width:20px;text-align:center;flex-shrink:0}
+.sidebar-item .badge{
+  margin-left:auto;font-size:10px;padding:1px 7px;border-radius:50px;
+  background:rgba(79,70,229,.12);color:var(--primary);font-weight:700;
+}
+.sidebar-item.active .badge{background:rgba(255,255,255,.2);color:#fff}
+
+/* ── MAIN CONTENT ── */
+.content{padding:36px 48px;max-width:860px;min-width:0}
+.page-section{display:none}
+.page-section.active{display:block}
+
+.content h1{
+  font-size:30px;font-weight:800;margin-bottom:8px;letter-spacing:-.5px;
+}
+.content .lead{font-size:16px;color:var(--muted);margin-bottom:28px}
+.content h2{
+  font-size:21px;font-weight:700;margin-top:44px;margin-bottom:12px;
+  padding-top:44px;border-top:1px solid var(--border);
+}
+.content h2:first-of-type{margin-top:0;padding-top:0;border-top:none}
+.content h3{font-size:17px;font-weight:600;margin-top:28px;margin-bottom:8px;color:var(--primary-dark)}
+.content p{margin-bottom:14px;color:#374151}
+.content ul,.content ol{padding-left:22px;margin-bottom:14px}
+.content li{margin-bottom:5px;color:#374151}
+.content strong{font-weight:600;color:var(--text)}
+.content a{color:var(--primary);text-decoration:none}
+.content a:hover{text-decoration:underline}
+.content code{
+  background:#f1f0ff;color:var(--primary-dark);
+  padding:2px 6px;border-radius:4px;font-size:.85em;
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+.content pre{
+  background:#0f172a;color:#e2e8f0;
+  padding:18px;border-radius:var(--radius);overflow-x:auto;
+  font-size:13px;line-height:1.6;margin:16px 0;
+}
+.content pre code{background:transparent;color:inherit;padding:0}
+.content hr{border:none;border-top:1px solid var(--border);margin:32px 0}
+
+/* Cards */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin:16px 0}
+.card{
+  background:#fff;border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px;box-shadow:var(--shadow);transition:all .15s;
+}
+.card:hover{border-color:var(--primary);box-shadow:0 4px 20px rgba(79,70,229,.12)}
+.card .card-icon{font-size:28px;margin-bottom:10px}
+.card h4{font-size:13.5px;font-weight:700;margin-bottom:4px}
+.card p{font-size:12.5px;color:var(--muted);margin:0}
+
+/* Steps */
+.steps{counter-reset:step;list-style:none;padding:0;margin:16px 0}
+.steps li{
+  display:flex;gap:14px;margin-bottom:14px;
+  background:#fff;border:1px solid var(--border);border-radius:var(--radius);
+  padding:14px 16px;align-items:flex-start;
+}
+.steps li::before{
+  counter-increment:step;content:counter(step);
+  flex-shrink:0;width:26px;height:26px;border-radius:50%;
+  background:var(--primary);color:#fff;
+  font-size:12px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;margin-top:1px;
+}
+.steps li .step-body{flex:1}
+.steps li .step-title{font-weight:600;margin-bottom:3px;font-size:14px}
+.steps li .step-desc{font-size:13px;color:var(--muted);margin:0}
+
+/* Callouts */
+.callout{
+  border-radius:var(--radius);padding:14px 16px;margin:16px 0;
+  display:flex;gap:10px;align-items:flex-start;font-size:13.5px;
+}
+.callout-icon{font-size:18px;margin-top:1px;flex-shrink:0}
+.callout.info{background:#eff6ff;border-left:4px solid #3b82f6;color:#1e40af}
+.callout.success{background:#f0fdf4;border-left:4px solid #22c55e;color:#166534}
+.callout.warning{background:#fffbeb;border-left:4px solid #f59e0b;color:#92400e}
+.callout.danger{background:#fef2f2;border-left:4px solid #ef4444;color:#991b1b}
+
+/* Tables */
+.table-wrap{overflow-x:auto;margin:14px 0;border-radius:var(--radius);border:1px solid var(--border)}
+table.data{width:100%;border-collapse:collapse;font-size:13.5px}
+table.data thead tr{background:var(--bg);border-bottom:2px solid var(--border)}
+table.data th{padding:10px 14px;font-weight:600;color:var(--muted);text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+table.data td{padding:10px 14px;border-bottom:1px solid var(--border)}
+table.data tr:last-child td{border-bottom:none}
+table.data tr:nth-child(even) td{background:#fafafa}
+
+/* Status badges */
+.badge{
+  display:inline-flex;align-items:center;
+  font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:50px;
+}
+.badge-green{background:#dcfce7;color:#166534}
+.badge-blue{background:#dbeafe;color:#1e40af}
+.badge-amber{background:#fef3c7;color:#92400e}
+.badge-red{background:#fee2e2;color:#991b1b}
+.badge-gray{background:#f3f4f6;color:#4b5563}
+.badge-violet{background:#ede9fe;color:#5b21b6}
+
+/* Key shortcut */
+kbd{
+  background:#f3f4f6;border:1px solid #d1d5db;border-bottom:2px solid #9ca3af;
+  border-radius:4px;padding:1px 7px;font-family:inherit;font-size:12px;color:#374151;
+}
+
+/* ── TOC ── */
+.toc{
+  position:sticky;top:60px;align-self:start;
+  height:calc(100vh - 60px);overflow-y:auto;
+  padding:28px 16px;border-left:1px solid var(--border);
+}
+.toc-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:10px}
+.toc ul{list-style:none;padding:0}
+.toc ul li{margin:0}
+.toc ul li a{
+  display:block;padding:4px 8px;font-size:12.5px;color:var(--muted);
+  text-decoration:none;border-left:2px solid transparent;
+  transition:all .12s;border-radius:0 6px 6px 0;
+}
+.toc ul li a:hover{color:var(--primary);border-left-color:var(--primary);background:var(--primary-light)}
+.toc ul li.lvl3 a{padding-left:18px;font-size:12px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+  .layout{grid-template-columns:var(--sidebar-w) minmax(0,1fr)}
+  .toc{display:none}
+}
+@media(max-width:768px){
+  .menu-toggle{display:block}
+  .layout{grid-template-columns:1fr}
+  .sidebar{
+    position:fixed;top:60px;left:0;z-index:50;
+    width:280px;max-width:85%;
+    height:calc(100vh - 60px);
+    transform:translateX(-110%);
+    transition:transform .25s ease-out;
+    box-shadow:4px 0 24px rgba(0,0,0,.1);
+  }
+  .sidebar.open{transform:translateX(0)}
+  .backdrop{
+    display:none;position:fixed;inset:60px 0 0 0;
+    background:rgba(0,0,0,.4);z-index:40;
+  }
+  .backdrop.open{display:block}
+  .content{padding:20px 16px}
+  .topbar-nav{gap:4px}
+  .topbar-nav a:not(.btn-wa){display:none}
+}
+@media print{
+  .topbar,.sidebar,.toc,.menu-toggle{display:none!important}
+  .layout{display:block}
+  .content{padding:0;max-width:100%}
+  .page-section{display:block!important}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div style="display:flex;align-items:center;gap:12px">
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+    <a class="topbar-brand" href="#">
+      <div class="logo">H</div>
+      <span>Hotel HMS</span>
+      <small>Panduan Penggunaan</small>
+    </a>
+  </div>
+  <nav class="topbar-nav">
+    <a href="../">← Kembali ke App</a>
+    <a href="#" onclick="window.print()" style="display:flex;align-items:center;gap:5px">
+      🖨 Print
+    </a>
+    <a class="btn-wa"
+       href="https://wa.me/62081296052010?text=Halo%2C+saya+ingin+bertanya+tentang+source+code+Hotel+HMS"
+       target="_blank" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Beli Source Code
+    </a>
+  </nav>
+</header>
+
+<div class="backdrop" id="backdrop"></div>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Mulai Di Sini</div>
+    <button class="sidebar-item active" data-section="overview">
+      <span class="icon">🏠</span> Gambaran Umum
+    </button>
+    <button class="sidebar-item" data-section="install">
+      <span class="icon">⚙️</span> Instalasi
+    </button>
+    <button class="sidebar-item" data-section="login">
+      <span class="icon">🔐</span> Login & Role
+    </button>
+    <button class="sidebar-item" data-section="workflow">
+      <span class="icon">🔀</span> Alur Kerja (End-to-End)
+    </button>
+    <button class="sidebar-item" data-section="schema">
+      <span class="icon">🗄️</span> Skema Database
+    </button>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Front Office</div>
+    <button class="sidebar-item" data-section="reservations">
+      <span class="icon">📋</span> Reservasi
+    </button>
+    <button class="sidebar-item" data-section="checkin">
+      <span class="icon">🛎</span> Check-in / Check-out
+    </button>
+    <button class="sidebar-item" data-section="folio">
+      <span class="icon">🧾</span> Folio & Billing
+    </button>
+    <button class="sidebar-item" data-section="nightaudit">
+      <span class="icon">🌙</span> Night Audit
+    </button>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Operasional</div>
+    <button class="sidebar-item" data-section="housekeeping">
+      <span class="icon">🧹</span> Housekeeping
+    </button>
+    <button class="sidebar-item" data-section="pos">
+      <span class="icon">🛒</span> POS (F&B)
+    </button>
+    <button class="sidebar-item" data-section="banquet">
+      <span class="icon">🎪</span> Banquet & Event
+    </button>
+    <button class="sidebar-item" data-section="spa">
+      <span class="icon">💆</span> Spa
+    </button>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Revenue & Distribusi</div>
+    <button class="sidebar-item" data-section="channel">
+      <span class="icon">🌐</span> Channel Manager
+    </button>
+    <button class="sidebar-item" data-section="pricing">
+      <span class="icon">💰</span> Open Pricing
+    </button>
+    <button class="sidebar-item" data-section="rms">
+      <span class="icon">📊</span> Revenue Management
+    </button>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Keuangan</div>
+    <button class="sidebar-item" data-section="accounting">
+      <span class="icon">📒</span> Akuntansi
+    </button>
+    <button class="sidebar-item" data-section="reports">
+      <span class="icon">📈</span> Laporan
+    </button>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Modul Tambahan</div>
+    <button class="sidebar-item" data-section="guests">
+      <span class="icon">👥</span> Tamu & Loyalty
+    </button>
+    <button class="sidebar-item" data-section="hr">
+      <span class="icon">👔</span> HR & Payroll
+    </button>
+    <button class="sidebar-item" data-section="asset">
+      <span class="icon">🔧</span> Aset & Maintenance
+    </button>
+    <button class="sidebar-item" data-section="comm">
+      <span class="icon">💬</span> Komunikasi & Marketing
+    </button>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Pengaturan</div>
+    <button class="sidebar-item" data-section="settings">
+      <span class="icon">⚙️</span> Konfigurasi
+    </button>
+    <button class="sidebar-item" data-section="integrations">
+      <span class="icon">🔌</span> Integrasi BYOK
+    </button>
+    <button class="sidebar-item" data-section="api">
+      <span class="icon">📡</span> REST API
+    </button>
+    <button class="sidebar-item" data-section="purchase">
+      <span class="icon">💎</span> Beli Source Code
+      <span class="badge">HOT</span>
+    </button>
+  </div>
+
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="content">
+
+<!-- ===================== OVERVIEW ===================== -->
+<section class="page-section active" id="section-overview">
+  <h1>Hotel Management System</h1>
+  <p class="lead">Sistem manajemen hotel lengkap berbasis Laravel 11 — dirancang untuk hotel butik hingga resort bintang 5 di Indonesia.</p>
+
+  <div class="card-grid">
+    <div class="card"><div class="card-icon">🏨</div><h4>Front Office</h4><p>Reservasi, check-in/out, folio, night audit</p></div>
+    <div class="card"><div class="card-icon">🛒</div><h4>POS</h4><p>Kasir F&B, minibar, charge to room</p></div>
+    <div class="card"><div class="card-icon">🌐</div><h4>Channel Manager</h4><p>Booking.com, Agoda, Traveloka ARI sync</p></div>
+    <div class="card"><div class="card-icon">💰</div><h4>Open Pricing</h4><p>Dynamic pricing engine, rate overrides</p></div>
+    <div class="card"><div class="card-icon">📒</div><h4>Accounting</h4><p>Double-entry GL, AR/AP, trial balance</p></div>
+    <div class="card"><div class="card-icon">📊</div><h4>RMS</h4><p>Yield management, forecast, rate shopper</p></div>
+    <div class="card"><div class="card-icon">🧹</div><h4>Housekeeping</h4><p>Room status board, task assignment</p></div>
+    <div class="card"><div class="card-icon">💆</div><h4>Spa & Banquet</h4><p>Treatments, therapists, events, BEO</p></div>
+    <div class="card"><div class="card-icon">👥</div><h4>Guest 360</h4><p>Loyalty, upsell score, churn risk, LTV</p></div>
+    <div class="card"><div class="card-icon">👔</div><h4>HR & Payroll</h4><p>Karyawan, absensi, payslip, service charge</p></div>
+    <div class="card"><div class="card-icon">🔌</div><h4>BYOK Integration</h4><p>AI / Payment / SMS / WA — user konfigurasi sendiri</p></div>
+    <div class="card"><div class="card-icon">📡</div><h4>REST API</h4><p>OAuth + PAT, webhook, idempotency</p></div>
+  </div>
+
+  <h2>Statistik Teknis</h2>
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>Metrik</th><th>Jumlah</th></tr></thead>
+      <tbody>
+        <tr><td>PHP source files</td><td><strong>341+</strong></td></tr>
+        <tr><td>Database migrations</td><td><strong>46</strong></td></tr>
+        <tr><td>Eloquent models</td><td><strong>130</strong></td></tr>
+        <tr><td>Blade views</td><td><strong>141</strong> (100% redesigned)</td></tr>
+        <tr><td>Routes</td><td><strong>~430</strong></td></tr>
+        <tr><td>Pest tests</td><td><strong>84/84</strong> ✅ 206 assertions</td></tr>
+        <tr><td>Services</td><td><strong>38</strong></td></tr>
+        <tr><td>Queue jobs</td><td><strong>16</strong></td></tr>
+        <tr><td>Dokumentasi</td><td><strong>27 file</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Teknologi</h2>
+  <ul>
+    <li><strong>Backend:</strong> Laravel 11, PHP 8.3, Eloquent ORM</li>
+    <li><strong>Database:</strong> PostgreSQL (recommended) / MySQL / SQLite (dev)</li>
+    <li><strong>Frontend:</strong> Tailwind CSS 3, Alpine.js, Blade templates</li>
+    <li><strong>Queue:</strong> Laravel Queues (Redis/database driver)</li>
+    <li><strong>Testing:</strong> Pest PHP, 84/84 passing</li>
+    <li><strong>Auth:</strong> Laravel Sanctum + Spatie Permission (11 roles)</li>
+    <li><strong>Compliance:</strong> PB1, NSFP, WNA reporting, UU PDP</li>
+  </ul>
+</section>
+
+<!-- ===================== INSTALASI ===================== -->
+<section class="page-section" id="section-install">
+  <h1>Instalasi</h1>
+  <p class="lead">Panduan setup dari nol hingga aplikasi berjalan di server.</p>
+
+  <h2>Kebutuhan Sistem</h2>
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>Komponen</th><th>Minimum</th><th>Rekomendasi</th></tr></thead>
+      <tbody>
+        <tr><td>PHP</td><td>8.2</td><td><strong>8.3</strong></td></tr>
+        <tr><td>Database</td><td>MySQL 8 / PostgreSQL 15</td><td><strong>PostgreSQL 16</strong></td></tr>
+        <tr><td>RAM</td><td>2 GB</td><td><strong>4 GB+</strong></td></tr>
+        <tr><td>Storage</td><td>20 GB</td><td><strong>50 GB SSD</strong></td></tr>
+        <tr><td>Node.js</td><td>18</td><td><strong>20 LTS</strong></td></tr>
+        <tr><td>Composer</td><td>2.5</td><td><strong>2.7+</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Langkah Instalasi</h2>
+  <ol class="steps">
+    <li>
+      <div class="step-body">
+        <div class="step-title">Clone & Install Dependencies</div>
+        <pre><code>git clone https://github.com/your-org/hotel.git
+cd hotel
+composer install --optimize-autoloader
+npm install && npm run build</code></pre>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <div class="step-title">Konfigurasi Environment</div>
+        <pre><code>cp .env.example .env
+php artisan key:generate</code></pre>
+        <p class="step-desc">Edit <code>.env</code>: set <code>DB_*</code>, <code>APP_URL</code>, <code>APP_MODE</code> (<code>standalone</code> atau <code>saas</code>)</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <div class="step-title">Jalankan Migrasi & Seeder</div>
+        <pre><code>php artisan migrate --seed</code></pre>
+        <p class="step-desc">Membuat 60+ tabel dan seed data: roles, room types contoh, admin user</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <div class="step-title">Setup Storage & Queue</div>
+        <pre><code>php artisan storage:link
+php artisan queue:work --queue=default,notifications,reports &</code></pre>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <div class="step-title">Setup Wizard</div>
+        <div class="step-desc">Buka <code>/setup/wizard</code> di browser → isi nama property, alamat, pajak, dan buat akun admin pertama.</div>
+      </div>
+    </li>
+  </ol>
+
+  <div class="callout success">
+    <span class="callout-icon">✅</span>
+    <div>Setelah wizard selesai, akses panel staff di <code>/panel</code> dan portal tamu di <code>/</code> (homepage booking engine).</div>
+  </div>
+
+  <h2>Akun Demo (setelah <code>DemoDataSeeder</code>)</h2>
+  <p>Semua akun demo memakai password <code>password123</code>. Cukup login di <code>/login</code> dan akses panel staff.</p>
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>Email</th><th>Password</th><th>Role</th><th>Akses Utama</th></tr></thead>
+      <tbody>
+        <tr><td><code>superadmin@demohotel.id</code></td><td><code>password123</code></td><td><span class="badge badge-violet">super_owner</span></td><td>Semua modul + user management + license</td></tr>
+        <tr><td><code>admin@demohotel.id</code></td><td><code>password123</code></td><td><span class="badge badge-violet">super_owner</span></td><td>Alias super admin (kompatibilitas)</td></tr>
+        <tr><td><code>manager@demohotel.id</code></td><td><code>password123</code></td><td><span class="badge badge-blue">manager</span></td><td>Semua operasional (tanpa user mgmt)</td></tr>
+        <tr><td><code>fo@demohotel.id</code></td><td><code>password123</code></td><td><span class="badge badge-green">front_office</span></td><td>Reservasi, check-in/out, folio</td></tr>
+        <tr><td><code>cashier@demohotel.id</code></td><td><code>password123</code></td><td><span class="badge badge-green">cashier</span></td><td>Folio payment + read folio</td></tr>
+        <tr><td><code>housekeeping@demohotel.id</code></td><td><code>password123</code></td><td><span class="badge badge-green">housekeeping</span></td><td>Status kamar, task, lost &amp; found</td></tr>
+        <tr><td><code>pos@demohotel.id</code></td><td><code>password123</code></td><td><span class="badge badge-amber">pos_cashier</span></td><td>POS order: create, update, settle</td></tr>
+        <tr><td><code>accountant@demohotel.id</code></td><td><code>password123</code></td><td><span class="badge badge-amber">accountant</span></td><td>Journal, AR/AP, reports</td></tr>
+        <tr><td><code>auditor@demohotel.id</code></td><td><code>password123</code></td><td><span class="badge badge-gray">auditor</span></td><td>Read-only semua modul + audit log</td></tr>
+        <tr><td><code>sales@demohotel.id</code></td><td><code>password123</code></td><td><span class="badge badge-gray">sales_marketing</span></td><td>Guest read + report operasional</td></tr>
+        <tr><td><code>it@demohotel.id</code></td><td><code>password123</code></td><td><span class="badge badge-gray">it_admin</span></td><td>Settings, integration, API token</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout warning">
+    <span class="callout-icon">⚠️</span>
+    <div>Ganti semua password default segera setelah instalasi. Jangan gunakan di production sebelum mengganti kredensial.</div>
+  </div>
+</section>
+
+<!-- ===================== LOGIN ===================== -->
+<section class="page-section" id="section-login">
+  <h1>Login & Sistem Role</h1>
+  <p class="lead">Hotel HMS menggunakan Spatie Laravel Permission dengan 11 role berbeda.</p>
+
+  <h2>Cara Login</h2>
+  <ol class="steps">
+    <li><div class="step-body"><div class="step-title">Buka URL Login</div><div class="step-desc">Akses <code>/login</code> langsung atau klik tombol <strong>Login</strong> di pojok kanan atas homepage.</div></div></li>
+    <li><div class="step-body"><div class="step-title">Masukkan Kredensial</div><div class="step-desc">Email + password. Centang "Remember Me" untuk session persisten.</div></div></li>
+    <li><div class="step-body"><div class="step-title">2FA (Opsional)</div><div class="step-desc">Jika diaktifkan admin, masukkan kode TOTP dari Google Authenticator / Authy.</div></div></li>
+  </ol>
+
+  <h2>Akun Demo Siap Pakai</h2>
+  <p>Password semua akun: <code>password123</code></p>
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>Email</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td><code>superadmin@demohotel.id</code></td><td><span class="badge badge-violet">super_owner</span></td></tr>
+        <tr><td><code>manager@demohotel.id</code></td><td><span class="badge badge-blue">manager</span></td></tr>
+        <tr><td><code>fo@demohotel.id</code></td><td><span class="badge badge-green">front_office</span></td></tr>
+        <tr><td><code>cashier@demohotel.id</code></td><td><span class="badge badge-green">cashier</span></td></tr>
+        <tr><td><code>housekeeping@demohotel.id</code></td><td><span class="badge badge-green">housekeeping</span></td></tr>
+        <tr><td><code>pos@demohotel.id</code></td><td><span class="badge badge-amber">pos_cashier</span></td></tr>
+        <tr><td><code>accountant@demohotel.id</code></td><td><span class="badge badge-amber">accountant</span></td></tr>
+        <tr><td><code>auditor@demohotel.id</code></td><td><span class="badge badge-gray">auditor</span></td></tr>
+        <tr><td><code>sales@demohotel.id</code></td><td><span class="badge badge-gray">sales_marketing</span></td></tr>
+        <tr><td><code>it@demohotel.id</code></td><td><span class="badge badge-gray">it_admin</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Daftar Role &amp; Akses</h2>
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>Role</th><th>Akses</th><th>Keterangan</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge badge-violet">super_owner</span></td><td>Semua modul</td><td>Full akses + user management + license</td></tr>
+        <tr><td><span class="badge badge-blue">manager</span></td><td>Semua operasional</td><td>Tanpa <code>sett.user.*</code></td></tr>
+        <tr><td><span class="badge badge-green">front_office</span></td><td>FO + folio + guest</td><td>Reservasi, check-in/out, kasir</td></tr>
+        <tr><td><span class="badge badge-green">cashier</span></td><td>Folio payment</td><td>Read folio + post payment</td></tr>
+        <tr><td><span class="badge badge-green">housekeeping</span></td><td>HK board, task, lost &amp; found</td><td>Update status kamar &amp; tugas HK</td></tr>
+        <tr><td><span class="badge badge-amber">pos_server</span></td><td>POS create + update</td><td>Input order tanpa settle</td></tr>
+        <tr><td><span class="badge badge-amber">pos_cashier</span></td><td>POS create + update + settle</td><td>POS outlet penuh</td></tr>
+        <tr><td><span class="badge badge-amber">accountant</span></td><td>Accounting + reports</td><td>Journal, AR/AP, period close</td></tr>
+        <tr><td><span class="badge badge-gray">auditor</span></td><td>Semua endpoint <code>.read</code></td><td>Read-only + audit log</td></tr>
+        <tr><td><span class="badge badge-gray">sales_marketing</span></td><td>Guest read + report ops</td><td>Untuk sales / outlet marketing</td></tr>
+        <tr><td><span class="badge badge-gray">it_admin</span></td><td>Settings + integration + token</td><td>Konfigurasi sistem &amp; API</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Menambah User Baru</h2>
+  <p>Buka <strong>Panel → Settings → Users</strong>. Klik "Add User", isi nama/email/password, pilih role. User langsung bisa login.</p>
+
+  <div class="callout info">
+    <span class="callout-icon">💡</span>
+    <div>Role <code>super_owner</code> punya akses penuh termasuk license, integrasi, dan user management. Role lain dibatasi sesuai permission di <code>RolesAndPermissionsSeeder</code>.</div>
+  </div>
+</section>
+
+<!-- ===================== RESERVASI ===================== -->
+<section class="page-section" id="section-reservations">
+  <h1>Reservasi</h1>
+  <p class="lead">Kelola semua reservasi — dari booking langsung, OTA, telepon, hingga walk-in.</p>
+
+  <h2>Membuat Reservasi Baru</h2>
+  <ol class="steps">
+    <li><div class="step-body"><div class="step-title">Buka Panel → Front Office → Reservasi</div><div class="step-desc">Klik tombol "Reservasi Baru" di pojok kanan atas.</div></div></li>
+    <li><div class="step-body"><div class="step-title">Isi Data Tamu</div><div class="step-desc">Cari tamu existing atau buat tamu baru: nama lengkap, email, telepon, kebangsaan.</div></div></li>
+    <li><div class="step-body"><div class="step-title">Pilih Kamar & Tanggal</div><div class="step-desc">Pilih room type, check-in / check-out, jumlah dewasa & anak. Sistem otomatis cek ketersediaan.</div></div></li>
+    <li><div class="step-body"><div class="step-title">Tentukan Rate Plan</div><div class="step-desc">Pilih rate plan (Room Only, Breakfast, dll). Harga otomatis dihitung termasuk PB1 & service charge.</div></div></li>
+    <li><div class="step-body"><div class="step-title">Simpan & Konfirmasi</div><div class="step-desc">Klik "Buat Reservasi" → sistem generate kode referensi unik (misal: <code>RES-2024-001234</code>).</div></div></li>
+  </ol>
+
+  <h2>Status Reservasi</h2>
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>Status</th><th>Arti</th><th>Aksi Tersedia</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge badge-amber">Tentative</span></td><td>Belum konfirmasi</td><td>Confirm / Cancel</td></tr>
+        <tr><td><span class="badge badge-green">Confirmed</span></td><td>Booking confirmed</td><td>Check-in / Cancel</td></tr>
+        <tr><td><span class="badge badge-blue">Checked In</span></td><td>Tamu sudah masuk</td><td>Check-out / Add Charge</td></tr>
+        <tr><td><span class="badge badge-gray">Checked Out</span></td><td>Selesai menginap</td><td>View only</td></tr>
+        <tr><td><span class="badge badge-red">Cancelled</span></td><td>Dibatalkan</td><td>View only</td></tr>
+        <tr><td><span class="badge badge-red">No Show</span></td><td>Tidak datang (ditandai saat night audit)</td><td>View only</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Tape Chart</h2>
+  <p>Buka <strong>FO → Tape Chart</strong> untuk melihat visual ketersediaan kamar per hari. Pilih range tanggal (default 14 hari ke depan). Setiap sel berwarna menunjukkan kamar yang terisi beserta nama tamu.</p>
+</section>
+
+<!-- ===================== CHECK-IN / OUT ===================== -->
+<section class="page-section" id="section-checkin">
+  <h1>Check-in & Check-out</h1>
+  <p class="lead">Proses check-in dan check-out dari panel Front Office.</p>
+
+  <h2>Proses Check-in</h2>
+  <ol class="steps">
+    <li><div class="step-body"><div class="step-title">Buka Daftar Arrivals</div><div class="step-desc">Panel → FO → Arrivals — semua reservasi "Confirmed" hari ini tampil di sini.</div></div></li>
+    <li><div class="step-body"><div class="step-title">Verifikasi Tamu</div><div class="step-desc">Klik reservasi → konfirmasi identitas tamu (KTP/passport). Upload scan KTP jika perlu.</div></div></li>
+    <li><div class="step-body"><div class="step-title">Assign Kamar Fisik</div><div class="step-desc">Pilih nomor kamar spesifik dari dropdown (otomatis filter kamar clean + available).</div></div></li>
+    <li><div class="step-body"><div class="step-title">Klik "Check-in"</div><div class="step-desc">Status berubah ke "Checked In". Folio tamu otomatis dibuat. Kamar berubah status FO = Occupied.</div></div></li>
+  </ol>
+
+  <h2>Proses Check-out</h2>
+  <ol class="steps">
+    <li><div class="step-body"><div class="step-title">Buka Daftar Departures</div><div class="step-desc">Panel → FO → Departures — reservasi "Checked In" dengan checkout hari ini.</div></div></li>
+    <li><div class="step-body"><div class="step-title">Review Folio</div><div class="step-desc">Klik "View Folio" → pastikan semua charge sudah benar (kamar, F&B, minibar, misc).</div></div></li>
+    <li><div class="step-body"><div class="step-title">Proses Pembayaran</div><div class="step-desc">Pilih metode bayar: Cash, Kartu, Transfer, OTA Collect. Masukkan jumlah yang diterima.</div></div></li>
+    <li><div class="step-body"><div class="step-title">Cetak Invoice</div><div class="step-desc">Klik "Print Invoice" → halaman invoice terpisah dengan tombol print otomatis.</div></div></li>
+    <li><div class="step-body"><div class="step-title">Klik "Check-out"</div><div class="step-desc">Status berubah ke "Checked Out". Kamar otomatis Dirty, siap untuk dibersihkan HK.</div></div></li>
+  </ol>
+
+  <div class="callout info">
+    <span class="callout-icon">💡</span>
+    <div>Tamu bisa melakukan <strong>self check-in</strong> via portal tamu di <code>/self-checkin/{ref}</code> menggunakan kode booking mereka. Sistem akan kirim link otomatis via email/WhatsApp.</div>
+  </div>
+</section>
+
+<!-- ===================== FOLIO ===================== -->
+<section class="page-section" id="section-folio">
+  <h1>Folio & Billing</h1>
+  <p class="lead">Setiap reservasi memiliki folio sebagai wadah semua transaksi selama menginap.</p>
+
+  <h2>Struktur Folio</h2>
+  <ul>
+    <li><strong>Room Charges</strong> — diposting otomatis setiap malam oleh Night Audit</li>
+    <li><strong>POS Charges</strong> — F&B, minibar yang di-charge ke kamar</li>
+    <li><strong>Misc Charges</strong> — laundry, transport, dll ditambah manual</li>
+    <li><strong>Payments</strong> — pembayaran yang masuk (cash, card, OTA)</li>
+    <li><strong>Balance</strong> — saldo tersisa (Total Charges − Total Payments)</li>
+  </ul>
+
+  <h2>Menambah Charge Manual</h2>
+  <p>Buka folio → klik "+ Add Charge" → pilih type (room/fnb/misc), isi deskripsi, amount, tanggal, COA account. Sistem otomatis hitung PB1 sesuai konfigurasi property.</p>
+
+  <h2>Split Folio</h2>
+  <p>Untuk tamu korporat atau group: buka folio → "Split" → pindahkan charge tertentu ke folio baru (misal F&B ke folio terpisah yang dibayar company).</p>
+
+  <h2>Transfer Charge</h2>
+  <p>Untuk memindahkan charge dari folio satu ke folio lain (mis. dari kamar A ke kamar B untuk tamu yang pindah kamar).</p>
+</section>
+
+<!-- ===================== NIGHT AUDIT ===================== -->
+<section class="page-section" id="section-nightaudit">
+  <h1>Night Audit</h1>
+  <p class="lead">Proses penutupan hari akuntansi hotel — dijalankan setiap malam setelah pukul 00:00.</p>
+
+  <h2>Apa yang Dilakukan Night Audit</h2>
+  <ul>
+    <li>Post <strong>room charges</strong> ke semua folio tamu yang masih check-in</li>
+    <li>Tandai reservasi "Confirmed" yang tidak check-in sebagai <strong>No Show</strong></li>
+    <li>Post <strong>jurnal akuntansi</strong> otomatis (DR: AR, CR: Room Revenue + Tax)</li>
+    <li>Hitung <strong>KPI harian</strong>: occupancy, ADR, RevPAR</li>
+    <li>Generate <strong>laporan daily revenue</strong></li>
+    <li>Tutup periode akuntansi untuk tanggal tersebut (period lock)</li>
+  </ul>
+
+  <h2>Cara Menjalankan</h2>
+  <ol class="steps">
+    <li><div class="step-body"><div class="step-title">Buka FO → Night Audit</div><div class="step-desc">Sistem menampilkan summary: kamar terisi, expected charges, catatan khusus.</div></div></li>
+    <li><div class="step-body"><div class="step-title">Verifikasi Data</div><div class="step-desc">Pastikan tidak ada reservasi yang belum diselesaikan (checkout terlambat, dll).</div></div></li>
+    <li><div class="step-body"><div class="step-title">Klik "Run Night Audit"</div><div class="step-desc">Proses berjalan otomatis ±30 detik. Progress bar ditampilkan.</div></div></li>
+    <li><div class="step-body"><div class="step-title">Review Hasil</div><div class="step-desc">Laporan Daily Revenue otomatis tersedia di Reports → Daily Revenue.</div></div></li>
+  </ol>
+
+  <div class="callout warning">
+    <span class="callout-icon">⚠️</span>
+    <div>Night audit bersifat <strong>idempotent</strong> — aman dijalankan ulang jika ada error. Tidak akan duplikasi charge yang sudah ada untuk tanggal yang sama.</div>
+  </div>
+
+  <h2>Otomasi via Scheduler</h2>
+  <p>Tambahkan ke crontab server untuk jalankan otomatis pukul 00:05:</p>
+  <pre><code>* * * * * cd /var/www/hotel && php artisan schedule:run >> /dev/null 2>&1</code></pre>
+  <p>Konfigurasi di <code>app/Console/Kernel.php</code>: <code>$schedule->job(new RunNightAuditJob)->dailyAt('00:05')</code></p>
+</section>
+
+<!-- ===================== HOUSEKEEPING ===================== -->
+<section class="page-section" id="section-housekeeping">
+  <h1>Housekeeping</h1>
+  <p class="lead">Manajemen status kebersihan kamar real-time dan penugasan staf HK.</p>
+
+  <h2>Room Status Board</h2>
+  <p>Buka <strong>Panel → Housekeeping → Board</strong>. Setiap kamar ditampilkan sebagai card dengan:</p>
+  <ul>
+    <li><span class="badge badge-green">Clean</span> — siap untuk tamu</li>
+    <li><span class="badge badge-red">Dirty</span> — perlu dibersihkan (otomatis setelah checkout)</li>
+    <li><span class="badge badge-blue">Inspected</span> — sudah diperiksa supervisor HK</li>
+    <li><span class="badge badge-amber">Cleaning</span> — sedang dibersihkan</li>
+    <li><span class="badge badge-gray">Out of Order</span> — tidak tersedia (maintenance)</li>
+  </ul>
+
+  <h2>Update Status Kamar</h2>
+  <p>Dari Board: pilih status baru di dropdown bawah card kamar → otomatis tersimpan real-time. Staf HK bisa akses via mobile browser.</p>
+
+  <h2>HK Tasks</h2>
+  <p>Buka <strong>HK → Tasks</strong> untuk melihat daftar tugas (cleaning, turndown, amenities replenishment). Supervisor bisa assign task ke staf tertentu.</p>
+
+  <h2>Out of Order (OOO)</h2>
+  <p>Buka <strong>FO → OOO</strong>: blokir kamar dari reservasi untuk periode tertentu dengan alasan (maintenance, renovasi, dll). Kamar yang OOO tidak muncul di availability check.</p>
+</section>
+
+<!-- ===================== POS ===================== -->
+<section class="page-section" id="section-pos">
+  <h1>POS (Point of Sale)</h1>
+  <p class="lead">Sistem kasir untuk outlet F&B — restaurant, bar, minibar, in-room dining.</p>
+
+  <h2>Membuka Kasir</h2>
+  <ol class="steps">
+    <li><div class="step-body"><div class="step-title">Pilih Outlet</div><div class="step-desc">Panel → POS → pilih outlet (Restaurant, Bar, dll)</div></div></li>
+    <li><div class="step-body"><div class="step-title">Pilih Meja</div><div class="step-desc">Klik meja yang akan dilayani. Status meja: Available (hijau) / Occupied (merah).</div></div></li>
+    <li><div class="step-body"><div class="step-title">Input Order</div><div class="step-desc">Pilih item dari menu → tambah ke keranjang. Modifiers dan catatan khusus tersedia per item.</div></div></li>
+    <li><div class="step-body"><div class="step-title">Settle</div><div class="step-desc">Pilih metode bayar atau "Charge to Room" (otomatis masuk ke folio tamu).</div></div></li>
+  </ol>
+
+  <h2>Charge to Room</h2>
+  <p>Di POS, pilih "Charge to Room" → masukkan nomor kamar atau nama tamu. Charge langsung masuk ke folio tamu yang bersangkutan. Akan muncul saat proses checkout.</p>
+
+  <h2>Laporan Shift POS</h2>
+  <p>FO → Shifts → pilih shift → lihat rekap pembayaran, breakdown per metode, dan variance cash.</p>
+</section>
+
+<!-- ===================== BANQUET ===================== -->
+<section class="page-section" id="section-banquet">
+  <h1>Banquet & Event</h1>
+  <p class="lead">Manajemen event, function rooms, dan BEO (Banquet Event Order).</p>
+
+  <h2>Membuat Event Baru</h2>
+  <ol class="steps">
+    <li><div class="step-body"><div class="step-title">Panel → Banquet → Events → Create</div><div class="step-desc">Isi nama event, tipe (wedding/conference/gala/dll)</div></div></li>
+    <li><div class="step-body"><div class="step-title">Jadwal & Setup</div><div class="step-desc">Tanggal, jam mulai-selesai, jumlah pax, layout ruangan (classroom/theatre/banquet)</div></div></li>
+    <li><div class="step-body"><div class="step-title">Assign Function Room</div><div class="step-desc">Pilih function room yang tersedia. Sistem cek konflik jadwal otomatis.</div></div></li>
+    <li><div class="step-body"><div class="step-title">Tambah F&B Menu</div><div class="step-desc">Di halaman detail event, tambah item F&B (catering, beverages, dll) per orang atau paket.</div></div></li>
+  </ol>
+
+  <h2>BEO (Banquet Event Order)</h2>
+  <p>Buka event → klik "Print BEO". Sistem generate dokumen formal berisi detail event, F&B, setup, total biaya. Bisa di-print atau save sebagai PDF menggunakan print browser (<kbd>Ctrl</kbd>+<kbd>P</kbd>).</p>
+
+  <h2>Banquet Calendar</h2>
+  <p>Panel → Banquet → Calendar: lihat semua event per function room dalam tampilan kalender. Event ditampilkan dengan status dan jumlah pax.</p>
+</section>
+
+<!-- ===================== SPA ===================== -->
+<section class="page-section" id="section-spa">
+  <h1>Spa Management</h1>
+  <p class="lead">Kelola treatment, therapist, dan appointment spa.</p>
+
+  <h2>Setup Awal</h2>
+  <ul>
+    <li><strong>Panel → Spa → Treatments</strong>: tambah treatment (nama, kode, durasi menit, harga)</li>
+    <li><strong>Panel → Spa → Therapists</strong>: daftarkan therapist (nama, gender, specializations, status aktif)</li>
+  </ul>
+
+  <h2>Appointment</h2>
+  <p>Panel → Spa → Appointments: buat appointment baru — pilih tamu, treatment, therapist, tanggal/jam. Sistem cek konflik jadwal therapist otomatis.</p>
+
+  <h2>Charge ke Folio</h2>
+  <p>Di halaman appointment: klik "Charge to Folio" → masukkan nomor kamar tamu. Biaya spa langsung masuk ke folio dan terhitung saat checkout.</p>
+</section>
+
+<!-- ===================== CHANNEL MANAGER ===================== -->
+<section class="page-section" id="section-channel">
+  <h1>Channel Manager</h1>
+  <p class="lead">Sinkronisasi availability, rate, dan restriction (ARI) ke OTA secara real-time.</p>
+
+  <h2>Channel yang Didukung</h2>
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>OTA</th><th>Format</th><th>Fitur</th></tr></thead>
+      <tbody>
+        <tr><td>Booking.com</td><td>XML / OTA API</td><td>ARI push + booking pull</td></tr>
+        <tr><td>Agoda</td><td>JSON REST (YCS)</td><td>ARI push + booking pull</td></tr>
+        <tr><td>Traveloka</td><td>JSON REST (TPI)</td><td>ARI push + booking pull</td></tr>
+        <tr><td>Channel lain</td><td>Generic REST</td><td>Konfigurasi via BYOK adapter</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Konfigurasi Channel</h2>
+  <ol class="steps">
+    <li><div class="step-body"><div class="step-title">Panel → Channel → Index</div><div class="step-desc">Klik "+ Add Channel" → pilih OTA → masukkan API credentials (Hotel ID, API Key, Secret)</div></div></li>
+    <li><div class="step-body"><div class="step-title">Room Mapping</div><div class="step-desc">Panel → Channel → Mapping: hubungkan room type HMS dengan room type ID di OTA</div></div></li>
+    <li><div class="step-body"><div class="step-title">Rate Mapping</div><div class="step-desc">Panel → Channel → Rates: setup rate plan yang di-push ke masing-masing OTA</div></div></li>
+    <li><div class="step-body"><div class="step-title">Restriction Setup</div><div class="step-desc">Panel → Channel → Restrictions: min stay, stop sell, closed to arrival per tanggal/kamar</div></div></li>
+  </tbody>
+  </ol>
+
+  <h2>Sync Log</h2>
+  <p>Panel → Channel → Sync Log: monitor semua ARI push (status, timestamp, payload, error). Berguna untuk troubleshoot jika ada inkonsistensi di OTA.</p>
+
+  <h2>Conflict Detection</h2>
+  <p>Panel → Channel → Conflicts: sistem otomatis deteksi double booking dan rate mismatch antar channel. Resolve manual atau otomatis via rule.</p>
+</section>
+
+<!-- ===================== PRICING ===================== -->
+<section class="page-section" id="section-pricing">
+  <h1>Open Pricing</h1>
+  <p class="lead">Engine harga terbuka per tanggal, room type, dan channel — dengan dynamic pricing otomatis.</p>
+
+  <h2>Rate Calendar</h2>
+  <p>Panel → Pricing → Calendar. Pilih room type + channel + range tanggal → klik "Load". Grid menampilkan harga per hari dengan sumber (base/dynamic/override) dan restriction.</p>
+
+  <h3>Bulk Override</h3>
+  <p>Setelah load grid, isi form Bulk Override di bawah → set harga, min stay, stop sell untuk <strong>semua tanggal</strong> yang terload sekaligus. Klik "Save Overrides".</p>
+
+  <h2>Dynamic Pricing Rules</h2>
+  <p>Panel → Pricing → Rules. Buat rule otomatis:</p>
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>Trigger</th><th>Contoh</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td>Occupancy %</td><td>Occupancy ≥ 80%</td><td>+15% price increase</td></tr>
+        <tr><td>Days to Arrival</td><td>≤ 3 days before</td><td>−10% last-minute discount</td></tr>
+        <tr><td>Pickup Pace</td><td>Pickup ≥ 5/day</td><td>+10% demand surge</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Klik "Apply Now" untuk jalankan semua rule aktif terhadap inventory 30 hari ke depan.</p>
+
+  <h2>Parity Monitor</h2>
+  <p>Panel → Pricing → Parity. Monitor perbedaan rate antara direct booking vs OTA. Alert otomatis muncul jika gap > threshold yang dikonfigurasi (critical/high/medium/low).</p>
+</section>
+
+<!-- ===================== RMS ===================== -->
+<section class="page-section" id="section-rms">
+  <h1>Revenue Management (RMS)</h1>
+  <p class="lead">Tools untuk mengoptimalkan pendapatan — forecast, yield, dan competitive intelligence.</p>
+
+  <h2>RMS Dashboard</h2>
+  <p>Panel → RMS → Dashboard: overview KPI revenue — occupancy, ADR, RevPAR, TRevPAR dibanding periode sebelumnya.</p>
+
+  <h2>Forecast</h2>
+  <p>Panel → RMS → Forecast: proyeksi occupancy dan revenue 30/60/90 hari ke depan berdasarkan historis dan pickup pace. Export ke Excel tersedia.</p>
+
+  <h2>Yield Management</h2>
+  <p>Panel → RMS → Yield: tabel yield per room type — room nights sold, ADR, ALOS, variance vs budget. Warna merah/hijau otomatis untuk quick scan.</p>
+
+  <h2>Rate Shopper</h2>
+  <p>Panel → RMS → Rate Shopper: bandingkan rate kita vs kompetitor. Rate index dihitung (hijau ≥1.05 = premium, merah ≤0.95 = below market). Data diupdate via integrasi rate shopping API (konfigurasi di Integrations).</p>
+</section>
+
+<!-- ===================== ACCOUNTING ===================== -->
+<section class="page-section" id="section-accounting">
+  <h1>Akuntansi</h1>
+  <p class="lead">Double-entry accounting terintegrasi — semua transaksi hotel otomatis membuat jurnal.</p>
+
+  <h2>Chart of Accounts (COA)</h2>
+  <p>Panel → Accounting → COA: lihat semua akun dengan kode, nama, tipe (Asset/Liability/Equity/Revenue/Expense). Default seeder sudah include ~50 akun standar hotel Indonesia.</p>
+
+  <h2>Journal Entries</h2>
+  <p>Sebagian besar jurnal dibuat otomatis (room charge, payment, night audit). Untuk jurnal manual: Panel → Accounting → Journal → Create. Input baris debit/kredit, sistem validasi balance otomatis.</p>
+
+  <h2>AR (Accounts Receivable)</h2>
+  <p>Panel → Accounting → AR: invoice ke company account atau travel agent. Lihat aging, outstanding balance, dan riwayat pembayaran per invoice.</p>
+
+  <h2>AP (Accounts Payable)</h2>
+  <p>Panel → Accounting → AP: tagihan dari supplier — laundry, F&B supplier, maintenance. Track outstanding bills dan tanggal jatuh tempo (overdue ditandai merah).</p>
+
+  <h2>Laporan Keuangan</h2>
+  <ul>
+    <li><strong>Daily Revenue</strong> — breakdown pendapatan per hari per kategori</li>
+    <li><strong>Trial Balance</strong> — neraca saldo periode tertentu, warning jika tidak balance</li>
+    <li><strong>P&L Statement</strong> — laba rugi dengan margin % dan KPI cards</li>
+  </ul>
+
+  <div class="callout info">
+    <span class="callout-icon">💡</span>
+    <div>Laporan bisa diexport ke <strong>CSV</strong> (kompatibel Accurate, Jurnal.id) dan format <strong>Coretax DJP</strong> untuk pelaporan e-Faktur.</div>
+  </div>
+</section>
+
+<!-- ===================== REPORTS ===================== -->
+<section class="page-section" id="section-reports">
+  <h1>Laporan</h1>
+  <p class="lead">Semua laporan operasional dan keuangan dalam satu tempat.</p>
+
+  <h2>Laporan Tersedia</h2>
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>Laporan</th><th>Modul</th><th>Frekuensi</th></tr></thead>
+      <tbody>
+        <tr><td>Daily Revenue</td><td>Accounting</td><td>Harian (otomatis night audit)</td></tr>
+        <tr><td>Trial Balance</td><td>Accounting</td><td>Bulanan</td></tr>
+        <tr><td>Profit & Loss</td><td>Accounting</td><td>Bulanan / Tahunan</td></tr>
+        <tr><td>Flash Report</td><td>Reports</td><td>Harian</td></tr>
+        <tr><td>Occupancy Report</td><td>Reports</td><td>Harian / Bulanan</td></tr>
+        <tr><td>Channel Production</td><td>Reports</td><td>Bulanan</td></tr>
+        <tr><td>Cashier Shift</td><td>Reports</td><td>Per shift</td></tr>
+        <tr><td>Service Charge</td><td>HR</td><td>Bulanan</td></tr>
+        <tr><td>Payroll Summary</td><td>HR</td><td>Bulanan</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Flash Report</h2>
+  <p>Panel → Reports → Flash: snapshot KPI hari ini — occupancy %, rooms sold, revenue, ADR, RevPAR. Desain print-friendly untuk morning briefing.</p>
+</section>
+
+<!-- ===================== GUESTS ===================== -->
+<section class="page-section" id="section-guests">
+  <h1>Tamu & Loyalty</h1>
+  <p class="lead">Database tamu terpadu dengan profil 360° dan program loyalitas.</p>
+
+  <h2>Guest Directory</h2>
+  <p>Panel → Guests: cari tamu berdasarkan nama, email, atau telepon. Klik tamu untuk lihat riwayat menginap.</p>
+
+  <h2>Guest 360 Profile</h2>
+  <p>Untuk setiap tamu, klik "360° Profile" untuk melihat:</p>
+  <ul>
+    <li><strong>Loyalty Score</strong> — 0–100, semakin tinggi = semakin loyal</li>
+    <li><strong>Upsell Score</strong> — potensi tamu untuk upgrade/add-on</li>
+    <li><strong>Churn Risk</strong> — risiko tamu tidak kembali (merah = AT RISK)</li>
+    <li><strong>LTV</strong> — total nilai lifetime tamu</li>
+    <li><strong>Behavioral Profile</strong> — frekuensi kunjungan, preferred room type, lead days</li>
+    <li><strong>Spend Patterns</strong> — avg F&B, spa per menginap</li>
+  </ul>
+  <p>Klik "Rebuild Profile" untuk refresh skor berdasarkan data terbaru.</p>
+
+  <h2>Loyalty Tiers</h2>
+  <p>Panel → Loyalty → Tiers: Bronze / Silver / Gold / Platinum. Set threshold poin dan rate discount per tier.</p>
+
+  <h2>Vouchers</h2>
+  <p>Panel → Loyalty → Vouchers: issue voucher diskon, complimentary night, atau F&B credit kepada tamu. Set tanggal expired dan nilai nominal.</p>
+</section>
+
+<!-- ===================== HR ===================== -->
+<section class="page-section" id="section-hr">
+  <h1>HR & Payroll</h1>
+  <p class="lead">Manajemen karyawan, absensi, dan penggajian terintegrasi.</p>
+
+  <h2>Data Karyawan</h2>
+  <p>Panel → HR → Employees: kelola data karyawan (nama, posisi, departemen, tanggal bergabung, gaji pokok). Upload dokumen (KTP, BPJS, kontrak).</p>
+
+  <h2>Absensi</h2>
+  <p>Panel → HR → Attendance: input absensi harian per karyawan atau import dari fingerprint system. Track jam kerja, overtime, cuti.</p>
+
+  <h2>Payroll</h2>
+  <p>Panel → HR → Payroll: generate payroll bulanan. Otomatis hitung komponen:</p>
+  <ul>
+    <li>Gaji pokok + tunjangan</li>
+    <li>Lembur (overtime hours × rate)</li>
+    <li>Service charge share per karyawan</li>
+    <li>Potongan BPJS Kesehatan & Ketenagakerjaan</li>
+    <li>PPh 21 (perhitungan otomatis)</li>
+  </ul>
+
+  <h2>Payslip</h2>
+  <p>Klik nama karyawan → pilih periode → "Print Payslip". Slip gaji formal dalam format SLIP GAJI yang print-friendly.</p>
+
+  <h2>Service Charge Distribution</h2>
+  <p>Panel → HR → Service Charge: distribusi service charge bulanan ke semua karyawan berdasarkan formula yang dikonfigurasi (equal share, atau per jabatan).</p>
+</section>
+
+<!-- ===================== ASSET ===================== -->
+<section class="page-section" id="section-asset">
+  <h1>Aset & Maintenance</h1>
+  <p class="lead">Tracking aset hotel dan work order maintenance.</p>
+
+  <h2>Daftar Aset</h2>
+  <p>Panel → Assets: semua aset hotel (furniture, elektronik, A/C, dll). Track cost, depresiasi, nilai buku, dan lokasi.</p>
+
+  <h2>Work Orders</h2>
+  <p>Panel → Assets → Work Orders: buat work order untuk maintenance. Tipe: Corrective (kerusakan), Preventive (rutin), Inspection. Assign ke teknisi dan set priority.</p>
+
+  <h2>PPM (Planned Preventive Maintenance)</h2>
+  <p>Panel → Assets → PPM: jadwal maintenance rutin per aset (mis: A/C service setiap 3 bulan). Tampilan visual: <span class="badge badge-red">Overdue</span> / <span class="badge badge-amber">Due Soon</span> / <span class="badge badge-blue">Scheduled</span>.</p>
+</section>
+
+<!-- ===================== COMM ===================== -->
+<section class="page-section" id="section-comm">
+  <h1>Komunikasi & Marketing</h1>
+  <p class="lead">Inbox terpusat, template pesan, dan campaign marketing.</p>
+
+  <h2>Inbox</h2>
+  <p>Panel → Comm → Inbox: semua pesan masuk dari tamu (via email, WhatsApp, SMS) dalam satu tampilan. Balas langsung dari panel.</p>
+
+  <h2>Thread / Chat View</h2>
+  <p>Klik thread untuk melihat percakapan dalam format chat. Pesan keluar (biru, kanan) dan masuk (abu, kiri) dengan timestamp.</p>
+
+  <h2>Templates</h2>
+  <p>Panel → Comm → Templates: buat template pesan untuk booking confirmation, check-in reminder, post-stay review request. Tersedia per channel (email/WhatsApp/SMS) dan bahasa.</p>
+
+  <h2>Campaigns</h2>
+  <p>Panel → Comm → Campaigns: blast pesan ke segment tamu (mis: semua tamu yang menginap 3+ bulan lalu). Set jadwal kirim, track open rate dan sent count.</p>
+
+  <h2>Referral Program</h2>
+  <p>Panel → Marketing → Referrals: program referral — tamu dapat unique link, earning points setiap ada booking dari link mereka.</p>
+</section>
+
+<!-- ===================== SETTINGS ===================== -->
+<section class="page-section" id="section-settings">
+  <h1>Konfigurasi</h1>
+  <p class="lead">Semua pengaturan property, pajak, dan sistem.</p>
+
+  <h2>Property Settings</h2>
+  <p>Panel → Settings → Property: nama hotel, alamat, telepon, NPWP, logo, timezone, mata uang. Pengaturan ini muncul di semua invoice dan dokumen resmi.</p>
+
+  <h2>Tax Settings</h2>
+  <p>Panel → Settings → Tax: aktifkan/nonaktifkan PB1, set persentase (default 10%), input NSFP prefix, daftar history rate PB1 untuk audit.</p>
+
+  <h2>Cancellation Policies</h2>
+  <p>Panel → Settings → Cancellation Policies: buat kebijakan pembatalan (nama, grace period, aturan penalty per X hari sebelum checkin). Assign ke rate plan.</p>
+
+  <h2>Document Templates</h2>
+  <p>Panel → Settings → Doc Templates: kustomisasi template folio, invoice, BEO — header HTML, body, footer. Variabel dinamis tersedia (nama tamu, total, dll).</p>
+
+  <h2>Users</h2>
+  <p>Panel → Settings → Users: kelola user staff — tambah, edit role, reset password, aktif/nonaktif.</p>
+</section>
+
+<!-- ===================== INTEGRATIONS ===================== -->
+<section class="page-section" id="section-integrations">
+  <h1>Integrasi BYOK</h1>
+  <p class="lead">Bring Your Own Key — semua integrasi dikonfigurasi oleh user sendiri, tidak ada provider yang hardcoded.</p>
+
+  <h2>Kategori Integrasi</h2>
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>Kategori</th><th>Contoh Provider</th><th>Format Adapter</th></tr></thead>
+      <tbody>
+        <tr><td>AI / LLM</td><td>OpenAI, Claude, DeepSeek, Groq, Ollama</td><td>OpenAI-compatible / Anthropic / Gemini</td></tr>
+        <tr><td>Payment</td><td>Midtrans, Xendit, Stripe, Doku</td><td>Redirect / Embed / QR</td></tr>
+        <tr><td>SMS Gateway</td><td>Twilio, Zenziva, Vonage</td><td>REST-format</td></tr>
+        <tr><td>WhatsApp</td><td>Wablas, Fonnte, WA Cloud API</td><td>REST-format</td></tr>
+        <tr><td>Email</td><td>Mailgun, SendGrid, SES, SMTP</td><td>SMTP / API</td></tr>
+        <tr><td>Storage</td><td>S3, Backblaze, Cloudflare R2, local</td><td>S3-compatible</td></tr>
+        <tr><td>Channel OTA</td><td>Booking.com, Agoda, Traveloka</td><td>XML / JSON REST</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Cara Menambah Integrasi</h2>
+  <ol class="steps">
+    <li><div class="step-body"><div class="step-title">Panel → Settings → Integrations</div><div class="step-desc">Klik "+ Add Integration" → pilih kategori</div></div></li>
+    <li><div class="step-body"><div class="step-title">Pilih Format Adapter</div><div class="step-desc">Misal untuk LLM: pilih "OpenAI-Compatible" jika provider pakai format OpenAI (DeepSeek, Groq, Ollama, dll)</div></div></li>
+    <li><div class="step-body"><div class="step-title">Input Credentials</div><div class="step-desc">Base URL, API Key (dienkripsi AES-256 saat disimpan), model name, extra headers jika perlu</div></div></li>
+    <li><div class="step-body"><div class="step-title">Assign ke Fitur</div><div class="step-desc">Pilih fitur mana yang menggunakan integrasi ini (AI: guest profile / translate / demand forecast)</div></div></li>
+    <li><div class="step-body"><div class="step-title">Test Connection</div><div class="step-desc">Klik "Test" untuk verifikasi koneksi sebelum aktifkan</div></div></li>
+  </ol>
+
+  <div class="callout success">
+    <span class="callout-icon">🔐</span>
+    <div>Semua API key dienkripsi di database menggunakan AES-256. Key tidak pernah dicatat di log dan tidak pernah muncul di API response.</div>
+  </div>
+</section>
+
+<!-- ===================== API ===================== -->
+<section class="page-section" id="section-api">
+  <h1>REST API</h1>
+  <p class="lead">Hotel HMS menyediakan REST API v1 untuk integrasi dengan sistem eksternal.</p>
+
+  <h2>Authentication</h2>
+  <p>Dua metode autentikasi:</p>
+  <ul>
+    <li><strong>OAuth 2.0</strong> — untuk aplikasi pihak ketiga</li>
+    <li><strong>Personal Access Token (PAT)</strong> — untuk integrasi langsung (webhook, scripts)</li>
+  </ul>
+  <pre><code>Authorization: Bearer {your-token}</code></pre>
+
+  <h2>Base URL</h2>
+  <pre><code>https://yourdomain.com/api/v1</code></pre>
+
+  <h2>Endpoint Utama</h2>
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>Endpoint</th><th>Method</th><th>Deskripsi</th></tr></thead>
+      <tbody>
+        <tr><td><code>/reservations</code></td><td>GET / POST</td><td>List & create reservasi</td></tr>
+        <tr><td><code>/reservations/{id}</code></td><td>GET / PATCH</td><td>Detail & update</td></tr>
+        <tr><td><code>/reservations/{id}/check-in</code></td><td>POST</td><td>Proses check-in</td></tr>
+        <tr><td><code>/reservations/{id}/check-out</code></td><td>POST</td><td>Proses check-out</td></tr>
+        <tr><td><code>/rooms</code></td><td>GET</td><td>List kamar & availability</td></tr>
+        <tr><td><code>/guests</code></td><td>GET / POST</td><td>Directory tamu</td></tr>
+        <tr><td><code>/folios/{id}/charges</code></td><td>POST</td><td>Tambah charge ke folio</td></tr>
+        <tr><td><code>/pricing/calendar</code></td><td>GET / POST</td><td>Rate grid & override</td></tr>
+        <tr><td><code>/webhooks</code></td><td>POST</td><td>Register webhook endpoint</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Idempotency</h2>
+  <p>Untuk request yang bisa duplikat (pembayaran, dll), gunakan header <code>Idempotency-Key: {uuid}</code>. Sistem menyimpan hasil 24 jam — request sama tidak akan diproses dua kali.</p>
+
+  <h2>Webhook Events</h2>
+  <ul>
+    <li><code>reservation.created</code></li>
+    <li><code>reservation.checked_in</code></li>
+    <li><code>reservation.checked_out</code></li>
+    <li><code>folio.payment_received</code></li>
+    <li><code>night_audit.completed</code></li>
+  </ul>
+
+  <p>Lihat dokumentasi lengkap di <a href="/api/v1/openapi.json" target="_blank"><code>/api/v1/openapi.json</code></a> (OpenAPI 3.0 spec).</p>
+</section>
+
+<!-- ===================== PURCHASE ===================== -->
+<section class="page-section" id="section-purchase">
+  <h1>Beli Source Code</h1>
+  <p class="lead">Dapatkan source code lengkap Hotel HMS untuk digunakan di hotel Anda.</p>
+
+  <div style="background:linear-gradient(135deg,#4f46e5,#7c3aed);border-radius:20px;padding:32px;color:#fff;margin:20px 0;text-align:center">
+    <div style="font-size:48px;margin-bottom:12px">💎</div>
+    <h2 style="font-size:26px;font-weight:800;margin:0 0 8px;border:none;padding:0;color:#fff">Hotel HMS — Full Source Code</h2>
+    <p style="opacity:.85;font-size:15px;margin-bottom:24px">Laravel 11 · PostgreSQL · Tailwind CSS · Alpine.js · 341 PHP files</p>
+    <a href="https://wa.me/62081296052010?text=Halo%2C+saya+tertarik+membeli+source+code+Hotel+HMS+Laravel.+Boleh+info+harga+dan+detail%3F"
+       target="_blank" rel="noopener"
+       style="display:inline-flex;align-items:center;gap:10px;background:#25d366;
+              color:#fff;border-radius:14px;padding:14px 28px;font-size:16px;font-weight:700;
+              text-decoration:none;box-shadow:0 4px 20px rgba(0,0,0,.2)">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Hubungi via WhatsApp
+    </a>
+    <p style="opacity:.75;font-size:14px;margin-top:16px">📞 081296052010 · Respon cepat</p>
+  </div>
+
+  <h2>Yang Termasuk dalam Paket</h2>
+  <ul>
+    <li>✅ Source code Laravel 11 lengkap (341+ PHP files)</li>
+    <li>✅ 141 Blade views — UI modern Tailwind CSS</li>
+    <li>✅ 46 database migrations + seeder lengkap</li>
+    <li>✅ 130 Eloquent models dengan relasi lengkap</li>
+    <li>✅ ~430 routes (panel, portal, API, admin)</li>
+    <li>✅ Pest test suite 84/84 passing</li>
+    <li>✅ 27 file dokumentasi teknis (00-24)</li>
+    <li>✅ BYOK integration system (AI, Payment, SMS, Channel)</li>
+    <li>✅ pSEO 15+ pattern untuk booking engine</li>
+    <li>✅ License pairing system (standalone mode)</li>
+    <li>✅ Indonesia compliance (PB1, NSFP, WNA reporting)</li>
+    <li>✅ Dukungan setup via WhatsApp</li>
+  </ul>
+
+  <h2>Cocok Untuk</h2>
+  <div class="card-grid">
+    <div class="card"><div class="card-icon">🏨</div><h4>Pemilik Hotel</h4><p>Deploy langsung untuk hotel Anda. Customisasi bebas tanpa biaya bulanan.</p></div>
+    <div class="card"><div class="card-icon">💻</div><h4>Developer / Agency</h4><p>Base yang solid untuk project HMS klien Anda. Hemat ratusan jam development.</p></div>
+    <div class="card"><div class="card-icon">🎓</div><h4>Belajar</h4><p>Studi kasus nyata Laravel 11 enterprise — ideal untuk portofolio atau tugas akhir.</p></div>
+    <div class="card"><div class="card-icon">🚀</div><h4>SaaS Starter</h4><p>Infrastruktur SaaS multi-tenant sudah disiapkan (stancl/tenancy ready).</p></div>
+  </div>
+
+  <h2>Kontak Pembelian</h2>
+  <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:var(--radius);padding:20px;display:flex;align-items:center;gap:16px">
+    <div style="background:#25d366;border-radius:50%;width:48px;height:48px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </div>
+    <div>
+      <p style="font-weight:700;font-size:15px;color:#166534;margin-bottom:4px">WhatsApp: 081296052010</p>
+      <p style="font-size:13px;color:#166534;margin:0">Chat sekarang untuk info harga, demo, dan proses pembelian</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ALUR KERJA (END-TO-END WORKFLOW) ===================== -->
+<section class="page-section" id="section-workflow">
+  <h1>Alur Kerja End-to-End</h1>
+  <p style="font-size:16px;color:var(--muted);margin-bottom:24px">Dari user klik tombol → kode jalan → tabel database terisi. Semua relational, satu alur.</p>
+
+  <div style="background:linear-gradient(135deg,#eef2ff,#fae8ff);border-radius:var(--radius);padding:20px 24px;margin-bottom:32px;border:1px solid #e0e7ff">
+    <p style="font-weight:700;font-size:14px;color:var(--primary-dark);margin-bottom:8px">📌 Cara baca dokumen ini</p>
+    <p style="font-size:14px;color:#3730a3;line-height:1.7;margin:0">Setiap workflow di-decompose jadi langkah. Per langkah ada <b>aksi user → file kode → tabel database yang terisi</b>. Tabel yang masih kosong di DB-mu = fitur belum pernah dipakai (normal kalau fresh install). Kalau sudah ada data, alur sudah dilalui.</p>
+  </div>
+
+  <h2>1️⃣ Workflow: Reservasi Direct (Booking Engine)</h2>
+  <p>Tamu pesan langsung dari website hotel. Tanpa OTA.</p>
+  <div style="overflow-x:auto;margin:16px 0 32px">
+  <table>
+    <thead><tr><th style="width:60px">Step</th><th>Aksi User</th><th>Kode</th><th>Tabel Terisi</th></tr></thead>
+    <tbody>
+      <tr><td><b>1</b></td><td>Buka <code>/booking</code> + isi tanggal</td><td><code>BookingEngineController@search</code></td><td>(read-only) <code>inventory</code>, <code>rate_plans</code>, <code>rates</code></td></tr>
+      <tr><td><b>2</b></td><td>Klik kamar → Pilih</td><td><code>BookingEngineController@results</code></td><td>(read-only)</td></tr>
+      <tr><td><b>3</b></td><td>Isi data tamu → Submit</td><td><code>BookingEngineController@submit</code></td><td>✏️ <code>guests</code>, <code>reservations</code>, <code>reservation_rooms</code>, <code>folios</code></td></tr>
+      <tr><td><b>4</b></td><td>Bayar via gateway</td><td>Webhook <code>booking.payment-callback</code></td><td>✏️ <code>folio_payments</code>, <code>folios.balance</code></td></tr>
+      <tr><td><b>5</b></td><td>Email konfirmasi terkirim</td><td>Job <code>SendReservationConfirmationJob</code></td><td>✏️ <code>notifications</code>, <code>email_logs</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>2️⃣ Workflow: Booking dari OTA (Channel Manager)</h2>
+  <p>Booking masuk dari Booking.com / Agoda / Traveloka / dll. lewat webhook atau polling.</p>
+  <div style="overflow-x:auto;margin:16px 0 32px">
+  <table>
+    <thead><tr><th style="width:60px">Step</th><th>Aksi</th><th>Kode</th><th>Tabel Terisi</th></tr></thead>
+    <tbody>
+      <tr><td><b>1</b></td><td>Setup OTA channel pertama kali</td><td><code>panel/channel</code> → <code>ChannelController@store</code></td><td>✏️ <code>channels</code>, <code>channel_room_mappings</code></td></tr>
+      <tr><td><b>2</b></td><td>OTA push booking via webhook</td><td><code>WebhookController@channel</code> → <code>BookingComAdapter</code> (atau adapter lain)</td><td>✏️ <code>reservations</code>, <code>reservation_rooms</code>, <code>guests</code>, <code>folios</code>, <code>ari_sync_log</code></td></tr>
+      <tr><td><b>3</b></td><td>PMS push availability ke OTA</td><td>Job <code>PushAriToChannelJob</code> → adapter</td><td>✏️ <code>ari_sync_log</code>, <code>inventory</code> (sync timestamp)</td></tr>
+      <tr><td><b>4</b></td><td>Konflik tarif/avail</td><td><code>ConflictDetectionService</code></td><td>✏️ <code>channel_conflicts</code>, <code>channel_parity_alerts</code></td></tr>
+      <tr><td><b>5</b></td><td>Resolve konflik (admin)</td><td><code>ConflictController@resolve</code></td><td>✏️ <code>channel_conflicts.resolved_at</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>3️⃣ Workflow: Check-In → Stay → Check-Out</h2>
+  <p>Inti operasional Front Office. Semua charge di-track di folio.</p>
+  <div style="overflow-x:auto;margin:16px 0 32px">
+  <table>
+    <thead><tr><th style="width:60px">Step</th><th>Aksi User</th><th>Kode</th><th>Tabel Terisi</th></tr></thead>
+    <tbody>
+      <tr><td><b>1</b></td><td>Tamu datang → Receptionist klik <b>Check-in</b></td><td><code>panel/fo/reservations/{id}/check-in</code></td><td>✏️ <code>reservations.status='checked_in'</code>, <code>reservation_rooms.actual_arrival</code>, <code>rooms.status='occupied'</code></td></tr>
+      <tr><td><b>2</b></td><td>Scan KTP/Paspor (vision LLM)</td><td><code>OcrService@extractKtp</code></td><td>✏️ <code>guests.ktp_number</code>, <code>guests.id_document_url</code></td></tr>
+      <tr><td><b>3</b></td><td>Tamu sign e-registration card</td><td><code>e-registration/store</code></td><td>✏️ <code>e_registrations</code>, <code>guests.signature_url</code></td></tr>
+      <tr><td><b>4</b></td><td>WNA? Auto generate Lapor Imigrasi</td><td><code>WnaReporter@queueReport</code></td><td>✏️ <code>wna_reports</code>, <code>compliance_jobs</code></td></tr>
+      <tr><td><b>5</b></td><td>Tamu order makanan via QR menu di kamar</td><td><code>QrMenuController@placeOrder</code></td><td>✏️ <code>pos_orders</code>, <code>pos_order_items</code></td></tr>
+      <tr><td><b>6</b></td><td>POS settle: <b>charge to room</b></td><td><code>PosController@settle</code></td><td>✏️ <code>folio_charges</code> (linked ke folio reservasi), <code>pos_orders.status='settled'</code></td></tr>
+      <tr><td><b>7</b></td><td>Minibar consumption (HK input)</td><td><code>HkController@minibarPost</code></td><td>✏️ <code>folio_charges</code>, <code>minibar_consumptions</code></td></tr>
+      <tr><td><b>8</b></td><td>Tamu check-out → settle folio</td><td><code>panel/fo/folios/{id}/settle</code></td><td>✏️ <code>folio_payments</code>, <code>folios.balance=0</code>, <code>reservations.status='checked_out'</code>, <code>rooms.status='dirty'</code></td></tr>
+      <tr><td><b>9</b></td><td>HK dapat task auto-clean</td><td><code>RoomCheckedOutObserver</code></td><td>✏️ <code>hk_tasks</code>, <code>rooms.status='cleaning'</code></td></tr>
+      <tr><td><b>10</b></td><td>HK selesai inspeksi → kamar sellable lagi</td><td><code>HkController@inspect</code></td><td>✏️ <code>hk_inspections</code>, <code>rooms.status='clean'</code>, <code>inventory.available++</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>4️⃣ Workflow: Night Audit (Closing Day)</h2>
+  <p>Auto-post room charge, freeze inventory, generate laporan harian.</p>
+  <div style="overflow-x:auto;margin:16px 0 32px">
+  <table>
+    <thead><tr><th style="width:60px">Step</th><th>Aksi</th><th>Kode</th><th>Tabel Terisi</th></tr></thead>
+    <tbody>
+      <tr><td><b>1</b></td><td>Click <b>Run Night Audit</b> (atau cron 03:00 WIB)</td><td><code>NightAuditController@run</code></td><td>—</td></tr>
+      <tr><td><b>2</b></td><td>Auto-post room charge per occupied room</td><td><code>NightAuditService@postRoomCharges</code></td><td>✏️ <code>folio_charges</code> (category=room)</td></tr>
+      <tr><td><b>3</b></td><td>Snapshot occupancy & rate</td><td><code>NightAuditService@snapshot</code></td><td>✏️ <code>inventory.sold</code>, <code>inventory.adr</code></td></tr>
+      <tr><td><b>4</b></td><td>Generate flash report</td><td><code>FlashReportGenerator@generate</code></td><td>✏️ <code>daily_flash_reports</code></td></tr>
+      <tr><td><b>5</b></td><td>Auto-post journal entries (PSAK + USALI)</td><td><code>JournalPostingService@postEod</code></td><td>✏️ <code>journal_entries</code>, <code>journal_lines</code></td></tr>
+      <tr><td><b>6</b></td><td>Lock period (no edits)</td><td><code>AccountingPeriod@close</code></td><td>✏️ <code>accounting_periods</code>, <code>audit_logs</code></td></tr>
+      <tr><td><b>7</b></td><td>Email digest ke owner</td><td>Job <code>SendDailyDigestJob</code></td><td>✏️ <code>email_logs</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>5️⃣ Workflow: Procurement (Inventory)</h2>
+  <p>PR → PO → GR. Auto-update stock card & journal AP.</p>
+  <div style="overflow-x:auto;margin:16px 0 32px">
+  <table>
+    <thead><tr><th style="width:60px">Step</th><th>Aksi User</th><th>Kode</th><th>Tabel Terisi</th></tr></thead>
+    <tbody>
+      <tr><td><b>1</b></td><td>HK / Kitchen butuh barang → bikin PR</td><td><code>panel/inventory/pr/create</code></td><td>✏️ <code>purchase_requests</code>, <code>purchase_request_lines</code></td></tr>
+      <tr><td><b>2</b></td><td>Manager approve</td><td><code>panel/inventory/pr/{id}/approve</code></td><td>✏️ <code>purchase_requests.status='approved'</code>, <code>approval_requests</code></td></tr>
+      <tr><td><b>3</b></td><td>Purchasing convert PR → PO</td><td><code>panel/inventory/po/create</code></td><td>✏️ <code>purchase_orders</code>, <code>purchase_order_lines</code></td></tr>
+      <tr><td><b>4</b></td><td>PO send ke vendor (email/print)</td><td><code>PoController@send</code></td><td>✏️ <code>purchase_orders.sent_at</code>, <code>email_logs</code></td></tr>
+      <tr><td><b>5</b></td><td>Barang datang → input GR</td><td><code>panel/inventory/gr/create</code></td><td>✏️ <code>goods_receipts</code>, <code>goods_receipt_lines</code></td></tr>
+      <tr><td><b>6</b></td><td>GR accept → stock + AP bill auto-create</td><td><code>GrController@accept</code></td><td>✏️ <code>inventory_movements</code>, <code>inventory_items.stock_qty</code>, <code>ap_bills</code>, <code>ap_bill_lines</code></td></tr>
+      <tr><td><b>7</b></td><td>Pay AP bill</td><td><code>panel/accounting/ap/{id}/pay</code></td><td>✏️ <code>ap_payments</code>, <code>ap_bills.status='paid'</code>, <code>journal_entries</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>6️⃣ Workflow: AI Concierge (BYOK)</h2>
+  <p>Chatbot tamu yang BYOK ke provider apapun (DeepSeek, Gemini, Anthropic, Self-hosted).</p>
+  <div style="overflow-x:auto;margin:16px 0 32px">
+  <table>
+    <thead><tr><th style="width:60px">Step</th><th>Aksi</th><th>Kode</th><th>Tabel Terisi</th></tr></thead>
+    <tbody>
+      <tr><td><b>1</b></td><td>Owner setup AI provider di Settings → Integrations</td><td><code>panel/settings/integrations</code></td><td>✏️ <code>integrations</code> (kategori 'ai', api_format, encrypted key)</td></tr>
+      <tr><td><b>2</b></td><td>Tamu chat di guest portal / WhatsApp</td><td><code>POST /api/v1/ai/concierge</code></td><td>✏️ <code>ai_conversations</code>, <code>ai_messages</code></td></tr>
+      <tr><td><b>3</b></td><td>ConciergeService panggil adapter (OpenAI-compat / Anthropic / Gemini)</td><td><code>ConciergeService@chat</code> → <code>OpenAICompatibleAdapter</code> (etc)</td><td>✏️ <code>ai_usage_logs</code> (token count, cost tracking)</td></tr>
+      <tr><td><b>4</b></td><td>Response streaming ke tamu</td><td>SSE response</td><td>✏️ <code>ai_messages</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>7️⃣ Workflow: Lisensi Pairing (Buyer Activation)</h2>
+  <p>Saat buyer install app pertama kali — pair ke <code>whitelabel.co.id</code>.</p>
+  <div style="overflow-x:auto;margin:16px 0 32px">
+  <table>
+    <thead><tr><th style="width:60px">Step</th><th>Aksi</th><th>Kode</th><th>File / Tabel</th></tr></thead>
+    <tbody>
+      <tr><td><b>1</b></td><td>Buyer buka domain pertama kali</td><td>Middleware <code>RequirePair</code></td><td>(read-only) <code>storage/app/.license.lock</code></td></tr>
+      <tr><td><b>2</b></td><td>Belum paired → redirect ke <code>/__pair</code> wizard</td><td><code>PairController@show</code></td><td>—</td></tr>
+      <tr><td><b>3</b></td><td>Buyer paste activation key</td><td><code>LicenseClient@activate</code> → POST whitelabel.co.id</td><td>—</td></tr>
+      <tr><td><b>4</b></td><td>Server return signed_payload (RSA-signed)</td><td>—</td><td>📦 <code>storage/app/.license.lock</code> (AES-256-GCM encrypted)</td></tr>
+      <tr><td><b>5</b></td><td>Heartbeat tiap 24 jam</td><td><code>LicenseClient@maybeHeartbeat</code></td><td>(cache: <code>license:heartbeat:last</code>)</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>8️⃣ Workflow: SaaS Onboarding (Vendor Side)</h2>
+  <p>Calon customer signup di marketplace, vendor admin provision tenant.</p>
+  <div style="overflow-x:auto;margin:16px 0 32px">
+  <table>
+    <thead><tr><th style="width:60px">Step</th><th>Aksi</th><th>Kode</th><th>Tabel Terisi</th></tr></thead>
+    <tbody>
+      <tr><td><b>1</b></td><td>Calon customer signup di <code>/signup</code></td><td><code>TenantSignupController@store</code></td><td>✏️ <code>tenants</code> (status='trial')</td></tr>
+      <tr><td><b>2</b></td><td>Vendor admin provision di <code>/admin/tenants/{id}/provision</code></td><td><code>TenantProvisioner@provision</code></td><td>✏️ <code>tenant_domains</code>, <code>tenant_subscriptions</code> (plan), <code>users</code> (admin tenant)</td></tr>
+      <tr><td><b>3</b></td><td>Generate tenant invoice pertama</td><td><code>InvoiceGenerator@generate</code></td><td>✏️ <code>tenant_invoices</code> (status='unpaid')</td></tr>
+      <tr><td><b>4</b></td><td>Customer bayar via Midtrans</td><td>Webhook <code>payment.success</code></td><td>✏️ <code>tenant_invoices.status='paid'</code>, <code>tenants.status='active'</code></td></tr>
+      <tr><td><b>5</b></td><td>Vendor impersonate untuk troubleshoot</td><td><code>panel/admin/tenants/{id}/impersonate</code></td><td>✏️ <code>impersonation_logs</code></td></tr>
+      <tr><td><b>6</b></td><td>Vendor suspend (telat bayar)</td><td><code>panel/admin/tenants/{id}/suspend</code></td><td>✏️ <code>tenants.status='suspended'</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:var(--radius);padding:18px 22px;margin-top:32px">
+    <p style="font-weight:700;font-size:14px;color:#166534;margin-bottom:6px">✅ Relational Integrity</p>
+    <p style="font-size:14px;color:#166534;line-height:1.7;margin:0">Setiap tabel anak punya FK ke parent — <code>folio_charges.folio_id → folios.id</code>, <code>folios.reservation_id → reservations.id</code>, <code>reservation_rooms.reservation_id → reservations.id</code>, <code>journal_lines.journal_entry_id → journal_entries.id</code>, dst. Semua di-enforce via migration <code>foreign()</code> constraints. Cascade delete dipakai untuk parent-child wajib (folio_charges ikut hilang kalau folio dihapus); restrict untuk reference master (rooms, guests).</p>
+  </div>
+
+</section>
+
+<!-- ===================== SKEMA DATABASE ===================== -->
+<section class="page-section" id="section-schema">
+  <h1>Skema Database</h1>
+  <p style="font-size:16px;color:var(--muted);margin-bottom:24px">167 tabel total · 24 ada data sekarang · 143 menunggu workflow dilalui</p>
+
+  <h2>Tabel dengan Data (Sudah Pernah Dipakai)</h2>
+  <p>Tabel yang sudah punya rows di DB-mu — fitur sudah diaktifkan, alur sudah dilalui:</p>
+  <div style="overflow-x:auto;margin:16px 0 32px">
+  <table>
+    <thead><tr><th>Tabel</th><th>Rows</th><th>Diisi oleh workflow</th></tr></thead>
+    <tbody>
+      <tr><td><code>folio_charges</code></td><td>2,452</td><td>Setiap charge ke folio (room, F&amp;B, minibar, addon)</td></tr>
+      <tr><td><code>rates</code></td><td>1,086</td><td>Setup rate plan + rate calendar</td></tr>
+      <tr><td><code>guests</code></td><td>1,001</td><td>Setiap reservasi baru (auto-create kalau guest belum ada)</td></tr>
+      <tr><td><code>reservation_rooms</code></td><td>801</td><td>Per kamar dalam reservasi (multi-room booking)</td></tr>
+      <tr><td><code>reservations</code></td><td>801</td><td>Booking direct + dari OTA</td></tr>
+      <tr><td><code>folios</code></td><td>748</td><td>1 folio per reservasi (auto-create saat reservasi)</td></tr>
+      <tr><td><code>inventory</code></td><td>543</td><td>Snapshot per kamar per tanggal (dari Night Audit)</td></tr>
+      <tr><td><code>folio_payments</code></td><td>370</td><td>Setiap payment masuk (cash, transfer, gateway)</td></tr>
+      <tr><td><code>permissions</code></td><td>56</td><td>Spatie permission seeded</td></tr>
+      <tr><td><code>rooms</code></td><td>30</td><td>Master kamar (30 untuk demo hotel)</td></tr>
+      <tr><td><code>roles</code></td><td>11</td><td>Spatie role: super_owner, manager, FO, cashier, dll</td></tr>
+      <tr><td><code>room_types</code></td><td>3</td><td>Superior, Deluxe, Junior Suite</td></tr>
+      <tr><td><code>properties</code></td><td>1</td><td>Demo Hotel Mandala</td></tr>
+      <tr><td><code>users</code></td><td>1</td><td>admin@demohotel.id</td></tr>
+      <tr><td><code>admin_users</code></td><td>1</td><td>superadmin@hotelhub.id (vendor)</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>Tabel Kosong (Fitur Belum Dipakai)</h2>
+  <p>143 tabel masih kosong — ini <b>NORMAL</b>. Akan terisi otomatis sesuai alur kerja:</p>
+  <div style="overflow-x:auto;margin:16px 0 32px">
+  <table>
+    <thead><tr><th>Kategori Fitur</th><th>Tabel Kosong</th><th>Akan terisi saat</th></tr></thead>
+    <tbody>
+      <tr><td>Channel / OTA</td><td><code>channels</code>, <code>channel_room_mappings</code>, <code>channel_conflicts</code>, <code>channel_parity_alerts</code>, <code>ari_sync_log</code></td><td>Setup OTA pertama (Booking.com, Agoda, dll)</td></tr>
+      <tr><td>POS / F&amp;B</td><td><code>pos_orders</code>, <code>pos_order_items</code>, <code>pos_outlets</code>, <code>pos_menu_items</code>, <code>pos_tables</code></td><td>Pertama kali order F&amp;B di restoran</td></tr>
+      <tr><td>Housekeeping</td><td><code>hk_tasks</code>, <code>hk_inspections</code>, <code>linen_audits</code>, <code>lost_found_items</code></td><td>Pertama kali check-out (auto-create cleaning task)</td></tr>
+      <tr><td>Accounting</td><td><code>journal_entries</code>, <code>journal_lines</code>, <code>ar_invoices</code>, <code>ar_payments</code>, <code>ap_bills</code>, <code>ap_payments</code>, <code>accounting_periods</code></td><td>Night Audit pertama atau manual journal</td></tr>
+      <tr><td>Inventory / Procurement</td><td><code>purchase_requests</code>, <code>purchase_orders</code>, <code>goods_receipts</code>, <code>inventory_items</code>, <code>inventory_movements</code></td><td>PR pertama dibuat</td></tr>
+      <tr><td>HR &amp; Payroll</td><td><code>employees</code>, <code>attendance_logs</code>, <code>leave_requests</code>, <code>payrolls</code>, <code>payslips</code></td><td>Tambah employee pertama</td></tr>
+      <tr><td>Banquet / MICE</td><td><code>banquet_events</code>, <code>banquet_function_rooms</code>, <code>banquet_event_menus</code></td><td>Booking event pertama</td></tr>
+      <tr><td>Spa</td><td><code>spa_appointments</code>, <code>spa_therapists</code>, <code>spa_treatments</code></td><td>Booking spa pertama</td></tr>
+      <tr><td>Asset / Maintenance</td><td><code>assets</code>, <code>work_orders</code>, <code>ppm_schedules</code></td><td>Tambah aset pertama</td></tr>
+      <tr><td>Loyalty / CRM</td><td><code>loyalty_members</code>, <code>loyalty_tiers</code>, <code>loyalty_vouchers</code></td><td>Enroll member loyalty pertama</td></tr>
+      <tr><td>Communication</td><td><code>conversations</code>, <code>messages</code>, <code>campaigns</code>, <code>notifications</code></td><td>Kirim email/WA pertama</td></tr>
+      <tr><td>Compliance</td><td><code>wna_reports</code>, <code>sipgar_submissions</code>, <code>e_faktur_logs</code></td><td>Check-in tamu WNA pertama / submit pajak</td></tr>
+      <tr><td>SaaS / Multi-tenant</td><td><code>tenants</code>, <code>tenant_domains</code>, <code>tenant_subscriptions</code>, <code>tenant_invoices</code></td><td>Cuma kepakai kalau APP_MODE=saas</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>Relational Integrity Map</h2>
+  <p>Cara tabel terhubung — semua FK enforced di migration:</p>
+  <pre style="background:#0f172a;color:#e2e8f0;padding:20px;border-radius:var(--radius);overflow-x:auto;font-size:13px;line-height:1.7"><code>properties (1)
+   ├─ rooms ─── room_types
+   ├─ inventory (per room per tanggal)
+   ├─ rate_plans ─── rates
+   │
+   ├─ reservations
+   │     ├─ reservation_rooms ─── rooms
+   │     ├─ guests (primary_guest)
+   │     └─ folios
+   │           ├─ folio_charges
+   │           ├─ folio_payments
+   │           └─ folio_transfers
+   │
+   ├─ channels (Booking.com, Agoda, …)
+   │     ├─ channel_room_mappings ─── room_types
+   │     ├─ channel_conflicts
+   │     └─ ari_sync_log
+   │
+   ├─ pos_outlets ─── pos_menu_items, pos_tables
+   │     └─ pos_orders ─── pos_order_items
+   │           └─ folio_charges (charge to room)
+   │
+   ├─ hk_tasks ─── rooms, employees
+   │     ├─ hk_inspections
+   │     ├─ linen_audits
+   │     └─ lost_found_items
+   │
+   ├─ journal_entries ─── journal_lines ─── chart_of_accounts
+   │     ├─ ar_invoices ─── ar_invoice_lines, ar_payments
+   │     └─ ap_bills ─── ap_bill_lines, ap_payments
+   │
+   ├─ purchase_requests ── purchase_orders ── goods_receipts
+   │     └─ inventory_movements ─── inventory_items
+   │
+   ├─ employees ── attendance_logs, leave_requests, payrolls, payslips
+   │
+   └─ users ── roles ── permissions  (Spatie)
+
+admin_users (vendor side, terpisah)
+   ├─ tenants ── tenant_domains, tenant_subscriptions, tenant_invoices
+   └─ license_events</code></pre>
+
+  <h2>Cara Cek Relational Integrity Sendiri</h2>
+  <pre style="background:#1e293b;color:#e2e8f0;padding:16px;border-radius:var(--radius);overflow-x:auto;font-size:13px"><code># List semua FK constraint:
+mysql hotel_main -e "SELECT TABLE_NAME, COLUMN_NAME, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
+FROM information_schema.KEY_COLUMN_USAGE
+WHERE REFERENCED_TABLE_NAME IS NOT NULL
+ORDER BY TABLE_NAME;"
+
+# Test cascade — coba delete reservation, lihat folio + folio_charges ikut hilang:
+php artisan tinker
+> \App\Models\Reservation::find(1)->delete();
+> // folios + folio_charges + folio_payments otomatis ikut</code></pre>
+
+</section>
+
+</main>
+
+<!-- TOC (right sidebar) -->
+<aside class="toc" id="toc">
+  <div class="toc-title">On This Page</div>
+  <ul id="tocList"></ul>
+</aside>
+
+</div><!-- .layout -->
+
+<script>
+// ── Navigation ──
+const sections = {};
+document.querySelectorAll('.page-section').forEach(s => {
+  sections[s.id.replace('section-','')] = s;
+});
+
+function showSection(key) {
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+  const section = sections[key];
+  const btn = document.querySelector(`.sidebar-item[data-section="${key}"]`);
+  if (section) { section.classList.add('active'); buildToc(section); }
+  if (btn) { btn.classList.add('active'); btn.scrollIntoView({block:'nearest',behavior:'smooth'}); }
+  window.scrollTo({top:0,behavior:'instant'});
+  history.replaceState(null,'','#'+key);
+}
+
+document.querySelectorAll('.sidebar-item[data-section]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    showSection(btn.dataset.section);
+    // close mobile sidebar
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('backdrop').classList.remove('open');
+  });
+});
+
+// ── TOC Builder ──
+function buildToc(section) {
+  const list = document.getElementById('tocList');
+  list.innerHTML = '';
+  section.querySelectorAll('h2,h3').forEach((h, i) => {
+    if (!h.id) h.id = 'h-' + i + '-' + h.textContent.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+    const li = document.createElement('li');
+    li.className = h.tagName === 'H3' ? 'lvl3' : '';
+    const a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.textContent = h.textContent;
+    li.appendChild(a);
+    list.appendChild(li);
+  });
+  // scroll spy
+  const tocLinks = list.querySelectorAll('a');
+  function updateToc() {
+    const hs = Array.from(section.querySelectorAll('h2,h3'));
+    let current = null;
+    hs.forEach(h => { if(h.getBoundingClientRect().top < 120) current = h.id; });
+    tocLinks.forEach(a => a.style.fontWeight = a.getAttribute('href') === '#'+current ? '600' : '');
+    tocLinks.forEach(a => a.style.color = a.getAttribute('href') === '#'+current ? 'var(--primary)' : '');
+  }
+  window.removeEventListener('scroll', window._tocScroll);
+  window._tocScroll = updateToc;
+  window.addEventListener('scroll', updateToc, {passive:true});
+  updateToc();
+}
+
+// ── Mobile sidebar ──
+const menuToggle = document.getElementById('menuToggle');
+const sidebar = document.getElementById('sidebar');
+const backdrop = document.getElementById('backdrop');
+menuToggle.addEventListener('click', () => {
+  sidebar.classList.toggle('open');
+  backdrop.classList.toggle('open');
+});
+backdrop.addEventListener('click', () => {
+  sidebar.classList.remove('open');
+  backdrop.classList.remove('open');
+});
+
+// ── Load from hash ──
+const hash = location.hash.replace('#','') || 'overview';
+showSection(hash);
+</script>
+
+</body>
+</html>
