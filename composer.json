@@ -23,6 +23,7 @@
         "phpoffice/phpspreadsheet": "^5.7",
         "pragmarx/google2fa-laravel": "^3.0",
         "predis/predis": "^2.2",
+        "pusher/pusher-php-server": "*",
         "ramsey/uuid": "^4.7",
         "sentry/sentry-laravel": "^4.25",
         "simplesoftwareio/simple-qrcode": "^4.2",
