@@ -28,7 +28,6 @@ class Room extends Model
     public function reservationRooms() { return $this->hasMany(ReservationRoom::class); }
     public function outOfOrderPeriods() { return $this->hasMany(OutOfOrderPeriod::class); }
     public function guestRequests()    { return $this->hasMany(GuestRequest::class); }
-    public function outOfOrderPeriods() { return $this->hasMany(OutOfOrderPeriod::class); }
     public function ownerStatements()  { return $this->hasMany(OwnerStatement::class); }
     public function iotDevices()       { return $this->hasMany(IotDevice::class); }
 }
