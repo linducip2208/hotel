@@ -514,6 +514,15 @@ Route::prefix('panel')->name('panel.')->middleware(['license', 'auth', 'property
         Route::get('users', [UserController::class, 'index'])->name('users');
         Route::post('users', [UserController::class, 'store'])->name('users.store');
         Route::patch('users/{id}', [UserController::class, 'update'])->name('users.update');
+
+        // Roles
+        Route::get('roles', [\App\Http\Controllers\Panel\Settings\RoleController::class, 'index'])->name('roles.index');
+        Route::get('roles/create', [\App\Http\Controllers\Panel\Settings\RoleController::class, 'create'])->name('roles.create');
+        Route::post('roles', [\App\Http\Controllers\Panel\Settings\RoleController::class, 'store'])->name('roles.store');
+        Route::get('roles/{id}/edit', [\App\Http\Controllers\Panel\Settings\RoleController::class, 'edit'])->name('roles.edit');
+        Route::put('roles/{id}', [\App\Http\Controllers\Panel\Settings\RoleController::class, 'update'])->name('roles.update');
+        Route::delete('roles/{id}', [\App\Http\Controllers\Panel\Settings\RoleController::class, 'destroy'])->name('roles.destroy');
+
         // Room Types
         Route::prefix('room-types')->name('room-types.')->group(function () {
             Route::get('/', [RoomTypeController::class, 'index'])->name('index');
