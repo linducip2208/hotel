@@ -698,6 +698,16 @@ Route::prefix('panel')->name('panel.')->middleware(['license', 'auth', 'property
         Route::get('competitor-intelligence', [\App\Http\Controllers\Panel\Rms\RmsController::class, 'competitorIntelligence'])->name('competitor-intelligence');
         Route::get('pricing-log', [\App\Http\Controllers\Panel\Rms\RmsController::class, 'pricingLog'])->name('pricing-log');
         Route::get('forecast-accuracy', [\App\Http\Controllers\Panel\Rms\ForecastAccuracyController::class, 'index'])->name('forecast-accuracy');
+
+        // Rate Scraper
+        Route::get('scraper', [\App\Http\Controllers\Panel\RateScraperController::class, 'index'])->name('scraper.index');
+        Route::post('scraper/targets', [\App\Http\Controllers\Panel\RateScraperController::class, 'storeTarget'])->name('scraper.targets.store');
+        Route::put('scraper/targets/{id}', [\App\Http\Controllers\Panel\RateScraperController::class, 'updateTarget'])->name('scraper.targets.update');
+        Route::delete('scraper/targets/{id}', [\App\Http\Controllers\Panel\RateScraperController::class, 'destroyTarget'])->name('scraper.targets.destroy');
+        Route::post('scraper/targets/{id}/scrape', [\App\Http\Controllers\Panel\RateScraperController::class, 'scrapeTarget'])->name('scraper.scrape');
+        Route::post('scraper/scrape-all', [\App\Http\Controllers\Panel\RateScraperController::class, 'scrapeAll'])->name('scraper.scrape-all');
+        Route::get('scraper/alerts', [\App\Http\Controllers\Panel\RateScraperController::class, 'alerts'])->name('scraper.alerts');
+        Route::post('scraper/alerts/{id}/read', [\App\Http\Controllers\Panel\RateScraperController::class, 'markAlertRead'])->name('scraper.alerts.read');
     });
 
     Route::prefix('asset')->name('asset.')->group(function () {
@@ -925,4 +935,62 @@ Route::prefix('panel')->name('panel.')->middleware(['license', 'auth', 'property
         Route::get('privacy/{id}/export', [\App\Http\Controllers\Panel\Compliance\PrivacyController::class, 'export'])->name('privacy.export');
         Route::post('privacy/{id}/anonymize', [\App\Http\Controllers\Panel\Compliance\PrivacyController::class, 'anonymize'])->name('privacy.anonymize');
     });
+
+    // ════════════════ ENHANCEMENT: Micro-stay / Day-use ════════════════
+    Route::prefix('microstay')->name('microstay.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Panel\MicrostayController::class, 'index'])->name('index');
+        Route::get('rates', [\App\Http\Controllers\Panel\MicrostayController::class, 'rates'])->name('rates');
+        Route::post('rates', [\App\Http\Controllers\Panel\MicrostayController::class, 'storeRate'])->name('rates.store');
+        Route::put('rates/{id}', [\App\Http\Controllers\Panel\MicrostayController::class, 'updateRate'])->name('rates.update');
+        Route::delete('rates/{id}', [\App\Http\Controllers\Panel\MicrostayController::class, 'destroyRate'])->name('rates.destroy');
+        Route::post('book', [\App\Http\Controllers\Panel\MicrostayController::class, 'book'])->name('book');
+    });
+
+    // ════════════════ ENHANCEMENT: Self Check-in Kiosk ════════════════
+    Route::prefix('kiosk')->name('kiosk.')->group(function () {
+        Route::get('sessions', [\App\Http\Controllers\Panel\KioskController::class, 'sessions'])->name('sessions');
+        Route::get('sessions/{id}', [\App\Http\Controllers\Panel\KioskController::class, 'showSession'])->name('sessions.show');
+    });
+
+    // ════════════════ ENHANCEMENT: Guest Messaging ════════════════
+    Route::prefix('messages')->name('messages.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Panel\MessagingController::class, 'index'])->name('index');
+        Route::get('thread/{id}', [\App\Http\Controllers\Panel\MessagingController::class, 'thread'])->name('thread');
+        Route::post('thread/{id}/send', [\App\Http\Controllers\Panel\MessagingController::class, 'send'])->name('send');
+        Route::post('thread/{id}/read', [\App\Http\Controllers\Panel\MessagingController::class, 'markRead'])->name('read');
+        Route::post('thread/{id}/close', [\App\Http\Controllers\Panel\MessagingController::class, 'closeThread'])->name('close');
+        Route::get('thread/{id}/poll', [\App\Http\Controllers\Panel\MessagingController::class, 'poll'])->name('poll');
+        Route::get('quick-replies', [\App\Http\Controllers\Panel\MessagingController::class, 'quickReplies'])->name('quick-replies');
+        Route::post('quick-replies', [\App\Http\Controllers\Panel\MessagingController::class, 'storeQuickReply'])->name('quick-replies.store');
+    });
+
+    // ════════════════ ENHANCEMENT: Dynamic Packaging ════════════════
+    Route::prefix('packages')->name('packages.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Panel\DynamicPackageController::class, 'index'])->name('index');
+        Route::get('{id}/builder', [\App\Http\Controllers\Panel\DynamicPackageController::class, 'builder'])->name('builder');
+        Route::post('{id}/customize', [\App\Http\Controllers\Panel\DynamicPackageController::class, 'customize'])->name('customize');
+        Route::post('{id}/attach/{reservation}', [\App\Http\Controllers\Panel\DynamicPackageController::class, 'attach'])->name('attach');
+    });
+
+    // ════════════════ ENHANCEMENT: Upsell Pre-arrival Campaigns ════════════════
+    Route::prefix('upsell')->name('upsell.')->group(function () {
+        Route::get('campaigns', [\App\Http\Controllers\Panel\UpsellCampaignController::class, 'index'])->name('campaigns.index');
+        Route::get('campaigns/create', [\App\Http\Controllers\Panel\UpsellCampaignController::class, 'create'])->name('campaigns.create');
+        Route::post('campaigns', [\App\Http\Controllers\Panel\UpsellCampaignController::class, 'store'])->name('campaigns.store');
+        Route::get('campaigns/{id}', [\App\Http\Controllers\Panel\UpsellCampaignController::class, 'show'])->name('campaigns.show');
+        Route::post('campaigns/{id}/run', [\App\Http\Controllers\Panel\UpsellCampaignController::class, 'run'])->name('campaigns.run');
+        Route::post('campaigns/{id}/toggle', [\App\Http\Controllers\Panel\UpsellCampaignController::class, 'toggle'])->name('campaigns.toggle');
+        Route::post('presentations/{id}/accept', [\App\Http\Controllers\Panel\UpsellCampaignController::class, 'acceptPresentation'])->name('presentations.accept');
+    });
+
+    // ════════════════ ENHANCEMENT: RFM Segmentation Dashboard ════════════════
+    Route::prefix('rfm')->name('rfm.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Panel\RfmController::class, 'index'])->name('index');
+        Route::post('calculate', [\App\Http\Controllers\Panel\RfmController::class, 'calculate'])->name('calculate');
+        Route::get('segments', [\App\Http\Controllers\Panel\RfmController::class, 'segments'])->name('segments');
+        Route::post('segments', [\App\Http\Controllers\Panel\RfmController::class, 'storeSegment'])->name('segments.store');
+        Route::put('segments/{id}', [\App\Http\Controllers\Panel\RfmController::class, 'updateSegment'])->name('segments.update');
+        Route::get('guest/{id}', [\App\Http\Controllers\Panel\RfmController::class, 'guestDetail'])->name('guest');
+    });
+
 });

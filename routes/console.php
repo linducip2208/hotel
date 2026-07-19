@@ -63,3 +63,9 @@ Schedule::command('compliance:check-licenses')->dailyAt('08:00');
 
 // Group Block auto-release
 Schedule::command('groups:release-expired')->dailyAt('02:00');
+
+// ════════════════ 8 ENHANCEMENTS SCHEDULER ════════════════
+Schedule::command('hotel:expire-microstays')->everyTenMinutes();
+Schedule::command('hotel:calculate-rfm')->dailyAt('04:30')->withoutOverlapping();
+Schedule::command('hotel:upsell-campaigns')->dailyAt('08:00')->withoutOverlapping();
+Schedule::command('hotel:scrape-rates')->everySixHours()->withoutOverlapping();
