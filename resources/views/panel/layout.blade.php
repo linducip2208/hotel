@@ -133,15 +133,16 @@
             return "<p class=\"px-3 pt-5 pb-2 text-[10px] uppercase tracking-[0.18em] font-semibold text-white/30\">$label</p>";
         };
 
-        // Role helper
-        $roleName = auth()->user()?->roles->first()?->name ?? '';
-        $isAdmin = in_array($roleName, ['Super Admin', 'Admin', 'Owner']);
-        $isFO = in_array($roleName, ['Super Admin', 'Admin', 'Front Office', 'Front Office Staff', 'Manager', 'Owner']);
-        $isHK = in_array($roleName, ['Super Admin', 'Admin', 'Housekeeping', 'Manager', 'Owner']);
-        $isFinance = in_array($roleName, ['Super Admin', 'Admin', 'Accounting', 'Finance', 'Manager', 'Owner']);
-        $isRevenue = in_array($roleName, ['Super Admin', 'Admin', 'Revenue Manager', 'Manager', 'Owner']);
-        $isMarketing = in_array($roleName, ['Super Admin', 'Admin', 'Marketing', 'Manager', 'Owner']);
-        $isSistem = in_array($roleName, ['Super Admin', 'Admin', 'Owner']);
+        // Role helper — match DB role names (snake_case)
+        // Default: show everything. Specific roles get restricted nav.
+        $roleName = auth()->user()?->roles->first()?->name ?? 'super_owner';
+        $isAdmin   = !in_array($roleName, ['housekeeping', 'pos_server', 'pos_cashier']);
+        $isFO      = !in_array($roleName, ['accountant', 'auditor', 'housekeeping', 'pos_server']);
+        $isHK      = !in_array($roleName, ['cashier', 'pos_cashier', 'pos_server', 'accountant', 'auditor', 'sales_marketing']);
+        $isFinance = !in_array($roleName, ['front_office', 'cashier', 'housekeeping', 'pos_server', 'pos_cashier']);
+        $isRevenue = !in_array($roleName, ['housekeeping', 'pos_server', 'pos_cashier']);
+        $isMarketing = $isRevenue;
+        $isSistem  = in_array($roleName, ['super_owner', 'it_admin']);
     @endphp
 
     {{-- ═══ 1. 🏠 Beranda ═══ --}}
