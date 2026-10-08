@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Rates;
 
+use App\Models\Property;
 use App\Services\Rms\RateShopperService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -11,6 +12,7 @@ use Illuminate\Console\Command;
 final class FetchCompetitorRatesCommand extends Command
 {
     protected $signature = 'rates:fetch-competitor {property_id?} {--date=today}';
+
     protected $description = 'Fetch competitor hotel rates for rate shopping comparison';
 
     public function handle(RateShopperService $svc): int
@@ -29,11 +31,11 @@ final class FetchCompetitorRatesCommand extends Command
             }
         } else {
             // Fetch for all active properties
-            $properties = \App\Models\Property::where('is_active', true)->get();
+            $properties = Property::where('is_active', true)->get();
             foreach ($properties as $p) {
                 try {
                     $result = $svc->fetchCompetitorRates($p->id, $date);
-                    $this->line("  {$p->name}: " . ($result['rate_index'] ?? 'cached'));
+                    $this->line("  {$p->name}: ".($result['rate_index'] ?? 'cached'));
                 } catch (\Throwable $e) {
                     $this->error("  {$p->name}: {$e->getMessage()}");
                 }

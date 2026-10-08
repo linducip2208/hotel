@@ -64,6 +64,7 @@ class CashierShiftService
             ->where('method', 'cash')
             ->where('is_void', false)
             ->sum('amount');
+
         return (float) $shift->opening_float + $cashCollected;
     }
 

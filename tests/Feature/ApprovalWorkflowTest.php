@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\ApprovalRequest;
 use App\Models\Property;
 use App\Models\User;
 use App\Services\Approvals\ApprovalService;

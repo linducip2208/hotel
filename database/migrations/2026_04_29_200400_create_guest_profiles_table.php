@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Schema;
  * Guest 360 Intelligence: aggregated behavioral profile rebuilt after each stay.
  * Separates mutable computed data from the immutable guest identity record.
  */
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         Schema::create('guest_profiles', function (Blueprint $t) {

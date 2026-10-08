@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -99,7 +98,7 @@ class User extends Authenticatable
     {
         $codes = [];
         for ($i = 0; $i < 8; $i++) {
-            $codes[] = Str::random(10) . '-' . Str::random(10);
+            $codes[] = Str::random(10).'-'.Str::random(10);
         }
 
         return $codes;
@@ -120,24 +119,103 @@ class User extends Authenticatable
         return true;
     }
 
-    public function property()           { return $this->belongsTo(Property::class); }
-    public function employee()           { return $this->hasOne(Employee::class); }
-    public function reservationsCreated(){ return $this->hasMany(Reservation::class, 'created_by_user_id'); }
-    public function foliosAsCashier()    { return $this->hasMany(Folio::class, 'cashier_id'); }
-    public function foliosChargesPosted(){ return $this->hasMany(FolioCharge::class, 'posted_by_user_id'); }
-    public function paymentsCollected()  { return $this->hasMany(FolioPayment::class, 'cashier_id'); }
-    public function shifts()             { return $this->hasMany(CashierShift::class, 'cashier_id'); }
-    public function nightAuditsRun()     { return $this->hasMany(NightAudit::class, 'run_by_user_id'); }
-    public function hkTasksAssigned()    { return $this->hasMany(HkTask::class, 'assignee_id'); }
-    public function workOrdersAssigned() { return $this->hasMany(WorkOrder::class, 'assignee_id'); }
-    public function approvalsRequested() { return $this->hasMany(ApprovalRequest::class, 'requester_id'); }
-    public function approvalsHandled()   { return $this->hasMany(ApprovalRequest::class, 'approver_id'); }
-    public function threadsAssigned()    { return $this->hasMany(MessageThread::class, 'assignee_id'); }
-    public function vouchersIssued()     { return $this->hasMany(GiftVoucher::class, 'issued_by_user_id'); }
-    public function ordersAsServer()     { return $this->hasMany(PosOrder::class, 'server_id'); }
-    public function guestRequestsAssigned() { return $this->hasMany(GuestRequest::class, 'assignee_id'); }
-    public function vouchersRedeemed()      { return $this->hasMany(VoucherRedemption::class, 'redeemed_by_user_id'); }
-    public function kbArticlesAuthored()    { return $this->hasMany(KbArticle::class, 'author_user_id'); }
-    public function oooPeriodsCreated()     { return $this->hasMany(OutOfOrderPeriod::class, 'created_by_user_id'); }
-    public function stockMovementsPerformed() { return $this->hasMany(StockMovement::class, 'performed_by_user_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function employee()
+    {
+        return $this->hasOne(Employee::class);
+    }
+
+    public function reservationsCreated()
+    {
+        return $this->hasMany(Reservation::class, 'created_by_user_id');
+    }
+
+    public function foliosAsCashier()
+    {
+        return $this->hasMany(Folio::class, 'cashier_id');
+    }
+
+    public function foliosChargesPosted()
+    {
+        return $this->hasMany(FolioCharge::class, 'posted_by_user_id');
+    }
+
+    public function paymentsCollected()
+    {
+        return $this->hasMany(FolioPayment::class, 'cashier_id');
+    }
+
+    public function shifts()
+    {
+        return $this->hasMany(CashierShift::class, 'cashier_id');
+    }
+
+    public function nightAuditsRun()
+    {
+        return $this->hasMany(NightAudit::class, 'run_by_user_id');
+    }
+
+    public function hkTasksAssigned()
+    {
+        return $this->hasMany(HkTask::class, 'assignee_id');
+    }
+
+    public function workOrdersAssigned()
+    {
+        return $this->hasMany(WorkOrder::class, 'assignee_id');
+    }
+
+    public function approvalsRequested()
+    {
+        return $this->hasMany(ApprovalRequest::class, 'requester_id');
+    }
+
+    public function approvalsHandled()
+    {
+        return $this->hasMany(ApprovalRequest::class, 'approver_id');
+    }
+
+    public function threadsAssigned()
+    {
+        return $this->hasMany(MessageThread::class, 'assignee_id');
+    }
+
+    public function vouchersIssued()
+    {
+        return $this->hasMany(GiftVoucher::class, 'issued_by_user_id');
+    }
+
+    public function ordersAsServer()
+    {
+        return $this->hasMany(PosOrder::class, 'server_id');
+    }
+
+    public function guestRequestsAssigned()
+    {
+        return $this->hasMany(GuestRequest::class, 'assignee_id');
+    }
+
+    public function vouchersRedeemed()
+    {
+        return $this->hasMany(VoucherRedemption::class, 'redeemed_by_user_id');
+    }
+
+    public function kbArticlesAuthored()
+    {
+        return $this->hasMany(KbArticle::class, 'author_user_id');
+    }
+
+    public function oooPeriodsCreated()
+    {
+        return $this->hasMany(OutOfOrderPeriod::class, 'created_by_user_id');
+    }
+
+    public function stockMovementsPerformed()
+    {
+        return $this->hasMany(StockMovement::class, 'performed_by_user_id');
+    }
 }

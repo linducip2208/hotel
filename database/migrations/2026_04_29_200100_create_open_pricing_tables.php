@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Schema;
  * an independent price override, bypassing the static BAR / derived-rate model.
  * Dynamic pricing rules define threshold-triggered adjustments applied nightly.
  */
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         Schema::create('rate_overrides', function (Blueprint $t) {

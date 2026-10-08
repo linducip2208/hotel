@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Models\Channel;
 use App\Models\Inventory;
-use App\Models\Rate;
 use App\Services\Channel\AriSyncService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -18,7 +17,9 @@ class SyncAriToChannelsJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 3;
+
     public int $backoff = 120;
+
     public int $timeout = 120;
 
     public function __construct(
@@ -46,8 +47,8 @@ class SyncAriToChannelsJob implements ShouldQueue
             foreach ($inventories as $inv) {
                 $updates[] = [
                     'channel_room_id' => $mapping->channel_room_id,
-                    'date'            => $inv->date->toDateString(),
-                    'available'       => max(0, $inv->total - $inv->sold - $inv->blocked - $inv->out_of_order),
+                    'date' => $inv->date->toDateString(),
+                    'available' => max(0, $inv->total - $inv->sold - $inv->blocked - $inv->out_of_order),
                 ];
             }
         }
@@ -59,6 +60,6 @@ class SyncAriToChannelsJob implements ShouldQueue
 
     public function failed(\Throwable $e): void
     {
-        Log::error("ARI sync failed", ['channel' => $this->channelId, 'error' => $e->getMessage()]);
+        Log::error('ARI sync failed', ['channel' => $this->channelId, 'error' => $e->getMessage()]);
     }
 }

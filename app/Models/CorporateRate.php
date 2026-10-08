@@ -14,7 +14,18 @@ class CorporateRate extends Model
         'is_active' => 'boolean',
     ];
 
-    public function property()          { return $this->belongsTo(Property::class); }
-    public function corporateAccount()  { return $this->belongsTo(CorporateAccount::class); }
-    public function roomType()          { return $this->belongsTo(RoomType::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function corporateAccount()
+    {
+        return $this->belongsTo(CorporateAccount::class);
+    }
+
+    public function roomType()
+    {
+        return $this->belongsTo(RoomType::class);
+    }
 }

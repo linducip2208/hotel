@@ -33,9 +33,9 @@ class GuestRequestController extends Controller
         $guest = auth('customer')->user();
 
         $data = $request->validate([
-            'type'        => 'required|string|in:housekeeping,maintenance,extra_amenities,other',
+            'type' => 'required|string|in:housekeeping,maintenance,extra_amenities,other',
             'description' => 'required|string|max:1000',
-            'priority'    => 'nullable|string|in:low,normal,high',
+            'priority' => 'nullable|string|in:low,normal,high',
         ]);
 
         $activeStay = Reservation::where('primary_guest_id', $guest->id)
@@ -46,16 +46,16 @@ class GuestRequestController extends Controller
             ->first();
 
         GuestRequest::create([
-            'property_id'   => $guest->property_id,
-            'reservation_id'=> $activeStay?->id,
-            'guest_id'      => $guest->id,
-            'room_id'       => $activeStay?->room_id,
-            'type'          => $data['type'],
-            'description'   => $data['description'],
-            'priority'      => $data['priority'] ?? 'normal',
-            'status'        => 'pending',
-            'opened_at'     => now(),
-            'source'        => 'guest_app',
+            'property_id' => $guest->property_id,
+            'reservation_id' => $activeStay?->id,
+            'guest_id' => $guest->id,
+            'room_id' => $activeStay?->room_id,
+            'type' => $data['type'],
+            'description' => $data['description'],
+            'priority' => $data['priority'] ?? 'normal',
+            'status' => 'pending',
+            'opened_at' => now(),
+            'source' => 'guest_app',
         ]);
 
         return back()->with('success', 'Permintaan berhasil dikirim.');

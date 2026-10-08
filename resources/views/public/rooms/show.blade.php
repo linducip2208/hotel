@@ -32,6 +32,21 @@
         </div>
     @endif
 
+    {{-- Virtual tour 360 --}}
+    @if($roomType->virtual_tour_url)
+        <div class="max-w-7xl mx-auto px-4 lg:px-8 mt-6">
+            <div class="bg-white border border-slate-200 rounded-3xl overflow-hidden">
+                <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    <h2 class="font-display text-lg font-bold text-slate-900">Tur Virtual 360°</h2>
+                </div>
+                <div class="aspect-video w-full">
+                    <iframe src="{{ $roomType->virtual_tour_url }}" class="w-full h-full" loading="lazy" allowfullscreen allow="xr-spatial-tracking; fullscreen" title="Tur virtual {{ $roomType->name }}"></iframe>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <div class="max-w-7xl mx-auto px-4 lg:px-8 py-12 lg:py-16 grid lg:grid-cols-3 gap-10">
         <div class="lg:col-span-2">
             <p class="text-xs font-bold text-indigo-600 uppercase tracking-[0.25em] mb-3">{{ $roomType->code }} · {{ $property->name }}</p>

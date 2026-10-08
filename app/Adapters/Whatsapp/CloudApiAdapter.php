@@ -23,6 +23,7 @@ class CloudApiAdapter extends BaseAdapter implements WhatsappAdapterInterface
                 ],
             ],
         ]);
+
         return [
             'ok' => $response->getStatusCode() < 400,
             'raw' => json_decode((string) $response->getBody(), true) ?? [],

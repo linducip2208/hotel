@@ -68,8 +68,11 @@ class PayrollService
     protected function ptkp(Employee $emp): float
     {
         $base = 54000000; // TK/0
-        if (in_array($emp->marital_status, ['married', 'kawin'])) $base += 4500000;
+        if (in_array($emp->marital_status, ['married', 'kawin'])) {
+            $base += 4500000;
+        }
         $base += min(3, $emp->dependents_count) * 4500000;
+
         return $base;
     }
 
@@ -88,8 +91,11 @@ class PayrollService
             $portion = min($rem, $band);
             $tax += $portion * $rate;
             $rem -= $portion;
-            if ($rem <= 0) break;
+            if ($rem <= 0) {
+                break;
+            }
         }
+
         return round($tax, 2);
     }
 }

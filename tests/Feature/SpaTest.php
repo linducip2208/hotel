@@ -2,8 +2,6 @@
 
 use App\Models\Guest;
 use App\Models\Property;
-use App\Models\Reservation;
-use App\Models\RoomType;
 use App\Models\SpaAppointment;
 use App\Models\SpaCabin;
 use App\Models\SpaTherapist;

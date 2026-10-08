@@ -8,7 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class PropertyTranslation extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
 
-    public function property() { return $this->belongsTo(Property::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
 }

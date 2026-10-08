@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 class ProcessDripQueue extends Command
 {
     protected $signature = 'drip:process';
+
     protected $description = 'Process pending drip campaign queue items that are due';
 
     public function handle(DripCampaignService $service): int

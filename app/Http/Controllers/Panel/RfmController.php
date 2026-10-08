@@ -14,12 +14,12 @@ class RfmController extends Controller
     {
         $property = app('current_property');
         $profiles = GuestProfile::whereHas('guest', function ($q) use ($property) {
-            $q->whereHas('reservations', fn($r) => $r->where('property_id', $property->id));
+            $q->whereHas('reservations', fn ($r) => $r->where('property_id', $property->id));
         })->with('guest')->orderBy('rfm_score', 'desc')->limit(50)->get();
 
         $segments = RfmSegmentRule::where('property_id', $property->id)->get();
         $distribution = GuestProfile::whereNotNull('rfm_segment')
-            ->whereHas('guest', fn($q) => $q->whereHas('reservations', fn($r) => $r->where('property_id', $property->id)))
+            ->whereHas('guest', fn ($q) => $q->whereHas('reservations', fn ($r) => $r->where('property_id', $property->id)))
             ->selectRaw('rfm_segment, count(*) as total')
             ->groupBy('rfm_segment')
             ->pluck('total', 'rfm_segment')
@@ -32,6 +32,7 @@ class RfmController extends Controller
     {
         $property = app('current_property');
         $count = $service->calculateAll($property->id);
+
         return back()->with('success', "{$count} guest profiles berhasil di-segmentasi.");
     }
 
@@ -39,6 +40,7 @@ class RfmController extends Controller
     {
         $property = app('current_property');
         $rules = RfmSegmentRule::where('property_id', $property->id)->get();
+
         return view('panel.rfm.segments', compact('property', 'rules'));
     }
 
@@ -46,6 +48,7 @@ class RfmController extends Controller
     {
         $property = app('current_property');
         RfmSegmentRule::create(array_merge($request->all(), ['property_id' => $property->id]));
+
         return back()->with('success', 'Segment rule ditambahkan.');
     }
 
@@ -53,6 +56,7 @@ class RfmController extends Controller
     {
         $rule = RfmSegmentRule::findOrFail($id);
         $rule->update($request->all());
+
         return back()->with('success', 'Segment rule diupdate.');
     }
 
@@ -60,6 +64,7 @@ class RfmController extends Controller
     {
         $property = app('current_property');
         $guest = Guest::with('profile', 'reservations')->findOrFail($id);
+
         return view('panel.rfm.guest', compact('property', 'guest'));
     }
 }

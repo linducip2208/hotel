@@ -23,10 +23,11 @@ class RequirePair
         }
 
         $domain = strtolower($request->getHost());
-        $data   = $this->client->verify($domain);
+        $data = $this->client->verify($domain);
 
         if ($data) {
             $request->attributes->set('license', $data);
+
             return $next($request);
         }
 
@@ -35,16 +36,28 @@ class RequirePair
 
     private function shouldBypass(Request $request): bool
     {
-        $path = '/' . ltrim($request->path(), '/');
+        $path = '/'.ltrim($request->path(), '/');
 
-        if (str_starts_with($path, '/__pair')) return true;
-        if (str_starts_with($path, '/setup')) return true;
+        if (str_starts_with($path, '/__pair')) {
+            return true;
+        }
+        if (str_starts_with($path, '/setup')) {
+            return true;
+        }
 
-        if ($path === '/health' || $path === '/up') return true;
-        if (str_starts_with($path, '/_debugbar')) return true;
+        if ($path === '/health' || $path === '/up') {
+            return true;
+        }
+        if (str_starts_with($path, '/_debugbar')) {
+            return true;
+        }
 
-        if ($path === '/sitemap.xml' || str_starts_with($path, '/sitemap-')) return true;
-        if ($path === '/robots.txt') return true;
+        if ($path === '/sitemap.xml' || str_starts_with($path, '/sitemap-')) {
+            return true;
+        }
+        if ($path === '/robots.txt') {
+            return true;
+        }
 
         if ($this->isLocalDev($request->getHost())) {
             return true;

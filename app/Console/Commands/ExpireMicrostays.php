@@ -2,19 +2,21 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Property;
 use App\Services\Fo\MicrostayService;
 use Illuminate\Console\Command;
 
 class ExpireMicrostays extends Command
 {
     protected $signature = 'hotel:expire-microstays {--property=}';
+
     protected $description = 'Auto-checkout expired microstay reservations';
 
     public function handle(MicrostayService $service): int
     {
         $propertyId = $this->option('property');
-        if (!$propertyId) {
-            $properties = \App\Models\Property::where('is_active', true)->pluck('id');
+        if (! $propertyId) {
+            $properties = Property::where('is_active', true)->pluck('id');
             foreach ($properties as $pid) {
                 $count = $service->expireOverdueMicrostays($pid);
                 if ($count > 0) {

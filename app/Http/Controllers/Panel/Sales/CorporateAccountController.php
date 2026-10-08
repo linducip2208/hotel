@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel\Sales;
 
 use App\Http\Controllers\Controller;
 use App\Models\CorporateAccount;
+use App\Models\CorporateRate;
 use App\Models\RoomType;
 use App\Services\Sales\CorporateAccountService;
 use Illuminate\Http\Request;
@@ -15,13 +16,14 @@ class CorporateAccountController extends Controller
     public function index(Request $request)
     {
         $accounts = $this->service->list(app('current_property'), $request->only(['status', 'search']));
+
         return view('panel.sales.corporate-index', compact('accounts'));
     }
 
     public function create()
     {
         return view('panel.sales.corporate-form', [
-            'account' => new CorporateAccount(),
+            'account' => new CorporateAccount,
             'roomTypes' => RoomType::where('property_id', app('current_property')->id)->orderBy('name')->get(),
         ]);
     }
@@ -46,6 +48,7 @@ class CorporateAccountController extends Controller
             'notes' => 'nullable|string',
         ]);
         $this->service->create(app('current_property'), $data);
+
         return redirect()->route('panel.sales.corporate.index')->with('success', 'Corporate account berhasil dibuat.');
     }
 
@@ -56,12 +59,14 @@ class CorporateAccountController extends Controller
             ->findOrFail($id);
         $performance = $this->service->performanceReport($account);
         $roomTypes = RoomType::where('property_id', app('current_property')->id)->orderBy('name')->get();
+
         return view('panel.sales.corporate-show', compact('account', 'performance', 'roomTypes'));
     }
 
     public function edit($id)
     {
         $account = CorporateAccount::where('property_id', app('current_property')->id)->findOrFail($id);
+
         return view('panel.sales.corporate-form', [
             'account' => $account,
             'roomTypes' => RoomType::where('property_id', app('current_property')->id)->orderBy('name')->get(),
@@ -90,6 +95,7 @@ class CorporateAccountController extends Controller
             'notes' => 'nullable|string',
         ]);
         $this->service->update($account, $data);
+
         return back()->with('success', 'Corporate account berhasil diperbarui.');
     }
 
@@ -97,6 +103,7 @@ class CorporateAccountController extends Controller
     {
         $account = CorporateAccount::where('property_id', app('current_property')->id)->findOrFail($id);
         $account->delete();
+
         return back()->with('success', 'Corporate account berhasil dihapus.');
     }
 
@@ -110,15 +117,16 @@ class CorporateAccountController extends Controller
             'is_active' => 'boolean',
         ]);
         $this->service->saveRate(app('current_property'), $account, $data);
+
         return back()->with('success', 'Rate berhasil disimpan.');
     }
 
     public function deleteRate($id, $rateId)
     {
-        $rate = \App\Models\CorporateRate::whereHas('corporateAccount', fn($q) =>
-            $q->where('property_id', app('current_property')->id)
+        $rate = CorporateRate::whereHas('corporateAccount', fn ($q) => $q->where('property_id', app('current_property')->id)
         )->findOrFail($rateId);
         $this->service->deleteRate($rate);
+
         return back()->with('success', 'Rate berhasil dihapus.');
     }
 
@@ -126,6 +134,7 @@ class CorporateAccountController extends Controller
     {
         $account = CorporateAccount::where('property_id', app('current_property')->id)->findOrFail($id);
         $bookings = $account->bookings()->with('reservation')->latest()->paginate(20);
+
         return view('panel.sales.corporate-show', compact('account', 'bookings'));
     }
 }

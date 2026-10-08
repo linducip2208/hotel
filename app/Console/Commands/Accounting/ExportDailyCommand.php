@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 class ExportDailyCommand extends Command
 {
     protected $signature = 'accounting:export-daily {--format=csv : csv|jurnal|accurate}';
+
     protected $description = 'Export daily journal to CSV/Jurnal/Accurate format';
 
     public function handle(AccountingExporter $exporter): int

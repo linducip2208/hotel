@@ -15,10 +15,25 @@ class MenuRecipe extends Model
         'selling_price' => 'decimal:2',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function menuItem() { return $this->belongsTo(PosMenuItem::class); }
-    public function ingredients() { return $this->hasMany(RecipeIngredient::class); }
-    public function performances() { return $this->hasMany(MenuPerformance::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function menuItem()
+    {
+        return $this->belongsTo(PosMenuItem::class);
+    }
+
+    public function ingredients()
+    {
+        return $this->hasMany(RecipeIngredient::class);
+    }
+
+    public function performances()
+    {
+        return $this->hasMany(MenuPerformance::class);
+    }
 
     public function getFoodCostAttribute(): float
     {
@@ -27,7 +42,10 @@ class MenuRecipe extends Model
 
     public function getFoodCostPctAttribute(): float
     {
-        if ($this->selling_price <= 0) return 0;
+        if ($this->selling_price <= 0) {
+            return 0;
+        }
+
         return round(($this->food_cost / $this->selling_price) * 100, 2);
     }
 

@@ -19,6 +19,7 @@ final class PoController extends Controller
         $pos = PurchaseOrder::where('property_id', app('current_property')->id)
             ->with('vendor', 'purchaseRequest', 'orderedBy')
             ->orderByDesc('id')->paginate(50);
+
         return view('panel.inventory.po.index', compact('pos'));
     }
 
@@ -27,6 +28,7 @@ final class PoController extends Controller
         $suppliers = ApSupplier::where('property_id', app('current_property')->id)->where('is_active', true)->get();
         $prId = $request->query('pr_id');
         $pr = $prId ? PurchaseRequest::where('property_id', app('current_property')->id)->with('lines')->find($prId) : null;
+
         return view('panel.inventory.po.create', compact('suppliers', 'pr'));
     }
 
@@ -85,6 +87,7 @@ final class PoController extends Controller
     {
         $po = PurchaseOrder::where('property_id', app('current_property')->id)
             ->with('lines.stockItem', 'vendor', 'purchaseRequest')->findOrFail($id);
+
         return view('panel.inventory.po.show', compact('po'));
     }
 
@@ -92,6 +95,7 @@ final class PoController extends Controller
     {
         $po = PurchaseOrder::where('property_id', app('current_property')->id)->findOrFail($id);
         $po->update(['status' => 'sent']);
+
         return back()->with('success', 'PO marked as sent.');
     }
 

@@ -18,8 +18,23 @@ class PropertyOwner extends Model
         'is_active' => 'boolean',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function user() { return $this->belongsTo(User::class); }
-    public function distributions() { return $this->hasMany(OwnerDistribution::class, 'owner_user_id', 'user_id')->where('property_id', $this->property_id); }
-    public function documents() { return $this->hasMany(OwnerDocument::class, 'owner_user_id', 'user_id')->where('property_id', $this->property_id); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function distributions()
+    {
+        return $this->hasMany(OwnerDistribution::class, 'owner_user_id', 'user_id')->where('property_id', $this->property_id);
+    }
+
+    public function documents()
+    {
+        return $this->hasMany(OwnerDocument::class, 'owner_user_id', 'user_id')->where('property_id', $this->property_id);
+    }
 }

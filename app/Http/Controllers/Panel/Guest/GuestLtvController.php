@@ -13,7 +13,7 @@ class GuestLtvController extends Controller
         $property = app('current_property');
         $segment = $request->query('segment');
 
-        $baseQuery = GuestProfile::whereHas('guest', fn($q) => $q->where('property_id', $property->id));
+        $baseQuery = GuestProfile::whereHas('guest', fn ($q) => $q->where('property_id', $property->id));
 
         $stats = [
             'total_guests' => (clone $baseQuery)->count(),
@@ -48,8 +48,8 @@ class GuestLtvController extends Controller
     public function show($id)
     {
         $property = app('current_property');
-        $profile = GuestProfile::whereHas('guest', fn($q) => $q->where('property_id', $property->id))
-            ->with(['guest.reservations' => fn($q) => $q->latest()->limit(20)])
+        $profile = GuestProfile::whereHas('guest', fn ($q) => $q->where('property_id', $property->id))
+            ->with(['guest.reservations' => fn ($q) => $q->latest()->limit(20)])
             ->findOrFail($id);
 
         return view('panel.guests.ltv-detail', compact('profile'));

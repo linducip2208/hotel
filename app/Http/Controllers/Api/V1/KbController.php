@@ -18,7 +18,7 @@ class KbController extends Controller
         if ($request->search) {
             $query->where(function ($q) use ($request) {
                 $q->where('title', 'like', '%'.$request->search.'%')
-                  ->orWhere('content', 'like', '%'.$request->search.'%');
+                    ->orWhere('content', 'like', '%'.$request->search.'%');
             });
         }
 
@@ -32,18 +32,18 @@ class KbController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'      => 'required|string|max:250',
-            'content'    => 'required|string',
-            'category'   => 'required|string',
-            'tags'       => 'nullable|array',
-            'is_public'  => 'boolean',
+            'title' => 'required|string|max:250',
+            'content' => 'required|string',
+            'category' => 'required|string',
+            'tags' => 'nullable|array',
+            'is_public' => 'boolean',
         ]);
 
         $article = KbArticle::create([
             ...$data,
-            'property_id'    => $request->user()->property->id,
+            'property_id' => $request->user()->property->id,
             'author_user_id' => $request->user()->id,
-            'is_published'   => false,
+            'is_published' => false,
         ]);
 
         return response()->json($article, 201);
@@ -55,6 +55,7 @@ class KbController extends Controller
         $article = KbArticle::where('property_id', $property->id)
             ->with('author')
             ->findOrFail($id);
+
         return response()->json($article);
     }
 
@@ -63,6 +64,7 @@ class KbController extends Controller
         $property = $request->user()->property;
         $article = KbArticle::where('property_id', $property->id)->findOrFail($id);
         $article->update($request->only(['title', 'content', 'category', 'tags', 'is_public', 'is_published']));
+
         return response()->json($article);
     }
 
@@ -71,6 +73,7 @@ class KbController extends Controller
         $property = $request->user()->property;
         $article = KbArticle::where('property_id', $property->id)->findOrFail($id);
         $article->delete();
+
         return response()->noContent();
     }
 }

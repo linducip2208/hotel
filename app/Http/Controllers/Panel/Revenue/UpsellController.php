@@ -120,7 +120,7 @@ class UpsellController extends Controller
             $presented[] = $this->service->presentOffer($reservation, $offer);
         }
 
-        return back()->with('success', count($presented) . ' penawaran telah disajikan ke reservasi.');
+        return back()->with('success', count($presented).' penawaran telah disajikan ke reservasi.');
     }
 
     public function accept(Request $request, $id)
@@ -132,7 +132,7 @@ class UpsellController extends Controller
 
         $this->service->acceptOffer($presentation, auth()->id(), $negotiatedPrice ? (float) $negotiatedPrice : null);
 
-        return back()->with('success', 'Penawaran diterima. ' . ($negotiatedPrice ? 'Harga negosiasi: Rp ' . number_format($negotiatedPrice, 0, ',', '.') : ''));
+        return back()->with('success', 'Penawaran diterima. '.($negotiatedPrice ? 'Harga negosiasi: Rp '.number_format($negotiatedPrice, 0, ',', '.') : ''));
     }
 
     public function decline($id)

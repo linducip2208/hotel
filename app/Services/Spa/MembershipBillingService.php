@@ -75,7 +75,7 @@ final class MembershipBillingService
             ->whereDate('end_date', '>=', Carbon::now()->toDateString())
             ->first();
 
-        if (!$membership) {
+        if (! $membership) {
             return 0;
         }
 

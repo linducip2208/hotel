@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Panel\Hr;
 
 use App\Http\Controllers\Controller;
+use App\Models\Employee;
 use App\Models\LeaveBalance;
 use App\Models\LeaveRequest;
-use App\Models\Employee;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -110,6 +110,7 @@ final class LeaveController extends Controller
     {
         $leave = LeaveRequest::where('property_id', app('current_property')->id)->findOrFail($id);
         $leave->delete();
+
         return back()->with('success', 'Leave request deleted.');
     }
 

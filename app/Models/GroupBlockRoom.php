@@ -10,8 +10,16 @@ class GroupBlockRoom extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
     protected $casts = ['rate' => 'decimal:2'];
 
-    public function groupBlock() { return $this->belongsTo(GroupBlock::class); }
-    public function roomType() { return $this->belongsTo(RoomType::class); }
+    public function groupBlock()
+    {
+        return $this->belongsTo(GroupBlock::class);
+    }
+
+    public function roomType()
+    {
+        return $this->belongsTo(RoomType::class);
+    }
 }

@@ -20,6 +20,13 @@ class PosOrderItem extends Model
         'is_void' => 'boolean',
     ];
 
-    public function order() { return $this->belongsTo(PosOrder::class, 'order_id'); }
-    public function menuItem() { return $this->belongsTo(PosMenuItem::class, 'menu_item_id'); }
+    public function order()
+    {
+        return $this->belongsTo(PosOrder::class, 'order_id');
+    }
+
+    public function menuItem()
+    {
+        return $this->belongsTo(PosMenuItem::class, 'menu_item_id');
+    }
 }

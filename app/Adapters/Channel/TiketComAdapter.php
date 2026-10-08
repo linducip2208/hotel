@@ -20,6 +20,7 @@ class TiketComAdapter extends BaseChannelAdapter
     protected function http(): Client
     {
         $cred = $this->channel->getCredentials();
+
         return new Client([
             'base_uri' => $this->getBaseUrl(),
             'timeout' => 30,
@@ -43,7 +44,7 @@ class TiketComAdapter extends BaseChannelAdapter
                     return $response;
                 }
                 $retryAfter = (int) ($response->getHeader('Retry-After')[0] ?? 5);
-                Log::warning('Tiket.com rate limited, retrying after ' . $retryAfter . 's', [
+                Log::warning('Tiket.com rate limited, retrying after '.$retryAfter.'s', [
                     'channel_id' => $this->channel->id,
                     'attempt' => $attempt + 1,
                 ]);
@@ -57,6 +58,7 @@ class TiketComAdapter extends BaseChannelAdapter
                 sleep(pow(2, $attempt));
             }
         }
+
         return $response ?? null;
     }
 
@@ -79,6 +81,7 @@ class TiketComAdapter extends BaseChannelAdapter
             ];
 
             $response = $this->retryRequest(fn () => $this->http()->post('inventory/update', ['json' => $payload]));
+
             return $this->parseJsonResponse($response, 'availability');
         });
     }
@@ -101,6 +104,7 @@ class TiketComAdapter extends BaseChannelAdapter
             ];
 
             $response = $this->retryRequest(fn () => $this->http()->post('rates/update', ['json' => $payload]));
+
             return $this->parseJsonResponse($response, 'rates');
         });
     }
@@ -126,6 +130,7 @@ class TiketComAdapter extends BaseChannelAdapter
             ];
 
             $response = $this->retryRequest(fn () => $this->http()->post('restrictions/update', ['json' => $payload]));
+
             return $this->parseJsonResponse($response, 'restrictions');
         });
     }
@@ -160,7 +165,7 @@ class TiketComAdapter extends BaseChannelAdapter
                     $params['page_token'] = $pageToken;
                 }
 
-                $response = $this->retryRequest(fn () => $this->http()->get('bookings?' . http_build_query($params)));
+                $response = $this->retryRequest(fn () => $this->http()->get('bookings?'.http_build_query($params)));
                 $data = $this->parseJsonResponse($response, 'bookings');
 
                 $bookings = $data['data']['bookings'] ?? $data['data']['data'] ?? [];
@@ -180,7 +185,8 @@ class TiketComAdapter extends BaseChannelAdapter
     public function fetchBooking(string $bookingId): array
     {
         return $this->executeSync('fetch_booking', function () use ($bookingId) {
-            $response = $this->retryRequest(fn () => $this->http()->get('bookings/' . urlencode($bookingId)));
+            $response = $this->retryRequest(fn () => $this->http()->get('bookings/'.urlencode($bookingId)));
+
             return $this->parseJsonResponse($response, 'booking');
         });
     }
@@ -210,7 +216,8 @@ class TiketComAdapter extends BaseChannelAdapter
         }
         try {
             $r = $this->http()->get('ping');
-            return ['ok' => $r->getStatusCode() < 400, 'message' => 'HTTP ' . $r->getStatusCode()];
+
+            return ['ok' => $r->getStatusCode() < 400, 'message' => 'HTTP '.$r->getStatusCode()];
         } catch (\Throwable $e) {
             return ['ok' => false, 'message' => $e->getMessage()];
         }
@@ -234,16 +241,18 @@ class TiketComAdapter extends BaseChannelAdapter
 
         if ($statusCode === 429) {
             $retryAfter = $response->getHeader('Retry-After')[0] ?? 'unknown';
+
             return [
                 'success' => false,
                 'data' => [],
-                'error' => 'Rate limited. Retry after ' . $retryAfter,
+                'error' => 'Rate limited. Retry after '.$retryAfter,
                 'retry_after' => $retryAfter,
             ];
         }
 
         if ($statusCode >= 400) {
             $errorMsg = $data['message'] ?? $data['error'] ?? $data['description'] ?? 'Unknown error';
+
             return [
                 'success' => false,
                 'data' => $data,
@@ -297,7 +306,6 @@ class TiketComAdapter extends BaseChannelAdapter
                 'context' => $e->getContext(),
             ]);
             throw $e;
-
         } catch (ConnectException $e) {
             $log->update([
                 'status' => 'failed',
@@ -310,7 +318,6 @@ class TiketComAdapter extends BaseChannelAdapter
                 'error' => $e->getMessage(),
             ]);
             throw ChannelSyncException::networkError($this->channel->id, $operation, $e->getMessage());
-
         } catch (\Throwable $e) {
             $log->update([
                 'status' => 'failed',

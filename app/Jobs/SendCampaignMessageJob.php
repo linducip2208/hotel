@@ -20,6 +20,7 @@ final class SendCampaignMessageJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 5;
+
     public int $backoff = 30;
 
     public function __construct(
@@ -32,6 +33,7 @@ final class SendCampaignMessageJob implements ShouldQueue
         $campaign = MarketingCampaign::find($this->campaignId);
         if (! $campaign || $campaign->status === 'paused') {
             $this->release(60);
+
             return;
         }
 
@@ -89,6 +91,7 @@ final class SendCampaignMessageJob implements ShouldQueue
 
             if ($this->attempts() >= $this->tries) {
                 Log::error("Campaign message permanently failed after {$this->tries} attempts.");
+
                 return;
             }
 

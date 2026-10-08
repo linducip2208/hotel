@@ -18,12 +18,14 @@ final class PrController extends Controller
         $prs = PurchaseRequest::where('property_id', app('current_property')->id)
             ->with('requester', 'lines')
             ->orderByDesc('id')->paginate(50);
+
         return view('panel.inventory.pr.index', compact('prs'));
     }
 
     public function create()
     {
         $items = StockItem::where('property_id', app('current_property')->id)->where('is_active', true)->get();
+
         return view('panel.inventory.pr.create', compact('items'));
     }
 
@@ -69,6 +71,7 @@ final class PrController extends Controller
     {
         $pr = PurchaseRequest::where('property_id', app('current_property')->id)
             ->with('lines.stockItem', 'requester')->findOrFail($id);
+
         return view('panel.inventory.pr.show', compact('pr'));
     }
 
@@ -76,13 +79,15 @@ final class PrController extends Controller
     {
         $pr = PurchaseRequest::where('property_id', app('current_property')->id)->findOrFail($id);
         $pr->update(['status' => 'approved']);
+
         return back()->with('success', 'PR approved.');
     }
 
     public function reject(Request $request, int $id)
     {
         $pr = PurchaseRequest::where('property_id', app('current_property')->id)->findOrFail($id);
-        $pr->update(['status' => 'rejected', 'notes' => $pr->notes . "\nRejection: " . $request->input('reason', '')]);
+        $pr->update(['status' => 'rejected', 'notes' => $pr->notes."\nRejection: ".$request->input('reason', '')]);
+
         return back()->with('success', 'PR rejected.');
     }
 }

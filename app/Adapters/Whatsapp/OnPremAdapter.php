@@ -17,6 +17,7 @@ class OnPremAdapter extends BaseAdapter implements WhatsappAdapterInterface
                 'template' => ['name' => $template, 'parameters' => $variables['parameters'] ?? []],
             ],
         ]);
+
         return [
             'ok' => $response->getStatusCode() < 400,
             'raw' => json_decode((string) $response->getBody(), true) ?? [],

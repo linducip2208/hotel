@@ -19,5 +19,8 @@ class FoodWasteTarget extends Model
         'actual_kg' => 'decimal:3',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
 }

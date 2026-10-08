@@ -14,12 +14,12 @@ final class HousekeepingRoomStatusResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id'                  => $this->id,
-            'room_number'         => $this->room_number,
-            'status'              => $this->status,
-            'last_cleaned_at'     => $this->last_cleaned_at?->toIso8601String(),
+            'id' => $this->id,
+            'room_number' => $this->room_number,
+            'status' => $this->status,
+            'last_cleaned_at' => $this->last_cleaned_at?->toIso8601String(),
             'current_task_status' => $this->current_task_status ?? null,
-            'current_attendant'   => $this->current_attendant ?? null,
+            'current_attendant' => $this->current_attendant ?? null,
         ];
     }
 }

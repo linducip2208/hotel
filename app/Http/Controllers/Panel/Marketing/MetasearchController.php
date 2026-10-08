@@ -26,6 +26,7 @@ class MetasearchController extends Controller
         $format = $request->get('format', 'csv');
 
         $feedContent = $this->service->generateFeed($property, $channel, $format);
+
         return response($feedContent, 200, ['Content-Type' => $this->contentType($format)]);
     }
 
@@ -36,7 +37,7 @@ class MetasearchController extends Controller
         $format = $request->get('format', 'csv');
 
         $feedContent = $this->service->generateFeed($property, $channel, $format);
-        $filename = "metasearch-{$property->id}-{$channel}-" . now()->format('Ymd') . '.' . $format;
+        $filename = "metasearch-{$property->id}-{$channel}-".now()->format('Ymd').'.'.$format;
 
         return response($feedContent, 200, [
             'Content-Type' => $this->contentType($format),
@@ -53,12 +54,13 @@ class MetasearchController extends Controller
         if ($channel && isset($performance[$channel])) {
             return response()->json($performance[$channel]);
         }
+
         return response()->json($performance);
     }
 
     protected function contentType(string $format): string
     {
-        return match($format) {
+        return match ($format) {
             'xml' => 'application/xml',
             'json' => 'application/json',
             default => 'text/csv',

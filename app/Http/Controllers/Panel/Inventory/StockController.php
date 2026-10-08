@@ -12,6 +12,7 @@ class StockController extends Controller
     public function index()
     {
         $items = StockItem::where('property_id', app('current_property')->id)->paginate(50);
+
         return view('panel.inventory.index', compact('items'));
     }
 
@@ -25,6 +26,7 @@ class StockController extends Controller
             'reorder_point' => 'nullable|numeric',
         ]);
         StockItem::create($data + ['property_id' => app('current_property')->id]);
+
         return back();
     }
 
@@ -40,8 +42,9 @@ class StockController extends Controller
         StockMovement::create($data + ['performed_by_user_id' => $request->user()?->id]);
         $sign = in_array($data['movement_type'], ['out', 'transfer']) ? -1 : 1;
         StockItem::where('id', $data['stock_item_id'])->update([
-            'current_qty' => \DB::raw("current_qty + ".($sign * $data['qty'])),
+            'current_qty' => \DB::raw('current_qty + '.($sign * $data['qty'])),
         ]);
+
         return back();
     }
 }

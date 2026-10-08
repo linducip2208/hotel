@@ -23,8 +23,17 @@
     };
 @endphp
 
+@php
+    $actionState = [
+        'outstanding' => (float) $reservation->folios->where('status', 'open')->sum('balance'),
+        'canOverride' => auth()->user()->can('fo.reservation.force_checkout'),
+        'blocked' => $readinessBlocked ?? false,
+        'readiness' => $readiness ?? [],
+    ];
+@endphp
+
 {{-- Page Header --}}
-<div class="mb-6">
+<div class="mb-6" x-data="reservationActions(@json($actionState))">
     <div class="flex items-start justify-between gap-4">
         <div class="flex items-start gap-4">
             <a href="{{ route('panel.fo.reservations.index') }}"
@@ -44,44 +53,169 @@
 
         {{-- Action Buttons --}}
         <div class="flex items-center gap-2 flex-shrink-0">
-            @if ($reservation->status === 'confirmed')
-                <form method="POST" action="{{ route('panel.fo.reservations.check-in', $reservation->id) }}" class="inline">
-                    @csrf
-                    <button class="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                        </svg>
-                        Check-in
-                    </button>
-                </form>
+            @if (in_array($reservation->status, ['confirmed', 'tentative']))
+                <button type="button" x-on:click="openCheckIn = true"
+                        class="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    Check-in
+                </button>
             @endif
             @if ($reservation->status === 'checked_in')
-                <form method="POST" action="{{ route('panel.fo.reservations.check-out', $reservation->id) }}" class="inline">
-                    @csrf
-                    <button class="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7"/>
-                        </svg>
-                        Check-out
-                    </button>
-                </form>
+                <button type="button" x-on:click="openCheckOut = true"
+                        class="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7"/>
+                    </svg>
+                    Check-out
+                </button>
             @endif
-            @if (in_array($reservation->status, ['confirmed','checked_in']))
-                <form method="POST" action="{{ route('panel.fo.reservations.cancel', $reservation->id) }}" class="inline"
-                      onsubmit="return confirm('Yakin ingin membatalkan reservasi ini?')">
-                    @csrf
-                    <input type="hidden" name="reason" value="manual">
-                    <button class="inline-flex items-center gap-1.5 border border-red-200 text-red-600 hover:bg-red-50 px-4 py-2 rounded-xl text-sm font-medium transition">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
-                        Cancel
-                    </button>
-                </form>
+            @if (in_array($reservation->status, ['confirmed','tentative']))
+                <button type="button" x-on:click="openCancel = true"
+                        class="inline-flex items-center gap-1.5 border border-red-200 text-red-600 hover:bg-red-50 px-4 py-2 rounded-xl text-sm font-medium transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                    Cancel
+                </button>
             @endif
         </div>
     </div>
+
+    {{-- Check-in readiness modal --}}
+    <div x-show="openCheckIn" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none;">
+        <div class="absolute inset-0 bg-black/40" x-on:click="openCheckIn = false"></div>
+        <div class="relative bg-white rounded-2xl shadow-xl max-w-md w-full p-5">
+            <h3 class="text-lg font-bold mb-1">Check-in Readiness</h3>
+            <p class="text-sm text-gray-500 mb-4">Verifikasi kelengkapan sebelum check-in.</p>
+            <ul class="space-y-2 mb-4">
+                @foreach ($readiness as $check)
+                    <li class="flex items-start gap-2 text-sm">
+                        @if ($check['state'] === 'pass')
+                            <span class="text-emerald-600 font-bold">✓</span>
+                            <span class="text-gray-700">{{ $check['label'] }} <span class="text-gray-400">— {{ $check['detail'] }}</span></span>
+                        @elseif ($check['state'] === 'warn')
+                            <span class="text-yellow-600 font-bold">⚠</span>
+                            <span class="text-gray-700">{{ $check['label'] }} <span class="text-gray-500">— {{ $check['detail'] }}</span></span>
+                        @else
+                            <span class="text-red-600 font-bold">✗</span>
+                            <span class="text-gray-700">{{ $check['label'] }} <span class="text-red-500">— {{ $check['detail'] }}</span></span>
+                        @endif
+                    </li>
+                @endforeach
+            </ul>
+            <div class="flex gap-2 justify-end">
+                <button type="button" x-on:click="openCheckIn = false" class="px-4 py-2 rounded-xl border text-sm font-medium hover:bg-gray-50">Batal</button>
+                <form method="POST" action="{{ route('panel.fo.reservations.check-in', $reservation->id) }}" class="inline">
+                    @csrf
+                    <button type="submit" {{ ($readinessBlocked ?? false) ? 'disabled' : '' }}
+                            class="px-4 py-2 rounded-xl text-sm font-medium text-white transition {{ ($readinessBlocked ?? false) ? 'bg-gray-300 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700' }}">
+                        Check-in Guest
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- Check-out modal --}}
+    <div x-show="openCheckOut" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none;">
+        <div class="absolute inset-0 bg-black/40" x-on:click="openCheckOut = false"></div>
+        <div class="relative bg-white rounded-2xl shadow-xl max-w-md w-full p-5">
+            <h3 class="text-lg font-bold mb-1">Konfirmasi Check-out</h3>
+            <p class="text-sm text-gray-500 mb-3">Review folio sebelum checkout.</p>
+
+            @php
+                $openOutstanding = $reservation->folios->where('status','open')->sum('balance');
+            @endphp
+            <div class="rounded-xl border p-3 mb-3 text-sm {{ abs($openOutstanding) > 0.009 ? 'bg-yellow-50 border-yellow-200' : 'bg-emerald-50 border-emerald-200' }}">
+                @if (abs($openOutstanding) > 0.009)
+                    <p class="font-semibold text-yellow-800">Saldo outstanding: Rp {{ number_format($openOutstanding, 0, ',', '.') }}</p>
+                    <p class="text-yellow-700 mt-1">Checkout normal diblokir. Lakukan settlement pembayaran terlebih dahulu di halaman folio, atau gunakan Manager Override.</p>
+                @else
+                    <p class="font-semibold text-emerald-800">Saldo lunas — aman untuk checkout.</p>
+                @endif
+            </div>
+
+            <form method="POST" action="{{ route('panel.fo.reservations.check-out', $reservation->id) }}">
+                @csrf
+                @if (abs($openOutstanding) > 0.009)
+                    @if ($actionState['canOverride'])
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium mb-1">Alasan Override Manager <span class="text-red-500">*</span></label>
+                            <textarea name="override_reason" rows="2" maxlength="500" required
+                                      class="w-full border rounded p-2 text-sm" placeholder="Contoh: tamu akan menyelesaikan pembayaran esok hari"></textarea>
+                        </div>
+                        <input type="hidden" name="force" value="1">
+                        <div class="flex gap-2 justify-end">
+                            <button type="button" x-on:click="openCheckOut = false" class="px-4 py-2 rounded-xl border text-sm font-medium hover:bg-gray-50">Batal</button>
+                            <button type="submit" class="px-4 py-2 rounded-xl text-sm font-medium text-white bg-orange-600 hover:bg-orange-700">Override &amp; Check-out</button>
+                        </div>
+                    @else
+                        <div class="flex gap-2 justify-end">
+                            <button type="button" x-on:click="openCheckOut = false" class="px-4 py-2 rounded-xl border text-sm font-medium hover:bg-gray-50">Tutup</button>
+                            <a href="{{ $reservation->folios->first()?->id ? route('panel.fo.folios.show', $reservation->folios->first()->id) : route('panel.fo.folios.index') }}"
+                               class="px-4 py-2 rounded-xl text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">Buka Folio untuk Settlement</a>
+                        </div>
+                    @endif
+                @else
+                    <div class="flex gap-2 justify-end">
+                        <button type="button" x-on:click="openCheckOut = false" class="px-4 py-2 rounded-xl border text-sm font-medium hover:bg-gray-50">Batal</button>
+                        <button type="submit" class="px-4 py-2 rounded-xl text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">Check-out Guest</button>
+                    </div>
+                @endif
+            </form>
+        </div>
+    </div>
+
+    {{-- Cancel modal --}}
+    <div x-show="openCancel" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none;">
+        <div class="absolute inset-0 bg-black/40" x-on:click="openCancel = false"></div>
+        <div class="relative bg-white rounded-2xl shadow-xl max-w-md w-full p-5">
+            <h3 class="text-lg font-bold mb-1">Batalkan Reservasi</h3>
+            <p class="text-sm text-gray-500 mb-3">Tindakan ini atomic: inventory dirilis dan denda kebijakan pembatalan dihitung otomatis.</p>
+            <form method="POST" action="{{ route('panel.fo.reservations.cancel', $reservation->id) }}">
+                @csrf
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Alasan Pembatalan <span class="text-red-500">*</span></label>
+                    <select name="reason" required class="w-full border rounded p-2 text-sm">
+                        <option value="">— Pilih alasan —</option>
+                        <option value="guest_request">Permintaan tamu</option>
+                        <option value="duplicate_booking">Booking ganda</option>
+                        <option value="payment_not_received">Pembayaran tidak diterima</option>
+                        <option value="force_majeure">Keadaan memaksa</option>
+                        <option value="ota_cancelled">Dibatalkan OTA</option>
+                        <option value="other">Lainnya</option>
+                    </select>
+                </div>
+                <div class="rounded-xl bg-gray-50 border p-3 text-sm text-gray-600 mb-3">
+                    @if ($policyPreview > 0)
+                        <p>Estimasi denda berdasarkan kebijakan pembatalan: <strong class="text-red-600">Rp {{ number_format($policyPreview, 0, ',', '.') }}</strong></p>
+                        <p class="text-xs mt-1">Denda dibatasi maksimal sebesar total reservasi dan dihitung ulang saat konfirmasi.</p>
+                    @else
+                        <p class="text-emerald-700">Tanpa denda berdasarkan kebijakan pembatalan yang terhubung ke rate plan.</p>
+                    @endif
+                </div>
+                <div class="flex gap-2 justify-end">
+                    <button type="button" x-on:click="openCancel = false" class="px-4 py-2 rounded-xl border text-sm font-medium hover:bg-gray-50">Kembali</button>
+                    <button type="submit" class="px-4 py-2 rounded-xl text-sm font-medium text-white bg-red-600 hover:bg-red-700">Confirm Cancellation</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
+
+{{-- Flash & validation feedback --}}
+@if (session('success') || $errors->any())
+    <div class="mb-4 space-y-2">
+        @if (session('success'))
+            <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-xl text-sm">{{ session('success') }}</div>
+        @endif
+        @foreach ($errors->all() as $err)
+            <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-xl text-sm">{{ $err }}</div>
+        @endforeach
+    </div>
+@endif
 
 <div class="grid md:grid-cols-2 gap-4">
 
@@ -151,18 +285,53 @@
             <thead class="bg-gray-50 border-b border-gray-100">
                 <tr>
                     <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Tipe Kamar</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Rate Plan</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Kamar</th>
                     <th class="px-5 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wide">Dewasa</th>
                     <th class="px-5 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wide">Anak</th>
                     <th class="px-5 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wide">Subtotal</th>
+                    @if (in_array($reservation->status, ['confirmed', 'tentative', 'checked_in']) && collect($freeRooms)->isNotEmpty())
+                        <th class="px-5 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wide">Aksi</th>
+                    @endif
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
             @foreach ($reservation->rooms as $rr)
+                @php $moveOptions = $freeRooms[$rr->id] ?? collect(); @endphp
                 <tr class="hover:bg-gray-50 transition-colors">
                     <td class="px-5 py-3 font-medium text-gray-900">{{ $rr->roomType?->name ?? '—' }}</td>
+                    <td class="px-5 py-3 text-gray-600">{{ $rr->ratePlan?->name ?? '—' }}</td>
+                    <td class="px-5 py-3">
+                        @if ($rr->room)
+                            <span class="font-mono text-sm font-semibold text-gray-800">{{ $rr->room->number }}</span>
+                        @else
+                            <span class="text-xs text-amber-600">Belum ditentukan</span>
+                        @endif
+                    </td>
                     <td class="px-5 py-3 text-center text-gray-600">{{ $rr->adults }}</td>
                     <td class="px-5 py-3 text-center text-gray-600">{{ $rr->children }}</td>
                     <td class="px-5 py-3 text-right font-mono font-semibold text-gray-800">Rp {{ number_format($rr->subtotal, 0, ',', '.') }}</td>
+                    @if (in_array($reservation->status, ['confirmed', 'tentative', 'checked_in']) && collect($freeRooms)->isNotEmpty())
+                        <td class="px-5 py-3 text-right">
+                            @if ($moveOptions->isEmpty())
+                                <span class="text-xs text-gray-300">—</span>
+                            @else
+                                <form method="POST" action="{{ route('panel.fo.reservations.move-room', $reservation->id) }}"
+                                      onsubmit="return confirm('Pindahkan kamar untuk baris ini?')">
+                                    @csrf
+                                    <input type="hidden" name="reservation_room_id" value="{{ $rr->id }}">
+                                    <select name="to_room_id" required
+                                            class="text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white"
+                                            onchange="this.form.requestSubmit()">
+                                        <option value="">Pindah ke…</option>
+                                        @foreach ($moveOptions as $optRoom)
+                                            <option value="{{ $optRoom->id }}">{{ $optRoom->number }} · Lt.{{ $optRoom->floor }} · {{ $optRoom->hk_status }}</option>
+                                        @endforeach
+                                    </select>
+                                </form>
+                            @endif
+                        </td>
+                    @endif
                 </tr>
             @endforeach
             </tbody>
@@ -233,3 +402,17 @@
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+function reservationActions(state) {
+    return {
+        openCheckIn: false,
+        openCheckOut: false,
+        openCancel: false,
+        outstanding: state.outstanding,
+        canOverride: state.canOverride,
+    };
+}
+</script>
+@endpush

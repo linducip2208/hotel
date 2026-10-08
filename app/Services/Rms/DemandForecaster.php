@@ -35,6 +35,7 @@ class DemandForecaster
             ];
             $cursor->addDay();
         }
+
         return $result;
     }
 
@@ -42,6 +43,7 @@ class DemandForecaster
     {
         $inv = Inventory::where('property_id', $property->id)
             ->whereDate('date', $date->toDateString())->sum('sold');
+
         return $property->total_rooms > 0
             ? round(($inv / $property->total_rooms) * 100, 2)
             : 0;
@@ -58,11 +60,22 @@ class DemandForecaster
 
     protected function suggestRateModifier(float $expectedOcc): float
     {
-        if ($expectedOcc >= 90) return 25;
-        if ($expectedOcc >= 80) return 15;
-        if ($expectedOcc >= 70) return 8;
-        if ($expectedOcc >= 50) return 0;
-        if ($expectedOcc >= 30) return -10;
+        if ($expectedOcc >= 90) {
+            return 25;
+        }
+        if ($expectedOcc >= 80) {
+            return 15;
+        }
+        if ($expectedOcc >= 70) {
+            return 8;
+        }
+        if ($expectedOcc >= 50) {
+            return 0;
+        }
+        if ($expectedOcc >= 30) {
+            return -10;
+        }
+
         return -20;
     }
 }

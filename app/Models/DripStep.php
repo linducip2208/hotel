@@ -16,6 +16,13 @@ class DripStep extends Model
         'sort_order' => 'integer',
     ];
 
-    public function campaign()    { return $this->belongsTo(DripCampaign::class, 'drip_campaign_id'); }
-    public function queueItems()  { return $this->hasMany(DripQueue::class); }
+    public function campaign()
+    {
+        return $this->belongsTo(DripCampaign::class, 'drip_campaign_id');
+    }
+
+    public function queueItems()
+    {
+        return $this->hasMany(DripQueue::class);
+    }
 }

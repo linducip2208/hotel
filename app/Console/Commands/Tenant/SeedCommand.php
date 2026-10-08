@@ -11,6 +11,7 @@ use Illuminate\Console\Command;
 class SeedCommand extends Command
 {
     protected $signature = 'tenant:seed {tenant_id? : Tenant UUID or slug} {--class= : Seeder class name} {--all : Run on all tenants}';
+
     protected $description = 'Seed tenant databases';
 
     public function handle(TenantDatabaseManager $manager): int
@@ -25,6 +26,7 @@ class SeedCommand extends Command
 
         if (! $tenantId) {
             $this->error('Provide a tenant_id or use --all.');
+
             return self::FAILURE;
         }
 
@@ -34,11 +36,13 @@ class SeedCommand extends Command
 
         if (! $tenant) {
             $this->error("Tenant not found: {$tenantId}");
+
             return self::FAILURE;
         }
 
         if (! $tenant->database_name) {
             $this->error("Tenant {$tenant->slug} has no database provisioned.");
+
             return self::FAILURE;
         }
 
@@ -53,6 +57,7 @@ class SeedCommand extends Command
 
         if ($tenants->isEmpty()) {
             $this->info('No provisioned tenants found.');
+
             return self::SUCCESS;
         }
 
@@ -71,7 +76,7 @@ class SeedCommand extends Command
 
         try {
             $manager->seed($tenant);
-            $this->info("  OK");
+            $this->info('  OK');
         } catch (\Throwable $e) {
             $this->error("  FAILED: {$e->getMessage()}");
         }

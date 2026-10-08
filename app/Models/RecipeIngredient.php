@@ -17,6 +17,13 @@ class RecipeIngredient extends Model
         'total_cost' => 'decimal:2',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function menuRecipe() { return $this->belongsTo(MenuRecipe::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function menuRecipe()
+    {
+        return $this->belongsTo(MenuRecipe::class);
+    }
 }

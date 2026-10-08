@@ -17,8 +17,23 @@ class KidsBooking extends Model
         'start_time' => 'datetime',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function reservation() { return $this->belongsTo(Reservation::class); }
-    public function guest() { return $this->belongsTo(Guest::class); }
-    public function activity() { return $this->belongsTo(KidsActivity::class, 'kids_activity_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class);
+    }
+
+    public function guest()
+    {
+        return $this->belongsTo(Guest::class);
+    }
+
+    public function activity()
+    {
+        return $this->belongsTo(KidsActivity::class, 'kids_activity_id');
+    }
 }

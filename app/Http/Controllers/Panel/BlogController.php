@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel;
 use App\Http\Controllers\Controller;
 use App\Models\BlogCategory;
 use App\Models\BlogPost;
+use App\Services\Seo\IndexNowService;
 use Illuminate\Http\Request;
 
 class BlogController extends Controller
@@ -23,6 +24,7 @@ class BlogController extends Controller
     public function create()
     {
         $categories = BlogCategory::orderBy('name')->get();
+
         return view('panel.blog.create', compact('categories'));
     }
 
@@ -50,9 +52,9 @@ class BlogController extends Controller
 
         $post = BlogPost::create($data);
 
-        if ($post->is_published && class_exists(\App\Services\Seo\IndexNowService::class)) {
+        if ($post->is_published && class_exists(IndexNowService::class)) {
             try {
-                (new \App\Services\Seo\IndexNowService)->submitSingle(route('blog.show', $post->slug));
+                (new IndexNowService)->submitSingle(route('blog.show', $post->slug));
             } catch (\Throwable) {
             }
         }
@@ -64,6 +66,7 @@ class BlogController extends Controller
     {
         $post = BlogPost::findOrFail($id);
         $categories = BlogCategory::orderBy('name')->get();
+
         return view('panel.blog.create', compact('post', 'categories'));
     }
 
@@ -73,7 +76,7 @@ class BlogController extends Controller
 
         $data = $request->validate([
             'title' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:blog_posts,slug,' . $post->id,
+            'slug' => 'required|string|max:255|unique:blog_posts,slug,'.$post->id,
             'category_id' => 'nullable|exists:blog_categories,id',
             'content' => 'required|string',
             'excerpt' => 'nullable|string|max:500',
@@ -95,9 +98,9 @@ class BlogController extends Controller
         $data['author_id'] = auth()->id();
         $post->update($data);
 
-        if ($post->is_published && class_exists(\App\Services\Seo\IndexNowService::class)) {
+        if ($post->is_published && class_exists(IndexNowService::class)) {
             try {
-                (new \App\Services\Seo\IndexNowService)->submitSingle(route('blog.show', $post->slug));
+                (new IndexNowService)->submitSingle(route('blog.show', $post->slug));
             } catch (\Throwable) {
             }
         }

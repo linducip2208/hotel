@@ -11,5 +11,8 @@ class SeoRedirect extends Model
 
     protected $guarded = ['id'];
 
-    public function property() { return $this->belongsTo(Property::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
 }

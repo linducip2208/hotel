@@ -8,14 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class DocumentTemplate extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
+
     protected $casts = [
         'css' => 'array',
         'is_default' => 'boolean',
         'is_active' => 'boolean',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
 
     /** Render template with substituted variables. */
     public function render(array $vars = []): string
@@ -24,6 +29,7 @@ class DocumentTemplate extends Model
         foreach ($vars as $k => $v) {
             $html = str_replace('{{'.$k.'}}', is_scalar($v) ? (string) $v : '', $html);
         }
+
         return $html;
     }
 }

@@ -18,5 +18,8 @@ class ShuttleSchedule extends Model
         'is_active' => 'boolean',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
 }

@@ -25,16 +25,45 @@ class Tenant extends Model
         'provisioned' => 'boolean',
     ];
 
-    public function domains()      { return $this->hasMany(TenantDomain::class); }
-    public function plan()         { return $this->belongsTo(Plan::class); }
-    public function subscriptions(){ return $this->hasMany(TenantSubscription::class); }
-    public function invoices()     { return $this->hasMany(TenantInvoice::class); }
+    public function domains()
+    {
+        return $this->hasMany(TenantDomain::class);
+    }
 
-    public function getDatabaseName(): string { return $this->database_name ?? 'tenant_' . substr($this->id, 0, 8); }
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
+    }
 
-    public function isTrialing(): bool { return $this->status === 'trial' && $this->trial_ends_at?->isFuture(); }
-    public function isActive(): bool   { return $this->status === 'active'; }
-    public function isSuspended(): bool { return $this->status === 'suspended'; }
+    public function subscriptions()
+    {
+        return $this->hasMany(TenantSubscription::class);
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(TenantInvoice::class);
+    }
+
+    public function getDatabaseName(): string
+    {
+        return $this->database_name ?? 'tenant_'.substr($this->id, 0, 8);
+    }
+
+    public function isTrialing(): bool
+    {
+        return $this->status === 'trial' && $this->trial_ends_at?->isFuture();
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status === 'active';
+    }
+
+    public function isSuspended(): bool
+    {
+        return $this->status === 'suspended';
+    }
 
     public function logEvent(string $event, array $payload = []): void
     {

@@ -39,7 +39,7 @@ class FinanceController extends Controller
     public function fxLookup(Request $request)
     {
         $request->validate([
-            'base'  => 'required|string|size:3',
+            'base' => 'required|string|size:3',
             'quote' => 'required|string|size:3',
         ]);
 

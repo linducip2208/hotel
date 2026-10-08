@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Panel\Security;
 
 use App\Http\Controllers\Controller;
+use App\Models\IncidentFollowup;
 use App\Models\IncidentReport;
 use App\Services\Security\IncidentService;
 use Illuminate\Http\Request;
@@ -69,7 +70,7 @@ class IncidentController extends Controller
         $this->service->notifyManagement($incident);
 
         return redirect()->route('panel.security.incidents.show', $incident->id)
-            ->with('success', 'Laporan insiden berhasil dibuat. Nomor: ' . $incident->report_number);
+            ->with('success', 'Laporan insiden berhasil dibuat. Nomor: '.$incident->report_number);
     }
 
     public function show($id)
@@ -84,6 +85,7 @@ class IncidentController extends Controller
     public function edit($id)
     {
         $incident = IncidentReport::where('property_id', app('current_property')->id)->findOrFail($id);
+
         return view('panel.security.incident-detail', ['incident' => $incident, 'edit' => true]);
     }
 
@@ -104,6 +106,7 @@ class IncidentController extends Controller
             'insurance_claim_filed' => 'boolean',
         ]);
         $incident->update($data);
+
         return back()->with('success', 'Insiden berhasil diperbarui.');
     }
 
@@ -115,6 +118,7 @@ class IncidentController extends Controller
             'close_permanently' => 'boolean',
         ]);
         $this->service->resolve($incident, $data);
+
         return back()->with('success', 'Insiden berhasil diselesaikan.');
     }
 
@@ -128,15 +132,16 @@ class IncidentController extends Controller
             'notes' => 'nullable|string',
         ]);
         $this->service->addFollowup(app('current_property'), $incident, $data);
+
         return back()->with('success', 'Tindak lanjut berhasil ditambahkan.');
     }
 
     public function completeFollowup($id, $followupId)
     {
-        $followup = \App\Models\IncidentFollowup::whereHas('incidentReport', fn($q) =>
-            $q->where('property_id', app('current_property')->id)
+        $followup = IncidentFollowup::whereHas('incidentReport', fn ($q) => $q->where('property_id', app('current_property')->id)
         )->findOrFail($followupId);
         $this->service->completeFollowup($followup);
+
         return back()->with('success', 'Tindak lanjut selesai.');
     }
 }

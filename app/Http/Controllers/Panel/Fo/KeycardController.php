@@ -53,6 +53,7 @@ class KeycardController extends Controller
                 $data['room_id'] ?? null,
                 $data['guest_id'] ?? null
             );
+
             return back()->with('success', "Kartu {$card->card_number} berhasil dikeluarkan.");
         } catch (\RuntimeException $e) {
             return back()->with('error', $e->getMessage());
@@ -66,6 +67,7 @@ class KeycardController extends Controller
 
         try {
             $card = $this->service->returnCard($card->id);
+
             return back()->with('success', "Kartu {$card->card_number} berhasil dikembalikan.");
         } catch (\RuntimeException $e) {
             return back()->with('error', $e->getMessage());
@@ -87,6 +89,7 @@ class KeycardController extends Controller
 
         if ($request->isMethod('get')) {
             $types = $this->service->getTypes($propertyId);
+
             return view('panel.fo.keycard-types', compact('types'));
         }
 
@@ -118,12 +121,14 @@ class KeycardController extends Controller
                 'is_active' => 'sometimes|boolean',
             ]);
             $type->update($data);
+
             return back()->with('success', 'Tipe kartu berhasil diperbarui.');
         }
 
         if ($request->isMethod('delete')) {
             $type = KeycardType::where('property_id', $propertyId)->findOrFail(request('id'));
             $type->delete();
+
             return back()->with('success', 'Tipe kartu berhasil dihapus.');
         }
 

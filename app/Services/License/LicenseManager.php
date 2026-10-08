@@ -4,6 +4,9 @@ namespace App\Services\License;
 
 use App\Models\LicenseEvent;
 use App\Models\LocalLicense;
+use App\Models\Reservation;
+use App\Models\Room;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -60,6 +63,7 @@ class LicenseManager
     public function feature(string $key, $default = false)
     {
         $status = $this->status();
+
         return data_get($status, "features.$key", $default);
     }
 
@@ -105,6 +109,7 @@ class LicenseManager
         ])->save();
 
         $this->logEvent('pairing.success', ['license_key_hash' => substr($local->license_key_hash, 0, 12)]);
+
         return ['ok' => true, 'license' => $local->refresh()];
     }
 
@@ -119,9 +124,9 @@ class LicenseManager
         $local->save();
 
         $telemetry = [
-            'rooms_count' => \App\Models\Room::count(),
-            'active_bookings' => \App\Models\Reservation::whereIn('status', ['confirmed', 'checked_in'])->count(),
-            'users' => \App\Models\User::count(),
+            'rooms_count' => Room::count(),
+            'active_bookings' => Reservation::whereIn('status', ['confirmed', 'checked_in'])->count(),
+            'users' => User::count(),
             'app_version' => config('app.version', '1.0.0'),
         ];
 
@@ -129,6 +134,7 @@ class LicenseManager
 
         if (! $response['ok']) {
             $this->logEvent('heartbeat.failed', ['error' => $response['error'] ?? null, 'status' => $response['status']]);
+
             return ['ok' => false, 'reason' => 'network', 'detail' => $response];
         }
 
@@ -140,6 +146,7 @@ class LicenseManager
             $local->degrade_reason = $reason;
             $local->save();
             $this->logEvent('heartbeat.invalid', ['reason' => $reason]);
+
             return ['ok' => false, 'reason' => $reason];
         }
 
@@ -156,6 +163,7 @@ class LicenseManager
         $local->save();
 
         $this->logEvent('heartbeat.success', ['next' => $local->grace_until?->toIso8601String()]);
+
         return ['ok' => true];
     }
 
@@ -167,6 +175,7 @@ class LicenseManager
         $local->status = 'degraded';
         $local->degrade_reason = 'grace_expired';
         $local->save();
+
         return ['valid' => false, 'reason' => 'grace_expired'];
     }
 

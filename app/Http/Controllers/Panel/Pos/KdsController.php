@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Panel\Pos;
 
 use App\Http\Controllers\Controller;
 use App\Models\PosOrder;
-use App\Models\PosOrderItem;
 use Illuminate\Http\Request;
 
 class KdsController extends Controller
@@ -30,8 +29,12 @@ class KdsController extends Controller
                 $minutesSince = round($secondsSince / 60, 1);
 
                 $priority = 'normal';
-                if ($secondsSince > 900) $priority = 'overdue';       // >15 min
-                elseif ($secondsSince > 600) $priority = 'warning';   // >10 min
+                if ($secondsSince > 900) {
+                    $priority = 'overdue';
+                }       // >15 min
+                elseif ($secondsSince > 600) {
+                    $priority = 'warning';
+                }   // >10 min
 
                 return [
                     'id' => $order->id,

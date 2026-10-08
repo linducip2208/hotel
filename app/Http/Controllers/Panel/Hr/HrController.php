@@ -13,7 +13,10 @@ use Illuminate\Support\Str;
 
 class HrController extends Controller
 {
-    public function index() { return $this->employees(request()); }
+    public function index()
+    {
+        return $this->employees(request());
+    }
 
     public function employees(Request $request)
     {
@@ -21,13 +24,14 @@ class HrController extends Controller
         if ($search = $request->query('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('first_name', 'like', "%{$search}%")
-                  ->orWhere('last_name', 'like', "%{$search}%")
-                  ->orWhere('position', 'like', "%{$search}%")
-                  ->orWhere('department', 'like', "%{$search}%")
-                  ->orWhere('employee_no', 'like', "%{$search}%");
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('position', 'like', "%{$search}%")
+                    ->orWhere('department', 'like', "%{$search}%")
+                    ->orWhere('employee_no', 'like', "%{$search}%");
             });
         }
         $employees = $query->paginate(50);
+
         return view('panel.hr.employees', compact('employees'));
     }
 
@@ -46,12 +50,14 @@ class HrController extends Controller
             'property_id' => app('current_property')->id,
             'employee_no' => 'EMP-'.now()->format('Y').'-'.Str::upper(Str::random(5)),
         ]);
+
         return back();
     }
 
     public function editEmployee(int $id)
     {
         $employee = Employee::findOrFail($id);
+
         return view('panel.hr.employee-edit', compact('employee'));
     }
 
@@ -71,6 +77,7 @@ class HrController extends Controller
             'phone' => 'nullable|string',
         ]);
         $employee->update($data);
+
         return redirect()->route('panel.hr.employees')->with('status', 'Employee updated.');
     }
 
@@ -78,12 +85,14 @@ class HrController extends Controller
     {
         $employee = Employee::findOrFail($id);
         $employee->delete();
+
         return redirect()->route('panel.hr.employees')->with('status', 'Employee deleted.');
     }
 
     public function showEmployee(int $id)
     {
         $employee = Employee::with('attendance', 'payslips')->findOrFail($id);
+
         return view('panel.hr.employee-show', compact('employee'));
     }
 
@@ -97,12 +106,13 @@ class HrController extends Controller
         if ($search = $request->query('search')) {
             $query->whereHas('employee', function ($q) use ($search) {
                 $q->where('first_name', 'like', "%{$search}%")
-                  ->orWhere('last_name', 'like', "%{$search}%");
+                    ->orWhere('last_name', 'like', "%{$search}%");
             });
         }
 
         $logs = $query->paginate(100);
         $employees = Employee::where('property_id', app('current_property')->id)->where('is_active', true)->get();
+
         return view('panel.hr.attendance', compact('logs', 'date', 'employees'));
     }
 
@@ -119,6 +129,7 @@ class HrController extends Controller
             ['employee_id' => $data['employee_id'], 'date' => $data['date']],
             $data
         );
+
         return back();
     }
 
@@ -126,6 +137,7 @@ class HrController extends Controller
     {
         $log = AttendanceLog::findOrFail($id);
         $log->delete();
+
         return back()->with('status', 'Attendance record deleted.');
     }
 
@@ -140,11 +152,12 @@ class HrController extends Controller
         if ($search = $request->query('search')) {
             $query->whereHas('employee', function ($q) use ($search) {
                 $q->where('first_name', 'like', "%{$search}%")
-                  ->orWhere('last_name', 'like', "%{$search}%");
+                    ->orWhere('last_name', 'like', "%{$search}%");
             });
         }
 
         $payslips = $query->paginate(50);
+
         return view('panel.hr.payroll', compact('payslips', 'year', 'month'));
     }
 
@@ -159,12 +172,14 @@ class HrController extends Controller
                 $svc->generatePayslip($e, $year, $month);
                 $count++;
             });
+
         return back()->with('status', "Generated {$count} payslips for {$year}-{$month}.");
     }
 
     public function showPayslip(int $id)
     {
         $payslip = Payslip::with('employee')->findOrFail($id);
+
         return view('panel.hr.payslip-show', compact('payslip'));
     }
 
@@ -172,6 +187,7 @@ class HrController extends Controller
     {
         $payslip = Payslip::findOrFail($id);
         $payslip->update(['status' => 'approved']);
+
         return back()->with('status', 'Payslip approved.');
     }
 
@@ -179,6 +195,7 @@ class HrController extends Controller
     {
         $payslip = Payslip::findOrFail($id);
         $payslip->update(['status' => 'paid', 'paid_at' => now()]);
+
         return back()->with('status', 'Payslip marked as paid.');
     }
 
@@ -186,6 +203,7 @@ class HrController extends Controller
     {
         $distributions = ServiceChargeDistribution::where('property_id', app('current_property')->id)
             ->orderByDesc('year')->orderByDesc('month')->paginate(50);
+
         return view('panel.hr.service-charge', compact('distributions'));
     }
 }

@@ -27,7 +27,7 @@ class ReferralService
     public function trackReferral(string $code, Guest $referredGuest): ?Referral
     {
         $refCode = ReferralCode::where('code', $code)->where('is_active', true)->first();
-        if (!$refCode || $refCode->owner_guest_id === $referredGuest->id) {
+        if (! $refCode || $refCode->owner_guest_id === $referredGuest->id) {
             return null;
         }
 

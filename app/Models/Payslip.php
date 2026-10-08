@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Payslip extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
+
     protected $casts = [
         'breakdown' => 'array',
         'paid_at' => 'datetime',
@@ -24,5 +26,8 @@ class Payslip extends Model
         'net_salary' => 'decimal:2',
     ];
 
-    public function employee() { return $this->belongsTo(Employee::class); }
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
 }

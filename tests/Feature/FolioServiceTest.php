@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ChartOfAccount;
 use App\Models\Folio;
 use App\Models\Property;
 use App\Services\Fo\FolioService;
@@ -13,7 +14,7 @@ beforeEach(function () {
     ]);
     // Seed COA
     foreach ([['1-1010', 'Kas', 'asset', 'debit'], ['1-1100', 'Piutang', 'asset', 'debit']] as [$c, $n, $t, $b]) {
-        \App\Models\ChartOfAccount::create(['property_id' => $this->property->id, 'code' => $c, 'name' => $n, 'type' => $t, 'normal_balance' => $b, 'is_system' => true, 'is_active' => true]);
+        ChartOfAccount::create(['property_id' => $this->property->id, 'code' => $c, 'name' => $n, 'type' => $t, 'normal_balance' => $b, 'is_system' => true, 'is_active' => true]);
     }
 });
 

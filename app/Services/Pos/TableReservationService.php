@@ -29,7 +29,7 @@ class TableReservationService
             ->pluck('restaurant_table_id')
             ->toArray();
 
-        return $tables->reject(fn($t) => in_array($t->id, $occupiedTableIds))->values()->toArray();
+        return $tables->reject(fn ($t) => in_array($t->id, $occupiedTableIds))->values()->toArray();
     }
 
     public function reserve(Property $property, array $data): TableReservation
@@ -61,6 +61,7 @@ class TableReservationService
     {
         $r = TableReservation::findOrFail($id);
         $r->update(['status' => 'seated']);
+
         return $r;
     }
 
@@ -68,6 +69,7 @@ class TableReservationService
     {
         $r = TableReservation::findOrFail($id);
         $r->update(['status' => 'completed']);
+
         return $r;
     }
 
@@ -75,6 +77,7 @@ class TableReservationService
     {
         $r = TableReservation::findOrFail($id);
         $r->update(['status' => 'no_show']);
+
         return $r;
     }
 
@@ -82,6 +85,7 @@ class TableReservationService
     {
         $r = TableReservation::findOrFail($id);
         $r->update(['status' => 'cancelled']);
+
         return $r;
     }
 
@@ -89,7 +93,9 @@ class TableReservationService
     {
         $date = $date ?? Carbon::today()->toDateString();
         $query = RestaurantTable::where('property_id', $property->id)->where('is_active', true);
-        if ($outletId) $query->where('outlet_id', $outletId);
+        if ($outletId) {
+            $query->where('outlet_id', $outletId);
+        }
 
         $tables = $query->orderBy('section')->orderBy('table_number')->get();
 

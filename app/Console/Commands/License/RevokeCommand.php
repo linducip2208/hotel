@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands\License;
 
+use App\Models\LicenseEvent;
+use App\Models\LicenseRevocation;
 use App\Models\LocalLicense;
 use Illuminate\Console\Command;
 
@@ -22,6 +24,7 @@ class RevokeCommand extends Command
 
         if (! $this->option('force') && ! $this->confirm("Revoke license '{$licenseId}'? This will immediately disable the property's access.")) {
             $this->info('Revocation cancelled.');
+
             return self::SUCCESS;
         }
 
@@ -29,17 +32,19 @@ class RevokeCommand extends Command
 
         if (! $license) {
             $this->error("License not found: {$licenseId}");
+
             return self::FAILURE;
         }
 
         if ($license->status === 'revoked') {
             $this->warn('License is already revoked.');
+
             return self::SUCCESS;
         }
 
         $previousStatus = $license->status;
         $license->update([
-            'status'         => 'revoked',
+            'status' => 'revoked',
             'degrade_reason' => $reason,
         ]);
 
@@ -51,13 +56,14 @@ class RevokeCommand extends Command
 
         if ($this->option('json')) {
             $this->line(json_encode([
-                'success'          => true,
-                'license_id'       => $licenseId,
-                'previous_status'  => $previousStatus,
-                'new_status'       => 'revoked',
-                'reason'           => $reason,
-                'revoked_at'       => now()->toIso8601String(),
+                'success' => true,
+                'license_id' => $licenseId,
+                'previous_status' => $previousStatus,
+                'new_status' => 'revoked',
+                'reason' => $reason,
+                'revoked_at' => now()->toIso8601String(),
             ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+
             return self::SUCCESS;
         }
 
@@ -65,9 +71,9 @@ class RevokeCommand extends Command
         $this->info('License revoked successfully.');
         $this->line("  License ID:  {$licenseId}");
         $this->line("  From:        {$previousStatus}");
-        $this->line("  To:          revoked");
+        $this->line('  To:          revoked');
         $this->line("  Reason:      {$reason}");
-        $this->line("  Revoked at:  ".now()->toIso8601String());
+        $this->line('  Revoked at:  '.now()->toIso8601String());
         $this->newLine();
         $this->warn('On the next heartbeat, the client will receive a revocation notice.');
         $this->warn('The property installation will be locked immediately.');
@@ -85,17 +91,17 @@ class RevokeCommand extends Command
 
     protected function addToRevocationList(string $licenseId, string $reason): void
     {
-        if (! class_exists(\App\Models\LicenseRevocation::class)) {
+        if (! class_exists(LicenseRevocation::class)) {
             return;
         }
 
         try {
-            \App\Models\LicenseRevocation::updateOrCreate(
+            LicenseRevocation::updateOrCreate(
                 ['license_id' => $licenseId],
                 [
-                    'reason'       => $reason,
-                    'revoked_at'   => now(),
-                    'source_ip'    => request()?->ip(),
+                    'reason' => $reason,
+                    'revoked_at' => now(),
+                    'source_ip' => request()?->ip(),
                 ]
             );
         } catch (\Throwable $e) {
@@ -105,17 +111,17 @@ class RevokeCommand extends Command
 
     protected function logRevocationEvent(string $licenseId, string $previousStatus, string $reason): void
     {
-        if (! class_exists(\App\Models\LicenseEvent::class)) {
+        if (! class_exists(LicenseEvent::class)) {
             return;
         }
 
         try {
-            \App\Models\LicenseEvent::create([
-                'event'     => 'revoked',
-                'payload'   => [
-                    'license_id'       => $licenseId,
-                    'previous_status'  => $previousStatus,
-                    'reason'           => $reason,
+            LicenseEvent::create([
+                'event' => 'revoked',
+                'payload' => [
+                    'license_id' => $licenseId,
+                    'previous_status' => $previousStatus,
+                    'reason' => $reason,
                 ],
                 'source_ip' => request()?->ip(),
             ]);

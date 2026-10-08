@@ -15,6 +15,7 @@ class RedirectFlowAdapter extends BaseAdapter implements PaymentAdapterInterface
             'json' => $payload,
         ]);
         $data = json_decode((string) $response->getBody(), true) ?? [];
+
         return [
             'ok' => $response->getStatusCode() < 400,
             'redirect_url' => $data['redirect_url'] ?? $data['payment_url'] ?? null,
@@ -26,7 +27,9 @@ class RedirectFlowAdapter extends BaseAdapter implements PaymentAdapterInterface
     public function verifyCallback(array $payload, array $headers = []): bool
     {
         $signature = $payload['signature_key'] ?? $headers['x-signature'] ?? null;
-        if (! $signature) return false;
+        if (! $signature) {
+            return false;
+        }
 
         $orderId = $payload['order_id'] ?? '';
         $statusCode = $payload['status_code'] ?? '';
@@ -34,6 +37,7 @@ class RedirectFlowAdapter extends BaseAdapter implements PaymentAdapterInterface
         $secret = $this->provider->getSecret();
 
         $expected = hash('sha512', $orderId.$statusCode.$grossAmount.$secret);
+
         return hash_equals($expected, $signature);
     }
 
@@ -43,6 +47,7 @@ class RedirectFlowAdapter extends BaseAdapter implements PaymentAdapterInterface
             'headers' => ['Authorization' => 'Basic '.base64_encode($this->apiKey().':')],
             'json' => ['amount' => $amount, 'reason' => 'Refund'],
         ]);
+
         return [
             'ok' => $response->getStatusCode() < 400,
             'raw' => json_decode((string) $response->getBody(), true) ?? [],

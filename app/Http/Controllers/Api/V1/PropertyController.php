@@ -34,21 +34,21 @@ class PropertyController extends Controller
         abort_if($property->id !== $id, 403);
 
         $validated = $request->validate([
-            'name'             => 'sometimes|string|max:150',
-            'legal_name'       => 'nullable|string|max:191',
-            'email'            => 'nullable|email|max:191',
-            'phone'            => 'nullable|string|max:30',
-            'address_line1'    => 'nullable|string|max:191',
-            'city'             => 'nullable|string|max:100',
-            'country'          => 'nullable|string|size:2',
-            'timezone'         => 'nullable|string|max:60',
-            'currency'         => 'nullable|string|size:3',
-            'check_in_time'    => 'nullable|date_format:H:i',
-            'check_out_time'   => 'nullable|date_format:H:i',
-            'star_rating'      => 'nullable|integer|between:1,5',
+            'name' => 'sometimes|string|max:150',
+            'legal_name' => 'nullable|string|max:191',
+            'email' => 'nullable|email|max:191',
+            'phone' => 'nullable|string|max:30',
+            'address_line1' => 'nullable|string|max:191',
+            'city' => 'nullable|string|max:100',
+            'country' => 'nullable|string|size:2',
+            'timezone' => 'nullable|string|max:60',
+            'currency' => 'nullable|string|size:3',
+            'check_in_time' => 'nullable|date_format:H:i',
+            'check_out_time' => 'nullable|date_format:H:i',
+            'star_rating' => 'nullable|integer|between:1,5',
             'default_language' => 'nullable|string|max:10',
-            'logo_url'         => 'nullable|url|max:500',
-            'settings'         => 'nullable|array',
+            'logo_url' => 'nullable|url|max:500',
+            'settings' => 'nullable|array',
         ]);
 
         $property->update($validated);

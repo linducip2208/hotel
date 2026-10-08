@@ -40,10 +40,10 @@ class AccountingController extends Controller
     {
         $data = $request->validate([
             'description' => 'required|string|max:500',
-            'lines'       => 'required|array|min:2',
+            'lines' => 'required|array|min:2',
             'lines.*.account_id' => 'required|integer|exists:chart_of_accounts,id',
-            'lines.*.debit'      => 'nullable|numeric|min:0',
-            'lines.*.credit'     => 'nullable|numeric|min:0',
+            'lines.*.debit' => 'nullable|numeric|min:0',
+            'lines.*.credit' => 'nullable|numeric|min:0',
         ]);
 
         $entry = $poster->post(

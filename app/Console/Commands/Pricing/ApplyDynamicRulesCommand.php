@@ -8,7 +8,8 @@ use Illuminate\Console\Command;
 
 class ApplyDynamicRulesCommand extends Command
 {
-    protected $signature   = 'pricing:apply-dynamic-rules {--property= : Specific property ID}';
+    protected $signature = 'pricing:apply-dynamic-rules {--property= : Specific property ID}';
+
     protected $description = 'Evaluate dynamic pricing rules and upsert rate overrides for all properties';
 
     public function handle(DynamicPricingService $service): int
@@ -28,6 +29,7 @@ class ApplyDynamicRulesCommand extends Command
         }
 
         $this->info("Dynamic pricing complete — {$total} overrides upserted across {$properties->count()} properties.");
+
         return self::SUCCESS;
     }
 }

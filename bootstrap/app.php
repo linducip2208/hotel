@@ -1,8 +1,29 @@
 <?php
 
+use App\Http\Middleware\CachePseoResponse;
+use App\Http\Middleware\EnsureLicenseValid;
+use App\Http\Middleware\IdempotencyKey;
+use App\Http\Middleware\InitializeTenancy;
+use App\Http\Middleware\InjectLicenseStatus;
+use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Middleware\RequirePair;
+use App\Http\Middleware\ResolveCurrentProperty;
+use App\Http\Middleware\SecurityHeaders;
+use App\Http\Middleware\SetLocale;
+use App\Http\Middleware\VerifyCaptcha;
+use App\Providers\AccountingServiceProvider;
+use App\Providers\AppServiceProvider;
+use App\Providers\EventServiceProvider;
+use App\Providers\IntegrationServiceProvider;
+use App\Providers\LicenseServiceProvider;
+use App\Providers\ObserverServiceProvider;
+use App\Providers\PseoServiceProvider;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Support\Facades\Route;
+use Spatie\Permission\Middleware\PermissionMiddleware;
+use Spatie\Permission\Middleware\RoleMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -12,37 +33,37 @@ return Application::configure(basePath: dirname(__DIR__))
         channels: __DIR__.'/../routes/channels.php',
         health: '/health',
         then: function () {
-            \Illuminate\Support\Facades\Route::middleware('web')
+            Route::middleware('web')
                 ->group(base_path('routes/portal.php'));
-            \Illuminate\Support\Facades\Route::middleware('web')
+            Route::middleware('web')
                 ->group(base_path('routes/customer.php'));
-            \Illuminate\Support\Facades\Route::middleware('web')
+            Route::middleware('web')
                 ->group(base_path('routes/admin.php'));
-            \Illuminate\Support\Facades\Route::middleware('web')
+            Route::middleware('web')
                 ->group(base_path('routes/pseo.php'));
         },
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'license'     => \App\Http\Middleware\EnsureLicenseValid::class,
-            'pseo.cache'  => \App\Http\Middleware\CachePseoResponse::class,
-            'role'        => \Spatie\Permission\Middleware\RoleMiddleware::class,
-            'permission'  => \Spatie\Permission\Middleware\PermissionMiddleware::class,
-            'property'    => \App\Http\Middleware\ResolveCurrentProperty::class,
-            'idempotency' => \App\Http\Middleware\IdempotencyKey::class,
-            'captcha'     => \App\Http\Middleware\VerifyCaptcha::class,
-            'tenancy'     => \App\Http\Middleware\InitializeTenancy::class,
-            'guest'       => \App\Http\Middleware\RedirectIfAuthenticated::class,
+            'license' => EnsureLicenseValid::class,
+            'pseo.cache' => CachePseoResponse::class,
+            'role' => RoleMiddleware::class,
+            'permission' => PermissionMiddleware::class,
+            'property' => ResolveCurrentProperty::class,
+            'idempotency' => IdempotencyKey::class,
+            'captcha' => VerifyCaptcha::class,
+            'tenancy' => InitializeTenancy::class,
+            'guest' => RedirectIfAuthenticated::class,
         ]);
 
         $middleware->web(append: [
-            \App\Http\Middleware\InjectLicenseStatus::class,
-            \App\Http\Middleware\SetLocale::class,
+            InjectLicenseStatus::class,
+            SetLocale::class,
         ]);
 
         $middleware->web(prepend: [
-            \App\Http\Middleware\SecurityHeaders::class,
-            \App\Http\Middleware\RequirePair::class,
+            SecurityHeaders::class,
+            RequirePair::class,
         ]);
 
         // Trust reverse-proxy headers (X-Forwarded-*) — needed for force-HTTPS detection.
@@ -50,7 +71,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         if (env('APP_MODE', 'standalone') === 'saas') {
             $middleware->web(prepend: [
-                \App\Http\Middleware\InitializeTenancy::class,
+                InitializeTenancy::class,
             ]);
         }
     })
@@ -58,12 +79,12 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withProviders([
-        \App\Providers\AppServiceProvider::class,
-        \App\Providers\EventServiceProvider::class,
-        \App\Providers\LicenseServiceProvider::class,
-        \App\Providers\IntegrationServiceProvider::class,
-        \App\Providers\AccountingServiceProvider::class,
-        \App\Providers\PseoServiceProvider::class,
-        \App\Providers\ObserverServiceProvider::class,
+        AppServiceProvider::class,
+        EventServiceProvider::class,
+        LicenseServiceProvider::class,
+        IntegrationServiceProvider::class,
+        AccountingServiceProvider::class,
+        PseoServiceProvider::class,
+        ObserverServiceProvider::class,
     ])
     ->create();

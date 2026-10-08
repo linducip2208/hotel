@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Portal;
 
 use App\Http\Controllers\Controller;
 use App\Models\Reservation;
-use Illuminate\Http\Request;
 
 class MyBookingController extends Controller
 {

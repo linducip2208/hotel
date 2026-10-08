@@ -13,6 +13,13 @@ class AccountingPeriod extends Model
 
     protected $casts = ['locked_at' => 'datetime'];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function lockedBy() { return $this->belongsTo(User::class, 'locked_by_user_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function lockedBy()
+    {
+        return $this->belongsTo(User::class, 'locked_by_user_id');
+    }
 }

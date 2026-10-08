@@ -4,12 +4,13 @@ namespace App\Adapters\Captcha;
 
 use App\Adapters\BaseAdapter;
 use App\Adapters\Contracts\AdapterInterface;
+use GuzzleHttp\Client;
 
 class RecaptchaAdapter extends BaseAdapter implements AdapterInterface
 {
     public function verify(string $token, ?string $remoteIp = null): bool
     {
-        $client = new \GuzzleHttp\Client(['timeout' => 5, 'http_errors' => false]);
+        $client = new Client(['timeout' => 5, 'http_errors' => false]);
         $r = $client->post('https://www.google.com/recaptcha/api/siteverify', [
             'form_params' => [
                 'secret' => $this->provider->getSecret(),
@@ -18,6 +19,7 @@ class RecaptchaAdapter extends BaseAdapter implements AdapterInterface
             ],
         ]);
         $data = json_decode((string) $r->getBody(), true) ?? [];
+
         return (bool) ($data['success'] ?? false);
     }
 

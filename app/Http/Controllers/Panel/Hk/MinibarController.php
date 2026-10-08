@@ -9,6 +9,7 @@ use App\Models\MinibarStock;
 use App\Models\Room;
 use App\Services\Hk\MinibarService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class MinibarController extends Controller
 {
@@ -18,6 +19,7 @@ class MinibarController extends Controller
     {
         $propertyId = app('current_property')->id;
         $products = MinibarProduct::where('property_id', $propertyId)->orderBy('name')->get();
+
         return view('panel.hk.minibar-products', compact('products'));
     }
 
@@ -78,6 +80,7 @@ class MinibarController extends Controller
             ->orderBy('room_number')
             ->get();
         $products = MinibarProduct::where('property_id', $propertyId)->where('is_active', true)->orderBy('name')->get();
+
         return view('panel.hk.minibar-rooms', compact('rooms', 'products'));
     }
 
@@ -98,9 +101,10 @@ class MinibarController extends Controller
 
     public function record(Request $request)
     {
+        $propertyId = app('current_property')->id;
         $request->validate([
-            'room_id' => 'required|integer|exists:rooms,id',
-            'reservation_id' => 'required|integer|exists:reservations,id',
+            'room_id' => ['required', 'integer', Rule::exists('rooms', 'id')->where('property_id', $propertyId)],
+            'reservation_id' => ['required', 'integer', Rule::exists('reservations', 'id')->where('property_id', $propertyId)],
             'items' => 'required|array|min:1',
             'items.*.product_id' => 'required|integer|exists:minibar_products,id',
             'items.*.qty' => 'required|integer|min:1',
@@ -110,7 +114,7 @@ class MinibarController extends Controller
             $request->room_id,
             $request->reservation_id,
             $request->items,
-            auth()->id()
+            (int) auth()->id()
         );
 
         return back()->with('success', 'Konsumsi minibar berhasil dicatat dan ditagihkan ke folio.');
@@ -119,7 +123,7 @@ class MinibarController extends Controller
     public function restock(Request $request)
     {
         $request->validate([
-            'room_id' => 'required|integer|exists:rooms,id',
+            'room_id' => ['required', 'integer', Rule::exists('rooms', 'id')->where('property_id', app('current_property')->id)],
             'items' => 'required|array|min:1',
             'items.*.product_id' => 'required|integer|exists:minibar_products,id',
             'items.*.qty' => 'required|integer|min:1',

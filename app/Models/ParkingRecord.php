@@ -20,10 +20,33 @@ class ParkingRecord extends Model
         'valet_key_location' => 'array',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function parkingSlot() { return $this->belongsTo(ParkingSlot::class); }
-    public function reservation() { return $this->belongsTo(Reservation::class); }
-    public function guest() { return $this->belongsTo(Guest::class); }
-    public function valetByUser() { return $this->belongsTo(User::class, 'valet_by_user_id'); }
-    public function folioCharge() { return $this->belongsTo(FolioCharge::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function parkingSlot()
+    {
+        return $this->belongsTo(ParkingSlot::class);
+    }
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class);
+    }
+
+    public function guest()
+    {
+        return $this->belongsTo(Guest::class);
+    }
+
+    public function valetByUser()
+    {
+        return $this->belongsTo(User::class, 'valet_by_user_id');
+    }
+
+    public function folioCharge()
+    {
+        return $this->belongsTo(FolioCharge::class);
+    }
 }

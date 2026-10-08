@@ -13,5 +13,8 @@ class PosOrderPayment extends Model
 
     protected $casts = ['amount' => 'decimal:2'];
 
-    public function order() { return $this->belongsTo(PosOrder::class, 'order_id'); }
+    public function order()
+    {
+        return $this->belongsTo(PosOrder::class, 'order_id');
+    }
 }

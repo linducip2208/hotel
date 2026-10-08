@@ -2,10 +2,9 @@
 
 namespace App\Services\Comm;
 
-use App\Models\MessageThread;
 use App\Models\Message;
+use App\Models\MessageThread;
 use App\Models\QuickReply;
-use Carbon\Carbon;
 
 class GuestMessagingService
 {
@@ -16,7 +15,7 @@ class GuestMessagingService
             ->where('status', 'open')
             ->first();
 
-        if (!$thread) {
+        if (! $thread) {
             $thread = MessageThread::create([
                 'property_id' => $propertyId,
                 'guest_id' => $guestId,

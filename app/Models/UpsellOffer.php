@@ -18,7 +18,18 @@ class UpsellOffer extends Model
         'is_active' => 'boolean',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function upgradeToRoomType() { return $this->belongsTo(RoomType::class, 'upgrade_to_room_type_id'); }
-    public function presentations() { return $this->hasMany(UpsellPresentation::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function upgradeToRoomType()
+    {
+        return $this->belongsTo(RoomType::class, 'upgrade_to_room_type_id');
+    }
+
+    public function presentations()
+    {
+        return $this->hasMany(UpsellPresentation::class);
+    }
 }

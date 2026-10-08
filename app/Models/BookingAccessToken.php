@@ -16,7 +16,10 @@ class BookingAccessToken extends Model
         'used_at' => 'datetime',
     ];
 
-    public function reservation() { return $this->belongsTo(Reservation::class); }
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class);
+    }
 
     public function isValid(): bool
     {

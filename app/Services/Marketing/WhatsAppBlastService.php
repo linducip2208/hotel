@@ -3,7 +3,6 @@
 namespace App\Services\Marketing;
 
 use App\Models\Guest;
-use App\Models\GuestProfile;
 use App\Models\Property;
 use App\Models\Provider;
 use GuzzleHttp\Client;
@@ -12,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 class WhatsAppBlastService
 {
     protected Client $http;
+
     protected ?Provider $provider;
 
     public function __construct()
@@ -54,9 +54,11 @@ class WhatsAppBlastService
 
             $body = json_decode((string) $resp->getBody(), true);
             Log::channel('whatsapp')->info('WhatsApp blast sent', ['phone' => $phone, 'response' => $body]);
+
             return $body;
         } catch (\Exception $e) {
             Log::channel('whatsapp')->error('WhatsApp blast failed', ['phone' => $phone, 'error' => $e->getMessage()]);
+
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
@@ -117,6 +119,7 @@ class WhatsAppBlastService
             '{ltv}' => $profile ? number_format((float) $profile->total_lifetime_value, 0, ',', '.') : '0',
             '{stays}' => $profile?->total_stays ?? '0',
         ];
+
         return str_replace(array_keys($replace), array_values($replace), $message);
     }
 
@@ -129,6 +132,7 @@ class WhatsAppBlastService
         if (! str_starts_with($phone, '62')) {
             $phone = '62'.$phone;
         }
+
         return $phone;
     }
 }

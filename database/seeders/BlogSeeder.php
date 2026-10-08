@@ -4,8 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\BlogCategory;
 use App\Models\BlogPost;
+use App\Models\Property;
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class BlogSeeder extends Seeder
 {
@@ -23,8 +24,8 @@ class BlogSeeder extends Seeder
             BlogCategory::firstOrCreate(['slug' => $cat['slug']], $cat);
         }
 
-        $property = \App\Models\Property::first();
-        $author = \App\Models\User::first();
+        $property = Property::first();
+        $author = User::first();
 
         $posts = [
             [
@@ -111,7 +112,7 @@ class BlogSeeder extends Seeder
                     'title' => $data['title'],
                     'excerpt' => $data['excerpt'],
                     'content' => $data['content'],
-                    'meta_title' => $data['title'] . ' — ' . config('app.name', 'HotelHub') . ' Blog',
+                    'meta_title' => $data['title'].' — '.config('app.name', 'HotelHub').' Blog',
                     'meta_description' => $data['excerpt'],
                     'is_published' => true,
                     'published_at' => now()->subDays(rand(1, 90)),

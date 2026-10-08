@@ -37,11 +37,11 @@ class HrController extends Controller
     {
         $validated = $request->validate([
             'employee_id' => 'required|integer|exists:employees,id',
-            'date'        => 'required|date',
-            'clock_in'    => 'nullable|date_format:H:i:s',
-            'clock_out'   => 'nullable|date_format:H:i:s',
-            'status'      => 'nullable|in:present,absent,sick,leave,holiday,late',
-            'notes'       => 'nullable|string|max:500',
+            'date' => 'required|date',
+            'clock_in' => 'nullable|date_format:H:i:s',
+            'clock_out' => 'nullable|date_format:H:i:s',
+            'status' => 'nullable|in:present,absent,sick,leave,holiday,late',
+            'notes' => 'nullable|string|max:500',
         ]);
 
         Employee::where('property_id', $this->property()->id)
@@ -57,7 +57,7 @@ class HrController extends Controller
 
     public function payslips(Request $request)
     {
-        $year  = (int) $request->query('year', now()->year);
+        $year = (int) $request->query('year', now()->year);
         $month = (int) $request->query('month', now()->month);
 
         return response()->json(
@@ -73,8 +73,8 @@ class HrController extends Controller
     {
         $validated = $request->validate([
             'employee_id' => 'required|integer|exists:employees,id',
-            'year'        => 'nullable|integer|min:2000|max:2100',
-            'month'       => 'nullable|integer|between:1,12',
+            'year' => 'nullable|integer|min:2000|max:2100',
+            'month' => 'nullable|integer|between:1,12',
         ]);
 
         $employee = Employee::where('property_id', $this->property()->id)

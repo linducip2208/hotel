@@ -16,6 +16,7 @@ class DynamicPackageController extends Controller
             ->where('is_active', true)
             ->with('items')
             ->get();
+
         return view('panel.packages.index', compact('property', 'packages'));
     }
 

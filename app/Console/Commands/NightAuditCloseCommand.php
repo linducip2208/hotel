@@ -9,6 +9,7 @@ use Illuminate\Console\Command;
 class NightAuditCloseCommand extends Command
 {
     protected $signature = 'night-audit:close {--property=}';
+
     protected $description = 'Run night audit for all properties (or specified one)';
 
     public function handle(NightAuditService $svc): int
@@ -23,7 +24,7 @@ class NightAuditCloseCommand extends Command
                 $audit = $svc->run($p);
                 $this->line("  ✓ status={$audit->status} ".json_encode($audit->summary));
             } catch (\Throwable $e) {
-                $this->error("  ✗ ".$e->getMessage());
+                $this->error('  ✗ '.$e->getMessage());
             }
         }
 

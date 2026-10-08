@@ -20,6 +20,11 @@ class FolioService
 
     public function postCharge(Folio $folio, array $data): FolioCharge
     {
+        // Financial invariant: no posting to a closed/void folio.
+        if ($folio->status !== 'open') {
+            throw new \RuntimeException("Folio {$folio->folio_no} sudah ditutup — charge tidak dapat diposting.");
+        }
+
         return DB::transaction(function () use ($folio, $data) {
             $taxAmount = 0;
             if (! empty($data['is_taxable'])) {
@@ -47,12 +52,18 @@ class FolioService
             ]);
 
             $folio->recalculate();
+
             return $charge;
         });
     }
 
     public function postPayment(Folio $folio, array $data): FolioPayment
     {
+        // Financial invariant: no posting to a closed/void folio.
+        if ($folio->status !== 'open') {
+            throw new \RuntimeException("Folio {$folio->folio_no} sudah ditutup — pembayaran tidak dapat diposting.");
+        }
+
         return DB::transaction(function () use ($folio, $data) {
             $payment = $folio->payments()->create([
                 'property_id' => $folio->property_id,
@@ -68,6 +79,7 @@ class FolioService
 
             $folio->recalculate();
             $this->journal->postFolioPayment($folio, $payment);
+
             return $payment;
         });
     }

@@ -63,7 +63,7 @@
         </svg>
     </div>
     <p class="text-base font-semibold text-gray-600">No tables configured</p>
-    <p class="text-sm text-gray-400 mt-1">Add tables in Settings → POS outlets.</p>
+    <p class="text-sm text-gray-400 mt-1">Kelola outlet dan meja di <a href="{{ route('panel.pos.outlets.edit', $outlet->id) }}" class="text-primary-600 underline">Pengaturan Outlet</a>.</p>
 </div>
 @endif
 

@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Panel\Finance;
 use App\Http\Controllers\Controller;
 use App\Models\BankAccount;
 use App\Models\BankStatement;
-use App\Models\BankStatementLine;
 use App\Models\BudgetLine;
 use App\Models\BudgetPeriod;
+use App\Models\ChartOfAccount;
 use App\Models\FolioPayment;
 use App\Models\FxRate;
 use App\Models\OwnerStatement;
@@ -30,7 +30,8 @@ class FinanceController extends Controller
 
         $format = function (float $val, string $cur) {
             $decimals = in_array($cur, ['IDR', 'JPY', 'VND', 'KRW']) ? 0 : 2;
-            return number_format($val, $decimals, ',', '.') . ' ' . $cur;
+
+            return number_format($val, $decimals, ',', '.').' '.$cur;
         };
 
         return response()->json([
@@ -48,6 +49,7 @@ class FinanceController extends Controller
     public function refreshFxRates(FxRateService $fxSvc)
     {
         $fxSvc->fetchLive('IDR');
+
         return back()->with('success', 'Kurs berhasil diperbarui dari API real-time.');
     }
 
@@ -55,8 +57,9 @@ class FinanceController extends Controller
     {
         $accounts = BankAccount::where('property_id', app('current_property')->id)
             ->with('coaAccount')->paginate(50);
-        $coa = \App\Models\ChartOfAccount::where('property_id', app('current_property')->id)
+        $coa = ChartOfAccount::where('property_id', app('current_property')->id)
             ->where('type', 'asset')->orderBy('code')->get();
+
         return view('panel.finance.bank-accounts', compact('accounts', 'coa'));
     }
 
@@ -70,6 +73,7 @@ class FinanceController extends Controller
             'currency' => 'nullable|string',
         ]);
         BankAccount::create($data + ['property_id' => app('current_property')->id]);
+
         return back();
     }
 
@@ -150,8 +154,9 @@ class FinanceController extends Controller
             ['status' => 'draft']
         );
         $lines = $period->lines()->with('account')->orderBy('account_id')->orderBy('month')->get();
-        $coa = \App\Models\ChartOfAccount::where('property_id', app('current_property')->id)
+        $coa = ChartOfAccount::where('property_id', app('current_property')->id)
             ->whereIn('type', ['revenue', 'expense'])->orderBy('code')->get();
+
         return view('panel.finance.budget', compact('period', 'lines', 'coa', 'year'));
     }
 
@@ -167,6 +172,7 @@ class FinanceController extends Controller
             ['budget_period_id' => $data['budget_period_id'], 'account_id' => $data['account_id'], 'month' => $data['month']],
             ['amount' => $data['amount']]
         );
+
         return back();
     }
 
@@ -174,12 +180,14 @@ class FinanceController extends Controller
     {
         $statements = OwnerStatement::where('property_id', app('current_property')->id)
             ->with('room')->orderByDesc('year')->orderByDesc('month')->paginate(50);
+
         return view('panel.finance.owner-statements', compact('statements'));
     }
 
     public function fxRates()
     {
         $rates = FxRate::orderByDesc('rate_date')->paginate(100);
+
         return view('panel.finance.fx-rates', compact('rates'));
     }
 
@@ -196,6 +204,7 @@ class FinanceController extends Controller
             ['base_currency' => strtoupper($data['base_currency']), 'quote_currency' => strtoupper($data['quote_currency']), 'rate_date' => $data['rate_date']],
             ['rate' => $data['rate'], 'source' => $data['source'] ?? 'manual']
         );
+
         return back();
     }
 }

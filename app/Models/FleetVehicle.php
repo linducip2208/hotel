@@ -17,6 +17,13 @@ class FleetVehicle extends Model
         'next_maintenance_due' => 'date',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function trips() { return $this->hasMany(FleetTrip::class, 'vehicle_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function trips()
+    {
+        return $this->hasMany(FleetTrip::class, 'vehicle_id');
+    }
 }

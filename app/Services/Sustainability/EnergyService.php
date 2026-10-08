@@ -37,10 +37,10 @@ class EnergyService
             $suggestions[] = "Konsumsi naik {$change}% vs bulan lalu. Periksa AC dan water heater.";
         }
         if ($dailyAvg > ($property->total_rooms ?? 100) * 15) {
-            $suggestions[] = "Konsumsi per kamar tinggi. Pertimbangkan smart thermostat.";
+            $suggestions[] = 'Konsumsi per kamar tinggi. Pertimbangkan smart thermostat.';
         }
         if (count($suggestions) === 0) {
-            $suggestions[] = "Konsumsi energi dalam batas normal. Pertahankan!";
+            $suggestions[] = 'Konsumsi energi dalam batas normal. Pertahankan!';
         }
 
         return compact(

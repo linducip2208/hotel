@@ -30,11 +30,15 @@ class S3CompatibleAdapter implements AdapterInterface
         $bucket = data_get($this->provider->extra_config, 'bucket');
         try {
             $this->client->headBucket(['Bucket' => $bucket]);
+
             return ['ok' => true, 'message' => 'Bucket reachable'];
         } catch (\Throwable $e) {
             return ['ok' => false, 'message' => $e->getMessage()];
         }
     }
 
-    public function client(): S3Client { return $this->client; }
+    public function client(): S3Client
+    {
+        return $this->client;
+    }
 }

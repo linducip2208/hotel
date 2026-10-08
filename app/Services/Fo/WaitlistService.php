@@ -4,7 +4,6 @@ namespace App\Services\Fo;
 
 use App\Models\Inventory;
 use App\Models\WaitlistEntry;
-use App\Services\Notifications\NotificationDispatcher;
 use Illuminate\Support\Facades\Log;
 
 class WaitlistService
@@ -27,12 +26,15 @@ class WaitlistService
                     $count++;
                 }
             });
+
         return $count;
     }
 
     protected function hasAvailability(WaitlistEntry $w): bool
     {
-        if (! $w->preferred_room_type_id) return false;
+        if (! $w->preferred_room_type_id) {
+            return false;
+        }
         $cursor = $w->check_in->copy();
         while ($cursor->lt($w->check_out)) {
             $inv = Inventory::where([
@@ -40,9 +42,12 @@ class WaitlistService
                 'room_type_id' => $w->preferred_room_type_id,
                 'date' => $cursor->toDateString(),
             ])->first();
-            if (! $inv || $inv->available < $w->rooms) return false;
+            if (! $inv || $inv->available < $w->rooms) {
+                return false;
+            }
             $cursor->addDay();
         }
+
         return true;
     }
 }

@@ -23,7 +23,7 @@ class AiController extends Controller
     {
         $request->validate([
             'text' => 'required|string',
-            'to'   => 'required|string|size:2',
+            'to' => 'required|string|size:2',
             'from' => 'nullable|string|size:2',
         ]);
 
@@ -40,7 +40,7 @@ class AiController extends Controller
         $request->validate([
             'message' => 'required|string',
             'history' => 'nullable|array',
-            'locale'  => 'nullable|string|max:10',
+            'locale' => 'nullable|string|max:10',
         ]);
 
         $property = $this->property();
@@ -56,7 +56,7 @@ class AiController extends Controller
     public function reviewReply(Request $request, int $reviewId, ReviewReplyGenerator $svc)
     {
         $request->validate([
-            'tone'   => 'nullable|string|max:50',
+            'tone' => 'nullable|string|max:50',
             'locale' => 'nullable|string|max:10',
         ]);
 
@@ -73,12 +73,12 @@ class AiController extends Controller
     {
         $request->validate([
             'from' => 'nullable|date',
-            'to'   => 'nullable|date|after_or_equal:from',
+            'to' => 'nullable|date|after_or_equal:from',
         ]);
 
         $property = $this->property();
         $from = Carbon::parse($request->query('from', now()->toDateString()));
-        $to   = Carbon::parse($request->query('to', now()->addDays(14)->toDateString()));
+        $to = Carbon::parse($request->query('to', now()->addDays(14)->toDateString()));
 
         return response()->json($svc->refine($property, $from, $to));
     }
@@ -88,7 +88,7 @@ class AiController extends Controller
         $request->validate([
             'message' => 'required|string|max:1000',
             'history' => 'nullable|array',
-            'locale'  => 'nullable|string|max:10',
+            'locale' => 'nullable|string|max:10',
         ]);
 
         $property = $this->property();

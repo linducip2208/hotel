@@ -4,17 +4,19 @@ namespace App\Console\Commands\Notifications;
 
 use App\Jobs\SendCheckinReminderJob;
 use App\Models\Reservation;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class CheckinRemindersCommand extends Command
 {
-    protected $signature   = 'notifications:checkin-reminders {--date= : Check-in date (Y-m-d), defaults to tomorrow}';
+    protected $signature = 'notifications:checkin-reminders {--date= : Check-in date (Y-m-d), defaults to tomorrow}';
+
     protected $description = 'Dispatch check-in reminder notifications for reservations arriving tomorrow';
 
     public function handle(): int
     {
         $date = $this->option('date')
-            ? \Carbon\Carbon::parse($this->option('date'))
+            ? Carbon::parse($this->option('date'))
             : now()->addDay();
 
         $reservations = Reservation::whereDate('check_in', $date->toDateString())
@@ -29,6 +31,7 @@ class CheckinRemindersCommand extends Command
         }
 
         $this->info('All reminder jobs queued.');
+
         return self::SUCCESS;
     }
 }

@@ -35,6 +35,7 @@ class DemandForecastAi
         try {
             $r = $adapter->chat($messages, options: ['max_tokens' => 2000, 'temperature' => 0.3]);
             $refined = json_decode($r['content'] ?? '[]', true);
+
             return ['ok' => true, 'forecast' => $refined ?: $base, 'ai_refined' => (bool) $refined];
         } catch (\Throwable $e) {
             return ['ok' => true, 'forecast' => $base, 'ai_refined' => false, 'error' => $e->getMessage()];

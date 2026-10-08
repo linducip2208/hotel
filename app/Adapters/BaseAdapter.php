@@ -47,6 +47,7 @@ abstract class BaseAdapter implements AdapterInterface
                 $headers[$k] = $v;
             }
         }
+
         return $headers;
     }
 }

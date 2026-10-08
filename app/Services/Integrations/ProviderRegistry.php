@@ -34,6 +34,7 @@ class ProviderRegistry
             ->where('is_active', true)
             ->where('is_default', true)
             ->first();
+
         return $provider ? $this->factory->make($provider) : null;
     }
 

@@ -26,7 +26,7 @@ class WebhookController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'url'    => 'required|url|max:500',
+            'url' => 'required|url|max:500',
             'events' => 'required|array|min:1',
             'secret' => 'nullable|string|max:255',
         ]);
@@ -34,11 +34,11 @@ class WebhookController extends Controller
         $secret = $validated['secret'] ?? Str::random(48);
 
         $webhook = Webhook::create([
-            'property_id'      => $this->property()->id,
-            'url'              => $validated['url'],
-            'events'           => $validated['events'],
+            'property_id' => $this->property()->id,
+            'url' => $validated['url'],
+            'events' => $validated['events'],
             'secret_encrypted' => $secret,
-            'is_active'        => true,
+            'is_active' => true,
         ]);
 
         return response()->json(['id' => $webhook->id, 'secret' => $secret], 201);
@@ -54,8 +54,8 @@ class WebhookController extends Controller
     public function update(Request $request, int $id)
     {
         $validated = $request->validate([
-            'url'       => 'sometimes|url|max:500',
-            'events'    => 'sometimes|array|min:1',
+            'url' => 'sometimes|url|max:500',
+            'events' => 'sometimes|array|min:1',
             'is_active' => 'sometimes|boolean',
         ]);
 

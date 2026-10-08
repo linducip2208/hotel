@@ -18,5 +18,8 @@ class ArInvoiceLine extends Model
         'tax_amount' => 'decimal:2',
     ];
 
-    public function invoice() { return $this->belongsTo(ArInvoice::class, 'invoice_id'); }
+    public function invoice()
+    {
+        return $this->belongsTo(ArInvoice::class, 'invoice_id');
+    }
 }

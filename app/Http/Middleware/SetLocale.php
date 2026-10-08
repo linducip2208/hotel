@@ -15,7 +15,7 @@ class SetLocale
             ?? $request->getPreferredLanguage(['id', 'en'])
             ?? config('app.locale', 'id');
 
-        if (!in_array($locale, ['id', 'en'])) {
+        if (! in_array($locale, ['id', 'en'])) {
             $locale = 'id';
         }
 

@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class FxRate extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
+
     protected $casts = [
         'rate_date' => 'date',
         'rate' => 'decimal:8',
@@ -22,6 +24,7 @@ class FxRate extends Model
             ->where('rate_date', '<=', $on->format('Y-m-d'))
             ->orderByDesc('rate_date')
             ->first();
+
         return $rate ? (float) $rate->rate : null;
     }
 }

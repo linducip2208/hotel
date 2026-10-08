@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class RateScraperLog extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
+
     protected $casts = [
         'scraped_for_date' => 'date',
         'rates_found' => 'array',
@@ -17,6 +19,13 @@ class RateScraperLog extends Model
         'price_gap_pct' => 'decimal:2',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function target() { return $this->belongsTo(RateScraperTarget::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function target()
+    {
+        return $this->belongsTo(RateScraperTarget::class);
+    }
 }

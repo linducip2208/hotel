@@ -4,7 +4,6 @@ namespace App\Services\Fo;
 
 use App\Models\KeycardInventory;
 use App\Models\KeycardType;
-use App\Models\Reservation;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -38,7 +37,7 @@ class KeycardService
             $card = KeycardInventory::findOrFail($cardId);
 
             if ($card->status !== 'available') {
-                throw new \RuntimeException('Kartu tidak tersedia — status: ' . $card->status);
+                throw new \RuntimeException('Kartu tidak tersedia — status: '.$card->status);
             }
 
             $card->update([
@@ -83,6 +82,7 @@ class KeycardService
             'status' => 'lost',
             'returned_at' => now(),
         ]);
+
         return $card;
     }
 
@@ -93,6 +93,7 @@ class KeycardService
             'status' => 'damaged',
             'returned_at' => now(),
         ]);
+
         return $card;
     }
 

@@ -13,6 +13,7 @@ class GuestRequestController extends Controller
         $requests = GuestRequest::where('property_id', app('current_property')->id)
             ->when($request->query('status'), fn ($q, $s) => $q->where('status', $s))
             ->with('guest', 'room', 'assignee')->latest('opened_at')->paginate(50);
+
         return view('panel.concierge.requests', compact('requests'));
     }
 
@@ -28,6 +29,7 @@ class GuestRequestController extends Controller
             'priority' => 'nullable|in:low,normal,high,urgent',
         ]);
         GuestRequest::create($data + ['property_id' => app('current_property')->id, 'status' => 'open']);
+
         return back();
     }
 
@@ -42,6 +44,7 @@ class GuestRequestController extends Controller
                 default => null,
             };
         }
+
         return back();
     }
 }

@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Services\Indonesia\SipgarReportService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 final class SipgarController extends Controller
 {

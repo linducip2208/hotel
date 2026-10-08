@@ -18,10 +18,33 @@ class FleetTrip extends Model
         'charge_amount' => 'decimal:2',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function vehicle() { return $this->belongsTo(FleetVehicle::class); }
-    public function driver() { return $this->belongsTo(FleetDriver::class); }
-    public function reservation() { return $this->belongsTo(Reservation::class); }
-    public function guest() { return $this->belongsTo(Guest::class); }
-    public function folioCharge() { return $this->belongsTo(FolioCharge::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function vehicle()
+    {
+        return $this->belongsTo(FleetVehicle::class);
+    }
+
+    public function driver()
+    {
+        return $this->belongsTo(FleetDriver::class);
+    }
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class);
+    }
+
+    public function guest()
+    {
+        return $this->belongsTo(Guest::class);
+    }
+
+    public function folioCharge()
+    {
+        return $this->belongsTo(FolioCharge::class);
+    }
 }

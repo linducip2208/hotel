@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\Panel\Revenue;
 
 use App\Http\Controllers\Controller;
-use App\Models\Inventory;
-use App\Models\Reservation;
-use App\Models\RoomType;
 use App\Services\Revenue\OverbookingService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;

@@ -9,6 +9,7 @@ use Illuminate\Console\Command;
 class ReleaseGroupBlocks extends Command
 {
     protected $signature = 'groups:release-expired';
+
     protected $description = 'Release unpicked rooms from expired group blocks';
 
     public function handle(GroupBlockService $service): void
@@ -20,6 +21,7 @@ class ReleaseGroupBlocks extends Command
 
         if ($blocks->isEmpty()) {
             $this->info('No expired group blocks to release.');
+
             return;
         }
 

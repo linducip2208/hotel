@@ -17,5 +17,8 @@ class ReservationAddon extends Model
         'subtotal' => 'decimal:2',
     ];
 
-    public function reservation() { return $this->belongsTo(Reservation::class); }
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class);
+    }
 }

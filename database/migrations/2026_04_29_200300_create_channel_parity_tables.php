@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Schema;
  * Channel parity monitoring: detect when an OTA sells your room cheaper than
  * your direct rate (rate parity breach) and log alerts for action.
  */
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         Schema::create('channel_parity_alerts', function (Blueprint $t) {

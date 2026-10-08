@@ -19,6 +19,36 @@
     </div>
 </div>
 
+{{-- Filters --}}
+<div class="bg-white rounded-2xl shadow-card border border-gray-100 p-4 mb-4">
+    <form method="GET" class="grid sm:grid-cols-12 gap-3 items-end">
+        <div class="sm:col-span-5">
+            <label class="block text-xs font-semibold text-gray-600 mb-1.5">Cari (Ref / Nama / Email)</label>
+            <input type="text" name="q" value="{{ request('q') }}" placeholder="HMS-... atau nama tamu"
+                   class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2 text-sm outline-none focus:bg-white focus:border-primary-400 transition-all">
+        </div>
+        <div class="sm:col-span-3">
+            <label class="block text-xs font-semibold text-gray-600 mb-1.5">Status</label>
+            <select name="status" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2 text-sm outline-none focus:bg-white focus:border-primary-400 transition-all">
+                <option value="">Semua status</option>
+                @foreach (['confirmed' => 'Confirmed', 'tentative' => 'Tentative', 'checked_in' => 'Checked In', 'checked_out' => 'Checked Out', 'cancelled' => 'Cancelled', 'no_show' => 'No Show'] as $val => $label)
+                    <option value="{{ $val }}" @selected(request('status') === $val)>{{ $label }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="sm:col-span-2">
+            <label class="block text-xs font-semibold text-gray-600 mb-1.5">Menginap pada</label>
+            <input type="date" name="date" value="{{ request('date') }}"
+                   class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2 text-sm outline-none focus:bg-white focus:border-primary-400 transition-all">
+        </div>
+        <div class="sm:col-span-2 flex gap-2">
+            <button type="submit" class="flex-1 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium px-4 py-2 rounded-xl transition">Filter</button>
+            <a href="{{ route('panel.fo.reservations.index') }}" title="Bersihkan filter"
+               class="px-3 py-2 border border-gray-200 text-gray-500 hover:bg-gray-50 rounded-xl text-sm">Reset</a>
+        </div>
+    </form>
+</div>
+
 {{-- Table Card --}}
 <div class="bg-white rounded-2xl shadow-card border border-gray-100 overflow-hidden">
     <div class="overflow-x-auto">
@@ -96,16 +126,27 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="text-sm font-medium text-gray-700">Belum ada data</p>
-                                <p class="text-xs text-gray-400 mt-0.5">Buat reservasi pertama Anda</p>
+                                <p class="text-sm font-medium text-gray-700">
+                                    {{ (request('q') || request('status') || request('date')) ? 'Tidak ada hasil untuk filter ini' : 'Belum ada data' }}
+                                </p>
+                                <p class="text-xs text-gray-400 mt-0.5">
+                                    {{ (request('q') || request('status') || request('date')) ? 'Coba ubah kata kunci atau reset filter' : 'Buat reservasi pertama Anda' }}
+                                </p>
                             </div>
-                            <a href="{{ route('panel.fo.reservations.create') }}"
-                               class="mt-1 inline-flex items-center gap-1.5 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-xl text-xs font-medium transition">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                                </svg>
-                                Buat Reservasi
-                            </a>
+                            @if (request('q') || request('status') || request('date'))
+                                <a href="{{ route('panel.fo.reservations.index') }}"
+                                   class="mt-1 inline-flex items-center gap-1.5 border border-gray-200 text-gray-600 hover:bg-gray-50 px-4 py-2 rounded-xl text-xs font-medium transition">
+                                    Reset Filter
+                                </a>
+                            @else
+                                <a href="{{ route('panel.fo.reservations.create') }}"
+                                   class="mt-1 inline-flex items-center gap-1.5 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-xl text-xs font-medium transition">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                    </svg>
+                                    Buat Reservasi
+                                </a>
+                            @endif
                         </div>
                     </td>
                 </tr>

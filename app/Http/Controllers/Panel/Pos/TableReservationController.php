@@ -68,6 +68,7 @@ class TableReservationController extends Controller
         $data['booked_by_user_id'] = auth()->id();
 
         $this->svc->reserve(app('current_property'), $data);
+
         return back()->with('success', 'Reservasi meja berhasil dibuat.');
     }
 
@@ -87,6 +88,7 @@ class TableReservationController extends Controller
         ]);
 
         $r->update($data);
+
         return back()->with('success', 'Reservasi meja berhasil diperbarui.');
     }
 
@@ -94,6 +96,7 @@ class TableReservationController extends Controller
     {
         $r = TableReservation::where('property_id', app('current_property')->id)->findOrFail($id);
         $this->svc->checkIn($r->id);
+
         return back()->with('success', 'Tamu sudah duduk.');
     }
 
@@ -101,6 +104,7 @@ class TableReservationController extends Controller
     {
         $r = TableReservation::where('property_id', app('current_property')->id)->findOrFail($id);
         $this->svc->complete($r->id);
+
         return back()->with('success', 'Reservasi selesai.');
     }
 
@@ -108,6 +112,7 @@ class TableReservationController extends Controller
     {
         $r = TableReservation::where('property_id', app('current_property')->id)->findOrFail($id);
         $this->svc->noShow($r->id);
+
         return back()->with('success', 'Ditandai no-show.');
     }
 
@@ -115,6 +120,7 @@ class TableReservationController extends Controller
     {
         $r = TableReservation::where('property_id', app('current_property')->id)->findOrFail($id);
         $this->svc->cancel($r->id);
+
         return back()->with('success', 'Reservasi dibatalkan.');
     }
 }

@@ -17,7 +17,7 @@ class MultiPropertyController extends Controller
         $properties = Property::where('is_active', true)->get();
 
         $from = $request->query('from', now()->startOfMonth()->toDateString());
-        $to   = $request->query('to', now()->toDateString());
+        $to = $request->query('to', now()->toDateString());
 
         $totalRooms = Room::whereIn('property_id', $properties->pluck('id'))->count();
 

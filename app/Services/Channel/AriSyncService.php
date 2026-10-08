@@ -3,6 +3,7 @@
 namespace App\Services\Channel;
 
 use App\Adapters\Channel\BaseChannelAdapter;
+use App\Adapters\Channel\BookingComAdapter;
 use App\Models\AriSyncLog;
 use App\Models\Channel;
 use Illuminate\Support\Facades\Log;
@@ -16,7 +17,8 @@ class AriSyncService
 
     public function adapter(Channel $channel): BaseChannelAdapter
     {
-        $class = $this->adapters()[$channel->code] ?? \App\Adapters\Channel\BookingComAdapter::class;
+        $class = $this->adapters()[$channel->code] ?? BookingComAdapter::class;
+
         return new $class($channel);
     }
 
@@ -38,6 +40,7 @@ class AriSyncService
                 'response_summary' => $result,
                 'error' => $result['ok'] ? null : ($result['message'] ?? 'unknown'),
             ]);
+
             return $result;
         } catch (\Throwable $e) {
             Log::channel('channel-manager')->error('ARI push failed', ['error' => $e->getMessage()]);
@@ -53,6 +56,7 @@ class AriSyncService
             $result = $this->adapter($channel)->fetchBookings($channel->last_sync_at);
             $log->update(['status' => 'success', 'finished_at' => now(), 'response_summary' => ['count' => count($result['bookings'] ?? [])]]);
             $channel->update(['last_sync_at' => now(), 'last_sync_status' => 'ok']);
+
             return $result;
         } catch (\Throwable $e) {
             $log->update(['status' => 'failed', 'finished_at' => now(), 'error' => $e->getMessage()]);

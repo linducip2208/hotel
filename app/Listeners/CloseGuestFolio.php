@@ -23,7 +23,7 @@ final class CloseGuestFolio implements ShouldQueue
                 $folio->recalculate();
                 if ((float) $folio->balance <= 0) {
                     $folio->update([
-                        'status'    => 'settled',
+                        'status' => 'settled',
                         'closed_at' => now(),
                     ]);
                 }

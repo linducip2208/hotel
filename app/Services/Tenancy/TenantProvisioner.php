@@ -27,7 +27,7 @@ class TenantProvisioner
         if (! $tenant->domains()->exists()) {
             TenantDomain::create([
                 'tenant_id' => $tenant->id,
-                'domain' => $tenant->slug . '.hotelhub.id',
+                'domain' => $tenant->slug.'.hotelhub.id',
                 'is_primary' => true,
                 'is_verified' => true,
                 'ssl_status' => 'active',

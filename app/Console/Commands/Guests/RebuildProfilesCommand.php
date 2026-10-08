@@ -8,7 +8,8 @@ use Illuminate\Console\Command;
 
 class RebuildProfilesCommand extends Command
 {
-    protected $signature   = 'guests:rebuild-profiles {--guest= : Specific guest ID} {--sync : Run synchronously instead of queueing}';
+    protected $signature = 'guests:rebuild-profiles {--guest= : Specific guest ID} {--sync : Run synchronously instead of queueing}';
+
     protected $description = 'Rebuild Guest 360 intelligence profiles from transaction history';
 
     public function handle(): int
@@ -18,8 +19,8 @@ class RebuildProfilesCommand extends Command
             $query->where('id', $id);
         }
 
-        $guests  = $query->get();
-        $sync    = $this->option('sync');
+        $guests = $query->get();
+        $sync = $this->option('sync');
         $this->info("Rebuilding profiles for {$guests->count()} guest(s)...");
 
         foreach ($guests as $guest) {
@@ -30,7 +31,8 @@ class RebuildProfilesCommand extends Command
             }
         }
 
-        $this->info($sync ? 'Done.' : "All jobs queued.");
+        $this->info($sync ? 'Done.' : 'All jobs queued.');
+
         return self::SUCCESS;
     }
 }

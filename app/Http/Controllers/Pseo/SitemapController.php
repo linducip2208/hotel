@@ -22,6 +22,7 @@ class SitemapController extends Controller
                     .'</loc></sitemap>';
             }
             $xml .= '</sitemapindex>';
+
             return $xml;
         });
 
@@ -44,6 +45,7 @@ class SitemapController extends Controller
                 $xml .= '</url>';
             }
             $xml .= '</urlset>';
+
             return $xml;
         });
 

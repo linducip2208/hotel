@@ -13,6 +13,13 @@ class ProviderFeatureAssignment extends Model
 
     protected $casts = ['config' => 'array'];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function provider() { return $this->belongsTo(Provider::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function provider()
+    {
+        return $this->belongsTo(Provider::class);
+    }
 }

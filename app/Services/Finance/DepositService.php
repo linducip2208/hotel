@@ -4,10 +4,7 @@ namespace App\Services\Finance;
 
 use App\Models\Deposit;
 use App\Models\FolioCharge;
-use App\Models\Guest;
 use App\Models\Property;
-use App\Models\Reservation;
-use Carbon\Carbon;
 
 class DepositService
 {
@@ -38,7 +35,7 @@ class DepositService
             'refund_date' => now()->toDateString(),
             'refund_method' => $method,
             'status' => $remaining <= 0 ? 'fully_refunded' : 'partially_refunded',
-            'notes' => $reason ? ($deposit->notes ? $deposit->notes . "\nRefund: " . $reason : 'Refund: ' . $reason) : $deposit->notes,
+            'notes' => $reason ? ($deposit->notes ? $deposit->notes."\nRefund: ".$reason : 'Refund: '.$reason) : $deposit->notes,
         ]);
 
         return $deposit->fresh();

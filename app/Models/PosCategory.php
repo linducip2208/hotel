@@ -13,6 +13,13 @@ class PosCategory extends Model
 
     protected $casts = ['is_active' => 'boolean'];
 
-    public function outlet() { return $this->belongsTo(PosOutlet::class, 'outlet_id'); }
-    public function menuItems() { return $this->hasMany(PosMenuItem::class, 'category_id'); }
+    public function outlet()
+    {
+        return $this->belongsTo(PosOutlet::class, 'outlet_id');
+    }
+
+    public function menuItems()
+    {
+        return $this->hasMany(PosMenuItem::class, 'category_id');
+    }
 }

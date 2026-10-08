@@ -4,7 +4,6 @@ namespace App\Services\Guest;
 
 use App\Models\FolioCharge;
 use App\Models\Guest;
-use App\Models\GuestProfile;
 use App\Models\Reservation;
 
 class PreferenceLearningService
@@ -22,10 +21,14 @@ class PreferenceLearningService
     public function learn(Reservation $reservation): void
     {
         $guest = $reservation->primaryGuest ?? $reservation->guest;
-        if (!$guest) return;
+        if (! $guest) {
+            return;
+        }
 
         $learned = $this->extractFromReservation($reservation);
-        if (empty($learned)) return;
+        if (empty($learned)) {
+            return;
+        }
 
         $this->mergePreferences($guest, $learned);
     }
@@ -48,10 +51,12 @@ class PreferenceLearningService
     public function suggestForCheckin(Reservation $reservation): array
     {
         $guest = $reservation->primaryGuest ?? $reservation->guest;
-        if (!$guest) return [];
+        if (! $guest) {
+            return [];
+        }
 
         $prefs = $this->getPreferences($guest);
-        if (empty($prefs['auto_apply']) || !($prefs['auto_apply'] ?? true)) {
+        if (empty($prefs['auto_apply']) || ! ($prefs['auto_apply'] ?? true)) {
             return [];
         }
 
@@ -74,7 +79,9 @@ class PreferenceLearningService
     {
         $suggestions = $this->suggestForCheckin($reservation);
         $guest = $reservation->primaryGuest ?? $reservation->guest;
-        if (!$guest || empty($suggestions)) return;
+        if (! $guest || empty($suggestions)) {
+            return;
+        }
 
         $guest->preferences = array_merge($guest->preferences ?? [], [
             'last_applied_to_reservation' => $reservation->id,
@@ -103,7 +110,7 @@ class PreferenceLearningService
 
             $minibarItems = $charges->filter(fn ($c) => $c->category === 'minibar')
                 ->pluck('description')->filter()->unique()->values()->toArray();
-            if (!empty($minibarItems)) {
+            if (! empty($minibarItems)) {
                 $learned['minibar_items'] = $minibarItems;
             }
         }
@@ -113,7 +120,9 @@ class PreferenceLearningService
             $lower = strtolower($specialRequests);
             if (str_contains($lower, 'lantai')) {
                 preg_match('/lantai\s*(\d+)/i', $specialRequests, $m);
-                if (isset($m[1])) $learned['preferred_floor'] = (int) $m[1];
+                if (isset($m[1])) {
+                    $learned['preferred_floor'] = (int) $m[1];
+                }
             }
             if (str_contains($lower, 'bantal') && str_contains($lower, 'lunak')) {
                 $learned['pillow_type'] = 'soft';
@@ -132,7 +141,9 @@ class PreferenceLearningService
             }
             if (str_contains($lower, 'ac') || str_contains($lower, 'suhu')) {
                 preg_match('/(\d{2})\s*(?:°|derajat|C)/i', $specialRequests, $m);
-                if (isset($m[1])) $learned['ac_temperature'] = (int) $m[1];
+                if (isset($m[1])) {
+                    $learned['ac_temperature'] = (int) $m[1];
+                }
             }
         }
 
@@ -163,8 +174,12 @@ class PreferenceLearningService
                 } else {
                     $sameVal = $oldEntry && isset($oldEntry['value']) && $oldEntry['value'] === $value;
                     $confidence = min(100, (int) round(($staysForThis / max(1, $staysForThis + 1 - ($sameVal ? 1 : 0))) * 100));
-                    if ($sameVal && $confidence < 60) $confidence = 60;
-                    if (!$sameVal && $staysForThis === 1) $confidence = 25;
+                    if ($sameVal && $confidence < 60) {
+                        $confidence = 60;
+                    }
+                    if (! $sameVal && $staysForThis === 1) {
+                        $confidence = 25;
+                    }
                 }
 
                 $existing[$key] = [

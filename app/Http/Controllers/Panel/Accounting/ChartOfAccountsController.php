@@ -11,6 +11,7 @@ class ChartOfAccountsController extends Controller
     public function index()
     {
         $accounts = ChartOfAccount::where('property_id', app('current_property')->id)->orderBy('code')->get();
+
         return view('panel.accounting.coa', compact('accounts'));
     }
 
@@ -24,14 +25,18 @@ class ChartOfAccountsController extends Controller
             'parent_id' => 'nullable|integer',
         ]);
         ChartOfAccount::create($data + ['property_id' => app('current_property')->id]);
+
         return back();
     }
 
     public function update(Request $request, int $id)
     {
         $coa = ChartOfAccount::where('property_id', app('current_property')->id)->findOrFail($id);
-        if ($coa->is_system) abort(403, 'System account cannot be edited.');
+        if ($coa->is_system) {
+            abort(403, 'System account cannot be edited.');
+        }
         $coa->update($request->only(['name', 'description', 'is_active']));
+
         return back();
     }
 }

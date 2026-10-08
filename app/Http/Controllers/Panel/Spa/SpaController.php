@@ -16,7 +16,10 @@ class SpaController extends Controller
 {
     public function __construct(protected SpaService $svc) {}
 
-    public function index() { return $this->appointments(request()); }
+    public function index()
+    {
+        return $this->appointments(request());
+    }
 
     public function appointments(Request $request)
     {
@@ -32,6 +35,7 @@ class SpaController extends Controller
         $treatments = SpaTreatment::where('property_id', app('current_property')->id)->where('is_active', true)->get();
         $therapists = SpaTherapist::where('property_id', app('current_property')->id)->where('is_active', true)->get();
         $cabins = SpaCabin::where('property_id', app('current_property')->id)->where('is_active', true)->get();
+
         return view('panel.spa.appointments', compact('apps', 'treatments', 'therapists', 'cabins', 'today'));
     }
 
@@ -48,6 +52,7 @@ class SpaController extends Controller
             'price' => 'nullable|numeric',
         ]);
         $this->svc->book($data);
+
         return back();
     }
 
@@ -55,6 +60,7 @@ class SpaController extends Controller
     {
         $a = SpaAppointment::where('property_id', app('current_property')->id)->findOrFail($id);
         $this->svc->complete($a);
+
         return back();
     }
 
@@ -62,6 +68,7 @@ class SpaController extends Controller
     {
         $a = SpaAppointment::where('property_id', app('current_property')->id)->findOrFail($id);
         $a->update(['status' => 'cancelled']);
+
         return back();
     }
 
@@ -69,6 +76,7 @@ class SpaController extends Controller
     {
         $a = SpaAppointment::where('property_id', app('current_property')->id)->findOrFail($id);
         $a->delete();
+
         return back();
     }
 
@@ -81,6 +89,7 @@ class SpaController extends Controller
             $q->where(fn ($sub) => $sub->where('name', 'like', "%{$search}%")->orWhere('code', 'like', "%{$search}%"));
         }
         $treatments = $q->paginate(50);
+
         return view('panel.spa.treatments', compact('treatments'));
     }
 
@@ -94,6 +103,7 @@ class SpaController extends Controller
             'description' => 'nullable|string',
         ]);
         SpaTreatment::create($data + ['property_id' => app('current_property')->id]);
+
         return back();
     }
 
@@ -108,6 +118,7 @@ class SpaController extends Controller
             'description' => 'nullable|string',
         ]);
         $t->update($data);
+
         return back();
     }
 
@@ -115,6 +126,7 @@ class SpaController extends Controller
     {
         $t = SpaTreatment::where('property_id', app('current_property')->id)->findOrFail($id);
         $t->delete();
+
         return back();
     }
 
@@ -127,6 +139,7 @@ class SpaController extends Controller
             $q->where('name', 'like', "%{$search}%");
         }
         $therapists = $q->paginate(50);
+
         return view('panel.spa.therapists', compact('therapists'));
     }
 
@@ -134,6 +147,7 @@ class SpaController extends Controller
     {
         $data = $request->validate(['name' => 'required|string', 'gender' => 'nullable|in:M,F']);
         SpaTherapist::create($data + ['property_id' => app('current_property')->id]);
+
         return back();
     }
 
@@ -142,6 +156,7 @@ class SpaController extends Controller
         $tp = SpaTherapist::where('property_id', app('current_property')->id)->findOrFail($id);
         $data = $request->validate(['name' => 'required|string', 'gender' => 'nullable|in:M,F']);
         $tp->update($data);
+
         return back();
     }
 
@@ -149,6 +164,7 @@ class SpaController extends Controller
     {
         $tp = SpaTherapist::where('property_id', app('current_property')->id)->findOrFail($id);
         $tp->delete();
+
         return back();
     }
 
@@ -157,6 +173,7 @@ class SpaController extends Controller
     public function cabins()
     {
         $cabins = SpaCabin::where('property_id', app('current_property')->id)->paginate(50);
+
         return view('panel.spa.cabins', compact('cabins'));
     }
 
@@ -167,6 +184,7 @@ class SpaController extends Controller
             'type' => 'required|in:single,couple,vip',
         ]);
         SpaCabin::create($data + ['property_id' => app('current_property')->id]);
+
         return back();
     }
 
@@ -179,6 +197,7 @@ class SpaController extends Controller
         ]);
         $data['is_active'] = $request->boolean('is_active');
         $cabin->update($data);
+
         return back();
     }
 
@@ -186,6 +205,7 @@ class SpaController extends Controller
     {
         $cabin = SpaCabin::where('property_id', app('current_property')->id)->findOrFail($id);
         $cabin->delete();
+
         return back();
     }
 
@@ -194,6 +214,7 @@ class SpaController extends Controller
     public function memberships()
     {
         $memberships = SpaMembership::where('property_id', app('current_property')->id)->with('guest')->paginate(50);
+
         return view('panel.spa.memberships', compact('memberships'));
     }
 
@@ -207,9 +228,10 @@ class SpaController extends Controller
             'price' => 'required|numeric',
             'payment_method' => 'nullable|string',
         ]);
-        $data['membership_number'] = 'SPA-' . strtoupper(Str::random(8));
+        $data['membership_number'] = 'SPA-'.strtoupper(Str::random(8));
         $data['property_id'] = app('current_property')->id;
         SpaMembership::create($data);
+
         return back();
     }
 
@@ -226,6 +248,7 @@ class SpaController extends Controller
         ]);
         $data['auto_renew'] = $request->boolean('auto_renew');
         $m->update($data);
+
         return back();
     }
 }

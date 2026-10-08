@@ -24,7 +24,10 @@ class Provider extends Model
 
     protected $hidden = ['api_key_encrypted', 'secret_encrypted'];
 
-    public function property() { return $this->belongsTo(Property::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
 
     public function setApiKey(?string $key): void
     {
@@ -48,9 +51,14 @@ class Provider extends Model
 
     public function getMaskedKeyAttribute(): ?string
     {
-        if (! $this->api_key_encrypted) return null;
+        if (! $this->api_key_encrypted) {
+            return null;
+        }
         $plain = $this->getApiKey();
-        if (strlen($plain) < 8) return str_repeat('*', strlen($plain));
+        if (strlen($plain) < 8) {
+            return str_repeat('*', strlen($plain));
+        }
+
         return substr($plain, 0, 4).str_repeat('*', max(4, strlen($plain) - 8)).substr($plain, -4);
     }
 }

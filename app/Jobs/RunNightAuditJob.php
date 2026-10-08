@@ -17,6 +17,7 @@ class RunNightAuditJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 1; // night audit must not run twice
+
     public int $timeout = 300;
 
     public function __construct(
@@ -28,15 +29,15 @@ class RunNightAuditJob implements ShouldQueue
     {
         $property = Property::findOrFail($this->propertyId);
         $svc->run($property, new DateTime($this->auditDate));
-        Log::info("NightAudit complete", ['property' => $this->propertyId, 'date' => $this->auditDate]);
+        Log::info('NightAudit complete', ['property' => $this->propertyId, 'date' => $this->auditDate]);
     }
 
     public function failed(\Throwable $e): void
     {
-        Log::error("NightAudit failed", [
+        Log::error('NightAudit failed', [
             'property' => $this->propertyId,
-            'date'     => $this->auditDate,
-            'error'    => $e->getMessage(),
+            'date' => $this->auditDate,
+            'error' => $e->getMessage(),
         ]);
     }
 }

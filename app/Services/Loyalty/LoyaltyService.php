@@ -30,13 +30,19 @@ class LoyaltyService
     public function awardForStay(Reservation $reservation): ?LoyaltyTransaction
     {
         $guest = $reservation->primaryGuest;
-        if (! $guest) return null;
+        if (! $guest) {
+            return null;
+        }
 
         $member = LoyaltyMember::where('guest_id', $guest->id)->first();
-        if (! $member) return null;
+        if (! $member) {
+            return null;
+        }
 
         $points = (int) round($reservation->total_room * self::POINTS_PER_RUPIAH);
-        if ($points <= 0) return null;
+        if ($points <= 0) {
+            return null;
+        }
 
         return DB::transaction(function () use ($member, $points, $reservation) {
             $tx = LoyaltyTransaction::create([
@@ -50,13 +56,16 @@ class LoyaltyService
             $member->increment('points_balance', $points);
             $member->increment('lifetime_points', $points);
             $this->upgradeTierIfEligible($member);
+
             return $tx;
         });
     }
 
     public function redeem(LoyaltyMember $member, int $points, string $description): ?LoyaltyTransaction
     {
-        if ($member->points_balance < $points) return null;
+        if ($member->points_balance < $points) {
+            return null;
+        }
 
         return DB::transaction(function () use ($member, $points, $description) {
             $tx = LoyaltyTransaction::create([
@@ -66,6 +75,7 @@ class LoyaltyService
                 'description' => $description,
             ]);
             $member->decrement('points_balance', $points);
+
             return $tx;
         });
     }

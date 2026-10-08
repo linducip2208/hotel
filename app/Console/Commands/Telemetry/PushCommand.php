@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\DB;
 
 class PushCommand extends Command
 {
-    protected $signature   = 'telemetry:push';
+    protected $signature = 'telemetry:push';
+
     protected $description = 'Push anonymized usage telemetry to the vendor license server';
 
     public function handle(LicenseClient $client, MrrCalculator $mrr): int
@@ -21,9 +22,9 @@ class PushCommand extends Command
                     ->whereMonth('created_at', now()->month)
                     ->whereYear('created_at', now()->year)
                     ->count(),
-                'php_version'  => PHP_VERSION,
+                'php_version' => PHP_VERSION,
                 'laravel_version' => app()->version(),
-                'timestamp'    => now()->toIso8601String(),
+                'timestamp' => now()->toIso8601String(),
             ];
 
             $client->heartbeat($payload);

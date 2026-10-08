@@ -20,13 +20,14 @@ class MisterAladinAdapter extends BaseChannelAdapter
     protected function http(): Client
     {
         $cred = $this->channel->getCredentials();
+
         return new Client([
             'base_uri' => $this->getBaseUrl(),
             'timeout' => 30,
             'connect_timeout' => 10,
             'http_errors' => false,
             'headers' => [
-                'Authorization' => 'Bearer ' . ($cred['token'] ?? $cred['access_token'] ?? $cred['api_key'] ?? ''),
+                'Authorization' => 'Bearer '.($cred['token'] ?? $cred['access_token'] ?? $cred['api_key'] ?? ''),
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
             ],
@@ -51,7 +52,7 @@ class MisterAladinAdapter extends BaseChannelAdapter
             ];
 
             $response = $this->http()->put(
-                'hotels/' . urlencode((string) $hotelId) . '/rooms/availability',
+                'hotels/'.urlencode((string) $hotelId).'/rooms/availability',
                 ['json' => $payload]
             );
 
@@ -76,7 +77,7 @@ class MisterAladinAdapter extends BaseChannelAdapter
             ];
 
             $response = $this->http()->put(
-                'hotels/' . urlencode((string) $hotelId) . '/rooms/prices',
+                'hotels/'.urlencode((string) $hotelId).'/rooms/prices',
                 ['json' => $payload]
             );
 
@@ -104,7 +105,7 @@ class MisterAladinAdapter extends BaseChannelAdapter
             ];
 
             $response = $this->http()->put(
-                'hotels/' . urlencode((string) $hotelId) . '/rooms/policies',
+                'hotels/'.urlencode((string) $hotelId).'/rooms/policies',
                 ['json' => $payload]
             );
 
@@ -138,7 +139,7 @@ class MisterAladinAdapter extends BaseChannelAdapter
             do {
                 $params['page'] = $page;
                 $response = $this->http()->get(
-                    'hotels/' . urlencode((string) $hotelId) . '/bookings?' . http_build_query($params)
+                    'hotels/'.urlencode((string) $hotelId).'/bookings?'.http_build_query($params)
                 );
                 $data = $this->parseJsonResponse($response, 'bookings');
 
@@ -160,7 +161,8 @@ class MisterAladinAdapter extends BaseChannelAdapter
     public function fetchBooking(string $bookingId): array
     {
         return $this->executeSync('fetch_booking', function () use ($bookingId) {
-            $response = $this->http()->get('bookings/' . urlencode($bookingId));
+            $response = $this->http()->get('bookings/'.urlencode($bookingId));
+
             return $this->parseJsonResponse($response, 'booking');
         });
     }
@@ -190,7 +192,8 @@ class MisterAladinAdapter extends BaseChannelAdapter
         }
         try {
             $r = $this->http()->get('health');
-            return ['ok' => $r->getStatusCode() < 400, 'message' => 'HTTP ' . $r->getStatusCode()];
+
+            return ['ok' => $r->getStatusCode() < 400, 'message' => 'HTTP '.$r->getStatusCode()];
         } catch (\Throwable $e) {
             return ['ok' => false, 'message' => $e->getMessage()];
         }
@@ -214,16 +217,18 @@ class MisterAladinAdapter extends BaseChannelAdapter
 
         if ($statusCode === 429) {
             $retryAfter = $response->getHeader('Retry-After')[0] ?? 'unknown';
+
             return [
                 'success' => false,
                 'data' => [],
-                'error' => 'Rate limited. Retry after ' . $retryAfter,
+                'error' => 'Rate limited. Retry after '.$retryAfter,
                 'retry_after' => $retryAfter,
             ];
         }
 
         if ($statusCode >= 400) {
             $errorMsg = $data['message'] ?? $data['error'] ?? $data['description'] ?? 'Unknown error';
+
             return [
                 'success' => false,
                 'data' => $data,
@@ -277,7 +282,6 @@ class MisterAladinAdapter extends BaseChannelAdapter
                 'context' => $e->getContext(),
             ]);
             throw $e;
-
         } catch (ConnectException $e) {
             $log->update([
                 'status' => 'failed',
@@ -290,7 +294,6 @@ class MisterAladinAdapter extends BaseChannelAdapter
                 'error' => $e->getMessage(),
             ]);
             throw ChannelSyncException::networkError($this->channel->id, $operation, $e->getMessage());
-
         } catch (\Throwable $e) {
             $log->update([
                 'status' => 'failed',

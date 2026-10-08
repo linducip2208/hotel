@@ -7,6 +7,9 @@ namespace App\Services\Accounting;
 use App\Models\BankStatement;
 use App\Models\BankStatementLine;
 use App\Models\FolioPayment;
+use App\Models\JournalEntry;
+use App\Models\JournalLine;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
@@ -16,8 +19,8 @@ final class BankReconciliationService
     /**
      * Match bank statement lines against PMS folio payments.
      *
-     * @param Collection<BankStatementLine> $bankStatements
-     * @param Collection<FolioPayment> $folioPayments
+     * @param  Collection<BankStatementLine>  $bankStatements
+     * @param  Collection<FolioPayment>  $folioPayments
      * @return array{matched: array, suggested: array, bank_only: array, pms_only: array}
      */
     public function match(Collection $bankStatements, Collection $folioPayments): array
@@ -167,16 +170,16 @@ final class BankReconciliationService
         $bankLines = $statement->lines()->where('is_reconciled', false)->get();
 
         $propertyId = $statement->bankAccount->property_id ?? null;
-        if (!$propertyId) {
+        if (! $propertyId) {
             throw new RuntimeException('Bank account has no property.');
         }
 
-        $journalLines = \App\Models\JournalLine::whereHas('entry', function ($q) use ($propertyId, $statement) {
+        $journalLines = JournalLine::whereHas('entry', function ($q) use ($propertyId, $statement) {
             $q->where('property_id', $propertyId)
                 ->where('status', 'posted')
                 ->whereBetween('journal_date', [
-                    \Carbon\Carbon::parse($statement->period_from)->subDays(3)->toDateString(),
-                    \Carbon\Carbon::parse($statement->period_to)->addDays(3)->toDateString(),
+                    Carbon::parse($statement->period_from)->subDays(3)->toDateString(),
+                    Carbon::parse($statement->period_to)->addDays(3)->toDateString(),
                 ]);
         })->whereHas('account', fn ($q) => $q->where('type', 'asset'))
             ->get();
@@ -187,18 +190,24 @@ final class BankReconciliationService
 
         foreach ($bankLines as $bankLine) {
             $bankAmount = (float) ($bankLine->credit > 0 ? $bankLine->credit : -$bankLine->debit);
-            if ($bankAmount == 0) continue;
-            $bankDate = \Carbon\Carbon::parse($bankLine->transaction_date);
+            if ($bankAmount == 0) {
+                continue;
+            }
+            $bankDate = Carbon::parse($bankLine->transaction_date);
 
             $bestMatch = null;
             $bestScore = 0;
 
             foreach ($journalLines as $jl) {
-                if (in_array($jl->id, $usedJournalIds, true)) continue;
+                if (in_array($jl->id, $usedJournalIds, true)) {
+                    continue;
+                }
 
                 $glAmount = (float) ($jl->credit > 0 ? $jl->credit : -$jl->debit);
-                if ($glAmount == 0) continue;
-                $glDate = \Carbon\Carbon::parse($jl->entry->journal_date);
+                if ($glAmount == 0) {
+                    continue;
+                }
+                $glDate = Carbon::parse($jl->entry->journal_date);
 
                 $score = 0;
                 $dayDiff = abs($bankDate->diffInDays($glDate));
@@ -312,6 +321,7 @@ final class BankReconciliationService
             }
             fclose($handle);
         }
+
         return $rows;
     }
 
@@ -343,9 +353,10 @@ final class BankReconciliationService
 
     private function findJournalLineId(int $folioPaymentId): ?int
     {
-        $entry = \App\Models\JournalEntry::where('source_type', 'folio_payment')
+        $entry = JournalEntry::where('source_type', 'folio_payment')
             ->where('source_id', $folioPaymentId)
             ->first();
+
         return $entry?->lines()->first()?->id;
     }
 
@@ -368,9 +379,11 @@ final class BankReconciliationService
         foreach (['date', 'tanggal', 'posting_date', 'transaction_date', 'tgl'] as $key) {
             if (isset($row[$key]) && $row[$key]) {
                 $ts = strtotime((string) $row[$key]);
+
                 return $ts ? date('Y-m-d', $ts) : now()->toDateString();
             }
         }
+
         return now()->toDateString();
     }
 
@@ -381,6 +394,7 @@ final class BankReconciliationService
                 return (string) $row[$key];
             }
         }
+
         return '';
     }
 
@@ -389,12 +403,14 @@ final class BankReconciliationService
         foreach (['amount', 'jumlah', 'amount_cr', 'credit', 'debit', 'amount_dr'] as $key) {
             if (isset($row[$key]) && is_numeric($row[$key])) {
                 $val = (float) $row[$key];
+
                 return isset($row['amount_dr']) && $row['amount_dr'] > 0 ? -$val : $val;
             }
         }
         if (isset($row['debit']) && is_numeric($row['debit']) && (float) $row['debit'] > 0) {
             return -(float) $row['debit'];
         }
+
         return 0;
     }
 
@@ -405,6 +421,7 @@ final class BankReconciliationService
                 return (float) $row[$key];
             }
         }
+
         return null;
     }
 
@@ -415,6 +432,7 @@ final class BankReconciliationService
                 return (string) $row[$key];
             }
         }
+
         return null;
     }
 }

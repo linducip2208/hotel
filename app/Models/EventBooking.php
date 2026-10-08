@@ -22,11 +22,38 @@ class EventBooking extends Model
         'catering_requirements' => 'array',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function eventType() { return $this->belongsTo(EventType::class); }
-    public function guest() { return $this->belongsTo(Guest::class); }
-    public function venue() { return $this->belongsTo(Room::class, 'venue_id'); }
-    public function folio() { return $this->belongsTo(Folio::class); }
-    public function assignedUser() { return $this->belongsTo(User::class, 'assigned_to_user_id'); }
-    public function services() { return $this->hasMany(EventService::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function eventType()
+    {
+        return $this->belongsTo(EventType::class);
+    }
+
+    public function guest()
+    {
+        return $this->belongsTo(Guest::class);
+    }
+
+    public function venue()
+    {
+        return $this->belongsTo(Room::class, 'venue_id');
+    }
+
+    public function folio()
+    {
+        return $this->belongsTo(Folio::class);
+    }
+
+    public function assignedUser()
+    {
+        return $this->belongsTo(User::class, 'assigned_to_user_id');
+    }
+
+    public function services()
+    {
+        return $this->hasMany(EventService::class);
+    }
 }

@@ -21,7 +21,18 @@ class CashierShift extends Model
         'breakdown' => 'array',
     ];
 
-    public function property()  { return $this->belongsTo(Property::class); }
-    public function cashier()   { return $this->belongsTo(User::class, 'cashier_id'); }
-    public function payments()  { return $this->hasMany(FolioPayment::class, 'shift_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function cashier()
+    {
+        return $this->belongsTo(User::class, 'cashier_id');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(FolioPayment::class, 'shift_id');
+    }
 }

@@ -19,6 +19,13 @@ class ApBillLine extends Model
         'withholding_amount' => 'decimal:2',
     ];
 
-    public function bill() { return $this->belongsTo(ApBill::class, 'bill_id'); }
-    public function account() { return $this->belongsTo(ChartOfAccount::class, 'account_id'); }
+    public function bill()
+    {
+        return $this->belongsTo(ApBill::class, 'bill_id');
+    }
+
+    public function account()
+    {
+        return $this->belongsTo(ChartOfAccount::class, 'account_id');
+    }
 }

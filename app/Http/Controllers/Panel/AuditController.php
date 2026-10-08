@@ -16,12 +16,14 @@ class AuditController extends Controller
             ->when($request->query('user_id'), fn ($q, $u) => $q->where('user_id', $u))
             ->latest('created_at')
             ->paginate(100);
+
         return view('panel.audit.index', compact('logs'));
     }
 
     public function show(int $id)
     {
         $log = AuditLog::where('property_id', app('current_property')->id)->findOrFail($id);
+
         return view('panel.audit.show', compact('log'));
     }
 }

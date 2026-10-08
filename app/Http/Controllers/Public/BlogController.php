@@ -20,7 +20,7 @@ class BlogController extends Controller
         $categories = BlogCategory::withCount(['posts' => fn ($q) => $q->published()])->get();
         $recentPosts = BlogPost::published()->orderBy('published_at', 'desc')->take(5)->get();
 
-        $seoTitle = 'Blog — ' . config('app.name');
+        $seoTitle = 'Blog — '.config('app.name');
         $seoDescription = 'Tips perhotelan, panduan wisata, review hotel, dan berita terbaru seputar dunia perhotelan Indonesia.';
 
         return view('blog.index', compact('posts', 'categories', 'recentPosts', 'seoTitle', 'seoDescription'));
@@ -36,7 +36,7 @@ class BlogController extends Controller
         $recentPosts = BlogPost::published()->latest('published_at')->take(5)->get();
         $categories = BlogCategory::withCount(['posts' => fn ($q) => $q->published()])->get();
 
-        $seoTitle = ($post->meta_title ?: $post->title) . ' — ' . config('app.name');
+        $seoTitle = ($post->meta_title ?: $post->title).' — '.config('app.name');
         $seoDescription = $post->meta_description ?: $post->excerpt;
 
         $schema = [
@@ -64,7 +64,7 @@ class BlogController extends Controller
         $categories = BlogCategory::withCount(['posts' => fn ($q) => $q->published()])->get();
         $recentPosts = BlogPost::published()->latest('published_at')->take(5)->get();
 
-        $seoTitle = "Kategori: {$category->name} — Blog " . config('app.name');
+        $seoTitle = "Kategori: {$category->name} — Blog ".config('app.name');
 
         return view('blog.index', compact('posts', 'categories', 'recentPosts', 'seoTitle', 'category'));
     }
@@ -75,19 +75,19 @@ class BlogController extends Controller
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>';
         $xml .= '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">';
-        $xml .= '<channel><title>' . e(config('app.name') . ' Blog') . '</title>';
-        $xml .= '<link>' . e(route('blog.index')) . '</link>';
+        $xml .= '<channel><title>'.e(config('app.name').' Blog').'</title>';
+        $xml .= '<link>'.e(route('blog.index')).'</link>';
         $xml .= '<description>Tips perhotelan dan panduan wisata Indonesia</description>';
         $xml .= '<language>id</language>';
-        $xml .= '<atom:link href="' . e(route('blog.feed')) . '" rel="self" type="application/rss+xml"/>';
+        $xml .= '<atom:link href="'.e(route('blog.feed')).'" rel="self" type="application/rss+xml"/>';
 
         foreach ($posts as $post) {
             $xml .= '<item>';
-            $xml .= '<title>' . e($post->title) . '</title>';
-            $xml .= '<link>' . e(route('blog.show', $post->slug)) . '</link>';
-            $xml .= '<guid>' . e(route('blog.show', $post->slug)) . '</guid>';
-            $xml .= '<description>' . e($post->excerpt) . '</description>';
-            $xml .= '<pubDate>' . $post->published_at->toRfc2822String() . '</pubDate>';
+            $xml .= '<title>'.e($post->title).'</title>';
+            $xml .= '<link>'.e(route('blog.show', $post->slug)).'</link>';
+            $xml .= '<guid>'.e(route('blog.show', $post->slug)).'</guid>';
+            $xml .= '<description>'.e($post->excerpt).'</description>';
+            $xml .= '<pubDate>'.$post->published_at->toRfc2822String().'</pubDate>';
             $xml .= '</item>';
         }
 

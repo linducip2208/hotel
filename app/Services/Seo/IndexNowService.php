@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Log;
 class IndexNowService
 {
     protected string $key;
+
     protected string $keyLocation;
+
     protected array $searchEngines = [
         'https://www.bing.com/indexnow',
         'https://yandex.com/indexnow',
@@ -19,12 +21,14 @@ class IndexNowService
     public function __construct()
     {
         $this->key = (string) @file_get_contents(public_path('indexnow-key.txt'));
-        $this->keyLocation = config('app.url') . '/indexnow-key.txt';
+        $this->keyLocation = config('app.url').'/indexnow-key.txt';
     }
 
     public function submit(array $urls): array
     {
-        if (empty($urls)) return ['success' => false, 'message' => 'No URLs provided'];
+        if (empty($urls)) {
+            return ['success' => false, 'message' => 'No URLs provided'];
+        }
 
         $payload = [
             'host' => parse_url(config('app.url'), PHP_URL_HOST),
@@ -49,7 +53,7 @@ class IndexNowService
             }
         }
 
-        Log::info('IndexNow: submitted ' . count($urls) . ' URLs', $results);
+        Log::info('IndexNow: submitted '.count($urls).' URLs', $results);
 
         return [
             'success' => true,
@@ -76,7 +80,9 @@ class IndexNowService
 
         foreach ($chunks as $chunk) {
             $result = $this->submit($chunk);
-            if ($result['success']) $total += count($chunk);
+            if ($result['success']) {
+                $total += count($chunk);
+            }
             sleep(1); // Rate limit
         }
 

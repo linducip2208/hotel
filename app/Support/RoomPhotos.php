@@ -65,6 +65,7 @@ class RoomPhotos
 
     /** Width × height untuk URL Unsplash. */
     private const W = 800;
+
     private const Q = 80;
 
     /**
@@ -80,6 +81,7 @@ class RoomPhotos
         if ($pool) {
             $index = ((int) $room->id - 1) % count($pool);
             $photoId = $pool[$index];
+
             return "https://images.unsplash.com/{$photoId}?auto=format&fit=crop&w=".self::W.'&q='.self::Q;
         }
 
@@ -91,6 +93,7 @@ class RoomPhotos
             }
             if (is_array($photos) && count($photos) > 0) {
                 $index = ((int) $room->id - 1) % count($photos);
+
                 return $photos[array_keys($photos)[$index]] ?? $photos[0];
             }
         }
@@ -109,6 +112,7 @@ class RoomPhotos
 
         if ($pool) {
             $idx = $index % count($pool);
+
             return "https://images.unsplash.com/{$pool[$idx]}?auto=format&fit=crop&w=1600&q=".self::Q;
         }
 
@@ -135,8 +139,10 @@ class RoomPhotos
         // Fallback: lookup
         if (! empty($room->room_type_id)) {
             $rt = RoomType::find($room->room_type_id);
+
             return $rt?->code ?? '';
         }
+
         return '';
     }
 }

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Panel\Fo;
 use App\Http\Controllers\Controller;
 use App\Models\DoorLockEvent;
 use App\Models\Reservation;
-use App\Models\Room;
 use App\Services\Lock\LockService;
 use Illuminate\Http\Request;
 

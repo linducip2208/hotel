@@ -20,6 +20,13 @@ class Plan extends Model
         'per_room_price_idr' => 'decimal:2',
     ];
 
-    public function tenants()       { return $this->hasMany(Tenant::class); }
-    public function subscriptions() { return $this->hasMany(TenantSubscription::class); }
+    public function tenants()
+    {
+        return $this->hasMany(Tenant::class);
+    }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(TenantSubscription::class);
+    }
 }

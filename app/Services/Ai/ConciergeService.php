@@ -25,6 +25,7 @@ class ConciergeService
 
         try {
             $r = $adapter->chat($messages, options: ['max_tokens' => 800, 'temperature' => 0.7]);
+
             return ['ok' => $r['ok'] ?? false, 'reply' => $r['content'] ?? null];
         } catch (\Throwable $e) {
             return ['ok' => false, 'error' => $e->getMessage()];
@@ -33,12 +34,13 @@ class ConciergeService
 
     protected function buildSystemPrompt(Property $p, string $locale): string
     {
-        $base = "You are a virtual concierge for {$p->name} located at {$p->city}, {$p->province}, Indonesia. " .
-                "Star rating: {$p->star_rating}. Check-in {$p->check_in_time?->format('H:i')}, check-out {$p->check_out_time?->format('H:i')}. " .
-                "Reply in {$locale} (ISO 639-1). Be friendly, helpful, concise. " .
-                "If asked about reservation, ask for booking ref to look up. " .
-                "If asked about local recommendations, give practical advice (transport, food, attractions). " .
+        $base = "You are a virtual concierge for {$p->name} located at {$p->city}, {$p->province}, Indonesia. ".
+                "Star rating: {$p->star_rating}. Check-in {$p->check_in_time?->format('H:i')}, check-out {$p->check_out_time?->format('H:i')}. ".
+                "Reply in {$locale} (ISO 639-1). Be friendly, helpful, concise. ".
+                'If asked about reservation, ask for booking ref to look up. '.
+                'If asked about local recommendations, give practical advice (transport, food, attractions). '.
                 "Don't make up policies — say 'let me check with our front desk' for hotel-specific questions you're unsure about.";
+
         return $base;
     }
 }

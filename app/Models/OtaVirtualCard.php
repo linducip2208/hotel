@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class OtaVirtualCard extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
+
     protected $casts = [
         'expires_on' => 'date',
         'valid_from' => 'date',
@@ -22,7 +24,18 @@ class OtaVirtualCard extends Model
 
     protected $hidden = ['card_number_encrypted', 'cvv_encrypted'];
 
-    public function property()    { return $this->belongsTo(Property::class); }
-    public function reservation() { return $this->belongsTo(Reservation::class); }
-    public function channel()     { return $this->belongsTo(Channel::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class);
+    }
+
+    public function channel()
+    {
+        return $this->belongsTo(Channel::class);
+    }
 }

@@ -17,7 +17,18 @@ class ChannelRoomMapping extends Model
         'is_active' => 'boolean',
     ];
 
-    public function channel() { return $this->belongsTo(Channel::class); }
-    public function roomType() { return $this->belongsTo(RoomType::class); }
-    public function ratePlan() { return $this->belongsTo(RatePlan::class); }
+    public function channel()
+    {
+        return $this->belongsTo(Channel::class);
+    }
+
+    public function roomType()
+    {
+        return $this->belongsTo(RoomType::class);
+    }
+
+    public function ratePlan()
+    {
+        return $this->belongsTo(RatePlan::class);
+    }
 }

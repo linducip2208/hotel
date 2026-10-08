@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Survey;
-use App\Models\SurveyResponse;
 use Illuminate\Http\Request;
 
 class SurveyController extends Controller
@@ -16,21 +15,22 @@ class SurveyController extends Controller
             ->withCount('responses')
             ->orderByDesc('created_at')
             ->get();
+
         return response()->json($surveys);
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'     => 'required|string|max:200',
+            'title' => 'required|string|max:200',
             'questions' => 'required|array|min:1',
-            'trigger'   => 'in:checkout,manual,scheduled',
+            'trigger' => 'in:checkout,manual,scheduled',
         ]);
 
         $survey = Survey::create([
             ...$data,
             'property_id' => $request->user()->property->id,
-            'is_active'   => true,
+            'is_active' => true,
         ]);
 
         return response()->json($survey, 201);
@@ -42,6 +42,7 @@ class SurveyController extends Controller
         $survey = Survey::where('property_id', $property->id)
             ->withCount('responses')
             ->findOrFail($id);
+
         return response()->json($survey);
     }
 
@@ -53,6 +54,7 @@ class SurveyController extends Controller
             ->with(['guest', 'reservation'])
             ->orderByDesc('submitted_at')
             ->paginate(20);
+
         return response()->json($responses);
     }
 
@@ -61,6 +63,7 @@ class SurveyController extends Controller
         $property = $request->user()->property;
         $survey = Survey::where('property_id', $property->id)->findOrFail($id);
         $survey->update($request->only(['title', 'questions', 'is_active', 'trigger']));
+
         return response()->json($survey);
     }
 }

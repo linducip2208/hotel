@@ -65,7 +65,7 @@ class PmController extends Controller
     public function toggle(int $id)
     {
         $schedule = PmSchedule::where('property_id', app('current_property')->id)->findOrFail($id);
-        $schedule->update(['is_active' => !$schedule->is_active]);
+        $schedule->update(['is_active' => ! $schedule->is_active]);
 
         return back()->with('success', 'Status jadwal diubah.');
     }

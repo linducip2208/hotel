@@ -11,6 +11,7 @@ use Illuminate\Console\Command;
 class MigrateCommand extends Command
 {
     protected $signature = 'tenant:migrate {tenant_id? : Tenant UUID or slug} {--all : Run on all tenants}';
+
     protected $description = 'Run migrations on tenant databases';
 
     public function handle(TenantDatabaseManager $manager): int
@@ -23,6 +24,7 @@ class MigrateCommand extends Command
 
         if (! $tenantId) {
             $this->error('Provide a tenant_id or use --all.');
+
             return self::FAILURE;
         }
 
@@ -32,11 +34,13 @@ class MigrateCommand extends Command
 
         if (! $tenant) {
             $this->error("Tenant not found: {$tenantId}");
+
             return self::FAILURE;
         }
 
         if (! $tenant->database_name) {
             $this->error("Tenant {$tenant->slug} has no database provisioned. Run tenant:provision first.");
+
             return self::FAILURE;
         }
 
@@ -51,6 +55,7 @@ class MigrateCommand extends Command
 
         if ($tenants->isEmpty()) {
             $this->info('No provisioned tenants found.');
+
             return self::SUCCESS;
         }
 
@@ -69,7 +74,7 @@ class MigrateCommand extends Command
 
         try {
             $manager->migrate($tenant);
-            $this->info("  OK");
+            $this->info('  OK');
         } catch (\Throwable $e) {
             $this->error("  FAILED: {$e->getMessage()}");
         }

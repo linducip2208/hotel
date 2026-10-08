@@ -37,25 +37,26 @@ class RoomController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'code'              => 'required|string|max:20',
-            'name'              => 'required|string|max:100',
-            'slug'              => 'required|string|max:100',
-            'description'       => 'nullable|string',
-            'max_occupancy'     => 'integer|min:1|max:20',
-            'max_adults'        => 'integer|min:1|max:20',
-            'max_children'      => 'integer|min:0|max:10',
-            'base_rate'         => 'numeric|min:0',
-            'amenities'         => 'nullable|array',
-            'photos'            => 'nullable|array',
-            'size_sqm'          => 'nullable|integer|min:1',
-            'view'              => 'nullable|string|max:100',
-            'bed_config'        => 'nullable|string|max:100',
-            'smoking'           => 'boolean',
-            'display_order'     => 'integer|min:0',
-            'is_active'         => 'boolean',
+            'code' => 'required|string|max:20',
+            'name' => 'required|string|max:100',
+            'slug' => 'required|string|max:100',
+            'description' => 'nullable|string',
+            'max_occupancy' => 'integer|min:1|max:20',
+            'max_adults' => 'integer|min:1|max:20',
+            'max_children' => 'integer|min:0|max:10',
+            'base_rate' => 'numeric|min:0',
+            'amenities' => 'nullable|array',
+            'photos' => 'nullable|array',
+            'size_sqm' => 'nullable|integer|min:1',
+            'view' => 'nullable|string|max:100',
+            'bed_config' => 'nullable|string|max:100',
+            'smoking' => 'boolean',
+            'display_order' => 'integer|min:0',
+            'is_active' => 'boolean',
         ]);
 
         $validated['property_id'] = $this->property()->id;
+
         return response()->json(RoomType::create($validated), 201);
     }
 
@@ -64,22 +65,24 @@ class RoomController extends Controller
         $roomType = RoomType::where('property_id', $this->property()->id)->findOrFail($id);
 
         $validated = $request->validate([
-            'name'          => 'sometimes|string|max:100',
-            'description'   => 'nullable|string',
-            'base_rate'     => 'numeric|min:0',
-            'amenities'     => 'nullable|array',
-            'photos'        => 'nullable|array',
+            'name' => 'sometimes|string|max:100',
+            'description' => 'nullable|string',
+            'base_rate' => 'numeric|min:0',
+            'amenities' => 'nullable|array',
+            'photos' => 'nullable|array',
             'display_order' => 'integer|min:0',
-            'is_active'     => 'boolean',
+            'is_active' => 'boolean',
         ]);
 
         $roomType->update($validated);
+
         return response()->json($roomType->fresh());
     }
 
     public function destroy(int $id)
     {
         RoomType::where('property_id', $this->property()->id)->findOrFail($id)->delete();
+
         return response()->json(['deleted' => true]);
     }
 
@@ -104,6 +107,7 @@ class RoomController extends Controller
 
         $room = Room::where('property_id', $this->property()->id)->findOrFail($id);
         $room->update(array_filter($validated, fn ($v) => $v !== null));
+
         return response()->json($room->fresh());
     }
 }

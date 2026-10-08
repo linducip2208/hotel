@@ -32,7 +32,9 @@ class AnthropicAdapter extends BaseAdapter implements AiAdapterInterface
             'messages' => $cleaned,
             'max_tokens' => $options['max_tokens'] ?? 1024,
         ];
-        if ($system) $payload['system'] = $system;
+        if ($system) {
+            $payload['system'] = $system;
+        }
 
         $response = $this->http->post('v1/messages', ['json' => $payload]);
         $data = json_decode((string) $response->getBody(), true) ?? [];
@@ -54,6 +56,7 @@ class AnthropicAdapter extends BaseAdapter implements AiAdapterInterface
     public function test(): array
     {
         $r = $this->chat([['role' => 'user', 'content' => 'ping']], options: ['max_tokens' => 5]);
+
         return ['ok' => $r['ok'] ?? false, 'message' => $r['ok'] ? 'OK' : ('HTTP '.$r['status'])];
     }
 }

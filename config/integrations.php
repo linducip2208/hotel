@@ -1,71 +1,101 @@
 <?php
 
+use App\Adapters\Ai\AnthropicAdapter;
+use App\Adapters\Ai\GeminiAdapter;
+use App\Adapters\Ai\ImageGenericAdapter;
+use App\Adapters\Ai\OpenAiCompatibleAdapter;
+use App\Adapters\Captcha\HcaptchaAdapter;
+use App\Adapters\Captcha\RecaptchaAdapter;
+use App\Adapters\Captcha\TurnstileAdapter;
+use App\Adapters\Channel\AgodaAdapter;
+use App\Adapters\Channel\AirbnbAdapter;
+use App\Adapters\Channel\BookingComAdapter;
+use App\Adapters\Channel\ExpediaAdapter;
+use App\Adapters\Channel\MisterAladinAdapter;
+use App\Adapters\Channel\PegipegiAdapter;
+use App\Adapters\Channel\TiketComAdapter;
+use App\Adapters\Channel\TravelokaAdapter;
+use App\Adapters\Channel\TripComAdapter;
+use App\Adapters\Mail\ApiMailAdapter;
+use App\Adapters\Mail\SmtpMailAdapter;
+use App\Adapters\Payment\DirectChargeAdapter;
+use App\Adapters\Payment\EmbedFlowAdapter;
+use App\Adapters\Payment\QrisFlowAdapter;
+use App\Adapters\Payment\RedirectFlowAdapter;
+use App\Adapters\Sms\RestSmsAdapter;
+use App\Adapters\Sms\SmppSmsAdapter;
+use App\Adapters\Storage\LocalAdapter;
+use App\Adapters\Storage\S3CompatibleAdapter;
+use App\Adapters\Whatsapp\AggregatorAdapter;
+use App\Adapters\Whatsapp\CloudApiAdapter;
+use App\Adapters\Whatsapp\OnPremAdapter;
+
 return [
     'ai' => [
         'formats' => [
-            'openai_compatible' => \App\Adapters\Ai\OpenAiCompatibleAdapter::class,
-            'anthropic'         => \App\Adapters\Ai\AnthropicAdapter::class,
-            'gemini'            => \App\Adapters\Ai\GeminiAdapter::class,
-            'image_generic'     => \App\Adapters\Ai\ImageGenericAdapter::class,
+            'openai_compatible' => OpenAiCompatibleAdapter::class,
+            'anthropic' => AnthropicAdapter::class,
+            'gemini' => GeminiAdapter::class,
+            'image_generic' => ImageGenericAdapter::class,
         ],
     ],
 
     'payment' => [
         'formats' => [
-            'redirect_flow' => \App\Adapters\Payment\RedirectFlowAdapter::class,
-            'embed_flow'    => \App\Adapters\Payment\EmbedFlowAdapter::class,
-            'qris_flow'     => \App\Adapters\Payment\QrisFlowAdapter::class,
-            'direct_charge' => \App\Adapters\Payment\DirectChargeAdapter::class,
+            'redirect_flow' => RedirectFlowAdapter::class,
+            'embed_flow' => EmbedFlowAdapter::class,
+            'qris_flow' => QrisFlowAdapter::class,
+            'direct_charge' => DirectChargeAdapter::class,
         ],
     ],
 
     'sms' => [
         'formats' => [
-            'rest' => \App\Adapters\Sms\RestSmsAdapter::class,
-            'smpp' => \App\Adapters\Sms\SmppSmsAdapter::class,
+            'rest' => RestSmsAdapter::class,
+            'smpp' => SmppSmsAdapter::class,
         ],
     ],
 
     'whatsapp' => [
         'formats' => [
-            'cloud_api'   => \App\Adapters\Whatsapp\CloudApiAdapter::class,
-            'on_premises' => \App\Adapters\Whatsapp\OnPremAdapter::class,
-            'aggregator'  => \App\Adapters\Whatsapp\AggregatorAdapter::class,
+            'cloud_api' => CloudApiAdapter::class,
+            'on_premises' => OnPremAdapter::class,
+            'aggregator' => AggregatorAdapter::class,
         ],
     ],
 
     'mail' => [
         'formats' => [
-            'smtp' => \App\Adapters\Mail\SmtpMailAdapter::class,
-            'api'  => \App\Adapters\Mail\ApiMailAdapter::class,
+            'smtp' => SmtpMailAdapter::class,
+            'api' => ApiMailAdapter::class,
         ],
     ],
 
     'storage' => [
         'formats' => [
-            's3_compatible' => \App\Adapters\Storage\S3CompatibleAdapter::class,
-            'local'         => \App\Adapters\Storage\LocalAdapter::class,
+            's3_compatible' => S3CompatibleAdapter::class,
+            'local' => LocalAdapter::class,
         ],
     ],
 
     'captcha' => [
         'formats' => [
-            'turnstile' => \App\Adapters\Captcha\TurnstileAdapter::class,
-            'hcaptcha'  => \App\Adapters\Captcha\HcaptchaAdapter::class,
-            'recaptcha' => \App\Adapters\Captcha\RecaptchaAdapter::class,
+            'turnstile' => TurnstileAdapter::class,
+            'hcaptcha' => HcaptchaAdapter::class,
+            'recaptcha' => RecaptchaAdapter::class,
         ],
     ],
 
     'channel_adapters' => [
-        'booking_com'   => \App\Adapters\Channel\BookingComAdapter::class,
-        'agoda'         => \App\Adapters\Channel\AgodaAdapter::class,
-        'traveloka'     => \App\Adapters\Channel\TravelokaAdapter::class,
-        'tiket_com'     => \App\Adapters\Channel\TiketComAdapter::class,
-        'expedia_eqc'   => \App\Adapters\Channel\ExpediaAdapter::class,
-        'airbnb'        => \App\Adapters\Channel\AirbnbAdapter::class,
-        'trip_com'      => \App\Adapters\Channel\TripComAdapter::class,
-        'pegipegi'      => \App\Adapters\Channel\PegipegiAdapter::class,
-        'mister_aladin' => \App\Adapters\Channel\MisterAladinAdapter::class,
+        'booking_com' => BookingComAdapter::class,
+        'agoda' => AgodaAdapter::class,
+        'traveloka' => TravelokaAdapter::class,
+        'tiket_com' => TiketComAdapter::class,
+        'expedia_eqc' => ExpediaAdapter::class,
+        'airbnb' => AirbnbAdapter::class,
+        'trip_com' => TripComAdapter::class,
+        'pegipegi' => PegipegiAdapter::class,
+        'mister_aladin' => MisterAladinAdapter::class,
     ],
 
     'channel_defaults' => [

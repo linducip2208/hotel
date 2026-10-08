@@ -161,7 +161,7 @@ class TripComAdapter extends BaseChannelAdapter
                 $queryString = http_build_query($params);
                 $signature = $this->generateSignature('');
 
-                $response = $this->http()->get('orders?' . $queryString, [
+                $response = $this->http()->get('orders?'.$queryString, [
                     'headers' => [
                         'X-API-Key' => ($this->channel->getCredentials() ?? [])['api_key'] ?? '',
                         'X-Signature' => $signature,
@@ -191,7 +191,7 @@ class TripComAdapter extends BaseChannelAdapter
         return $this->executeSync('fetch_booking', function () use ($bookingId) {
             $signature = $this->generateSignature('');
 
-            $response = $this->http()->get('orders/' . urlencode($bookingId), [
+            $response = $this->http()->get('orders/'.urlencode($bookingId), [
                 'headers' => [
                     'X-API-Key' => ($this->channel->getCredentials() ?? [])['api_key'] ?? '',
                     'X-Signature' => $signature,
@@ -235,7 +235,8 @@ class TripComAdapter extends BaseChannelAdapter
                     'X-Timestamp' => (string) time(),
                 ],
             ]);
-            return ['ok' => $r->getStatusCode() < 400, 'message' => 'HTTP ' . $r->getStatusCode()];
+
+            return ['ok' => $r->getStatusCode() < 400, 'message' => 'HTTP '.$r->getStatusCode()];
         } catch (\Throwable $e) {
             return ['ok' => false, 'message' => $e->getMessage()];
         }
@@ -252,19 +253,20 @@ class TripComAdapter extends BaseChannelAdapter
             Log::warning('Trip.com API secret not configured.', [
                 'channel_id' => $this->channel->id,
             ]);
+
             return '';
         }
 
         $timestamp = (string) time();
         $nonce = bin2hex(random_bytes(16));
 
-        $stringToSign = $timestamp . "\n"
-            . $nonce . "\n"
-            . hash('sha256', $body);
+        $stringToSign = $timestamp."\n"
+            .$nonce."\n"
+            .hash('sha256', $body);
 
         $signature = hash_hmac('sha256', $stringToSign, $apiSecret);
 
-        return $timestamp . ':' . $nonce . ':' . $signature;
+        return $timestamp.':'.$nonce.':'.$signature;
     }
 
     // ─── Private Helpers ──────────────────────────────────────────
@@ -285,16 +287,18 @@ class TripComAdapter extends BaseChannelAdapter
 
         if ($statusCode === 429) {
             $retryAfter = $response->getHeader('Retry-After')[0] ?? 'unknown';
+
             return [
                 'success' => false,
                 'data' => [],
-                'error' => 'Rate limited. Retry after ' . $retryAfter,
+                'error' => 'Rate limited. Retry after '.$retryAfter,
                 'retry_after' => $retryAfter,
             ];
         }
 
         if ($statusCode >= 400) {
             $errorMsg = $data['message'] ?? $data['error'] ?? $data['error_msg'] ?? 'Unknown error';
+
             return [
                 'success' => false,
                 'data' => $data,
@@ -348,7 +352,6 @@ class TripComAdapter extends BaseChannelAdapter
                 'context' => $e->getContext(),
             ]);
             throw $e;
-
         } catch (ConnectException $e) {
             $log->update([
                 'status' => 'failed',
@@ -361,7 +364,6 @@ class TripComAdapter extends BaseChannelAdapter
                 'error' => $e->getMessage(),
             ]);
             throw ChannelSyncException::networkError($this->channel->id, $operation, $e->getMessage());
-
         } catch (\Throwable $e) {
             $log->update([
                 'status' => 'failed',

@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class OwnerStatement extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
+
     protected $casts = [
         'breakdown' => 'array',
         'sent_at' => 'datetime',
@@ -20,6 +22,13 @@ class OwnerStatement extends Model
         'net_payable_to_owner' => 'decimal:2',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function room()     { return $this->belongsTo(Room::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
 }

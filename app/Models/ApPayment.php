@@ -16,6 +16,13 @@ class ApPayment extends Model
         'amount' => 'decimal:2',
     ];
 
-    public function bill()         { return $this->belongsTo(ApBill::class, 'bill_id'); }
-    public function journalEntry() { return $this->belongsTo(JournalEntry::class); }
+    public function bill()
+    {
+        return $this->belongsTo(ApBill::class, 'bill_id');
+    }
+
+    public function journalEntry()
+    {
+        return $this->belongsTo(JournalEntry::class);
+    }
 }

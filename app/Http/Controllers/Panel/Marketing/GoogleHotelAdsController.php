@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Panel\Marketing;
 
 use App\Http\Controllers\Controller;
 use App\Services\Marketing\GoogleHotelAdsService;
-use Illuminate\Http\Request;
 
 class GoogleHotelAdsController extends Controller
 {
@@ -21,6 +20,6 @@ class GoogleHotelAdsController extends Controller
     {
         $feed = $service->generatePriceFeed(app('current_property'));
 
-        return back()->with('success', 'Price feed berhasil di-sync. ' . count($feed) . ' entri diperbarui.');
+        return back()->with('success', 'Price feed berhasil di-sync. '.count($feed).' entri diperbarui.');
     }
 }

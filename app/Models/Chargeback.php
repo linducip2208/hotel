@@ -20,9 +20,28 @@ class Chargeback extends Model
         'recovered_amount' => 'decimal:2',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function reservation() { return $this->belongsTo(Reservation::class); }
-    public function folioCharge() { return $this->belongsTo(FolioCharge::class); }
-    public function paymentTransaction() { return $this->belongsTo(FolioPayment::class, 'payment_transaction_id'); }
-    public function evidence() { return $this->hasMany(ChargebackEvidence::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class);
+    }
+
+    public function folioCharge()
+    {
+        return $this->belongsTo(FolioCharge::class);
+    }
+
+    public function paymentTransaction()
+    {
+        return $this->belongsTo(FolioPayment::class, 'payment_transaction_id');
+    }
+
+    public function evidence()
+    {
+        return $this->hasMany(ChargebackEvidence::class);
+    }
 }

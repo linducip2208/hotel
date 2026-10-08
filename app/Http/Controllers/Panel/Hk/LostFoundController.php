@@ -33,16 +33,16 @@ class LostFoundController extends Controller
         $propertyId = app('current_property')->id;
 
         $data = $request->validate([
-            'name'           => 'required|string|max:200',
-            'category'       => 'required|string|in:electronics,clothing,jewelry,documents,toys,keys,other',
-            'description'    => 'nullable|string|max:1000',
+            'name' => 'required|string|max:200',
+            'category' => 'required|string|in:electronics,clothing,jewelry,documents,toys,keys,other',
+            'description' => 'nullable|string|max:1000',
             'location_found' => 'nullable|string|max:200',
-            'room_id'        => 'nullable|exists:rooms,id',
-            'found_at'       => 'nullable|date',
+            'room_id' => 'nullable|exists:rooms,id',
+            'found_at' => 'nullable|date',
             'storage_location' => 'nullable|string|max:200',
-            'disposal_days'  => 'nullable|integer|min:1|max:365',
-            'photos_upload'  => 'nullable|array',
-            'photos_upload.*'=> 'image|max:5120',
+            'disposal_days' => 'nullable|integer|min:1|max:365',
+            'photos_upload' => 'nullable|array',
+            'photos_upload.*' => 'image|max:5120',
         ]);
 
         $this->service->store($propertyId, $data, $request->user()->id);
@@ -64,16 +64,16 @@ class LostFoundController extends Controller
         $propertyId = app('current_property')->id;
 
         $data = $request->validate([
-            'name'           => 'required|string|max:200',
-            'category'       => 'required|string|in:electronics,clothing,jewelry,documents,toys,keys,other',
-            'description'    => 'nullable|string|max:1000',
+            'name' => 'required|string|max:200',
+            'category' => 'required|string|in:electronics,clothing,jewelry,documents,toys,keys,other',
+            'description' => 'nullable|string|max:1000',
             'location_found' => 'nullable|string|max:200',
-            'room_id'        => 'nullable|exists:rooms,id',
-            'found_at'       => 'nullable|date',
+            'room_id' => 'nullable|exists:rooms,id',
+            'found_at' => 'nullable|date',
             'storage_location' => 'nullable|string|max:200',
-            'disposal_days'  => 'nullable|integer|min:1|max:365',
-            'photos_upload'  => 'nullable|array',
-            'photos_upload.*'=> 'image|max:5120',
+            'disposal_days' => 'nullable|integer|min:1|max:365',
+            'photos_upload' => 'nullable|array',
+            'photos_upload.*' => 'image|max:5120',
         ]);
 
         $this->service->update($id, $propertyId, $data);
@@ -87,7 +87,7 @@ class LostFoundController extends Controller
 
         $data = $request->validate([
             'claimed_by_guest_id' => 'nullable|exists:guests,id',
-            'claim_verified_by'   => 'nullable|string|max:100',
+            'claim_verified_by' => 'nullable|string|max:100',
         ]);
 
         $this->service->claim($id, $propertyId, $data);
@@ -98,18 +98,21 @@ class LostFoundController extends Controller
     public function dispose(int $id)
     {
         $this->service->dispose($id, app('current_property')->id);
+
         return back()->with('success', 'Barang ditandai sebagai dibuang.');
     }
 
     public function donate(int $id)
     {
         $this->service->donate($id, app('current_property')->id);
+
         return back()->with('success', 'Barang ditandai sebagai disumbangkan.');
     }
 
     public function returnToOwner(int $id)
     {
         $this->service->returnToOwner($id, app('current_property')->id);
+
         return back()->with('success', 'Barang ditandai sebagai dikembalikan.');
     }
 
@@ -119,11 +122,11 @@ class LostFoundController extends Controller
         $propertyId = app('current_property')->id;
 
         match ($action) {
-            'claim'   => $this->service->claim($id, $propertyId, $request->only(['claimed_by_guest_id', 'claim_verified_by'])),
+            'claim' => $this->service->claim($id, $propertyId, $request->only(['claimed_by_guest_id', 'claim_verified_by'])),
             'dispose' => $this->service->dispose($id, $propertyId),
-            'donate'  => $this->service->donate($id, $propertyId),
-            'return'  => $this->service->returnToOwner($id, $propertyId),
-            default   => null,
+            'donate' => $this->service->donate($id, $propertyId),
+            'return' => $this->service->returnToOwner($id, $propertyId),
+            default => null,
         };
 
         return back()->with('success', 'Aksi berhasil dilakukan.');

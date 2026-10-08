@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Inventory;
 use App\Models\Property;
 use App\Models\RatePlan;
 use App\Models\Room;
@@ -16,10 +15,15 @@ use Illuminate\Support\Str;
 class DemoDataSeeder extends Seeder
 {
     private Property $property;
+
     private RoomType $superior;
+
     private RoomType $deluxe;
+
     private RoomType $suite;
+
     private RatePlan $bar;
+
     private RatePlan $nrr;
 
     private array $firstNames = [
@@ -261,7 +265,9 @@ class DemoDataSeeder extends Seeder
 
         foreach ([$this->superior, $this->deluxe, $this->suite] as $rt) {
             $total = (int) ($countsByType[$rt->id] ?? 0);
-            if ($total === 0) continue;
+            if ($total === 0) {
+                continue;
+            }
             $records = [];
             for ($d = -370; $d <= 100; $d++) {
                 $records[] = [
@@ -305,9 +311,9 @@ class DemoDataSeeder extends Seeder
             //   ~75% past stays (-365..-1), ~5% in-house (-3..+3), ~20% future (+4..+95)
             $r = rand(1, 100);
             $offset = match (true) {
-                $r <= 75  => -rand(1, 365),
-                $r <= 80  =>  rand(-3, 3),
-                default   =>  rand(4, 95),
+                $r <= 75 => -rand(1, 365),
+                $r <= 80 => rand(-3, 3),
+                default => rand(4, 95),
             };
             $checkIn = $today->copy()->addDays($offset);
 
@@ -320,7 +326,7 @@ class DemoDataSeeder extends Seeder
                 $rn <= 92 => 4,
                 $rn <= 97 => 5,
                 $rn <= 99 => 7,
-                default   => rand(8, 14),
+                default => rand(8, 14),
             };
             $checkOut = $checkIn->copy()->addDays($nights);
 
@@ -357,12 +363,12 @@ class DemoDataSeeder extends Seeder
             $reservationId++;
             $bar?->advance();
 
-            $checkIn   = $p['checkIn'];
-            $checkOut  = $p['checkOut'];
-            $nights    = $p['nights'];
-            $bookedAt  = $p['bookedAt'];
-            $leadDays  = $p['leadDays'];
-            $rt        = $p['rt'];
+            $checkIn = $p['checkIn'];
+            $checkOut = $p['checkOut'];
+            $nights = $p['nights'];
+            $bookedAt = $p['bookedAt'];
+            $leadDays = $p['leadDays'];
+            $rt = $p['rt'];
 
             // ----- Guest: ~25% repeat once pool is warm, otherwise create a new one -----
             if (count($repeatPool) > 30 && rand(1, 100) <= 25) {
@@ -372,7 +378,7 @@ class DemoDataSeeder extends Seeder
                 $useGuestId = $guestId;
                 $fn = $this->firstNames[array_rand($this->firstNames)];
                 $ln = $this->lastNames[array_rand($this->lastNames)];
-                $email = strtolower($fn . '.' . $ln . $guestId . '@' . $this->domains[array_rand($this->domains)]);
+                $email = strtolower($fn.'.'.$ln.$guestId.'@'.$this->domains[array_rand($this->domains)]);
                 $isVip = rand(1, 100) <= 5;
                 $city = $this->cities[array_rand($this->cities)];
 
@@ -381,11 +387,11 @@ class DemoDataSeeder extends Seeder
                     'first_name' => $fn,
                     'last_name' => $ln,
                     'email' => $email,
-                    'phone' => '+628' . rand(10, 99) . '-' . rand(1000, 9999) . '-' . rand(1000, 9999),
+                    'phone' => '+628'.rand(10, 99).'-'.rand(1000, 9999).'-'.rand(1000, 9999),
                     'country' => 'ID',
                     'nationality' => 'ID',
                     'gender' => ['Male', 'Female'][rand(0, 1)],
-                    'address_line1' => $this->addressPrefixes[array_rand($this->addressPrefixes)] . ' No. ' . rand(1, 200),
+                    'address_line1' => $this->addressPrefixes[array_rand($this->addressPrefixes)].' No. '.rand(1, 200),
                     'city' => $city,
                     'province' => $city,
                     'postal_code' => (string) rand(10000, 99999),
@@ -418,14 +424,14 @@ class DemoDataSeeder extends Seeder
             if (in_array($month, [6, 7, 12, 1])) {
                 $multiplier *= 1.08;
             }
-            $ratePerNight   = (int) round($rt->base_rate * $multiplier);
-            $totalRoom      = $ratePerNight * $nights;
-            $serviceCharge  = (int) round($totalRoom * 0.05);
-            $taxTotal       = (int) round(($totalRoom + $serviceCharge) * 0.11);
+            $ratePerNight = (int) round($rt->base_rate * $multiplier);
+            $totalRoom = $ratePerNight * $nights;
+            $serviceCharge = (int) round($totalRoom * 0.05);
+            $taxTotal = (int) round(($totalRoom + $serviceCharge) * 0.11);
 
             $addonTotal = 0;
             $addonPicked = null;
-            if (rand(1, 100) <= 35 && !in_array($status, ['cancelled', 'no_show'])) {
+            if (rand(1, 100) <= 35 && ! in_array($status, ['cancelled', 'no_show'])) {
                 $addonPicked = $this->addonOptions[array_rand($this->addonOptions)];
                 $addonTotal = $addonPicked['price'];
             }
@@ -435,11 +441,11 @@ class DemoDataSeeder extends Seeder
             $grandTotal -= $discount;
 
             // ----- Lifecycle timestamps -----
-            $checkedInAt  = in_array($status, ['checked_in', 'checked_out'])
+            $checkedInAt = in_array($status, ['checked_in', 'checked_out'])
                 ? $checkIn->copy()->setTime(rand(13, 20), rand(0, 59)) : null;
             $checkedOutAt = $status === 'checked_out'
                 ? $checkOut->copy()->setTime(rand(7, 12), rand(0, 59)) : null;
-            $cancelledAt  = $status === 'cancelled'
+            $cancelledAt = $status === 'cancelled'
                 ? $bookedAt->copy()->addDays(rand(0, max(0, $leadDays - 1)))->setTime(rand(8, 21), rand(0, 59))
                 : null;
             $source = $this->sources[array_rand($this->sources)];
@@ -450,13 +456,13 @@ class DemoDataSeeder extends Seeder
             $balance = match ($status) {
                 'checked_out', 'cancelled', 'no_show' => 0,
                 'checked_in' => $grandTotal - $deposit,
-                default      => $grandTotal,
+                default => $grandTotal,
             };
 
             // Per-year ref counter for realistic numbering across the historical span
             $year = $bookedAt->year;
             $yearCounter[$year] = ($yearCounter[$year] ?? 0) + 1;
-            $ref = 'HMS-' . $year . '-' . str_pad((string) $yearCounter[$year], 6, '0', STR_PAD_LEFT);
+            $ref = 'HMS-'.$year.'-'.str_pad((string) $yearCounter[$year], 6, '0', STR_PAD_LEFT);
 
             $reservationUpdatedAt = $cancelledAt ?? $checkedOutAt ?? $checkedInAt ?? $bookedAt;
 
@@ -510,15 +516,15 @@ class DemoDataSeeder extends Seeder
             // Folios + charges + payments only exist for stays that actually opened
             if (in_array($status, ['checked_in', 'checked_out'])) {
                 $folioId++;
-                $folioStatus    = $status === 'checked_out' ? 'closed' : 'open';
-                $totalPayments  = $status === 'checked_out' ? $grandTotal : $deposit;
-                $folioBalance   = $grandTotal - $totalPayments;
+                $folioStatus = $status === 'checked_out' ? 'closed' : 'open';
+                $totalPayments = $status === 'checked_out' ? $grandTotal : $deposit;
+                $folioBalance = $grandTotal - $totalPayments;
 
                 $folioBatch[] = [
                     'property_id' => $propertyId,
                     'reservation_id' => $reservationId,
                     'guest_id' => $useGuestId,
-                    'folio_no' => 'FOL-' . $checkIn->format('Ymd') . '-' . str_pad((string) $folioId, 5, '0', STR_PAD_LEFT),
+                    'folio_no' => 'FOL-'.$checkIn->format('Ymd').'-'.str_pad((string) $folioId, 5, '0', STR_PAD_LEFT),
                     'type' => 'guest',
                     'status' => $folioStatus,
                     'total_charges' => $grandTotal,
@@ -537,7 +543,7 @@ class DemoDataSeeder extends Seeder
                     'folio_id' => $folioId,
                     'property_id' => $propertyId,
                     'charge_date' => $checkIn->toDateString(),
-                    'description' => 'Room Charge - ' . $rt->name . ' (' . $checkIn->format('d M') . ' - ' . $checkOut->format('d M Y') . ')',
+                    'description' => 'Room Charge - '.$rt->name.' ('.$checkIn->format('d M').' - '.$checkOut->format('d M Y').')',
                     'category' => 'room',
                     'qty' => $nights,
                     'unit_price' => $ratePerNight,
@@ -633,7 +639,7 @@ class DemoDataSeeder extends Seeder
                         'amount' => $grandTotal,
                         'method' => ['cash', 'card', 'transfer', 'qris'][rand(0, 3)],
                         'provider_id' => null,
-                        'reference_no' => 'PAY-' . Str::random(8),
+                        'reference_no' => 'PAY-'.Str::random(8),
                         'mdr_amount' => 0,
                         'gateway_payload' => null,
                         'is_void' => false,
@@ -651,7 +657,7 @@ class DemoDataSeeder extends Seeder
                         'amount' => $deposit,
                         'method' => ['cash', 'card', 'qris'][rand(0, 2)],
                         'provider_id' => null,
-                        'reference_no' => 'DEP-' . Str::random(8),
+                        'reference_no' => 'DEP-'.Str::random(8),
                         'mdr_amount' => 0,
                         'gateway_payload' => null,
                         'is_void' => false,
@@ -703,11 +709,11 @@ class DemoDataSeeder extends Seeder
             ['email' => 'manager@demohotel.id',    'name' => 'Hotel Manager',   'role' => 'manager'],
             ['email' => 'fo@demohotel.id',         'name' => 'Front Office',    'role' => 'front_office'],
             ['email' => 'cashier@demohotel.id',    'name' => 'FO Cashier',      'role' => 'cashier'],
-            ['email' => 'housekeeping@demohotel.id','name' => 'Housekeeping',   'role' => 'housekeeping'],
+            ['email' => 'housekeeping@demohotel.id', 'name' => 'Housekeeping',   'role' => 'housekeeping'],
             ['email' => 'pos@demohotel.id',        'name' => 'POS Cashier',     'role' => 'pos_cashier'],
             ['email' => 'accountant@demohotel.id', 'name' => 'Accountant',      'role' => 'accountant'],
             ['email' => 'auditor@demohotel.id',    'name' => 'Auditor',         'role' => 'auditor'],
-            ['email' => 'sales@demohotel.id',      'name' => 'Sales & Marketing','role' => 'sales_marketing'],
+            ['email' => 'sales@demohotel.id',      'name' => 'Sales & Marketing', 'role' => 'sales_marketing'],
             ['email' => 'it@demohotel.id',         'name' => 'IT Admin',        'role' => 'it_admin'],
         ];
 
@@ -742,29 +748,32 @@ class DemoDataSeeder extends Seeder
                 'is_active' => true,
             ]
         );
-        try { $legacy->syncRoles(['super_owner']); } catch (\Throwable $e) {}
+        try {
+            $legacy->syncRoles(['super_owner']);
+        } catch (\Throwable $e) {
+        }
 
         return $superOwnerId ?? $legacy->id;
     }
 
     private function flushBatches(array &$guests, array &$reservations, array &$resRooms, array &$folios, array &$charges, array &$payments): void
     {
-        if (!empty($guests)) {
+        if (! empty($guests)) {
             DB::table('guests')->insert($guests);
         }
-        if (!empty($reservations)) {
+        if (! empty($reservations)) {
             DB::table('reservations')->insert($reservations);
         }
-        if (!empty($resRooms)) {
+        if (! empty($resRooms)) {
             DB::table('reservation_rooms')->insert($resRooms);
         }
-        if (!empty($folios)) {
+        if (! empty($folios)) {
             DB::table('folios')->insert($folios);
         }
-        if (!empty($charges)) {
+        if (! empty($charges)) {
             DB::table('folio_charges')->insert($charges);
         }
-        if (!empty($payments)) {
+        if (! empty($payments)) {
             DB::table('folio_payments')->insert($payments);
         }
     }

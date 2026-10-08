@@ -780,11 +780,25 @@
 
         <div class="space-y-4">
             @php
-                $reviews = [
+                $fallbackReviews = [
                     ['name' => 'Maria K.', 'role' => 'Family Trip', 'text' => 'Pelayanannya luar biasa! Staff sangat ramah dan kamar bersih. Anak-anak juga senang dengan sarapannya.', 'rating' => 5],
                     ['name' => 'Andi S.',  'role' => 'Business',    'text' => 'Lokasi strategis untuk meeting. Wi-Fi cepat dan kamar tenang — produktivitas saya meningkat selama menginap di sini.', 'rating' => 5],
                     ['name' => 'Linda W.', 'role' => 'Honeymoon',   'text' => 'Suasananya romantis, dekorasi kamar elegan. Akan kembali untuk anniversary tahun depan!', 'rating' => 5],
                 ];
+
+                $dbTestimonials = \App\Models\Testimonial::where('is_active', true)
+                    ->orderBy('sort_order')
+                    ->limit(3)
+                    ->get();
+
+                $reviews = $dbTestimonials->isNotEmpty()
+                    ? $dbTestimonials->map(fn ($t) => [
+                        'name' => $t->guest_name,
+                        'role' => $t->guest_title ?: ($t->origin_city ?: 'Guest'),
+                        'text' => $t->quote,
+                        'rating' => (int) $t->rating,
+                    ])->all()
+                    : $fallbackReviews;
             @endphp
             @foreach($reviews as $rv)
                 <div class="reveal card-lift bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">

@@ -17,6 +17,7 @@ class SustainabilityController extends Controller
             ->sum('co2e_kg');
         $metrics = SustainabilityMetric::where('property_id', app('current_property')->id)
             ->orderByDesc('measurement_date')->limit(50)->get();
+
         return view('panel.sustainability.dashboard', compact('monthCo2', 'metrics'));
     }
 
@@ -30,6 +31,7 @@ class SustainabilityController extends Controller
             'source' => 'nullable|string',
         ]);
         SustainabilityMetric::create($data + ['property_id' => app('current_property')->id]);
+
         return back();
     }
 }

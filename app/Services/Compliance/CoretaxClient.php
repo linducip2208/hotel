@@ -23,11 +23,13 @@ class CoretaxClient
 
         if (! $invoice) {
             $faktur->markFailed('No AR Invoice associated with this e-Faktur record.');
+
             return ['ok' => false, 'message' => 'No AR Invoice associated.'];
         }
 
         try {
             $result = $this->coretax->pushFaktur($invoice);
+
             return ['ok' => $result['success'], 'message' => $result['data']['nomor_faktur'] ?? 'OK'];
         } catch (\Throwable $e) {
             return ['ok' => false, 'message' => $e->getMessage()];
@@ -38,6 +40,7 @@ class CoretaxClient
     {
         try {
             $result = $this->coretax->checkFakturStatus($faktur->nomor_faktur);
+
             return ['ok' => $result['success'], 'status' => $result['data']['status'] ?? $faktur->status];
         } catch (\Throwable $e) {
             return ['ok' => false, 'status' => $faktur->status, 'message' => $e->getMessage()];

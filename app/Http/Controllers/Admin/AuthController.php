@@ -8,7 +8,10 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function showLogin() { return view('admin.login'); }
+    public function showLogin()
+    {
+        return view('admin.login');
+    }
 
     public function login(Request $request)
     {
@@ -17,6 +20,7 @@ class AuthController extends Controller
             return back()->withErrors(['email' => 'Invalid credentials.']);
         }
         $request->session()->regenerate();
+
         return redirect()->route('admin.dashboard');
     }
 
@@ -24,6 +28,7 @@ class AuthController extends Controller
     {
         Auth::guard('admin')->logout();
         $request->session()->invalidate();
+
         return redirect()->route('admin.login');
     }
 }

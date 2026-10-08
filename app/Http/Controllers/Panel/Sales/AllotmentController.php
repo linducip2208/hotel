@@ -12,6 +12,7 @@ class AllotmentController extends Controller
     {
         $allotments = Allotment::where('property_id', app('current_property')->id)
             ->with('travelAgent', 'company', 'roomType')->latest('from_date')->paginate(50);
+
         return view('panel.sales.allotments', compact('allotments'));
     }
 
@@ -29,6 +30,7 @@ class AllotmentController extends Controller
             'negotiated_rate' => 'nullable|numeric',
         ]);
         Allotment::create($data + ['property_id' => app('current_property')->id, 'status' => 'active']);
+
         return back();
     }
 
@@ -37,6 +39,7 @@ class AllotmentController extends Controller
         $allotment = Allotment::where('property_id', app('current_property')->id)
             ->with(['travelAgent', 'company', 'roomType', 'ratePlan'])
             ->findOrFail($id);
+
         return view('panel.sales.allotments-show', compact('allotment'));
     }
 
@@ -55,6 +58,7 @@ class AllotmentController extends Controller
             'negotiated_rate' => 'nullable|numeric',
         ]);
         $allotment->update($data);
+
         return back()->with('success', 'Allotment berhasil diperbarui.');
     }
 
@@ -62,6 +66,7 @@ class AllotmentController extends Controller
     {
         $allotment = Allotment::where('property_id', app('current_property')->id)->findOrFail($id);
         $allotment->delete();
+
         return back()->with('success', 'Allotment berhasil dihapus.');
     }
 
@@ -69,6 +74,7 @@ class AllotmentController extends Controller
     {
         $allotment = Allotment::where('property_id', app('current_property')->id)->findOrFail($id);
         $allotment->update(['status' => 'released']);
+
         return back()->with('success', 'Allotment telah di-release.');
     }
 }

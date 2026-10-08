@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Portal;
 
 use App\Http\Controllers\Controller;
+use App\Models\OwnerDistribution;
+use App\Models\OwnerDocument;
 use App\Models\Property;
+use App\Models\PropertyOwner;
 use App\Services\Finance\OwnerPortalService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +27,7 @@ class OwnerPortalController extends Controller
     public function dashboard(Request $request)
     {
         $property = $this->userProperty();
-        if (!$property) {
+        if (! $property) {
             return redirect('/login')->with('error', 'Properti tidak ditemukan.');
         }
 
@@ -45,12 +48,14 @@ class OwnerPortalController extends Controller
     public function financials(Request $request)
     {
         $property = $this->userProperty();
-        if (!$property) { return redirect('/login'); }
+        if (! $property) {
+            return redirect('/login');
+        }
 
         $period = $request->query('period', now()->startOfMonth()->toDateString());
         $pnl = $this->ownerService->getMonthlyPnl($property, $period);
 
-        $owner = \App\Models\PropertyOwner::where('property_id', $property->id)
+        $owner = PropertyOwner::where('property_id', $property->id)
             ->where('user_id', Auth::id())
             ->first();
         $ownershipPct = $owner ? (float) $owner->ownership_pct : 0;
@@ -61,9 +66,11 @@ class OwnerPortalController extends Controller
     public function distributions(Request $request)
     {
         $property = $this->userProperty();
-        if (!$property) { return redirect('/login'); }
+        if (! $property) {
+            return redirect('/login');
+        }
 
-        $distributions = \App\Models\OwnerDistribution::where('property_id', $property->id)
+        $distributions = OwnerDistribution::where('property_id', $property->id)
             ->where('owner_user_id', Auth::id())
             ->orderByDesc('period_start')
             ->paginate(20);
@@ -73,15 +80,15 @@ class OwnerPortalController extends Controller
 
     public function downloadDocument($id)
     {
-        $doc = \App\Models\OwnerDocument::where('id', $id)
+        $doc = OwnerDocument::where('id', $id)
             ->where('owner_user_id', Auth::id())
             ->firstOrFail();
 
-        $path = storage_path('app/' . $doc->file_path);
-        if (!file_exists($path)) {
+        $path = storage_path('app/'.$doc->file_path);
+        if (! file_exists($path)) {
             abort(404, 'File tidak ditemukan.');
         }
 
-        return response()->download($path, $doc->title . '.' . pathinfo($path, PATHINFO_EXTENSION));
+        return response()->download($path, $doc->title.'.'.pathinfo($path, PATHINFO_EXTENSION));
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel;
 use App\Http\Controllers\Controller;
 use App\Models\Guest;
 use App\Models\Reservation;
+use App\Models\SearchKeyword;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
@@ -26,6 +27,8 @@ class SearchController extends Controller
 
         $reservations = Reservation::query()
             ->where('ref', 'like', "%$q%")->limit(10)->get();
+
+        SearchKeyword::track(app('current_property')->id, $q, 'panel', $guests->count() + $reservations->count());
 
         return response()->json([
             'guests' => $guests->map(fn ($g) => ['id' => $g->id, 'name' => $g->full_name, 'email' => $g->email]),

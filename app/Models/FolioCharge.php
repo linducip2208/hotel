@@ -20,7 +20,18 @@ class FolioCharge extends Model
         'is_void' => 'boolean',
     ];
 
-    public function folio()    { return $this->belongsTo(Folio::class); }
-    public function property() { return $this->belongsTo(Property::class); }
-    public function postedBy() { return $this->belongsTo(User::class, 'posted_by_user_id'); }
+    public function folio()
+    {
+        return $this->belongsTo(Folio::class);
+    }
+
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function postedBy()
+    {
+        return $this->belongsTo(User::class, 'posted_by_user_id');
+    }
 }

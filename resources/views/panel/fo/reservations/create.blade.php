@@ -9,7 +9,7 @@
     </a>
     <div>
         <h1 class="text-2xl font-bold text-gray-900">New Reservation</h1>
-        <p class="text-sm text-gray-500 mt-0.5">Create a direct or walk-in booking</p>
+        <p class="text-sm text-gray-500 mt-0.5">Create a booking — multiple rooms supported</p>
     </div>
 </div>
 
@@ -20,69 +20,91 @@
 </div>
 @endif
 
-<form method="POST" action="{{ route('panel.fo.reservations.store') }}" class="space-y-5 max-w-2xl">
-    @csrf
+<form method="POST" action="{{ route('panel.fo.reservations.store') }}" class="space-y-5 max-w-3xl" x-data="resForm()">
 
-    {{-- Stay dates --}}
+    {{-- 1. Stay dates --}}
     <div class="bg-white rounded-2xl shadow-card border border-gray-100 divide-y divide-gray-50">
         <div class="px-5 py-4">
             <h2 class="text-sm font-semibold text-gray-700 flex items-center gap-2">
                 <span class="w-6 h-6 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center text-xs font-bold">1</span>
-                Stay Dates
+                Stay
             </h2>
         </div>
-        <div class="p-5 grid grid-cols-2 gap-4">
+        <div class="p-5 grid md:grid-cols-3 gap-4 items-end">
             <div>
                 <label class="block text-xs font-semibold text-gray-600 mb-1.5">Check-in <span class="text-red-500">*</span></label>
-                <input type="date" name="check_in" value="{{ old('check_in') }}" required
+                <input type="date" name="check_in" value="{{ old('check_in') }}" required x-model="checkIn" x-on:change="updateNights()"
                        class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm text-gray-900 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none">
             </div>
             <div>
                 <label class="block text-xs font-semibold text-gray-600 mb-1.5">Check-out <span class="text-red-500">*</span></label>
-                <input type="date" name="check_out" value="{{ old('check_out') }}" required
+                <input type="date" name="check_out" value="{{ old('check_out') }}" required x-model="checkOut" x-on:change="updateNights()"
                        class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm text-gray-900 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none">
+            </div>
+            <div class="text-sm text-gray-500 pb-2.5">
+                <span x-show="nights > 0" x-cloak><span class="font-semibold text-gray-800" x-text="nights"></span> malam</span>
+                <span x-show="nights <= 0">Pilih tanggal menginap</span>
             </div>
         </div>
     </div>
 
-    {{-- Room --}}
+    {{-- 2. Rooms (multi) --}}
     <div class="bg-white rounded-2xl shadow-card border border-gray-100 divide-y divide-gray-50">
-        <div class="px-5 py-4">
+        <div class="px-5 py-4 flex items-center justify-between">
             <h2 class="text-sm font-semibold text-gray-700 flex items-center gap-2">
                 <span class="w-6 h-6 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center text-xs font-bold">2</span>
-                Room
+                Rooms
             </h2>
+            <button type="button" @click="addRoom()"
+                    class="text-xs font-medium text-primary-600 hover:text-primary-800 transition-colors">+ Tambah Kamar</button>
         </div>
-        <div class="p-5 grid grid-cols-3 gap-4">
-            <div>
-                <label class="block text-xs font-semibold text-gray-600 mb-1.5">Room Type <span class="text-red-500">*</span></label>
-                <select name="rooms[0][room_type_id]" required
-                        class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm text-gray-900 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none">
-                    <option value="">— select —</option>
-                    @foreach (\App\Models\RoomType::where('property_id', $property->id)->where('is_active', true)->orderBy('name')->get() as $rt)
-                    <option value="{{ $rt->id }}" @selected(old('rooms.0.room_type_id') == $rt->id)>{{ $rt->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div>
-                <label class="block text-xs font-semibold text-gray-600 mb-1.5">Rate Plan <span class="text-red-500">*</span></label>
-                <select name="rooms[0][rate_plan_id]" required
-                        class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm text-gray-900 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none">
-                    <option value="">— select —</option>
-                    @foreach (\App\Models\RatePlan::where('property_id', $property->id)->where('is_active', true)->orderBy('name')->get() as $rp)
-                    <option value="{{ $rp->id }}" @selected(old('rooms.0.rate_plan_id') == $rp->id)>{{ $rp->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div>
-                <label class="block text-xs font-semibold text-gray-600 mb-1.5">Adults <span class="text-red-500">*</span></label>
-                <input type="number" name="rooms[0][adults]" value="{{ old('rooms.0.adults', 2) }}" required min="1" max="10"
-                       class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm text-gray-900 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none">
-            </div>
+        <div class="p-5 space-y-4">
+            <template x-for="(room, i) in rooms" :key="i">
+                <div class="rounded-xl border border-gray-100 p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide" x-text="'Kamar ' + (i + 1)"></span>
+                        <button type="button" @click="rooms.length > 1 && rooms.splice(i, 1)"
+                                :class="rooms.length <= 1 ? 'opacity-20 cursor-not-allowed' : 'text-gray-300 hover:text-red-400'"
+                                class="text-xs font-medium transition-colors">Hapus</button>
+                    </div>
+                    <div class="grid md:grid-cols-4 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1.5">Room Type <span class="text-red-500">*</span></label>
+                            <select :name="'rooms['+i+'][room_type_id]'" required x-model="room.room_type_id"
+                                    class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm text-gray-900 focus:bg-white focus:border-primary-400 transition-all outline-none">
+                                <option value="">— pilih —</option>
+                                @foreach ($roomTypes as $rt)
+                                    <option value="{{ $rt->id }}">{{ $rt->name }} (max {{ $rt->max_occupancy }})</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1.5">Rate Plan <span class="text-red-500">*</span></label>
+                            <select :name="'rooms['+i+'][rate_plan_id]'" required x-model="room.rate_plan_id"
+                                    class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm text-gray-900 focus:bg-white focus:border-primary-400 transition-all outline-none">
+                                <option value="">— pilih —</option>
+                                @foreach ($ratePlans as $rp)
+                                    <option value="{{ $rp->id }}">{{ $rp->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1.5">Adults <span class="text-red-500">*</span></label>
+                            <input type="number" :name="'rooms['+i+'][adults]'" required min="1" max="10" value="{{ old('rooms.0.adults', 1) }}"
+                                   class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm text-gray-900 focus:bg-white focus:border-primary-400 transition-all outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1.5">Children</label>
+                            <input type="number" :name="'rooms['+i+'][children]'" min="0" max="10" value="0"
+                                   class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm text-gray-900 focus:bg-white focus:border-primary-400 transition-all outline-none">
+                        </div>
+                    </div>
+                </div>
+            </template>
         </div>
     </div>
 
-    {{-- Primary Guest --}}
+    {{-- 3. Primary Guest --}}
     <div class="bg-white rounded-2xl shadow-card border border-gray-100 divide-y divide-gray-50">
         <div class="px-5 py-4">
             <h2 class="text-sm font-semibold text-gray-700 flex items-center gap-2">
@@ -91,51 +113,64 @@
             </h2>
         </div>
         <div class="p-5 space-y-4">
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">First Name <span class="text-red-500">*</span></label>
-                    <input type="text" name="primary_guest[first_name]" value="{{ old('primary_guest.first_name') }}" required placeholder="John"
+                    <input type="text" name="primary_guest[first_name]" value="{{ old('primary_guest.first_name') }}" required maxlength="100" placeholder="John"
                            class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm text-gray-900 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">Last Name</label>
-                    <input type="text" name="primary_guest[last_name]" value="{{ old('primary_guest.last_name') }}" placeholder="Doe"
+                    <input type="text" name="primary_guest[last_name]" value="{{ old('primary_guest.last_name') }}" maxlength="100" placeholder="Doe"
                            class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm text-gray-900 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none">
                 </div>
             </div>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">Email</label>
                     <input type="email" name="primary_guest[email]" value="{{ old('primary_guest.email') }}" placeholder="john@example.com"
                            class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm text-gray-900 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">Phone</label>
-                    <input type="tel" name="primary_guest[phone]" value="{{ old('primary_guest.phone') }}" placeholder="+62 812 ..."
+                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">Phone / WhatsApp</label>
+                    <input type="tel" name="primary_guest[phone]" value="{{ old('primary_guest.phone') }}" maxlength="30" placeholder="+62 812 ..."
                            class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm text-gray-900 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none">
                 </div>
             </div>
         </div>
     </div>
 
-    {{-- Notes --}}
+    {{-- 4. Source & Notes --}}
     <div class="bg-white rounded-2xl shadow-card border border-gray-100 divide-y divide-gray-50">
         <div class="px-5 py-4">
             <h2 class="text-sm font-semibold text-gray-700 flex items-center gap-2">
                 <span class="w-6 h-6 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center text-xs font-bold">4</span>
-                Notes
+                Source &amp; Notes
             </h2>
         </div>
-        <div class="p-5">
-            <label class="block text-xs font-semibold text-gray-600 mb-1.5">Special Requests</label>
-            <textarea name="special_requests" rows="3" placeholder="Late check-in, extra pillows, honeymoon setup…"
-                      class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm text-gray-900 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none resize-none">{{ old('special_requests') }}</textarea>
+        <div class="p-5 space-y-4">
+            <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">Booking Source</label>
+                    <select name="source"
+                            class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm text-gray-900 focus:bg-white focus:border-primary-400 transition-all outline-none">
+                        @foreach ($sources as $key => $label)
+                            <option value="{{ $key }}" @selected(old('source', 'direct') === $key)>{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-600 mb-1.5">Special Requests</label>
+                <textarea name="special_requests" rows="3" maxlength="1000" placeholder="Late check-in, extra pillows, honeymoon setup…"
+                          class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm text-gray-900 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all outline-none resize-none">{{ old('special_requests') }}</textarea>
+            </div>
         </div>
     </div>
 
     {{-- Submit --}}
     <div class="flex items-center gap-3 pt-1">
-        <button type="submit"
+        <button type="submit" x-on:click="submitting = true"
                 class="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold px-6 py-2.5 rounded-xl shadow-sm transition-colors">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
             Create Reservation
@@ -146,3 +181,25 @@
 </form>
 
 @endsection
+
+@push('scripts')
+<script>
+function resForm() {
+    return {
+        checkIn: '{{ old('check_in') }}',
+        checkOut: '{{ old('check_out') }}',
+        nights: 0,
+        submitting: false,
+        rooms: [{ room_type_id: '{{ old('rooms.0.room_type_id') }}', rate_plan_id: '{{ old('rooms.0.rate_plan_id') }}' }],
+        addRoom() { this.rooms.push({ room_type_id: '', rate_plan_id: '' }); },
+        updateNights() {
+            if (!this.checkIn || !this.checkOut) { this.nights = 0; return; }
+            const a = new Date(this.checkIn), b = new Date(this.checkOut);
+            const diff = Math.round((b - a) / 86400000);
+            this.nights = diff > 0 ? diff : 0;
+        },
+        init() { this.updateNights(); },
+    };
+}
+</script>
+@endpush

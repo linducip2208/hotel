@@ -27,6 +27,7 @@ class MessagingService
             'unread_count' => $thread->unread_count + 1,
             'status' => 'open',
         ]);
+
         return $msg;
     }
 
@@ -43,16 +44,24 @@ class MessagingService
         $this->dispatchOutbound($thread, $msg);
 
         $thread->update(['last_message_at' => now()]);
+
         return $msg;
     }
 
     protected function resolveThread(string $channel, string $from, array $context): MessageThread
     {
-        $guest = Guest::where('email', $from)->orWhere('phone', $from)->first();
+        $propertyId = $context['property_id']
+            ?? (app()->bound('current_property') ? app('current_property')?->id : null)
+            ?? throw new \RuntimeException('MessagingService requires a property context.');
+
+        // Guest identity is per-property — never match across properties.
+        $guest = Guest::where('property_id', $propertyId)
+            ->where(fn ($q) => $q->where('email', $from)->orWhere('phone', $from))
+            ->first();
 
         return MessageThread::firstOrCreate(
             [
-                'property_id' => $context['property_id'] ?? 1,
+                'property_id' => $propertyId,
                 'channel' => $channel,
                 'external_thread_id' => $context['external_thread_id'] ?? null,
             ],

@@ -11,7 +11,6 @@ use App\Models\Folio;
 use App\Models\JournalLine;
 use App\Models\NightAudit;
 use App\Services\Coretax\EfakturXmlGenerator;
-use App\Services\Compliance\NsfpService;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -31,17 +30,19 @@ class ReportController extends Controller
             ->get()
             ->map(function ($a) use ($year, $month) {
                 $sum = JournalLine::whereHas('entry', function ($q) use ($year, $month) {
-                        $q->where('property_id', app('current_property')->id)
-                            ->where('period_year', '<=', $year)
-                            ->where(fn ($qq) => $qq->where('period_year', '<', $year)->orWhere('period_month', '<=', $month))
-                            ->where('status', 'posted');
-                    })
+                    $q->where('property_id', app('current_property')->id)
+                        ->where('period_year', '<=', $year)
+                        ->where(fn ($qq) => $qq->where('period_year', '<', $year)->orWhere('period_month', '<=', $month))
+                        ->where('status', 'posted');
+                })
                     ->where('account_id', $a->id);
                 $a->total_debit = (float) (clone $sum)->sum('debit');
                 $a->total_credit = (float) (clone $sum)->sum('credit');
                 $a->balance = $a->normal_balance === 'debit' ? $a->total_debit - $a->total_credit : $a->total_credit - $a->total_debit;
+
                 return $a;
             });
+
         return view('panel.accounting.reports.trial-balance', compact('accounts', 'year', 'month'));
     }
 
@@ -55,6 +56,7 @@ class ReportController extends Controller
         $expense = JournalLine::whereHas('entry', fn ($q) => $q->where('property_id', app('current_property')->id)->where('period_year', $year)->where('period_month', $month)->where('status', 'posted'))
             ->whereHas('account', fn ($q) => $q->where('type', 'expense'))
             ->sum('debit');
+
         return view('panel.accounting.reports.profit-loss', compact('year', 'month', 'revenue', 'expense'));
     }
 
@@ -63,6 +65,7 @@ class ReportController extends Controller
         $audit = NightAudit::where('property_id', app('current_property')->id)
             ->whereDate('audit_date', $request->query('date', now()->subDay()->toDateString()))
             ->first();
+
         return view('panel.accounting.reports.daily-revenue', compact('audit'));
     }
 
@@ -72,6 +75,7 @@ class ReportController extends Controller
         $month = (int) $request->input('month', now()->month);
         $period = AccountingPeriod::firstOrCreate(['property_id' => app('current_property')->id, 'year' => $year, 'month' => $month]);
         $period->update(['status' => 'locked', 'locked_at' => now(), 'locked_by_user_id' => $request->user()?->id]);
+
         return back();
     }
 
@@ -85,16 +89,17 @@ class ReportController extends Controller
             ->get()
             ->map(function ($a) use ($asOf) {
                 $sum = JournalLine::whereHas('entry', function ($q) use ($asOf) {
-                        $q->where('property_id', app('current_property')->id)
-                            ->where('journal_date', '<=', $asOf)
-                            ->where('status', 'posted');
-                    })
+                    $q->where('property_id', app('current_property')->id)
+                        ->where('journal_date', '<=', $asOf)
+                        ->where('status', 'posted');
+                })
                     ->where('account_id', $a->id);
                 $a->total_debit = (float) (clone $sum)->sum('debit');
                 $a->total_credit = (float) (clone $sum)->sum('credit');
                 $a->balance = $a->normal_balance === 'debit'
                     ? $a->total_debit - $a->total_credit
                     : $a->total_credit - $a->total_debit;
+
                 return $a;
             });
 
@@ -124,6 +129,7 @@ class ReportController extends Controller
         $month = (int) $request->input('month', now()->month);
         AccountingPeriod::where(['property_id' => app('current_property')->id, 'year' => $year, 'month' => $month])
             ->update(['status' => 'open', 'locked_at' => null]);
+
         return back();
     }
 
@@ -148,13 +154,13 @@ class ReportController extends Controller
 
         if ($request->filled('folio_id')) {
             $folio = Folio::where('property_id', $propertyId)->findOrFail((int) $request->folio_id);
-            $generator = new EfakturXmlGenerator();
+            $generator = new EfakturXmlGenerator;
             $generated = $generator->generateForFolio($folio, $request->filled('nsfp') ? $request->nsfp : null);
         }
 
         if ($request->filled('invoice_id')) {
             $invoice = ArInvoice::where('property_id', $propertyId)->findOrFail((int) $request->invoice_id);
-            $generator = new EfakturXmlGenerator();
+            $generator = new EfakturXmlGenerator;
             $generated = $generator->generateForInvoice($invoice, $request->filled('nsfp') ? $request->nsfp : null);
         }
 
@@ -183,7 +189,7 @@ class ReportController extends Controller
 
         return response($xml, 200, [
             'Content-Type' => 'application/xml',
-            'Content-Disposition' => 'attachment; filename="e-faktur-' . $efaktur->nomor_faktur . '.xml"',
+            'Content-Disposition' => 'attachment; filename="e-faktur-'.$efaktur->nomor_faktur.'.xml"',
         ]);
     }
 
@@ -191,7 +197,7 @@ class ReportController extends Controller
     {
         $count = min((int) ($request->count ?? 10), 50);
         $propertyId = app('current_property')->id;
-        $rangeStart = (int) (now()->format('ymd') . '00000');
+        $rangeStart = (int) (now()->format('ymd').'00000');
 
         for ($i = 0; $i < $count; $i++) {
             $nsfp = str_pad((string) ($rangeStart + $i), 13, '0', STR_PAD_LEFT);

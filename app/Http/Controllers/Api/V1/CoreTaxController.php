@@ -32,7 +32,8 @@ class CoreTaxController extends Controller
             return response()->json($result, 201);
 
         } catch (CoreTaxException $e) {
-            Log::channel('coretax')->error('pushFaktur failed: ' . $e->getMessage(), $e->getContext());
+            Log::channel('coretax')->error('pushFaktur failed: '.$e->getMessage(), $e->getContext());
+
             return response()->json([
                 'success' => false,
                 'error' => [
@@ -42,7 +43,8 @@ class CoreTaxController extends Controller
                 'context' => $e->getContext(),
             ], $e->getHttpStatusCode());
         } catch (\Throwable $e) {
-            Log::channel('coretax')->error('pushFaktur unexpected error: ' . $e->getMessage());
+            Log::channel('coretax')->error('pushFaktur unexpected error: '.$e->getMessage());
+
             return response()->json([
                 'success' => false,
                 'error' => [
@@ -60,6 +62,7 @@ class CoreTaxController extends Controller
     {
         try {
             $result = $this->coretax->checkFakturStatus($nomor);
+
             return response()->json($result);
         } catch (CoreTaxException $e) {
             return response()->json([
@@ -90,6 +93,7 @@ class CoreTaxController extends Controller
             $userId = $request->user()?->id ?? 1;
             $reason = $request->input('reason', '');
             $result = $this->coretax->cancelFaktur($nomor, $userId, $reason);
+
             return response()->json($result);
         } catch (CoreTaxException $e) {
             return response()->json([
@@ -114,6 +118,7 @@ class CoreTaxController extends Controller
     {
         try {
             $result = $this->coretax->getNsfp($year ?: (int) date('Y'));
+
             return response()->json($result);
         } catch (CoreTaxException $e) {
             return response()->json([

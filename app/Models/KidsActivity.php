@@ -21,12 +21,19 @@ class KidsActivity extends Model
         'is_active' => 'boolean',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function bookings() { return $this->hasMany(KidsBooking::class, 'kids_activity_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(KidsBooking::class, 'kids_activity_id');
+    }
 
     public function getAgeRangeAttribute(): string
     {
-        return $this->age_min . '–' . $this->age_max . ' tahun';
+        return $this->age_min.'–'.$this->age_max.' tahun';
     }
 
     public function getAvailableSlotsAttribute(): int
@@ -35,6 +42,7 @@ class KidsActivity extends Model
             ->where('booking_date', today()->toDateString())
             ->where('status', '!=', 'cancelled')
             ->count();
+
         return max(0, $this->capacity - $booked);
     }
 }

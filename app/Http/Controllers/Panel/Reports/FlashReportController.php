@@ -15,16 +15,16 @@ class FlashReportController extends Controller
         $property = app('current_property');
 
         $from = $request->query('from', now()->toDateString());
-        $to   = $request->query('to',   now()->toDateString());
+        $to = $request->query('to', now()->toDateString());
 
         // Fallback for old single-date parameter
-        if ($request->has('date') && !$request->has('from')) {
+        if ($request->has('date') && ! $request->has('from')) {
             $from = $request->query('date', now()->toDateString());
-            $to   = $from;
+            $to = $from;
         }
 
         // Build the latest report for display (use $to as the reference date)
-        $date  = Carbon::parse($to);
+        $date = Carbon::parse($to);
         $report = $svc->build($property, $date);
 
         // Fetch 7-day revenue trend

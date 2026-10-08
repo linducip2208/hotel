@@ -15,7 +15,18 @@ class DripCampaign extends Model
         'is_active' => 'boolean',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function steps()    { return $this->hasMany(DripStep::class)->orderBy('sort_order'); }
-    public function queueItems() { return $this->hasManyThrough(DripQueue::class, DripStep::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function steps()
+    {
+        return $this->hasMany(DripStep::class)->orderBy('sort_order');
+    }
+
+    public function queueItems()
+    {
+        return $this->hasManyThrough(DripQueue::class, DripStep::class);
+    }
 }

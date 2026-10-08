@@ -12,11 +12,11 @@ class GuestJourneyController extends Controller
     {
         $property = app('current_property');
         $from = $request->query('from');
-        $to   = $request->query('to');
+        $to = $request->query('to');
 
         $service = app(GuestJourneyService::class);
-        $funnel  = $service->getFunnel($property, $from, $to);
-        $trend   = $service->getConversionTrend($property, 30);
+        $funnel = $service->getFunnel($property, $from, $to);
+        $trend = $service->getConversionTrend($property, 30);
 
         return view('panel.analytics.guest-journey', compact('funnel', 'trend'));
     }

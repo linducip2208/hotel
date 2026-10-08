@@ -55,7 +55,9 @@ class NotificationDispatcher
     protected function sendMail(Reservation $r, string $subject, string $html): void
     {
         $email = $r->primaryGuest?->email;
-        if (! $email) return;
+        if (! $email) {
+            return;
+        }
 
         try {
             /** @var MailAdapterInterface|null $adapter */
@@ -73,7 +75,9 @@ class NotificationDispatcher
     protected function sendWhatsapp(Reservation $r, string $template, array $vars): void
     {
         $phone = $r->primaryGuest?->phone;
-        if (! $phone) return;
+        if (! $phone) {
+            return;
+        }
 
         try {
             /** @var WhatsappAdapterInterface|null $adapter */
@@ -90,6 +94,7 @@ class NotificationDispatcher
     {
         $name = $r->primaryGuest?->first_name;
         $url = url('/portal/booking/'.$r->ref);
+
         return <<<HTML
 <p>Halo {$name},</p>
 <p>Booking Anda terkonfirmasi.</p>

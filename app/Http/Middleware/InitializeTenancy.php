@@ -57,11 +57,12 @@ class InitializeTenancy
         $host = $request->getHost();
 
         $domain = TenantDomain::where('domain', $host)
-            ->orWhere('domain', 'www.' . $host)
+            ->orWhere('domain', 'www.'.$host)
             ->first();
 
         if ($domain) {
             session(['current_tenant_id' => $domain->tenant_id]);
+
             return $domain->tenant;
         }
 

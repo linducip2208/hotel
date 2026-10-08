@@ -57,7 +57,7 @@ class QrMenuController extends Controller
         PosTable::where('outlet_id', $outlet->id)->findOrFail($data['table_id']);
 
         $order = DB::transaction(function () use ($data, $outlet) {
-            $orderNo = 'QR-' . now()->format('YmdHis') . '-' . Str::upper(Str::random(4));
+            $orderNo = 'QR-'.now()->format('YmdHis').'-'.Str::upper(Str::random(4));
 
             $order = PosOrder::create([
                 'outlet_id' => $outlet->id,
@@ -82,7 +82,7 @@ class QrMenuController extends Controller
                     'unit_price' => $menu->price,
                     'qty' => $i['qty'],
                     'subtotal' => $lineSubtotal,
-                    'modifiers' => !empty($i['notes']) ? ['notes' => $i['notes']] : null,
+                    'modifiers' => ! empty($i['notes']) ? ['notes' => $i['notes']] : null,
                 ]);
                 $subtotal += $lineSubtotal;
             }

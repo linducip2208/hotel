@@ -9,6 +9,7 @@ use Illuminate\Console\Command;
 class AutoAssignHkTasks extends Command
 {
     protected $signature = 'hk:auto-assign';
+
     protected $description = 'Auto-create checkout cleaning tasks and assign to attendants';
 
     public function handle(TaskAutoAssignmentService $service): void

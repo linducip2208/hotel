@@ -2,12 +2,15 @@
 
 namespace App\Services\Finance;
 
+use App\Models\ApBill;
+use App\Models\FolioCharge;
 use App\Models\OwnerDistribution;
+use App\Models\OwnerDocument;
 use App\Models\Property;
 use App\Models\PropertyOwner;
+use App\Models\Reservation;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
 
 class OwnerPortalService
 {
@@ -17,18 +20,18 @@ class OwnerPortalService
         $start = $date->copy()->startOfMonth();
         $end = $date->copy()->endOfMonth();
 
-        $revenue = \App\Models\FolioCharge::where('property_id', $property->id)
+        $revenue = FolioCharge::where('property_id', $property->id)
             ->whereBetween('charge_date', [$start, $end])
             ->where('is_void', false)
             ->sum('amount');
 
-        $expense = \App\Models\ApBill::where('property_id', $property->id)
+        $expense = ApBill::where('property_id', $property->id)
             ->whereBetween('bill_date', [$start, $end])
             ->sum('total');
 
         $gop = $revenue - $expense;
 
-        $nights = \App\Models\Reservation::where('property_id', $property->id)
+        $nights = Reservation::where('property_id', $property->id)
             ->where('status', 'checked_out')
             ->whereBetween('check_out', [$start, $end])
             ->sum('nights');
@@ -89,7 +92,7 @@ class OwnerPortalService
             ->where('user_id', $user->id)
             ->first();
 
-        if (!$owner) {
+        if (! $owner) {
             return ['summary' => null, 'distributions' => [], 'monthly_trend' => [], 'documents' => []];
         }
 
@@ -114,7 +117,7 @@ class OwnerPortalService
             ];
         }
 
-        $documents = \App\Models\OwnerDocument::where('property_id', $property->id)
+        $documents = OwnerDocument::where('property_id', $property->id)
             ->where('owner_user_id', $user->id)
             ->orderByDesc('created_at')
             ->take(10)
@@ -137,52 +140,52 @@ class OwnerPortalService
         $start = Carbon::parse($period)->startOfMonth();
         $end = Carbon::parse($period)->endOfMonth();
 
-        $roomRevenue = \App\Models\FolioCharge::where('property_id', $property->id)
+        $roomRevenue = FolioCharge::where('property_id', $property->id)
             ->whereBetween('charge_date', [$start, $end])
             ->where('charge_type', 'room')
             ->where('is_void', false)
             ->sum('amount');
 
-        $fnbRevenue = \App\Models\FolioCharge::where('property_id', $property->id)
+        $fnbRevenue = FolioCharge::where('property_id', $property->id)
             ->whereBetween('charge_date', [$start, $end])
             ->where('charge_type', 'fnb')
             ->where('is_void', false)
             ->sum('amount');
 
-        $otherRevenue = \App\Models\FolioCharge::where('property_id', $property->id)
+        $otherRevenue = FolioCharge::where('property_id', $property->id)
             ->whereBetween('charge_date', [$start, $end])
             ->whereNotIn('charge_type', ['room', 'fnb', 'tax', 'discount'])
             ->where('is_void', false)
             ->sum('amount');
 
-        $taxCollected = \App\Models\FolioCharge::where('property_id', $property->id)
+        $taxCollected = FolioCharge::where('property_id', $property->id)
             ->whereBetween('charge_date', [$start, $end])
             ->where('charge_type', 'tax')
             ->where('is_void', false)
             ->sum('amount');
 
-        $discounts = \App\Models\FolioCharge::where('property_id', $property->id)
+        $discounts = FolioCharge::where('property_id', $property->id)
             ->whereBetween('charge_date', [$start, $end])
             ->where('charge_type', 'discount')
             ->where('is_void', false)
             ->sum('amount');
 
-        $payrollExpense = \App\Models\ApBill::where('property_id', $property->id)
+        $payrollExpense = ApBill::where('property_id', $property->id)
             ->whereBetween('bill_date', [$start, $end])
             ->where('category', 'payroll')
             ->sum('total');
 
-        $utilityExpense = \App\Models\ApBill::where('property_id', $property->id)
+        $utilityExpense = ApBill::where('property_id', $property->id)
             ->whereBetween('bill_date', [$start, $end])
             ->where('category', 'utility')
             ->sum('total');
 
-        $maintenanceExpense = \App\Models\ApBill::where('property_id', $property->id)
+        $maintenanceExpense = ApBill::where('property_id', $property->id)
             ->whereBetween('bill_date', [$start, $end])
             ->where('category', 'maintenance')
             ->sum('total');
 
-        $otherExpense = \App\Models\ApBill::where('property_id', $property->id)
+        $otherExpense = ApBill::where('property_id', $property->id)
             ->whereBetween('bill_date', [$start, $end])
             ->whereNotIn('category', ['payroll', 'utility', 'maintenance'])
             ->sum('total');

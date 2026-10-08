@@ -2,8 +2,8 @@
 
 namespace App\Services\Iot;
 
-use App\Models\IotDevice;
 use App\Models\IotCommand;
+use App\Models\IotDevice;
 use App\Models\IotEnergyLog;
 use App\Models\Property;
 use App\Models\Room;
@@ -34,6 +34,7 @@ class IotService
         $device->update(['current_state' => $state]);
 
         $cmd->update(['status' => 'executed']);
+
         return $cmd;
     }
 
@@ -74,6 +75,7 @@ class IotService
 
         $byRoom = $logs->groupBy('room_id')->map(function ($group) {
             $first = $group->first();
+
             return [
                 'room' => $first->room?->number ?? 'Unknown',
                 'kwh' => round((float) $group->sum('energy_kwh'), 2),

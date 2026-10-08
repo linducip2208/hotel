@@ -3,6 +3,7 @@
 namespace App\Services\Revenue;
 
 use App\Models\Property;
+use App\Models\Provider;
 use App\Models\RateOverride;
 use App\Models\RoomType;
 use GuzzleHttp\Client;
@@ -32,7 +33,7 @@ class WeatherPricingService
             return $this->mockForecast($date);
         }
 
-        $provider = \App\Models\Provider::where('property_id', $property->id)
+        $provider = Provider::where('property_id', $property->id)
             ->where('integration_type', 'weather')
             ->where('is_active', true)->first();
 
@@ -52,9 +53,11 @@ class WeatherPricingService
                 ],
             ]);
             $data = json_decode((string) $resp->getBody(), true);
+
             return $this->parseOpenWeather($data, $date);
         } catch (\Exception $e) {
             \Log::warning("Weather API error: {$e->getMessage()}");
+
             return $this->mockForecast($date);
         }
     }
@@ -64,6 +67,7 @@ class WeatherPricingService
         foreach ($data['list'] ?? [] as $item) {
             if (str_starts_with($item['dt_txt'] ?? '', $date)) {
                 $weather = $item['weather'][0]['main'] ?? 'Clear';
+
                 return [
                     'condition' => strtolower($weather),
                     'temp' => $item['main']['temp'] ?? 25,
@@ -73,6 +77,7 @@ class WeatherPricingService
                 ];
             }
         }
+
         return $this->mockForecast($date);
     }
 
@@ -80,6 +85,7 @@ class WeatherPricingService
     {
         $conditions = ['sunny', 'clear', 'partly_cloudy', 'cloudy'];
         $condition = $conditions[abs(crc32($date)) % count($conditions)];
+
         return [
             'condition' => $condition,
             'temp' => rand(24, 34),
@@ -137,6 +143,7 @@ class WeatherPricingService
                 $applied++;
             }
         }
+
         return $applied;
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Models\ApprovalRequest;
 use App\Models\FolioCharge;
 use App\Models\HkTask;
 use App\Models\Inventory;
@@ -17,8 +18,8 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $property   = app('current_property');
-        $today      = now()->toDateString();
+        $property = app('current_property');
+        $today = now()->toDateString();
         $totalRooms = $property->total_rooms ?: 1;
 
         $soldToday = (int) Inventory::where('property_id', $property->id)
@@ -43,34 +44,34 @@ class DashboardController extends Controller
         for ($d = 6; $d >= 0; $d--) {
             $date = Carbon::today()->subDays($d)->toDateString();
             $sold = (int) Inventory::where('property_id', $property->id)->whereDate('date', $date)->sum('sold');
-            $rev  = (float) FolioCharge::where('property_id', $property->id)
+            $rev = (float) FolioCharge::where('property_id', $property->id)
                 ->whereDate('charge_date', $date)->where('is_void', false)->sum('amount');
             $trend->push([
-                'date'    => Carbon::parse($date)->format('D'),
-                'occ'     => round(($sold / $totalRooms) * 100, 1),
+                'date' => Carbon::parse($date)->format('D'),
+                'occ' => round(($sold / $totalRooms) * 100, 1),
                 'revenue' => $rev,
             ]);
         }
 
         $kpi = [
-            'arrivals_today'   => $arrivalsList->count(),
+            'arrivals_today' => $arrivalsList->count(),
             'departures_today' => $departuresList->count(),
-            'in_house'         => Reservation::where('property_id', $property->id)->where('status', 'checked_in')->count(),
-            'pending_payment'  => Reservation::where('property_id', $property->id)
+            'in_house' => Reservation::where('property_id', $property->id)->where('status', 'checked_in')->count(),
+            'pending_payment' => Reservation::where('property_id', $property->id)
                 ->where('balance', '>', 0)->whereIn('status', ['confirmed', 'checked_in'])->count(),
-            'occupancy_pct'    => round(($soldToday / $totalRooms) * 100, 1),
-            'total_rooms'      => $totalRooms,
-            'occupied_rooms'   => $soldToday,
-            'adr'              => $soldToday > 0 ? round($roomRevToday / $soldToday, 0) : 0,
-            'revpar'           => round($roomRevToday / $totalRooms, 0),
-            'room_rev_today'   => $roomRevToday,
-            'total_rev_today'  => $totalRevToday,
-            'arrivals_list'    => $arrivalsList,
-            'departures_list'  => $departuresList,
+            'occupancy_pct' => round(($soldToday / $totalRooms) * 100, 1),
+            'total_rooms' => $totalRooms,
+            'occupied_rooms' => $soldToday,
+            'adr' => $soldToday > 0 ? round($roomRevToday / $soldToday, 0) : 0,
+            'revpar' => round($roomRevToday / $totalRooms, 0),
+            'room_rev_today' => $roomRevToday,
+            'total_rev_today' => $totalRevToday,
+            'arrivals_list' => $arrivalsList,
+            'departures_list' => $departuresList,
         ];
 
-        $user  = $request->user();
-        $role  = $user ? optional($user->roles->first())->name : null;
+        $user = $request->user();
+        $role = $user ? optional($user->roles->first())->name : null;
         $roleModules = $this->getVisibleModuleCatalog($role);
         $roleMetrics = $role ? $this->getRoleSpecificMetrics($role) : [];
 
@@ -107,8 +108,8 @@ class DashboardController extends Controller
             ['cluster' => 'AI Tools (BYOK)', 'label' => 'AI Hub',         'desc' => 'Semua tool AI di satu tempat',         'route' => 'panel.ai.hub',           'color' => 'violet',  'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>'],
             ['cluster' => 'AI Tools (BYOK)', 'label' => 'AI Concierge',   'desc' => 'Chatbot multi-bahasa',                 'route' => 'panel.ai.concierge',     'color' => 'indigo',  'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>'],
             ['cluster' => 'AI Tools (BYOK)', 'label' => 'Auto-Translate', 'desc' => 'Terjemahkan konten',                   'route' => 'panel.ai.translate',     'color' => 'sky',     'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>'],
-            ['cluster' => 'AI Tools (BYOK)', 'label' => 'Demand Forecast','desc' => 'Prediksi okupansi 30 hari',            'route' => 'panel.ai.forecast',      'color' => 'emerald', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>'],
-            ['cluster' => 'AI Tools (BYOK)', 'label' => 'Review Replies', 'desc' => 'AI generate balasan review',           'route' => 'panel.ai.review-replies','color' => 'amber',   'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>'],
+            ['cluster' => 'AI Tools (BYOK)', 'label' => 'Demand Forecast', 'desc' => 'Prediksi okupansi 30 hari',            'route' => 'panel.ai.forecast',      'color' => 'emerald', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>'],
+            ['cluster' => 'AI Tools (BYOK)', 'label' => 'Review Replies', 'desc' => 'AI generate balasan review',           'route' => 'panel.ai.review-replies', 'color' => 'amber',   'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>'],
 
             // Guests & CRM
             ['cluster' => 'Guests',     'label' => 'Guests',         'desc' => 'Profiles & history',            'route' => 'panel.guests.index',               'color' => 'indigo',   'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>'],
@@ -141,7 +142,7 @@ class DashboardController extends Controller
             ['cluster' => 'Insights',   'label' => 'Settings',       'desc' => 'Property &amp; integrations',   'route' => 'panel.settings.property',          'color' => 'gray',     'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065zM15 12a3 3 0 11-6 0 3 3 0 016 0z"/>'],
         ];
 
-        if (!$role || in_array($role, ['admin', 'manager', 'owner'])) {
+        if (! $role || in_array($role, ['admin', 'manager', 'owner'])) {
             return $allModules;
         }
 
@@ -160,27 +161,27 @@ class DashboardController extends Controller
     private function getRoleSpecificMetrics(string $role): array
     {
         $property = app('current_property');
-        $today    = now()->toDateString();
-        $metrics  = [];
+        $today = now()->toDateString();
+        $metrics = [];
 
-        $includeHk    = in_array($role, ['admin', 'manager', 'owner', 'hk']);
-        $includeFo    = in_array($role, ['admin', 'manager', 'owner', 'fo']);
-        $includeAcc   = in_array($role, ['admin', 'manager', 'owner', 'acc']);
+        $includeHk = in_array($role, ['admin', 'manager', 'owner', 'hk']);
+        $includeFo = in_array($role, ['admin', 'manager', 'owner', 'fo']);
+        $includeAcc = in_array($role, ['admin', 'manager', 'owner', 'acc']);
         $includeKasir = in_array($role, ['admin', 'manager', 'owner', 'kasir']);
 
         if ($includeHk) {
             $metrics['hk'] = [
-                'dirty_rooms'   => HkTask::where('property_id', $property->id)->whereDate('scheduled_date', $today)->where('status', 'pending')->count(),
-                'clean_rooms'   => HkTask::where('property_id', $property->id)->whereDate('scheduled_date', $today)->where('status', 'done')->count(),
+                'dirty_rooms' => HkTask::where('property_id', $property->id)->whereDate('scheduled_date', $today)->where('status', 'pending')->count(),
+                'clean_rooms' => HkTask::where('property_id', $property->id)->whereDate('scheduled_date', $today)->where('status', 'done')->count(),
                 'pending_tasks' => HkTask::where('property_id', $property->id)->whereIn('status', ['pending', 'in_progress'])->count(),
             ];
         }
 
         if ($includeFo) {
             $metrics['fo'] = [
-                'pending_check_ins'  => Reservation::where('property_id', $property->id)->whereDate('check_in', $today)->whereIn('status', ['confirmed', 'tentative'])->count(),
+                'pending_check_ins' => Reservation::where('property_id', $property->id)->whereDate('check_in', $today)->whereIn('status', ['confirmed', 'tentative'])->count(),
                 'pending_check_outs' => Reservation::where('property_id', $property->id)->whereDate('check_out', $today)->where('status', 'checked_in')->count(),
-                'pending_payments'   => Reservation::where('property_id', $property->id)->where('balance', '>', 0)->whereIn('status', ['confirmed', 'checked_in'])->count(),
+                'pending_payments' => Reservation::where('property_id', $property->id)->where('balance', '>', 0)->whereIn('status', ['confirmed', 'checked_in'])->count(),
             ];
         }
 
@@ -202,13 +203,13 @@ class DashboardController extends Controller
             $metrics['acc'] = [
                 'revenue_mtd' => $revenueMtd,
                 'expense_mtd' => $expenseMtd,
-                'net_income'  => $revenueMtd - $expenseMtd,
+                'net_income' => $revenueMtd - $expenseMtd,
             ];
         }
 
         if ($includeKasir) {
             $metrics['kasir'] = [
-                'pos_orders_today'  => PosOrder::where('property_id', $property->id)->whereDate('created_at', $today)->count(),
+                'pos_orders_today' => PosOrder::where('property_id', $property->id)->whereDate('created_at', $today)->count(),
                 'pos_revenue_today' => (float) PosOrder::where('property_id', $property->id)->whereDate('created_at', $today)->sum('grand_total'),
             ];
         }
@@ -218,7 +219,7 @@ class DashboardController extends Controller
 
     public function approveItem($id, ApprovalService $approvals)
     {
-        $req = \App\Models\ApprovalRequest::where('property_id', app('current_property')->id)
+        $req = ApprovalRequest::where('property_id', app('current_property')->id)
             ->findOrFail($id);
 
         $approvals->approve($req, auth()->id(), 'Approved from dashboard');
@@ -228,7 +229,7 @@ class DashboardController extends Controller
 
     public function rejectItem($id, ApprovalService $approvals)
     {
-        $req = \App\Models\ApprovalRequest::where('property_id', app('current_property')->id)
+        $req = ApprovalRequest::where('property_id', app('current_property')->id)
             ->findOrFail($id);
 
         $approvals->reject($req, auth()->id(), 'Rejected from dashboard');

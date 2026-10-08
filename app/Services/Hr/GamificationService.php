@@ -34,7 +34,9 @@ class GamificationService
         foreach ($badges as $badge) {
             $alreadyAwarded = EmployeeBadge::where('employee_id', $employee->id)
                 ->where('gamification_badge_id', $badge->id)->exists();
-            if ($alreadyAwarded) continue;
+            if ($alreadyAwarded) {
+                continue;
+            }
 
             $count = match ($badge->criteria) {
                 'rooms_cleaned' => HkTask::where('assignee_id', $employee->id)->where('status', 'done')->count(),
@@ -75,7 +77,9 @@ class GamificationService
         $leaderboard = [];
         $rank = 1;
         foreach ($points as $p) {
-            if (!$p->employee) continue;
+            if (! $p->employee) {
+                continue;
+            }
             $badges = EmployeeBadge::where('employee_id', $p->employee_id)
                 ->with('badge')->get();
             $leaderboard[] = [
@@ -86,6 +90,7 @@ class GamificationService
                 'badges' => $badges->pluck('badge.name')->toArray(),
             ];
         }
+
         return $leaderboard;
     }
 

@@ -18,19 +18,19 @@ final class LogCheckInAudit implements ShouldQueue
         $reservation = $event->reservation;
 
         AuditLog::create([
-            'property_id'   => $reservation->property_id,
-            'entity_type'   => 'reservation',
-            'entity_id'     => $reservation->id,
-            'action'        => 'checked_in',
-            'description'   => sprintf(
+            'property_id' => $reservation->property_id,
+            'entity_type' => 'reservation',
+            'entity_id' => $reservation->id,
+            'action' => 'checked_in',
+            'description' => sprintf(
                 'Guest checked in for reservation #%s at %s',
                 $reservation->ref,
                 now()->toDateTimeString(),
             ),
-            'metadata'      => [
+            'metadata' => [
                 'reservation_ref' => $reservation->ref,
-                'guest_id'        => $reservation->primary_guest_id,
-                'checked_in_by'   => $event->checkedInByUserId,
+                'guest_id' => $reservation->primary_guest_id,
+                'checked_in_by' => $event->checkedInByUserId,
             ],
         ]);
     }

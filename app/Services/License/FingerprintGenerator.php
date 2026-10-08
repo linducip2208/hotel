@@ -34,7 +34,9 @@ class FingerprintGenerator
         foreach ($candidates as $path) {
             if (is_readable($path)) {
                 $id = trim((string) @file_get_contents($path));
-                if ($id !== '') return $id;
+                if ($id !== '') {
+                    return $id;
+                }
             }
         }
 

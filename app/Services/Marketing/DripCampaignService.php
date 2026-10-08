@@ -7,6 +7,8 @@ use App\Models\DripQueue;
 use App\Models\DripStep;
 use App\Models\Guest;
 use App\Models\Reservation;
+use App\Services\Communication\MessagingService;
+use Illuminate\Support\Facades\Mail;
 
 class DripCampaignService
 {
@@ -24,7 +26,7 @@ class DripCampaignService
                 'drip_campaign_id' => $campaign->id,
                 'delay_hours' => $step['delay_hours'],
                 'channel' => $step['channel'] ?? 'whatsapp',
-                'template_key' => $step['template_key'] ?? 'drip_' . ($i + 1),
+                'template_key' => $step['template_key'] ?? 'drip_'.($i + 1),
                 'subject' => $step['subject'] ?? null,
                 'message' => $step['message'],
                 'sort_order' => $i + 1,
@@ -47,7 +49,7 @@ class DripCampaignService
         }
 
         $guest = $reservation->primaryGuest;
-        if (!$guest) {
+        if (! $guest) {
             return;
         }
 
@@ -84,13 +86,13 @@ class DripCampaignService
 
                 if ($step->channel === 'email') {
                     // Email via notification system
-                    \Illuminate\Support\Facades\Mail::raw($message, function ($m) use ($guest, $step) {
+                    Mail::raw($message, function ($m) use ($guest, $step) {
                         $m->to($guest->email)
-                            ->subject($step->subject ?? 'Pesan dari ' . config('app.name'));
+                            ->subject($step->subject ?? 'Pesan dari '.config('app.name'));
                     });
                 } else {
                     // WhatsApp via messaging service
-                    $client = app(\App\Services\Communication\MessagingService::class);
+                    $client = app(MessagingService::class);
                     if (method_exists($client, 'send')) {
                         $client->send($guest->phone, $message);
                     }

@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\GroupBlock;
 use App\Models\Inventory;
 use App\Models\Property;
 use App\Models\RoomType;

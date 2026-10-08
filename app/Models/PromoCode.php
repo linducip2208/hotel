@@ -19,6 +19,13 @@ class PromoCode extends Model
         'is_active' => 'boolean',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function usages()   { return $this->hasMany(PromoCodeUsage::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function usages()
+    {
+        return $this->hasMany(PromoCodeUsage::class);
+    }
 }

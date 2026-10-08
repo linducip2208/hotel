@@ -29,7 +29,9 @@ class VerifyCaptcha
             default => null,
         };
 
-        if (! $adapter) return $next($request);
+        if (! $adapter) {
+            return $next($request);
+        }
 
         if (! $token || ! $adapter->verify($token, $request->ip())) {
             return response()->json(['error' => 'Captcha verification failed'], 422);

@@ -2,19 +2,21 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Property;
 use App\Services\Guest\RfmSegmentationService;
 use Illuminate\Console\Command;
 
 class CalculateRfmSegments extends Command
 {
     protected $signature = 'hotel:calculate-rfm {--property=}';
+
     protected $description = 'Calculate RFM scores and segment all guests';
 
     public function handle(RfmSegmentationService $service): int
     {
         $propertyId = $this->option('property');
-        if (!$propertyId) {
-            $properties = \App\Models\Property::where('is_active', true)->pluck('id');
+        if (! $propertyId) {
+            $properties = Property::where('is_active', true)->pluck('id');
             foreach ($properties as $pid) {
                 $count = $service->calculateAll($pid);
                 $this->info("Property {$pid}: {$count} guests segmented.");

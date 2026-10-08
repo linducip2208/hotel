@@ -17,7 +17,18 @@ class MinibarProduct extends Model
         'is_active' => 'boolean',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function stocks() { return $this->hasMany(MinibarStock::class); }
-    public function consumptions() { return $this->hasMany(MinibarConsumption::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function stocks()
+    {
+        return $this->hasMany(MinibarStock::class);
+    }
+
+    public function consumptions()
+    {
+        return $this->hasMany(MinibarConsumption::class);
+    }
 }

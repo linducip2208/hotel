@@ -18,10 +18,33 @@ class JournalEntry extends Model
         'total_credit' => 'decimal:2',
     ];
 
-    public function property()      { return $this->belongsTo(Property::class); }
-    public function lines()         { return $this->hasMany(JournalLine::class); }
-    public function source()        { return $this->morphTo(); }
-    public function createdByUser() { return $this->belongsTo(User::class, 'created_by_user_id'); }
-    public function postedByUser()  { return $this->belongsTo(User::class, 'posted_by_user_id'); }
-    public function voidedByUser()  { return $this->belongsTo(User::class, 'voided_by_user_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function lines()
+    {
+        return $this->hasMany(JournalLine::class);
+    }
+
+    public function source()
+    {
+        return $this->morphTo();
+    }
+
+    public function createdByUser()
+    {
+        return $this->belongsTo(User::class, 'created_by_user_id');
+    }
+
+    public function postedByUser()
+    {
+        return $this->belongsTo(User::class, 'posted_by_user_id');
+    }
+
+    public function voidedByUser()
+    {
+        return $this->belongsTo(User::class, 'voided_by_user_id');
+    }
 }

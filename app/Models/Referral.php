@@ -18,8 +18,23 @@ class Referral extends Model
         'completed_at' => 'datetime',
     ];
 
-    public function property()      { return $this->belongsTo(Property::class); }
-    public function referrerGuest() { return $this->belongsTo(Guest::class, 'referrer_guest_id'); }
-    public function referredGuest() { return $this->belongsTo(Guest::class, 'referred_guest_id'); }
-    public function referralCode()  { return $this->belongsTo(ReferralCode::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function referrerGuest()
+    {
+        return $this->belongsTo(Guest::class, 'referrer_guest_id');
+    }
+
+    public function referredGuest()
+    {
+        return $this->belongsTo(Guest::class, 'referred_guest_id');
+    }
+
+    public function referralCode()
+    {
+        return $this->belongsTo(ReferralCode::class);
+    }
 }

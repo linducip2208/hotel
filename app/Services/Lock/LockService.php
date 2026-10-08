@@ -12,6 +12,7 @@ use App\Adapters\Lock\SaltoAdapter;
 use App\Adapters\Lock\VingcardAdapter;
 use App\Models\DoorLockEvent;
 use App\Models\Guest;
+use App\Models\Provider;
 use App\Models\Reservation;
 use App\Models\Room;
 use App\Models\User;
@@ -119,6 +120,7 @@ final class LockService
     public function getStatus(Room $room): array
     {
         $adapter = $this->resolveAdapter($room->property_id);
+
         return $adapter->getLockStatus($room->room_number ?? "R{$room->id}");
     }
 
@@ -149,7 +151,7 @@ final class LockService
 
     private function resolveAdapter(int $propertyId): LockAdapterInterface
     {
-        $provider = \App\Models\Provider::where('property_id', $propertyId)
+        $provider = Provider::where('property_id', $propertyId)
             ->where('api_format', 'door_lock')
             ->where('is_active', true)
             ->first();

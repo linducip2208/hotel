@@ -16,5 +16,8 @@ class TenantDomain extends Model
         'is_verified' => 'boolean',
     ];
 
-    public function tenant() { return $this->belongsTo(Tenant::class); }
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class);
+    }
 }

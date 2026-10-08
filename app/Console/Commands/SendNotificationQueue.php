@@ -9,6 +9,7 @@ use Illuminate\Console\Command;
 class SendNotificationQueue extends Command
 {
     protected $signature = 'hotel:send-notifications';
+
     protected $description = 'Send pending notifications from queue';
 
     public function handle(NotificationDispatcher $dispatcher)
@@ -25,7 +26,7 @@ class SendNotificationQueue extends Command
             } catch (\Throwable $e) {
                 $notification->update([
                     'status' => 'failed',
-                    'error'  => $e->getMessage(),
+                    'error' => $e->getMessage(),
                 ]);
             }
         }

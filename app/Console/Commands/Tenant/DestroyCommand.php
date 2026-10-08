@@ -11,6 +11,7 @@ use Illuminate\Console\Command;
 class DestroyCommand extends Command
 {
     protected $signature = 'tenant:destroy {tenant_id : Tenant UUID or slug} {--force : Skip confirmation}';
+
     protected $description = 'Destroy a tenant database with confirmation';
 
     public function handle(TenantDatabaseManager $manager): int
@@ -23,25 +24,28 @@ class DestroyCommand extends Command
 
         if (! $tenant) {
             $this->error("Tenant not found: {$tenantId}");
+
             return self::FAILURE;
         }
 
         if (! $tenant->database_name) {
             $this->warn("Tenant {$tenant->slug} has no database provisioned.");
             $tenant->delete();
-            $this->info("Tenant record deleted.");
+            $this->info('Tenant record deleted.');
+
             return self::SUCCESS;
         }
 
         if (! $this->option('force')) {
-            $this->warn("╔════════════════════════════════════════════════════╗");
-            $this->warn("║  WARNING: This will DROP the tenant database!      ║");
+            $this->warn('╔════════════════════════════════════════════════════╗');
+            $this->warn('║  WARNING: This will DROP the tenant database!      ║');
             $this->warn("║  Database: {$tenant->database_name}");
             $this->warn("║  Tenant:   {$tenant->slug}");
-            $this->warn("╚════════════════════════════════════════════════════╝");
+            $this->warn('╚════════════════════════════════════════════════════╝');
 
             if (! $this->confirm("Type 'yes' to confirm permanent destruction of tenant '{$tenant->slug}'")) {
                 $this->info('Cancelled.');
+
                 return self::SUCCESS;
             }
         }
@@ -51,9 +55,10 @@ class DestroyCommand extends Command
         try {
             $manager->destroy($tenant);
             $tenant->delete();
-            $this->info("  OK — tenant and database destroyed.");
+            $this->info('  OK — tenant and database destroyed.');
         } catch (\Throwable $e) {
             $this->error("  FAILED: {$e->getMessage()}");
+
             return self::FAILURE;
         }
 

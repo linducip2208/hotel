@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 class RunUpsellCampaigns extends Command
 {
     protected $signature = 'hotel:upsell-campaigns {--campaign=}';
+
     protected $description = 'Run active upsell pre-arrival campaigns';
 
     public function handle(UpsellPreArrivalService $service): int

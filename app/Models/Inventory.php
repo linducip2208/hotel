@@ -10,14 +10,22 @@ class Inventory extends Model
     use HasFactory;
 
     protected $table = 'inventory';
+
     protected $guarded = ['id'];
 
     protected $casts = [
         'date' => 'date:Y-m-d',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function roomType() { return $this->belongsTo(RoomType::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function roomType()
+    {
+        return $this->belongsTo(RoomType::class);
+    }
 
     public function getAvailableAttribute(): int
     {

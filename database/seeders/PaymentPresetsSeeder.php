@@ -16,14 +16,19 @@ class PaymentPresetsSeeder extends Seeder
         $path = storage_path('app/payment-presets/payment-presets.json');
         if (! File::exists($path)) {
             $this->command?->warn('File payment-presets.json tidak ditemukan.');
+
             return;
         }
 
         $presets = json_decode(File::get($path), true);
-        if (! is_array($presets)) return;
+        if (! is_array($presets)) {
+            return;
+        }
 
         $property = Property::first();
-        if (! $property) return;
+        if (! $property) {
+            return;
+        }
 
         foreach ($presets as $preset) {
             $slug = Str::slug($preset['name']);
@@ -33,7 +38,9 @@ class PaymentPresetsSeeder extends Seeder
                 ->where('integration_type', 'payment')
                 ->exists();
 
-            if ($exists) continue;
+            if ($exists) {
+                continue;
+            }
 
             $provider = Provider::create([
                 'property_id' => $property->id,

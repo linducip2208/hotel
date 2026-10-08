@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Models\DailyFlashReport;
 use App\Models\Reservation;
-use App\Models\FolioCharge;
 use App\Services\Reports\DailyFlashService;
 use Illuminate\Http\Request;
 
@@ -33,7 +32,7 @@ class ReportController extends Controller
     {
         $request->validate([
             'from' => 'required|date_format:Y-m-d',
-            'to'   => 'required|date_format:Y-m-d|after_or_equal:from',
+            'to' => 'required|date_format:Y-m-d|after_or_equal:from',
         ]);
 
         $property = $request->user()->property;
@@ -50,7 +49,7 @@ class ReportController extends Controller
     {
         $request->validate([
             'from' => 'required|date_format:Y-m-d',
-            'to'   => 'required|date_format:Y-m-d|after_or_equal:from',
+            'to' => 'required|date_format:Y-m-d|after_or_equal:from',
         ]);
 
         $property = $request->user()->property;

@@ -8,7 +8,8 @@ use Illuminate\Console\Command;
 
 class ParityCheckCommand extends Command
 {
-    protected $signature   = 'parity:check {--property= : Specific property ID}';
+    protected $signature = 'parity:check {--property= : Specific property ID}';
+
     protected $description = 'Compare live OTA rates against direct rates and create parity alerts';
 
     public function handle(ParityMonitorService $monitor): int
@@ -32,6 +33,7 @@ class ParityCheckCommand extends Command
         }
 
         $this->info("Parity check complete — {$totalAlerts} alert(s) created.");
+
         return self::SUCCESS;
     }
 }

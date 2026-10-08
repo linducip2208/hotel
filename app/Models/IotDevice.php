@@ -17,8 +17,23 @@ class IotDevice extends Model
         'last_heartbeat_at' => 'datetime',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function room() { return $this->belongsTo(Room::class); }
-    public function commands() { return $this->hasMany(IotCommand::class); }
-    public function energyLogs() { return $this->hasMany(IotEnergyLog::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
+
+    public function commands()
+    {
+        return $this->hasMany(IotCommand::class);
+    }
+
+    public function energyLogs()
+    {
+        return $this->hasMany(IotEnergyLog::class);
+    }
 }

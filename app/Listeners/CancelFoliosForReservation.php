@@ -23,7 +23,7 @@ final class CancelFoliosForReservation implements ShouldQueue
 
         foreach ($folios as $folio) {
             $folio->update([
-                'status'    => 'voided',
+                'status' => 'voided',
                 'closed_at' => now(),
             ]);
 

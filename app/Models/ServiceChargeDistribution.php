@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class ServiceChargeDistribution extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
+
     protected $casts = [
         'distributed_at' => 'datetime',
         'total_collected' => 'decimal:2',
@@ -16,5 +18,8 @@ class ServiceChargeDistribution extends Model
         'staff_share_amount' => 'decimal:2',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
 }

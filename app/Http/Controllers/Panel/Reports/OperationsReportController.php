@@ -20,7 +20,7 @@ class OperationsReportController extends Controller
         $property = app('current_property');
 
         $from = Carbon::parse($request->query('from', now()->startOfMonth()->toDateString()));
-        $to   = Carbon::parse($request->query('to',   now()->toDateString()));
+        $to = Carbon::parse($request->query('to', now()->toDateString()));
 
         if ($to->diffInDays($from) > 365) {
             $from = $to->copy()->subDays(364);
@@ -41,14 +41,15 @@ class OperationsReportController extends Controller
             ->get()
             ->map(function ($r) {
                 $kpi = $r->rooms_kpi ?? [];
+
                 return [
-                    'date'        => $r->report_date,
-                    'sold'        => $kpi['sold']          ?? 0,
-                    'available'   => $kpi['available']     ?? 0,
-                    'occ_pct'     => $kpi['occupancy_pct'] ?? 0,
-                    'adr'         => $kpi['adr']           ?? 0,
-                    'revpar'      => $kpi['revpar']         ?? 0,
-                    'total_rev'   => $r->total_revenue     ?? 0,
+                    'date' => $r->report_date,
+                    'sold' => $kpi['sold'] ?? 0,
+                    'available' => $kpi['available'] ?? 0,
+                    'occ_pct' => $kpi['occupancy_pct'] ?? 0,
+                    'adr' => $kpi['adr'] ?? 0,
+                    'revpar' => $kpi['revpar'] ?? 0,
+                    'total_rev' => $r->total_revenue ?? 0,
                 ];
             });
 
@@ -64,7 +65,7 @@ class OperationsReportController extends Controller
         $property = app('current_property');
 
         $from = $request->query('from', now()->startOfMonth()->toDateString());
-        $to   = $request->query('to',   now()->toDateString());
+        $to = $request->query('to', now()->toDateString());
 
         $rows = Reservation::where('property_id', $property->id)
             ->whereIn('status', ['confirmed', 'checked_in', 'checked_out'])
@@ -91,12 +92,12 @@ class OperationsReportController extends Controller
         $property = app('current_property');
 
         $from = $request->query('from', now()->toDateString());
-        $to   = $request->query('to',   now()->toDateString());
+        $to = $request->query('to', now()->toDateString());
 
         // Fallback for old single-date parameter
-        if ($request->has('date') && !$request->has('from')) {
+        if ($request->has('date') && ! $request->has('from')) {
             $from = $request->query('date', now()->toDateString());
-            $to   = $from;
+            $to = $from;
         }
 
         $shifts = CashierShift::where('property_id', $property->id)
@@ -113,21 +114,22 @@ class OperationsReportController extends Controller
                     ->toArray();
 
                 return [
-                    'id'            => $shift->id,
-                    'cashier'       => $shift->cashier?->name ?? '—',
-                    'opened_at'     => $shift->opened_at,
-                    'closed_at'     => $shift->closed_at,
+                    'id' => $shift->id,
+                    'cashier' => $shift->cashier?->name ?? '—',
+                    'opened_at' => $shift->opened_at,
+                    'closed_at' => $shift->closed_at,
                     'opening_float' => (float) $shift->opening_float,
                     'expected_cash' => (float) $shift->expected_cash,
-                    'actual_cash'   => (float) $shift->actual_cash,
-                    'variance'      => (float) $shift->cash_variance,
-                    'breakdown'     => $pmtBreakdown,
-                    'is_open'       => is_null($shift->closed_at),
+                    'actual_cash' => (float) $shift->actual_cash,
+                    'variance' => (float) $shift->cash_variance,
+                    'breakdown' => $pmtBreakdown,
+                    'is_open' => is_null($shift->closed_at),
                 ];
             });
 
         if ($request->query('export') === 'csv') {
             $filename = "cashier_shift_{$from}_{$to}.csv";
+
             return $this->exportCsv($shifts, $filename);
         }
 
@@ -139,7 +141,7 @@ class OperationsReportController extends Controller
         $property = app('current_property');
 
         $from = $request->query('from', now()->subMonths(12)->toDateString());
-        $to   = $request->query('to', now()->toDateString());
+        $to = $request->query('to', now()->toDateString());
 
         $reservations = Reservation::where('property_id', $property->id)
             ->whereIn('status', ['confirmed', 'checked_in', 'checked_out'])
@@ -163,17 +165,28 @@ class OperationsReportController extends Controller
 
         foreach ($reservations->unique('primary_guest_id') as $r) {
             $guest = $r->primaryGuest;
-            if (!$guest) continue;
+            if (! $guest) {
+                continue;
+            }
 
             if ($guest->date_of_birth) {
                 $age = $guest->date_of_birth->age;
-                if ($age < 18) continue;
-                if ($age <= 25) $ageGroups['18-25']++;
-                elseif ($age <= 35) $ageGroups['26-35']++;
-                elseif ($age <= 45) $ageGroups['36-45']++;
-                elseif ($age <= 55) $ageGroups['46-55']++;
-                elseif ($age <= 65) $ageGroups['56-65']++;
-                else $ageGroups['65+']++;
+                if ($age < 18) {
+                    continue;
+                }
+                if ($age <= 25) {
+                    $ageGroups['18-25']++;
+                } elseif ($age <= 35) {
+                    $ageGroups['26-35']++;
+                } elseif ($age <= 45) {
+                    $ageGroups['36-45']++;
+                } elseif ($age <= 55) {
+                    $ageGroups['46-55']++;
+                } elseif ($age <= 65) {
+                    $ageGroups['56-65']++;
+                } else {
+                    $ageGroups['65+']++;
+                }
             } else {
                 $ageGroups['Tidak Diketahui']++;
             }
@@ -218,10 +231,10 @@ class OperationsReportController extends Controller
             default => abort(404),
         };
 
-        $pdf = Pdf::loadView('panel.reports.pdf.' . $type, $data);
+        $pdf = Pdf::loadView('panel.reports.pdf.'.$type, $data);
         $pdf->setPaper('a4', 'landscape');
 
-        return $pdf->download($type . '-' . now()->format('Ymd') . '.pdf');
+        return $pdf->download($type.'-'.now()->format('Ymd').'.pdf');
     }
 
     private function occupancyPdfData(Request $request): array
@@ -230,7 +243,7 @@ class OperationsReportController extends Controller
         $property = app('current_property');
 
         $from = Carbon::parse($request->query('from', now()->startOfMonth()->toDateString()));
-        $to   = Carbon::parse($request->query('to',   now()->toDateString()));
+        $to = Carbon::parse($request->query('to', now()->toDateString()));
 
         if ($to->diffInDays($from) > 365) {
             $from = $to->copy()->subDays(364);
@@ -250,23 +263,24 @@ class OperationsReportController extends Controller
             ->get()
             ->map(function ($r) {
                 $kpi = $r->rooms_kpi ?? [];
+
                 return [
-                    'date'        => $r->report_date,
-                    'sold'        => $kpi['sold']          ?? 0,
-                    'available'   => $kpi['available']     ?? 0,
-                    'occ_pct'     => $kpi['occupancy_pct'] ?? 0,
-                    'adr'         => $kpi['adr']           ?? 0,
-                    'revpar'      => $kpi['revpar']         ?? 0,
-                    'total_rev'   => $r->total_revenue     ?? 0,
+                    'date' => $r->report_date,
+                    'sold' => $kpi['sold'] ?? 0,
+                    'available' => $kpi['available'] ?? 0,
+                    'occ_pct' => $kpi['occupancy_pct'] ?? 0,
+                    'adr' => $kpi['adr'] ?? 0,
+                    'revpar' => $kpi['revpar'] ?? 0,
+                    'total_rev' => $r->total_revenue ?? 0,
                 ];
             });
 
-        $totalSold  = $rows->sum('sold');
+        $totalSold = $rows->sum('sold');
         $totalAvail = $rows->sum('available');
-        $totalRev   = $rows->sum('total_rev');
-        $avgOcc     = $rows->count() ? round($rows->avg('occ_pct'), 1) : 0;
-        $avgAdr     = $totalSold > 0 ? round($rows->sum(fn($r) => $r['adr'] * $r['sold']) / $totalSold, 0) : 0;
-        $avgRevpar  = $rows->count() ? round($rows->avg('revpar'), 0) : 0;
+        $totalRev = $rows->sum('total_rev');
+        $avgOcc = $rows->count() ? round($rows->avg('occ_pct'), 1) : 0;
+        $avgAdr = $totalSold > 0 ? round($rows->sum(fn ($r) => $r['adr'] * $r['sold']) / $totalSold, 0) : 0;
+        $avgRevpar = $rows->count() ? round($rows->avg('revpar'), 0) : 0;
 
         return compact('rows', 'from', 'to', 'totalSold', 'totalAvail', 'totalRev', 'avgOcc', 'avgAdr', 'avgRevpar');
     }
@@ -276,7 +290,7 @@ class OperationsReportController extends Controller
         $property = app('current_property');
 
         $from = $request->query('from', now()->toDateString());
-        $to   = $request->query('to',   now()->toDateString());
+        $to = $request->query('to', now()->toDateString());
 
         $shifts = CashierShift::where('property_id', $property->id)
             ->whereBetween(DB::raw('DATE(opened_at)'), [$from, $to])
@@ -292,16 +306,16 @@ class OperationsReportController extends Controller
                     ->toArray();
 
                 return [
-                    'id'            => $shift->id,
-                    'cashier'       => $shift->cashier?->name ?? '—',
-                    'opened_at'     => $shift->opened_at,
-                    'closed_at'     => $shift->closed_at,
+                    'id' => $shift->id,
+                    'cashier' => $shift->cashier?->name ?? '—',
+                    'opened_at' => $shift->opened_at,
+                    'closed_at' => $shift->closed_at,
                     'opening_float' => (float) $shift->opening_float,
                     'expected_cash' => (float) $shift->expected_cash,
-                    'actual_cash'   => (float) $shift->actual_cash,
-                    'variance'      => (float) $shift->cash_variance,
-                    'breakdown'     => $pmtBreakdown,
-                    'is_open'       => is_null($shift->closed_at),
+                    'actual_cash' => (float) $shift->actual_cash,
+                    'variance' => (float) $shift->cash_variance,
+                    'breakdown' => $pmtBreakdown,
+                    'is_open' => is_null($shift->closed_at),
                 ];
             });
 
@@ -314,7 +328,7 @@ class OperationsReportController extends Controller
         $property = app('current_property');
 
         $from = $request->query('from', now()->toDateString());
-        $to   = $request->query('to',   now()->toDateString());
+        $to = $request->query('to', now()->toDateString());
 
         // Build the latest report for display
         $report = $svc->build($property, Carbon::parse($to));
@@ -346,7 +360,7 @@ class OperationsReportController extends Controller
         fclose($handle);
 
         return response($csv, 200, [
-            'Content-Type'        => 'text/csv',
+            'Content-Type' => 'text/csv',
             'Content-Disposition' => "attachment; filename=\"{$filename}\"",
         ]);
     }

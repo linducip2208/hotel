@@ -12,6 +12,7 @@ class KbController extends Controller
     public function index()
     {
         $articles = KbArticle::where('property_id', app('current_property')->id)->orWhereNull('property_id')->paginate(50);
+
         return view('panel.kb.index', compact('articles'));
     }
 
@@ -30,6 +31,7 @@ class KbController extends Controller
             'slug' => Str::slug($data['title']).'-'.Str::random(4),
             'author_user_id' => $request->user()?->id,
         ]);
+
         return back();
     }
 }

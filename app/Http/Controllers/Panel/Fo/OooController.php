@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel\Fo;
 use App\Http\Controllers\Controller;
 use App\Models\Inventory;
 use App\Models\OutOfOrderPeriod;
+use App\Models\Room;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +16,7 @@ class OooController extends Controller
     {
         $periods = OutOfOrderPeriod::where('property_id', app('current_property')->id)
             ->with('room')->latest('from_date')->paginate(50);
+
         return view('panel.fo.ooo', compact('periods'));
     }
 
@@ -29,7 +31,7 @@ class OooController extends Controller
         ]);
 
         DB::transaction(function () use ($data, $request) {
-            $room = \App\Models\Room::where('property_id', app('current_property')->id)->findOrFail($data['room_id']);
+            $room = Room::where('property_id', app('current_property')->id)->findOrFail($data['room_id']);
             $period = OutOfOrderPeriod::create($data + [
                 'property_id' => app('current_property')->id,
                 'created_by_user_id' => $request->user()?->id,
@@ -48,6 +50,7 @@ class OooController extends Controller
                 $cursor->addDay();
             }
         });
+
         return back();
     }
 
@@ -68,6 +71,7 @@ class OooController extends Controller
                 $cursor->addDay();
             }
         });
+
         return back();
     }
 }

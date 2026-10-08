@@ -14,14 +14,14 @@ beforeEach(function () {
 
 it('enrolls guest as member', function () {
     $g = Guest::create(['property_id' => $this->property->id, 'first_name' => 'A', 'email' => 'a@x.com']);
-    $member = (new LoyaltyService())->enroll($g);
+    $member = (new LoyaltyService)->enroll($g);
     expect($member->guest_id)->toBe($g->id);
     expect($member->membership_no)->toStartWith('LM-');
 });
 
 it('awards points and upgrades tier', function () {
     $g = Guest::create(['property_id' => $this->property->id, 'first_name' => 'B', 'email' => 'b@x.com']);
-    $svc = new LoyaltyService();
+    $svc = new LoyaltyService;
     $svc->enroll($g);
     $r = Reservation::create([
         'property_id' => $this->property->id, 'ref' => 'L-001', 'primary_guest_id' => $g->id,

@@ -132,7 +132,7 @@ class LinenController extends Controller
                         'linen_item_id' => $item->id,
                         'type' => $diff > 0 ? 'in' : 'out',
                         'quantity' => abs($diff),
-                        'reference' => 'Physical audit ' . now()->toDateString(),
+                        'reference' => 'Physical audit '.now()->toDateString(),
                         'staff_id' => auth()->id(),
                         'notes' => "Audit adjustment: system={$item->getOriginal('current_stock')}, actual={$actualCount}, diff={$diff}",
                     ]);

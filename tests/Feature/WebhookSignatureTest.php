@@ -3,6 +3,7 @@
 use App\Models\Property;
 use App\Models\Webhook;
 use App\Models\WebhookDelivery;
+use App\Services\Webhooks\WebhookDispatcher;
 
 beforeEach(function () {
     $this->property = Property::create([
@@ -40,8 +41,8 @@ it('creates webhook delivery record when dispatching', function () {
         'is_active' => true,
     ]);
 
-    /** @var \App\Services\Webhooks\WebhookDispatcher $dispatcher */
-    $dispatcher = app(\App\Services\Webhooks\WebhookDispatcher::class);
+    /** @var WebhookDispatcher $dispatcher */
+    $dispatcher = app(WebhookDispatcher::class);
     $dispatcher->dispatch($this->property->id, 'reservation.created', ['id' => 1]);
 
     expect(WebhookDelivery::where('webhook_id', $webhook->id)->count())->toBe(1);
@@ -56,7 +57,7 @@ it('does not create delivery when no webhooks match event', function () {
         'is_active' => true,
     ]);
 
-    $dispatcher = app(\App\Services\Webhooks\WebhookDispatcher::class);
+    $dispatcher = app(WebhookDispatcher::class);
     $dispatcher->dispatch($this->property->id, 'reservation.cancelled', ['id' => 5]);
 
     expect(WebhookDelivery::count())->toBe(0);

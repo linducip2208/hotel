@@ -16,7 +16,18 @@ class InspectionChecklist extends Model
         'items' => 'array',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function room() { return $this->belongsTo(Room::class); }
-    public function inspector() { return $this->belongsTo(User::class, 'inspector_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
+
+    public function inspector()
+    {
+        return $this->belongsTo(User::class, 'inspector_id');
+    }
 }

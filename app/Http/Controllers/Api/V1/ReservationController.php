@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Models\Property;
 use App\Models\Reservation;
+use App\Services\Audit\AuditLogger;
+use App\Services\Fo\OutstandingBalanceException;
 use App\Services\Fo\ReservationService;
+use App\Services\Fo\ReservationValidationException;
 use Illuminate\Http\Request;
 
 class ReservationController extends Controller
@@ -40,19 +43,19 @@ class ReservationController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'guest_id'       => 'nullable|integer|exists:guests,id',
-            'room_type_id'   => 'required|integer|exists:room_types,id',
-            'check_in'       => 'required|date',
-            'check_out'      => 'required|date|after:check_in',
-            'adults'         => 'required|integer|min:1',
-            'children'       => 'nullable|integer|min:0',
-            'rate_plan_id'   => 'nullable|integer|exists:rate_plans,id',
-            'source'         => 'nullable|string|max:50',
-            'notes'          => 'nullable|string|max:1000',
+            'guest_id' => 'nullable|integer|exists:guests,id',
+            'room_type_id' => 'required|integer|exists:room_types,id',
+            'check_in' => 'required|date',
+            'check_out' => 'required|date|after:check_in',
+            'adults' => 'required|integer|min:1',
+            'children' => 'nullable|integer|min:0',
+            'rate_plan_id' => 'nullable|integer|exists:rate_plans,id',
+            'source' => 'nullable|string|max:50',
+            'notes' => 'nullable|string|max:1000',
             'guest_first_name' => 'nullable|string|max:100',
-            'guest_last_name'  => 'nullable|string|max:100',
-            'guest_email'      => 'nullable|email|max:191',
-            'guest_phone'      => 'nullable|string|max:30',
+            'guest_last_name' => 'nullable|string|max:100',
+            'guest_email' => 'nullable|email|max:191',
+            'guest_phone' => 'nullable|string|max:30',
         ]);
 
         $validated['property_id'] = $this->property()->id;
@@ -65,13 +68,13 @@ class ReservationController extends Controller
         $reservation = Reservation::where('property_id', $this->property()->id)->findOrFail($id);
 
         $validated = $request->validate([
-            'adults'       => 'sometimes|integer|min:1',
-            'children'     => 'nullable|integer|min:0',
-            'check_in'     => 'sometimes|date',
-            'check_out'    => 'sometimes|date|after:check_in',
+            'adults' => 'sometimes|integer|min:1',
+            'children' => 'nullable|integer|min:0',
+            'check_in' => 'sometimes|date',
+            'check_out' => 'sometimes|date|after:check_in',
             'rate_plan_id' => 'nullable|integer|exists:rate_plans,id',
-            'notes'        => 'nullable|string|max:1000',
-            'source'       => 'nullable|string|max:50',
+            'notes' => 'nullable|string|max:1000',
+            'source' => 'nullable|string|max:50',
         ]);
 
         $reservation->update($validated);
@@ -79,41 +82,62 @@ class ReservationController extends Controller
         return response()->json($reservation->fresh());
     }
 
-    public function destroy(int $id)
+    public function destroy(Request $request, int $id)
     {
-        return response()->json(
-            Reservation::where('property_id', $this->property()->id)->findOrFail($id)->delete()
-        );
+        $reservation = Reservation::where('property_id', $this->property()->id)->findOrFail($id);
+
+        // Soft-delete with audit trail — financial history is never hard-deleted.
+        app(AuditLogger::class)->record('reservation.deleted', $reservation, [
+            'ref' => $reservation->ref,
+            'status' => $reservation->status,
+        ]);
+        $reservation->delete();
+
+        return response()->json(['deleted' => true]);
     }
 
     public function cancel(Request $request, int $id)
     {
         $validated = $request->validate([
-            'reason'  => 'nullable|string|max:500',
+            'reason' => 'nullable|string|max:500',
             'penalty' => 'nullable|numeric|min:0',
         ]);
 
         $reservation = Reservation::where('property_id', $this->property()->id)->findOrFail($id);
 
-        return response()->json($this->svc->cancel(
-            $reservation,
-            $validated['reason'] ?? '-',
-            (float) ($validated['penalty'] ?? 0)
-        ));
+        try {
+            return response()->json($this->svc->cancel(
+                $reservation,
+                $validated['reason'] ?? '-',
+                (float) ($validated['penalty'] ?? 0)
+            ));
+        } catch (ReservationValidationException $e) {
+            return response()->json(['message' => $e->getMessage()], 422);
+        }
     }
 
     public function checkIn(int $id)
     {
         $reservation = Reservation::where('property_id', $this->property()->id)->findOrFail($id);
 
-        return response()->json($this->svc->checkIn($reservation));
+        try {
+            return response()->json($this->svc->checkIn($reservation));
+        } catch (ReservationValidationException $e) {
+            return response()->json(['message' => $e->getMessage()], 422);
+        }
     }
 
     public function checkOut(int $id)
     {
         $reservation = Reservation::where('property_id', $this->property()->id)->findOrFail($id);
 
-        return response()->json($this->svc->checkOut($reservation));
+        try {
+            return response()->json($this->svc->checkOut($reservation));
+        } catch (OutstandingBalanceException $e) {
+            return response()->json(['message' => $e->getMessage(), 'outstanding' => $e->outstanding], 422);
+        } catch (ReservationValidationException $e) {
+            return response()->json(['message' => $e->getMessage()], 422);
+        }
     }
 
     public function noShow(int $id)
@@ -121,8 +145,8 @@ class ReservationController extends Controller
         $reservation = Reservation::where('property_id', $this->property()->id)->findOrFail($id);
 
         $reservation->update([
-            'status'              => 'no_show',
-            'cancelled_at'        => now(),
+            'status' => 'no_show',
+            'cancelled_at' => now(),
             'cancellation_reason' => 'no_show',
         ]);
 
@@ -133,7 +157,7 @@ class ReservationController extends Controller
     {
         $validated = $request->validate([
             'reservation_room_id' => 'required|integer',
-            'to_room_id'          => 'required|integer|exists:rooms,id',
+            'to_room_id' => 'required|integer|exists:rooms,id',
         ]);
 
         $reservation = Reservation::where('property_id', $this->property()->id)->findOrFail($id);

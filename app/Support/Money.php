@@ -11,8 +11,7 @@ final readonly class Money
     public function __construct(
         public int $amount,
         public string $currency = 'IDR',
-    ) {
-    }
+    ) {}
 
     public static function fromFloat(float $amount, string $currency = 'IDR'): self
     {

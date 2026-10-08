@@ -19,12 +19,13 @@ class InjectLicenseStatus
         $paired = $this->isPaired($request, $local);
 
         View::share('licenseStatus', [
-            'paired'      => $paired,
-            'mode'        => $request->attributes->get('license.grace') ? 'grace' : 'normal',
+            'paired' => $paired,
+            'mode' => $request->attributes->get('license.grace') ? 'grace' : 'normal',
             'grace_until' => $request->attributes->get('license.grace_until'),
-            'features'    => $request->attributes->get('license.features', []),
-            'plan'        => $request->attributes->get('license.plan'),
+            'features' => $request->attributes->get('license.features', []),
+            'plan' => $request->attributes->get('license.plan'),
         ]);
+
         return $next($request);
     }
 

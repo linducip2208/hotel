@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace App\Services\Rms;
 
 use App\Models\Property;
-use App\Models\RateShopperSnapshot;
+use App\Models\Provider;
 use App\Models\Rate;
-use App\Models\RatePlan;
-use App\Models\RoomType;
+use App\Models\RateShopperSnapshot;
 use Carbon\Carbon;
-use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Log;
 
 final class RateShopperService
 {
@@ -34,7 +31,7 @@ final class RateShopperService
         }
 
         // Get configured AI provider for web scraping
-        $provider = \App\Models\Provider::where('property_id', $propertyId)
+        $provider = Provider::where('property_id', $propertyId)
             ->where('api_format', 'openai_compatible')
             ->where('is_active', true)
             ->first();
@@ -89,7 +86,7 @@ final class RateShopperService
             ->latest()
             ->first();
 
-        if (!$snapshots) {
+        if (! $snapshots) {
             return ['error' => 'No snapshot data for this date.'];
         }
 

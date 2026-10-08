@@ -16,7 +16,18 @@ class ChannelConflict extends Model
         'resolved_at' => 'datetime',
     ];
 
-    public function property()        { return $this->belongsTo(Property::class); }
-    public function channel()         { return $this->belongsTo(Channel::class); }
-    public function resolvedByUser()  { return $this->belongsTo(User::class, 'resolved_by_user_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function channel()
+    {
+        return $this->belongsTo(Channel::class);
+    }
+
+    public function resolvedByUser()
+    {
+        return $this->belongsTo(User::class, 'resolved_by_user_id');
+    }
 }

@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Event;
-use App\Models\EventMenuItem;
 use App\Models\FunctionRoom;
 use App\Models\Property;
 use App\Services\Banquet\EventService;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ProvisionTenantJob;
 use App\Models\Plan;
 use App\Models\Tenant;
 use App\Models\TenantDomain;
@@ -21,12 +22,15 @@ class TenantSignupController extends Controller
             return view('saas.signup-disabled');
         }
         $plans = Plan::where('is_active', true)->orderBy('display_order')->get();
+
         return view('saas.signup', compact('plans'));
     }
 
     public function store(Request $request)
     {
-        if (config('app.mode') !== 'saas') abort(404);
+        if (config('app.mode') !== 'saas') {
+            abort(404);
+        }
 
         $data = $request->validate([
             'company_name' => 'required|string|max:255',
@@ -58,7 +62,7 @@ class TenantSignupController extends Controller
             'ssl_status' => 'active',
         ]);
 
-        \App\Jobs\ProvisionTenantJob::dispatch($tenant->id);
+        ProvisionTenantJob::dispatch($tenant->id);
 
         return view('saas.signup-success', compact('tenant'));
     }

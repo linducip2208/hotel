@@ -9,9 +9,10 @@ use App\Models\GoodsReceipt;
 use App\Models\GoodsReceiptLine;
 use App\Models\PurchaseOrder;
 use App\Models\StockItem;
+use App\Models\StockMovement;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 final class GrController extends Controller
 {
@@ -20,6 +21,7 @@ final class GrController extends Controller
         $grs = GoodsReceipt::where('property_id', app('current_property')->id)
             ->with('purchaseOrder.vendor', 'receiver')
             ->orderByDesc('id')->paginate(50);
+
         return view('panel.inventory.gr.index', compact('grs'));
     }
 
@@ -27,6 +29,7 @@ final class GrController extends Controller
     {
         $poId = $request->query('po_id');
         $po = $poId ? PurchaseOrder::where('property_id', app('current_property')->id)->with('lines.stockItem')->find($poId) : null;
+
         return view('panel.inventory.gr.create', compact('po'));
     }
 
@@ -68,6 +71,7 @@ final class GrController extends Controller
     {
         $gr = GoodsReceipt::where('property_id', app('current_property')->id)
             ->with('lines.stockItem', 'purchaseOrder.vendor', 'receiver')->findOrFail($id);
+
         return view('panel.inventory.gr.show', compact('gr'));
     }
 
@@ -89,7 +93,7 @@ final class GrController extends Controller
                     StockItem::where('id', $line->stock_item_id)->increment('current_qty', $qty);
 
                     // Record movement
-                    \App\Models\StockMovement::create([
+                    StockMovement::create([
                         'stock_item_id' => $line->stock_item_id,
                         'movement_type' => 'in',
                         'qty' => $qty,

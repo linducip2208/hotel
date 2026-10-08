@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Panel\Settings;
 
 use App\Http\Controllers\Controller;
-use App\Models\Room;
+use App\Models\Guest;
+use App\Models\Provider;
 use App\Models\Reservation;
+use App\Models\Room;
 use App\Services\Lock\LockService;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 final class LockController extends Controller
 {
@@ -18,7 +20,7 @@ final class LockController extends Controller
     public function index()
     {
         $propertyId = app('current_property')->id;
-        $providers = \App\Models\Provider::where('property_id', $propertyId)
+        $providers = Provider::where('property_id', $propertyId)
             ->where('api_format', 'door_lock')->get();
         $rooms = Room::where('property_id', $propertyId)->where('is_active', true)->with('roomType')->paginate(25);
 
@@ -38,7 +40,7 @@ final class LockController extends Controller
             'hotel_id' => 'nullable|string',
         ]);
 
-        \App\Models\Provider::updateOrCreate(
+        Provider::updateOrCreate(
             [
                 'property_id' => app('current_property')->id,
                 'api_format' => 'door_lock',
@@ -84,7 +86,7 @@ final class LockController extends Controller
         ]);
 
         $room = Room::where('property_id', app('current_property')->id)->findOrFail($roomId);
-        $guest = \App\Models\Guest::findOrFail($request->input('guest_id'));
+        $guest = Guest::findOrFail($request->input('guest_id'));
         $reservation = Reservation::findOrFail($request->input('reservation_id'));
 
         try {
@@ -106,6 +108,7 @@ final class LockController extends Controller
 
         try {
             $result = $this->svc->revokeKey($room, $request->input('key_id'));
+
             return response()->json(['ok' => true, 'revoked' => $result]);
         } catch (\Throwable $e) {
             return response()->json(['ok' => false, 'error' => $e->getMessage()], 500);

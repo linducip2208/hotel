@@ -134,10 +134,15 @@ class WorkloadForecastService
     protected function determineTypes(int $roomId, Collection $checkoutRoomIds, Collection $stayoverRoomIds, Collection $vacantDirtyRoomIds): array
     {
         $types = [];
-        if ($checkoutRoomIds->contains($roomId)) $types[] = 'checkout';
-        elseif ($stayoverRoomIds->contains($roomId)) $types[] = 'stayover';
-        elseif ($vacantDirtyRoomIds->contains($roomId)) $types[] = 'vacant_dirty';
-        else $types[] = 'stayover'; // fallback
+        if ($checkoutRoomIds->contains($roomId)) {
+            $types[] = 'checkout';
+        } elseif ($stayoverRoomIds->contains($roomId)) {
+            $types[] = 'stayover';
+        } elseif ($vacantDirtyRoomIds->contains($roomId)) {
+            $types[] = 'vacant_dirty';
+        } else {
+            $types[] = 'stayover';
+        } // fallback
 
         return $types;
     }

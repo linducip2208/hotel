@@ -40,11 +40,11 @@ class SpaController extends Controller
     {
         $validated = $request->validate([
             'treatment_id' => 'required|integer|exists:spa_treatments,id',
-            'guest_id'     => 'nullable|integer|exists:guests,id',
+            'guest_id' => 'nullable|integer|exists:guests,id',
             'scheduled_at' => 'required|date',
             'therapist_id' => 'nullable|integer|exists:employees,id',
-            'cabin_id'     => 'nullable|integer',
-            'notes'        => 'nullable|string|max:500',
+            'cabin_id' => 'nullable|integer',
+            'notes' => 'nullable|string|max:500',
         ]);
 
         return response()->json($svc->book($validated), 201);

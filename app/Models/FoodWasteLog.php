@@ -17,7 +17,18 @@ class FoodWasteLog extends Model
         'estimated_cost' => 'decimal:2',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function outlet() { return $this->belongsTo(PosOutlet::class); }
-    public function loggedBy() { return $this->belongsTo(User::class, 'logged_by_user_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function outlet()
+    {
+        return $this->belongsTo(PosOutlet::class);
+    }
+
+    public function loggedBy()
+    {
+        return $this->belongsTo(User::class, 'logged_by_user_id');
+    }
 }

@@ -7,9 +7,7 @@ use App\Models\FleetTrip;
 use App\Models\FleetVehicle;
 use App\Models\Folio;
 use App\Models\FolioCharge;
-use App\Models\Guest;
 use App\Models\Property;
-use App\Models\Reservation;
 use Carbon\Carbon;
 
 class FleetService
@@ -25,7 +23,7 @@ class FleetService
             ->get();
 
         $vehicles = FleetVehicle::where('property_id', $property->id)
-            ->with(['trips' => fn($q) => $q->whereDate('scheduled_at', $today)])
+            ->with(['trips' => fn ($q) => $q->whereDate('scheduled_at', $today)])
             ->get();
 
         $activeVehicles = FleetVehicle::where('property_id', $property->id)
@@ -45,7 +43,8 @@ class FleetService
                 ->whereDate('scheduled_at', $today)
                 ->whereIn('status', ['scheduled', 'in_progress'])
                 ->exists();
-            return !$activeTrip;
+
+            return ! $activeTrip;
         });
 
         return [
@@ -92,6 +91,7 @@ class FleetService
             'status' => 'in_progress',
             'actual_departure' => now(),
         ]);
+
         return $trip;
     }
 
@@ -102,6 +102,7 @@ class FleetService
             'status' => 'completed',
             'actual_arrival' => now(),
         ]);
+
         return $trip;
     }
 
@@ -109,19 +110,22 @@ class FleetService
     {
         $trip = FleetTrip::findOrFail($tripId);
         $trip->update(['status' => 'cancelled']);
+
         return $trip;
     }
 
     public function chargeToFolio(FleetTrip $trip, int $folioId): void
     {
-        if ($trip->charge_amount <= 0) return;
+        if ($trip->charge_amount <= 0) {
+            return;
+        }
 
         $folio = Folio::where('property_id', $trip->property_id)->findOrFail($folioId);
 
         $charge = FolioCharge::create([
             'folio_id' => $folio->id,
             'property_id' => $trip->property_id,
-            'description' => 'Transport: ' . $trip->trip_type . ' - ' . ($trip->pickup_location ?? '') . ' ke ' . ($trip->dropoff_location ?? ''),
+            'description' => 'Transport: '.$trip->trip_type.' - '.($trip->pickup_location ?? '').' ke '.($trip->dropoff_location ?? ''),
             'amount' => $trip->charge_amount,
             'tax_amount' => 0,
             'is_void' => false,

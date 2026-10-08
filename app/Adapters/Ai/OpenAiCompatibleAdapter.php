@@ -18,6 +18,7 @@ class OpenAiCompatibleAdapter extends BaseAdapter implements AiAdapterInterface
         ]);
 
         $data = json_decode((string) $response->getBody(), true) ?? [];
+
         return [
             'ok' => $response->getStatusCode() === 200,
             'status' => $response->getStatusCode(),
@@ -33,12 +34,14 @@ class OpenAiCompatibleAdapter extends BaseAdapter implements AiAdapterInterface
             'headers' => ['Authorization' => 'Bearer '.$this->apiKey()],
         ]);
         $data = json_decode((string) $response->getBody(), true) ?? [];
+
         return $data['data'] ?? [];
     }
 
     public function test(): array
     {
         $r = $this->chat([['role' => 'user', 'content' => 'ping']], options: ['max_tokens' => 5]);
+
         return ['ok' => $r['ok'] ?? false, 'message' => $r['ok'] ? 'OK' : ('HTTP '.$r['status'])];
     }
 }

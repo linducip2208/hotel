@@ -15,7 +15,7 @@ class DeploymentHeartbeat extends Model
 
     protected $casts = [
         'uptime_pct_24h' => 'decimal:2',
-        'received_at'    => 'datetime',
-        'created_at'     => 'datetime',
+        'received_at' => 'datetime',
+        'created_at' => 'datetime',
     ];
 }

@@ -2,11 +2,11 @@
 
 namespace App\Services\Hk;
 
-use App\Models\HkTask;
-use App\Models\Room;
 use App\Models\Employee;
+use App\Models\HkTask;
 use App\Models\Property;
-use Carbon\Carbon;
+use App\Models\Reservation;
+use App\Models\Room;
 
 class TaskAutoAssignmentService
 {
@@ -24,7 +24,9 @@ class TaskAutoAssignmentService
                 ->whereDate('scheduled_date', now()->toDateString())
                 ->whereIn('status', ['pending', 'in_progress'])
                 ->exists();
-            if ($exists) continue;
+            if ($exists) {
+                continue;
+            }
 
             HkTask::create([
                 'property_id' => $property->id,
@@ -46,13 +48,17 @@ class TaskAutoAssignmentService
 
     protected function determinePriority(Room $room): string
     {
-        if ($room->is_vip ?? false) return 'high';
+        if ($room->is_vip ?? false) {
+            return 'high';
+        }
 
-        $tomorrowArrival = \App\Models\Reservation::whereHas('rooms', function ($q) use ($room) {
+        $tomorrowArrival = Reservation::whereHas('rooms', function ($q) use ($room) {
             $q->where('room_id', $room->id);
         })->whereDate('check_in', now()->addDay()->toDateString())->exists();
 
-        if ($tomorrowArrival) return 'high';
+        if ($tomorrowArrival) {
+            return 'high';
+        }
 
         return 'medium';
     }
@@ -72,7 +78,9 @@ class TaskAutoAssignmentService
             ->where('is_active', true)
             ->get();
 
-        if ($tasks->isEmpty() || $attendants->isEmpty()) return ['assigned' => 0, 'total' => $tasks->count()];
+        if ($tasks->isEmpty() || $attendants->isEmpty()) {
+            return ['assigned' => 0, 'total' => $tasks->count()];
+        }
 
         $workload = [];
         foreach ($attendants as $attendant) {
@@ -134,6 +142,7 @@ class TaskAutoAssignmentService
                 'total' => $pending + $inProgress,
             ];
         }
+
         return $summary;
     }
 }

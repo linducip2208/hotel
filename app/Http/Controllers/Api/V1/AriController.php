@@ -19,6 +19,7 @@ class AriController extends Controller
             );
             $count++;
         }
+
         return response()->json(['updated' => $count]);
     }
 
@@ -41,6 +42,7 @@ class AriController extends Controller
                 ], fn ($v) => $v !== null));
             $count++;
         }
+
         return response()->json(['updated' => $count]);
     }
 }

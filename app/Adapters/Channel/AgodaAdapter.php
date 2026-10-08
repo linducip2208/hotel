@@ -8,7 +8,6 @@ use App\Exceptions\ChannelSyncException;
 use App\Models\AriSyncLog;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Log;
 
 class AgodaAdapter extends BaseChannelAdapter
@@ -21,13 +20,14 @@ class AgodaAdapter extends BaseChannelAdapter
     protected function http(): Client
     {
         $cred = $this->channel->getCredentials();
+
         return new Client([
             'base_uri' => $this->getBaseUrl(),
             'timeout' => 30,
             'connect_timeout' => 10,
             'http_errors' => false,
             'headers' => [
-                'Authorization' => 'Bearer ' . ($cred['api_key'] ?? ''),
+                'Authorization' => 'Bearer '.($cred['api_key'] ?? ''),
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
                 'X-Hotel-ID' => $this->channel->hotel_id_at_channel ?? '',
@@ -59,6 +59,7 @@ class AgodaAdapter extends BaseChannelAdapter
             ];
 
             $response = $this->http()->post('inventory', ['json' => $payload]);
+
             return $this->parseJsonResponse($response, 'availability');
         });
     }
@@ -81,6 +82,7 @@ class AgodaAdapter extends BaseChannelAdapter
             ];
 
             $response = $this->http()->post('rates', ['json' => $payload]);
+
             return $this->parseJsonResponse($response, 'rates');
         });
     }
@@ -105,6 +107,7 @@ class AgodaAdapter extends BaseChannelAdapter
             ];
 
             $response = $this->http()->post('restrictions', ['json' => $payload]);
+
             return $this->parseJsonResponse($response, 'restrictions');
         });
     }
@@ -135,7 +138,7 @@ class AgodaAdapter extends BaseChannelAdapter
 
             do {
                 $params['page'] = $page;
-                $response = $this->http()->get('bookings?' . http_build_query($params));
+                $response = $this->http()->get('bookings?'.http_build_query($params));
                 $data = $this->parseJsonResponse($response, 'bookings');
 
                 $bookings = $data['data']['bookings'] ?? $data['data']['reservations'] ?? [];
@@ -156,7 +159,8 @@ class AgodaAdapter extends BaseChannelAdapter
     public function fetchBooking(string $bookingId): array
     {
         return $this->executeSync('fetch_booking', function () use ($bookingId) {
-            $response = $this->http()->get('bookings/' . urlencode($bookingId));
+            $response = $this->http()->get('bookings/'.urlencode($bookingId));
+
             return $this->parseJsonResponse($response, 'booking');
         });
     }
@@ -186,7 +190,8 @@ class AgodaAdapter extends BaseChannelAdapter
         }
         try {
             $r = $this->http()->get('ping');
-            return ['ok' => $r->getStatusCode() < 400, 'message' => 'HTTP ' . $r->getStatusCode()];
+
+            return ['ok' => $r->getStatusCode() < 400, 'message' => 'HTTP '.$r->getStatusCode()];
         } catch (\Throwable $e) {
             return ['ok' => false, 'message' => $e->getMessage()];
         }
@@ -210,16 +215,18 @@ class AgodaAdapter extends BaseChannelAdapter
 
         if ($statusCode === 429) {
             $retryAfter = $response->getHeader('Retry-After')[0] ?? 'unknown';
+
             return [
                 'success' => false,
                 'data' => [],
-                'error' => 'Rate limited. Retry after ' . $retryAfter,
+                'error' => 'Rate limited. Retry after '.$retryAfter,
                 'retry_after' => $retryAfter,
             ];
         }
 
         if ($statusCode >= 400) {
             $errorMsg = $data['message'] ?? $data['error'] ?? $data['description'] ?? 'Unknown error';
+
             return [
                 'success' => false,
                 'data' => $data,
@@ -273,7 +280,6 @@ class AgodaAdapter extends BaseChannelAdapter
                 'context' => $e->getContext(),
             ]);
             throw $e;
-
         } catch (ConnectException $e) {
             $log->update([
                 'status' => 'failed',
@@ -286,7 +292,6 @@ class AgodaAdapter extends BaseChannelAdapter
                 'error' => $e->getMessage(),
             ]);
             throw ChannelSyncException::networkError($this->channel->id, $operation, $e->getMessage());
-
         } catch (\Throwable $e) {
             $log->update([
                 'status' => 'failed',

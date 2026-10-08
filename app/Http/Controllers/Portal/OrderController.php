@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Portal;
 
 use App\Http\Controllers\Controller;
-use App\Models\Folio;
 use App\Models\FolioPayment;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class OrderController extends Controller
 {
@@ -65,23 +63,23 @@ class OrderController extends Controller
         $folio = $guest->folios()->where('id', $id)->firstOrFail();
 
         $request->validate([
-            'amount'         => 'required|numeric|min:1|max:' . $folio->balance,
+            'amount' => 'required|numeric|min:1|max:'.$folio->balance,
             'payment_method' => 'required|string|in:bank_transfer,ewallet,credit_card,cash',
-            'proof'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
-            'note'           => 'nullable|string|max:500',
+            'proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'note' => 'nullable|string|max:500',
         ]);
 
         $paymentData = [
-            'folio_id'        => $folio->id,
-            'property_id'     => $folio->property_id,
-            'amount'          => $request->input('amount'),
-            'payment_date'    => now()->toDateString(),
-            'payment_method'  => $request->input('payment_method'),
-            'reference_no'    => 'CUST-' . now()->format('YmdHis') . '-' . $folio->id,
+            'folio_id' => $folio->id,
+            'property_id' => $folio->property_id,
+            'amount' => $request->input('amount'),
+            'payment_date' => now()->toDateString(),
+            'payment_method' => $request->input('payment_method'),
+            'reference_no' => 'CUST-'.now()->format('YmdHis').'-'.$folio->id,
             'gateway_payload' => [
-                'uploaded_by'   => 'customer',
-                'guest_id'      => $guest->id,
-                'note'          => $request->input('note'),
+                'uploaded_by' => 'customer',
+                'guest_id' => $guest->id,
+                'note' => $request->input('note'),
             ],
         ];
 

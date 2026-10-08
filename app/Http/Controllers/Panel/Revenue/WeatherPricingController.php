@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Panel\Revenue;
 
 use App\Http\Controllers\Controller;
+use App\Models\Provider;
 use App\Models\RoomType;
 use App\Services\Revenue\WeatherPricingService;
 use Carbon\Carbon;
@@ -37,7 +38,7 @@ class WeatherPricingController extends Controller
             ];
         }
 
-        $hasWeatherProvider = \App\Models\Provider::where('property_id', $property->id)
+        $hasWeatherProvider = Provider::where('property_id', $property->id)
             ->where('integration_type', 'weather')
             ->where('is_active', true)->exists();
 

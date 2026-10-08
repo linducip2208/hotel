@@ -10,8 +10,16 @@ class LoyaltyTier extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
     protected $casts = ['benefits' => 'array', 'rate_discount_pct' => 'decimal:3'];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function members() { return $this->hasMany(LoyaltyMember::class, 'tier_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function members()
+    {
+        return $this->hasMany(LoyaltyMember::class, 'tier_id');
+    }
 }

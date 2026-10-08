@@ -5,18 +5,18 @@ namespace App\Http\Controllers\Panel\Fo;
 use App\Http\Controllers\Controller;
 use App\Models\Room;
 use App\Models\RoomType;
-use App\Models\Guest;
-use App\Models\Reservation;
-use App\Models\ReservationRoom;
-use App\Models\Folio;
-use App\Models\FolioCharge;
-use App\Models\FolioPayment;
+use App\Services\Fo\FolioService;
+use App\Services\Fo\ReservationService;
+use App\Services\Fo\ReservationValidationException;
+use App\Services\Fo\RoomSoldOutException;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class WalkinController extends Controller
 {
+    public function __construct(protected ReservationService $reservationService) {}
+
     public function index()
     {
         $propertyId = app('current_property')->id;
@@ -50,9 +50,11 @@ class WalkinController extends Controller
 
     public function quickRegister(Request $request)
     {
+        $propertyId = app('current_property')->id;
+
         $request->validate([
             'room_ids' => 'required|array|min:1',
-            'room_ids.*' => 'required|integer|exists:rooms,id',
+            'room_ids.*' => ['required', 'integer', Rule::exists('rooms', 'id')->where('property_id', $propertyId)],
             'guest_name' => 'required|string|max:255',
             'guest_phone' => 'nullable|string|max:20',
             'guest_email' => 'nullable|email|max:255',
@@ -64,150 +66,79 @@ class WalkinController extends Controller
             'notes' => 'nullable|string|max:500',
         ]);
 
-        $propertyId = app('current_property')->id;
         $userId = $request->user()?->id;
 
         $nameParts = explode(' ', trim($request->guest_name), 2);
-        $firstName = $nameParts[0];
-        $lastName = $nameParts[1] ?? '';
+        $guestData = [
+            'first_name' => $nameParts[0],
+            'last_name' => $nameParts[1] ?? '',
+            'email' => $request->guest_email ?? ('walkin-'.time().'-'.random_int(100, 999).'@walkin.local'),
+            'phone' => $request->guest_phone,
+            'adults' => (int) $request->adults,
+            'children' => (int) ($request->children ?? 0),
+        ];
 
-        $guest = Guest::firstOrCreate(
-            [
-                'email' => $request->guest_email ?? ('walkin-' . time() . '@walkin.local'),
-                'property_id' => $propertyId,
-            ],
-            [
-                'first_name' => $firstName,
-                'last_name' => $lastName,
-                'phone' => $request->guest_phone,
-                'property_id' => $propertyId,
-            ]
-        );
+        try {
+            $rooms = Room::with('roomType')
+                ->where('property_id', $propertyId)
+                ->where('is_active', true)
+                ->where('fo_status', 'vacant')
+                ->whereIn('id', $request->room_ids)
+                ->lockForUpdate()
+                ->get();
 
-        $rooms = Room::with('roomType')
-            ->where('property_id', $propertyId)
-            ->whereIn('id', $request->room_ids)
-            ->get();
+            if ($rooms->isEmpty()) {
+                return response()->json(['success' => false, 'message' => 'Kamar tidak tersedia (sudah ditempati atau tidak ada).'], 422);
+            }
 
-        if ($rooms->isEmpty()) {
-            return response()->json(['success' => false, 'message' => 'Kamar tidak ditemukan.'], 422);
+            // ALL selected rooms go through createWalkIn so pricing, totals,
+            // folio charges and occupancy cover every room (no undercharge).
+            $reservation = $this->reservationService->createWalkIn(
+                app('current_property'),
+                $rooms->all(),
+                $guestData,
+                Carbon::parse($request->check_out)->endOfDay(),
+                $userId,
+            );
+
+            $reservation = $reservation->fresh(['rooms.room']);
+
+            // Advance payment taken at the desk (money already received → paid),
+            // routed through FolioService so the journal entry is posted like
+            // every other payment.
+            $folio = $reservation->folios->first();
+            if ($folio) {
+                $paymentAmount = min((float) ($request->payment_amount ?? 0), (float) $reservation->grand_total);
+                if ($paymentAmount > 0) {
+                    app(FolioService::class)->postPayment($folio, [
+                        'amount' => $paymentAmount,
+                        'method' => $request->payment_method,
+                        'reference_no' => 'WALKIN-'.$reservation->ref,
+                        'cashier_id' => $userId,
+                    ]);
+                }
+
+                $reservation->update(['balance' => $folio->fresh()->balance]);
+            }
+        } catch (RoomSoldOutException $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+        } catch (ReservationValidationException $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
         }
 
-        $checkIn = Carbon::now();
-        $checkOut = Carbon::parse($request->check_out);
-        $nights = max(1, (int) $checkIn->diffInDays($checkOut));
-
-        $totalRoom = 0;
-        $roomRows = [];
-        foreach ($rooms as $room) {
-            $rate = $room->roomType->base_rate ?? 0;
-            $subtotal = $rate * $nights;
-            $totalRoom += $subtotal;
-            $roomRows[] = ['room' => $room, 'rate' => $rate, 'subtotal' => $subtotal];
-        }
-
-        $adults = (int) $request->adults;
-        $children = (int) ($request->children ?? 0);
-
-        $reservation = Reservation::create([
-            'property_id' => $propertyId,
-            'ref' => $this->generateRef(),
-            'primary_guest_id' => $guest->id,
-            'source' => 'walk_in',
-            'check_in' => $checkIn->toDateString(),
-            'check_out' => $checkOut->toDateString(),
-            'nights' => $nights,
-            'adults' => $adults,
-            'children' => $children,
-            'status' => 'checked_in',
-            'total_room' => $totalRoom,
-            'grand_total' => $totalRoom,
-            'balance' => $totalRoom,
-            'special_requests' => $request->notes,
-            'notes_internal' => 'Walk-in POS — ' . now()->format('d M Y H:i'),
-            'checked_in_at' => now(),
-            'created_by_user_id' => $userId,
-        ]);
-
-        foreach ($roomRows as $row) {
-            ReservationRoom::create([
-                'reservation_id' => $reservation->id,
-                'room_type_id' => $row['room']->room_type_id,
-                'rate_plan_id' => 1,
-                'room_id' => $row['room']->id,
-                'check_in' => $checkIn->toDateString(),
-                'check_out' => $checkOut->toDateString(),
-                'adults' => $adults,
-                'children' => $children,
-                'subtotal' => $row['subtotal'],
-                'status' => 'occupied',
-            ]);
-
-            $row['room']->update(['fo_status' => 'occupied']);
-        }
-
-        $folio = Folio::create([
-            'property_id' => $propertyId,
-            'reservation_id' => $reservation->id,
-            'guest_id' => $guest->id,
-            'folio_no' => 'W-' . $reservation->ref,
-            'type' => 'guest',
-            'status' => 'open',
-            'total_charges' => $totalRoom,
-            'balance' => $totalRoom,
-            'opened_at' => now(),
-            'cashier_id' => $userId,
-        ]);
-
-        FolioCharge::create([
-            'folio_id' => $folio->id,
-            'property_id' => $propertyId,
-            'charge_date' => now()->toDateString(),
-            'description' => 'Room Charge — Walk-in #' . $reservation->ref,
-            'category' => 'room',
-            'qty' => count($roomRows),
-            'unit_price' => $totalRoom / count($roomRows),
-            'amount' => $totalRoom,
-            'source_type' => 'reservation',
-            'source_ref' => $reservation->ref,
-            'posted_by_user_id' => $userId,
-        ]);
-
-        $paymentAmount = min((float) ($request->payment_amount ?? 0), $totalRoom);
-
-        if ($paymentAmount > 0) {
-            FolioPayment::create([
-                'folio_id' => $folio->id,
-                'property_id' => $propertyId,
-                'payment_date' => now()->toDateString(),
-                'amount' => $paymentAmount,
-                'method' => $request->payment_method,
-                'reference_no' => 'WALKIN-' . $reservation->ref,
-                'cashier_id' => $userId,
-            ]);
-
-            $folio->update([
-                'total_payments' => $paymentAmount,
-                'balance' => $totalRoom - $paymentAmount,
-            ]);
-
-            $reservation->update([
-                'balance' => $totalRoom - $paymentAmount,
-            ]);
-        }
-
-        $roomNumbers = $rooms->pluck('number')->toArray();
+        $reservation->refresh();
+        $roomNumbers = $reservation->rooms->map(fn ($rr) => $rr->room?->number)->filter()->values()->toArray();
 
         return response()->json([
             'success' => true,
-            'message' => 'Walk-in berhasil! ' . $guest->full_name . ' check-in di kamar ' . implode(', ', $roomNumbers),
+            'message' => 'Walk-in berhasil! '.$reservation->primaryGuest->full_name.' check-in di kamar '.implode(', ', $roomNumbers),
             'reservation' => [
                 'id' => $reservation->id,
                 'ref' => $reservation->ref,
-                'guest' => $guest->full_name,
+                'guest' => $reservation->primaryGuest->full_name,
                 'rooms' => $roomNumbers,
-                'total' => (int) $totalRoom,
-                'nights' => $nights,
+                'total' => (int) $reservation->grand_total,
+                'nights' => $reservation->nights,
             ],
             'redirect' => route('panel.fo.reservations.show', $reservation->id),
         ]);
@@ -215,9 +146,11 @@ class WalkinController extends Controller
 
     public function roomDetail(int $id)
     {
-        $room = Room::with(['roomType', 'reservationRooms' => function ($q) {
-            $q->whereHas('reservation', fn ($q) => $q->whereIn('status', ['checked_in', 'confirmed']));
-        }, 'reservationRooms.reservation.primaryGuest'])->findOrFail($id);
+        $room = Room::where('property_id', app('current_property')->id)
+            ->with(['roomType', 'reservationRooms' => function ($q) {
+                $q->whereHas('reservation', fn ($q) => $q->whereIn('status', ['checked_in', 'confirmed']));
+            }, 'reservationRooms.reservation.primaryGuest'])
+            ->findOrFail($id);
 
         $activeRR = $room->reservationRooms->first();
 
@@ -236,10 +169,5 @@ class WalkinController extends Controller
             'current_guest' => $activeRR?->reservation?->primaryGuest?->full_name,
             'current_ref' => $activeRR?->reservation?->ref,
         ]);
-    }
-
-    protected function generateRef(): string
-    {
-        return 'HMS-' . now()->format('Ymd') . '-' . Str::upper(Str::random(6));
     }
 }

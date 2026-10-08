@@ -6,13 +6,16 @@ namespace App\Services\Accounting;
 
 use App\Models\FxRate;
 use App\Models\JournalEntry;
+use App\Models\Provider;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
 use RuntimeException;
 
 final class MultiCurrencyService
 {
     private const CACHE_TTL = 3600;
+
     private string $baseCurrency = 'IDR';
 
     /**
@@ -39,6 +42,7 @@ final class MultiCurrencyService
 
             if ($rateFrom !== null && $rateTo !== null) {
                 $inBase = $amount * $rateFrom;
+
                 return round($inBase / $rateTo, 2);
             }
         }
@@ -74,7 +78,7 @@ final class MultiCurrencyService
         ?Carbon $date = null
     ): JournalEntry {
         $date ??= now();
-        $poster = new JournalPoster();
+        $poster = new JournalPoster;
 
         $convertedLines = [];
         foreach ($lines as $line) {
@@ -105,7 +109,7 @@ final class MultiCurrencyService
      */
     public function updateFxRates(): array
     {
-        $provider = \App\Models\Provider::where('api_format', 'currency')
+        $provider = Provider::where('api_format', 'currency')
             ->where('is_active', true)
             ->first();
 
@@ -116,7 +120,7 @@ final class MultiCurrencyService
         $apiKey = $provider->getApiKey();
         $baseUrl = rtrim((string) $provider->base_url, '/');
 
-        $client = new \GuzzleHttp\Client(['base_uri' => $baseUrl, 'timeout' => 15]);
+        $client = new Client(['base_uri' => $baseUrl, 'timeout' => 15]);
         $response = $client->get('/latest', [
             'query' => ['apikey' => $apiKey, 'base_currency' => $this->baseCurrency],
         ]);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel\Finance;
 
 use App\Http\Controllers\Controller;
 use App\Models\OwnerDistribution;
+use App\Models\OwnerDocument;
 use App\Models\PropertyOwner;
 use App\Models\User;
 use App\Services\Finance\OwnerPortalService;
@@ -70,6 +71,7 @@ class OwnerManagementController extends Controller
         ]);
 
         $owner->update($data);
+
         return back()->with('success', 'Data pemilik diperbarui.');
     }
 
@@ -77,6 +79,7 @@ class OwnerManagementController extends Controller
     {
         $owner = PropertyOwner::findOrFail($id);
         $owner->delete();
+
         return back()->with('success', 'Pemilik dihapus dari properti.');
     }
 
@@ -127,7 +130,7 @@ class OwnerManagementController extends Controller
 
         $path = $request->file('file')->store('owner-documents');
 
-        \App\Models\OwnerDocument::create([
+        OwnerDocument::create([
             'property_id' => $property->id,
             'owner_user_id' => $data['owner_user_id'],
             'title' => $data['title'],

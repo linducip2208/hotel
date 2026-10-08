@@ -18,9 +18,28 @@ class Deposit extends Model
         'refund_date' => 'date',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function reservation() { return $this->belongsTo(Reservation::class); }
-    public function guest() { return $this->belongsTo(Guest::class); }
-    public function folioCharge() { return $this->belongsTo(FolioCharge::class); }
-    public function createdBy() { return $this->belongsTo(User::class, 'created_by_user_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class);
+    }
+
+    public function guest()
+    {
+        return $this->belongsTo(Guest::class);
+    }
+
+    public function folioCharge()
+    {
+        return $this->belongsTo(FolioCharge::class);
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by_user_id');
+    }
 }

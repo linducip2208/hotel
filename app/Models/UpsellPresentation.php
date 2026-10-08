@@ -18,8 +18,23 @@ class UpsellPresentation extends Model
         'price_accepted' => 'decimal:2',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function reservation() { return $this->belongsTo(Reservation::class); }
-    public function offer() { return $this->belongsTo(UpsellOffer::class, 'upsell_offer_id'); }
-    public function acceptedByUser() { return $this->belongsTo(User::class, 'accepted_by_user_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class);
+    }
+
+    public function offer()
+    {
+        return $this->belongsTo(UpsellOffer::class, 'upsell_offer_id');
+    }
+
+    public function acceptedByUser()
+    {
+        return $this->belongsTo(User::class, 'accepted_by_user_id');
+    }
 }

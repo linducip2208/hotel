@@ -25,7 +25,7 @@ class CoretaxService
         protected NsfpService $nsfpService,
     ) {
         $this->http = new Client([
-            'base_uri' => rtrim((string) config('coretax.base_url'), '/') . '/',
+            'base_uri' => rtrim((string) config('coretax.base_url'), '/').'/',
             'timeout' => (int) config('coretax.timeout', 30),
             'connect_timeout' => 10,
             'http_errors' => false,
@@ -84,6 +84,7 @@ class CoretaxService
             if (($response['success'] ?? false) || in_array($status, ['success', 'approved', 'processed'])) {
                 $nomorFaktur = $response['nomor_faktur'] ?? $nsfp;
                 $faktur->markSent($nomorFaktur, $response, '05');
+
                 return [
                     'success' => true,
                     'data' => [
@@ -99,7 +100,6 @@ class CoretaxService
             $faktur->markFailed($errorMessage, $response);
 
             throw CoreTaxException::apiError('efaktur/submit', $response);
-
         } catch (CoreTaxException $e) {
             throw $e;
         } catch (\Throwable $e) {
@@ -132,6 +132,7 @@ class CoretaxService
 
             if ($response['success'] ?? false) {
                 $faktur->markCancelled($reason, $userId);
+
                 return [
                     'success' => true,
                     'data' => [
@@ -143,7 +144,6 @@ class CoretaxService
             }
 
             throw CoreTaxException::apiError('efaktur/cancel', $response);
-
         } catch (CoreTaxException $e) {
             throw $e;
         } catch (\Throwable $e) {
@@ -298,7 +298,7 @@ class CoretaxService
 
         if (! empty($errors)) {
             throw CoreTaxException::invoiceValidationFailed(
-                'Invoice #' . $invoice->invoice_no . ' is invalid for e-Faktur.',
+                'Invoice #'.$invoice->invoice_no.' is invalid for e-Faktur.',
                 ['errors' => $errors]
             );
         }
@@ -391,16 +391,18 @@ class CoretaxService
      */
     protected function signXml(string $xml): string
     {
-        $certPath = rtrim((string) config('coretax.certificate_path'), '/') . '/npwp.pfx';
+        $certPath = rtrim((string) config('coretax.certificate_path'), '/').'/npwp.pfx';
         $certPassword = config('coretax.certificate_password');
 
         if (! file_exists($certPath)) {
-            Log::warning('Coretax certificate not found at: ' . $certPath . '. Proceeding unsigned.');
+            Log::warning('Coretax certificate not found at: '.$certPath.'. Proceeding unsigned.');
+
             return $xml;
         }
 
         if (empty($certPassword)) {
             Log::warning('Coretax certificate password not set (CORETAX_CERT_PASSWORD). Proceeding unsigned.');
+
             return $xml;
         }
 
@@ -409,13 +411,15 @@ class CoretaxService
 
             if (! function_exists('openssl_pkcs12_read')) {
                 Log::warning('OpenSSL extension not available. Cannot sign XML.');
+
                 return $xml;
             }
 
             $certs = [];
             if (! openssl_pkcs12_read($pkcs12, $certs, $certPassword)) {
                 $error = openssl_error_string();
-                Log::error('Failed to read PKCS12 certificate: ' . ($error ?: 'unknown error'));
+                Log::error('Failed to read PKCS12 certificate: '.($error ?: 'unknown error'));
+
                 return $xml;
             }
 
@@ -424,10 +428,11 @@ class CoretaxService
 
             if (! $privateKey || ! $cert) {
                 Log::error('PKCS12 bundle missing private key or certificate.');
+
                 return $xml;
             }
 
-            $dom = new \DOMDocument();
+            $dom = new \DOMDocument;
             $dom->loadXML($xml);
 
             $canonical = $dom->C14N();
@@ -435,6 +440,7 @@ class CoretaxService
             $signature = '';
             if (! openssl_sign($canonical, $signature, $privateKey, OPENSSL_ALGO_SHA256)) {
                 Log::error('Failed to sign XML with certificate.');
+
                 return $xml;
             }
 
@@ -450,7 +456,8 @@ class CoretaxService
             return $dom->saveXML();
 
         } catch (\Throwable $e) {
-            Log::error('XML signing error: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('XML signing error: '.$e->getMessage(), ['exception' => $e]);
+
             return $xml;
         }
     }
@@ -488,7 +495,7 @@ class CoretaxService
 
             } catch (ConnectException $e) {
                 $lastException = $e;
-                Log::channel('coretax')->warning("Coretax connection attempt {$attempt} failed: " . $e->getMessage());
+                Log::channel('coretax')->warning("Coretax connection attempt {$attempt} failed: ".$e->getMessage());
 
                 if ($attempt < $maxRetries) {
                     usleep($attempt * 500000);
@@ -503,7 +510,7 @@ class CoretaxService
                     return $decoded;
                 }
 
-                Log::channel('coretax')->error("Coretax request attempt {$attempt} failed: " . $e->getMessage(), [
+                Log::channel('coretax')->error("Coretax request attempt {$attempt} failed: ".$e->getMessage(), [
                     'status' => $response?->getStatusCode(),
                     'body' => Str::limit($body, 500),
                 ]);

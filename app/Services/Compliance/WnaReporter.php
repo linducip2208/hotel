@@ -5,7 +5,6 @@ namespace App\Services\Compliance;
 use App\Models\Property;
 use App\Models\Reservation;
 use App\Models\WnaLog;
-use Carbon\Carbon;
 
 class WnaReporter
 {
@@ -38,7 +37,7 @@ class WnaReporter
             ->whereMonth('check_in_date', $month)
             ->with('guest')->get();
 
-        $out = ["passport_no,nationality,name,check_in,check_out,property"];
+        $out = ['passport_no,nationality,name,check_in,check_out,property'];
         foreach ($rows as $r) {
             $g = $r->guest;
             $out[] = sprintf('%s,%s,"%s",%s,%s,"%s"',
@@ -48,6 +47,7 @@ class WnaReporter
                 $property->name
             );
         }
+
         return implode("\n", $out);
     }
 }

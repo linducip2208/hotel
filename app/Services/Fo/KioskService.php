@@ -4,9 +4,7 @@ namespace App\Services;
 
 use App\Models\KioskSession;
 use App\Models\Reservation;
-use App\Models\Guest;
 use App\Models\Room;
-use Carbon\Carbon;
 use Illuminate\Support\Str;
 
 class KioskService
@@ -19,12 +17,16 @@ class KioskService
             ->with('primaryGuest')
             ->first();
 
-        if (!$reservation) return null;
+        if (! $reservation) {
+            return null;
+        }
 
         $existing = KioskSession::where('reservation_id', $reservation->id)
             ->where('status', '!=', 'cancelled')
             ->first();
-        if ($existing) return $existing;
+        if ($existing) {
+            return $existing;
+        }
 
         return KioskSession::create([
             'property_id' => $propertyId,
@@ -86,9 +88,12 @@ class KioskService
     protected function autoAssignRoom(int $propertyId, Reservation $reservation): ?Room
     {
         $rooms = $reservation->reservationRooms()->with('roomType')->get();
-        if ($rooms->isEmpty()) return null;
+        if ($rooms->isEmpty()) {
+            return null;
+        }
 
         $roomTypeId = $rooms->first()->room_type_id;
+
         return Room::where('property_id', $propertyId)
             ->where('room_type_id', $roomTypeId)
             ->where('is_active', true)

@@ -9,6 +9,7 @@ final class CoreTaxException extends HotelException
     public static function apiError(string $endpoint, array $response, ?\Throwable $previous = null): self
     {
         $message = $response['error'] ?? $response['pesan'] ?? 'Coretax API error';
+
         return new self(
             message: sprintf('Coretax %s: %s', $endpoint, $message),
             errorCode: 'CORETAX_API_ERROR',

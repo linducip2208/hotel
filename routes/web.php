@@ -1,8 +1,24 @@
 <?php
 
-use App\Http\Controllers\Public\HomeController;
-use App\Http\Controllers\Public\RoomController;
+use App\Http\Controllers\Admin\TelemetryReceiverController;
+use App\Http\Controllers\DocsController;
+use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\Portal\OwnerPortalController;
+use App\Http\Controllers\Public\AvailabilityWidgetController;
+use App\Http\Controllers\Public\BlogController;
+use App\Http\Controllers\Public\BookingButtonController;
 use App\Http\Controllers\Public\BookingEngineController;
+use App\Http\Controllers\Public\CartRecoveryController;
+use App\Http\Controllers\Public\CmsPageController;
+use App\Http\Controllers\Public\CurrencyController;
+use App\Http\Controllers\Public\HomeController;
+use App\Http\Controllers\Public\IcalController;
+use App\Http\Controllers\Public\KioskController;
+use App\Http\Controllers\Public\NewsletterController;
+use App\Http\Controllers\Public\QrMenuController;
+use App\Http\Controllers\Public\RegistrationController;
+use App\Http\Controllers\Public\RoomController;
+use App\Http\Controllers\Public\TenantSignupController;
 use App\Http\Controllers\Setup\WizardController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,54 +55,73 @@ Route::prefix('setup')->name('setup.')->group(function () {
 
 // Kiosk self check-in
 Route::middleware(['license'])->group(function () {
-    Route::get('/kiosk', [App\Http\Controllers\Public\KioskController::class, 'index'])->name('kiosk');
-    Route::post('/kiosk/lookup', [App\Http\Controllers\Public\KioskController::class, 'lookup'])->name('kiosk.lookup');
-    Route::post('/kiosk/checkin', [App\Http\Controllers\Public\KioskController::class, 'checkin'])->name('kiosk.checkin');
-    Route::get('/kiosk/print/{id}', [App\Http\Controllers\Public\KioskController::class, 'printReceipt'])->name('kiosk.print');
+    Route::get('/kiosk', [KioskController::class, 'index'])->name('kiosk');
+    Route::post('/kiosk/lookup', [KioskController::class, 'lookup'])->name('kiosk.lookup');
+    Route::post('/kiosk/checkin', [KioskController::class, 'checkin'])->name('kiosk.checkin');
+    Route::get('/kiosk/print/{id}', [KioskController::class, 'printReceipt'])->name('kiosk.print');
 });
 
 // Public SaaS signup
-Route::get('/signup', [\App\Http\Controllers\Public\TenantSignupController::class, 'show'])->name('saas.signup.show');
-Route::post('/signup', [\App\Http\Controllers\Public\TenantSignupController::class, 'store'])->name('saas.signup');
+Route::get('/signup', [TenantSignupController::class, 'show'])->name('saas.signup.show');
+Route::post('/signup', [TenantSignupController::class, 'store'])->name('saas.signup');
 
 // Abandoned cart recovery
-Route::post('/booking/cart/track', [App\Http\Controllers\Public\CartRecoveryController::class, 'track'])->name('booking.cart.track');
-Route::get('/booking/cart/recover/{token}', [App\Http\Controllers\Public\CartRecoveryController::class, 'recover'])->name('booking.cart.recover');
+Route::post('/booking/cart/track', [CartRecoveryController::class, 'track'])->name('booking.cart.track');
+Route::get('/booking/cart/recover/{token}', [CartRecoveryController::class, 'recover'])->name('booking.cart.recover');
 
 // QR Menu — public guest scan
-Route::get('/menu/{outletId}/{tableId}', [App\Http\Controllers\Public\QrMenuController::class, 'show'])->name('qr-menu');
-Route::post('/menu/order', [App\Http\Controllers\Public\QrMenuController::class, 'placeOrder'])->name('qr-menu.order');
+Route::get('/menu/{outletId}/{tableId}', [QrMenuController::class, 'show'])->name('qr-menu');
+Route::post('/menu/order', [QrMenuController::class, 'placeOrder'])->name('qr-menu.order');
 
 // Telemetry receiver — public endpoint for client deployments
-Route::post('/api/license/heartbeat-receive', [\App\Http\Controllers\Admin\TelemetryReceiverController::class, 'heartbeat'])->withoutMiddleware(['web']);
+Route::post('/api/license/heartbeat-receive', [TelemetryReceiverController::class, 'heartbeat'])->withoutMiddleware(['web']);
 
 // Digital Registration public form
-Route::get('registration/{token}', [\App\Http\Controllers\Public\RegistrationController::class, 'show'])->name('registration.form');
-Route::post('registration/{token}', [\App\Http\Controllers\Public\RegistrationController::class, 'submit'])->name('registration.submit');
-Route::get('registration-thanks', [\App\Http\Controllers\Public\RegistrationController::class, 'thanks'])->name('registration.thanks');
+Route::get('registration/{token}', [RegistrationController::class, 'show'])->name('registration.form');
+Route::post('registration/{token}', [RegistrationController::class, 'submit'])->name('registration.submit');
+Route::get('registration-thanks', [RegistrationController::class, 'thanks'])->name('registration.thanks');
 
 // Public blog
-Route::get('/blog', [\App\Http\Controllers\Public\BlogController::class, 'index'])->name('blog.index');
-Route::get('/blog/feed.xml', [\App\Http\Controllers\Public\BlogController::class, 'feed'])->name('blog.feed');
-Route::get('/blog/category/{slug}', [\App\Http\Controllers\Public\BlogController::class, 'category'])->name('blog.category');
-Route::get('/blog/{slug}', [\App\Http\Controllers\Public\BlogController::class, 'show'])->name('blog.show');
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/feed.xml', [BlogController::class, 'feed'])->name('blog.feed');
+Route::get('/blog/category/{slug}', [BlogController::class, 'category'])->name('blog.category');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
 // Public docs site (license-exempt)
-Route::get('/docs', [\App\Http\Controllers\DocsController::class, 'index'])->name('docs.index');
-Route::get('/docs/{slug}.md', [\App\Http\Controllers\DocsController::class, 'raw'])->name('docs.raw')->where('slug', '[A-Za-z0-9_-]+');
-Route::get('/docs/{slug}', [\App\Http\Controllers\DocsController::class, 'show'])->name('docs.show')->where('slug', '[A-Za-z0-9_-]+');
+Route::get('/docs', [DocsController::class, 'index'])->name('docs.index');
+Route::get('/docs/{slug}.md', [DocsController::class, 'raw'])->name('docs.raw')->where('slug', '[A-Za-z0-9_-]+');
+Route::get('/docs/{slug}', [DocsController::class, 'show'])->name('docs.show')->where('slug', '[A-Za-z0-9_-]+');
 
 // Language switcher
-Route::get('locale/{locale}', [\App\Http\Controllers\LocaleController::class, 'switch'])->name('locale.switch');
+Route::get('locale/{locale}', [LocaleController::class, 'switch'])->name('locale.switch');
+
+// Currency selector
+Route::get('currency/switch', [CurrencyController::class, 'switch'])->name('currency.switch');
+
+// Newsletter
+Route::middleware(['license'])->group(function () {
+    Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+    Route::get('/newsletter/unsubscribe/{token}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
+
+    // ICS / iCal export for a booking
+    Route::get('/booking/{ref}/ical', [IcalController::class, 'download'])->name('booking.ical');
+
+    // CMS static pages
+    Route::get('/page/{slug}', [CmsPageController::class, 'show'])->name('page.show')->where('slug', '[A-Za-z0-9\-]+');
+
+    // Public embeddable widgets
+    Route::get('/widget/availability', [AvailabilityWidgetController::class, 'show'])->name('widget.availability');
+    Route::get('/widget/book-button', [BookingButtonController::class, 'show'])->name('widget.book-button');
+});
 
 require __DIR__.'/auth.php';
 
 // Owner Portal (Investor Dashboard)
 Route::middleware(['auth'])->prefix('owner-portal')->name('owner-portal.')->group(function () {
-    Route::get('/', [\App\Http\Controllers\Portal\OwnerPortalController::class, 'dashboard'])->name('dashboard');
-    Route::get('financials', [\App\Http\Controllers\Portal\OwnerPortalController::class, 'financials'])->name('financials');
-    Route::get('distributions', [\App\Http\Controllers\Portal\OwnerPortalController::class, 'distributions'])->name('distributions');
-    Route::get('documents/{id}/download', [\App\Http\Controllers\Portal\OwnerPortalController::class, 'downloadDocument'])->name('documents.download');
+    Route::get('/', [OwnerPortalController::class, 'dashboard'])->name('dashboard');
+    Route::get('financials', [OwnerPortalController::class, 'financials'])->name('financials');
+    Route::get('distributions', [OwnerPortalController::class, 'distributions'])->name('distributions');
+    Route::get('documents/{id}/download', [OwnerPortalController::class, 'downloadDocument'])->name('documents.download');
 });
 
 // License pairing v3 (whitelabel.co.id marketplace)

@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Models\Channel;
 use App\Models\Property;
 use App\Models\Provider;
-use App\Models\ProviderFeatureAssignment;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -13,19 +12,22 @@ use Illuminate\Support\Str;
 class ImportChannelPresets extends Command
 {
     protected $signature = 'hotel:import-channel-presets {--property= : Property ID} {--activate : Aktifkan channel pertama sebagai default}';
+
     protected $description = 'Impor 10 OTA channel presets dari storage/app/channel-presets/channel-presets.json';
 
     public function handle(): int
     {
         $path = storage_path('app/channel-presets/channel-presets.json');
         if (! File::exists($path)) {
-            $this->error('File preset tidak ditemukan: ' . $path);
+            $this->error('File preset tidak ditemukan: '.$path);
+
             return self::FAILURE;
         }
 
         $presets = json_decode(File::get($path), true);
         if (! is_array($presets)) {
             $this->error('Format JSON tidak valid.');
+
             return self::FAILURE;
         }
 
@@ -36,6 +38,7 @@ class ImportChannelPresets extends Command
 
         if (! $property) {
             $this->error('Property tidak ditemukan.');
+
             return self::FAILURE;
         }
 
@@ -121,12 +124,12 @@ class ImportChannelPresets extends Command
             $this->newLine();
         }
 
-        $this->info("Selesai!");
+        $this->info('Selesai!');
         $this->line("  Provider: {$importedProviders} diimpor, {$skippedProviders} dilewati.");
         $this->line("  Channel:  {$importedChannels} diimpor, {$skippedChannels} dilewati.");
-        $this->line("");
-        $this->line("Selanjutnya: isi API Key + Secret di halaman admin, lalu aktifkan channel.");
-        $this->line("Jalankan <fg=yellow>php artisan migrate</> terlebih dahulu jika belum.");
+        $this->line('');
+        $this->line('Selanjutnya: isi API Key + Secret di halaman admin, lalu aktifkan channel.');
+        $this->line('Jalankan <fg=yellow>php artisan migrate</> terlebih dahulu jika belum.');
 
         return self::SUCCESS;
     }

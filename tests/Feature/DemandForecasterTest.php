@@ -41,7 +41,7 @@ it('forecast_occupancy_pct is between 0 and 100', function () {
 });
 
 it('suggests 25% rate uplift at 90%+ occupancy', function () {
-    $ref = new \ReflectionMethod($this->svc, 'suggestRateModifier');
+    $ref = new ReflectionMethod($this->svc, 'suggestRateModifier');
     $ref->setAccessible(true);
 
     expect($ref->invoke($this->svc, 95))->toBe(25.0)

@@ -4,8 +4,9 @@ namespace App\Services\Fo;
 
 use App\Models\DigitalRegistration;
 use App\Models\Reservation;
-use Illuminate\Support\Str;
+use App\Services\Marketing\WhatsAppBlastService;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class DigitalRegistrationService
 {
@@ -17,11 +18,11 @@ class DigitalRegistrationService
         }
 
         return DigitalRegistration::create([
-            'property_id'   => $reservation->property_id,
-            'reservation_id'=> $reservation->id,
-            'guest_id'      => $reservation->primary_guest_id,
-            'status'        => 'pending',
-            'token'         => Str::random(64),
+            'property_id' => $reservation->property_id,
+            'reservation_id' => $reservation->id,
+            'guest_id' => $reservation->primary_guest_id,
+            'status' => 'pending',
+            'token' => Str::random(64),
         ]);
     }
 
@@ -31,7 +32,7 @@ class DigitalRegistrationService
         $url = route('registration.form', ['token' => $reg->token]);
 
         if ($guest->phone) {
-            $whatsapp = app(\App\Services\Marketing\WhatsAppBlastService::class);
+            $whatsapp = app(WhatsAppBlastService::class);
             $provider = $whatsapp->resolveProvider($reg->property);
             if ($provider) {
                 $whatsapp->send($guest->phone, "Selamat datang di {$reg->property->name}! Silakan lengkapi registrasi digital Anda: {$url}", $reg->property);
@@ -45,8 +46,8 @@ class DigitalRegistrationService
     {
         if (in_array($reg->status, ['pending', 'sent'])) {
             $reg->update([
-                'status'     => 'viewed',
-                'viewed_at'  => now(),
+                'status' => 'viewed',
+                'viewed_at' => now(),
                 'ip_address' => $ip,
                 'user_agent' => $ua,
             ]);
@@ -59,16 +60,16 @@ class DigitalRegistrationService
         if ($signatureBase64) {
             $image = str_replace('data:image/png;base64,', '', $signatureBase64);
             $image = str_replace(' ', '+', $image);
-            $filename = 'signatures/' . $reg->id . '_' . time() . '.png';
+            $filename = 'signatures/'.$reg->id.'_'.time().'.png';
             Storage::disk('public')->put($filename, base64_decode($image));
             $signaturePath = $filename;
         }
 
         $reg->update([
-            'status'           => 'signed',
-            'signed_at'        => now(),
-            'form_data'        => $formData,
-            'signature_path'   => $signaturePath,
+            'status' => 'signed',
+            'signed_at' => now(),
+            'form_data' => $formData,
+            'signature_path' => $signaturePath,
             'id_document_path' => $idPhoto,
         ]);
     }

@@ -11,9 +11,16 @@ class RateController extends Controller
     public function index(Request $request)
     {
         $q = Rate::query();
-        if ($id = $request->query('room_type_id')) $q->where('room_type_id', $id);
-        if ($from = $request->query('from')) $q->where('date', '>=', $from);
-        if ($to = $request->query('to')) $q->where('date', '<=', $to);
+        if ($id = $request->query('room_type_id')) {
+            $q->where('room_type_id', $id);
+        }
+        if ($from = $request->query('from')) {
+            $q->where('date', '>=', $from);
+        }
+        if ($to = $request->query('to')) {
+            $q->where('date', '<=', $to);
+        }
+
         return response()->json($q->paginate(200));
     }
 
@@ -27,6 +34,7 @@ class RateController extends Controller
             );
             $count++;
         }
+
         return response()->json(['updated' => $count]);
     }
 }

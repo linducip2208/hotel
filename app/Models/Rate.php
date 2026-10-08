@@ -19,7 +19,18 @@ class Rate extends Model
         'closed' => 'boolean',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function roomType() { return $this->belongsTo(RoomType::class); }
-    public function ratePlan() { return $this->belongsTo(RatePlan::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function roomType()
+    {
+        return $this->belongsTo(RoomType::class);
+    }
+
+    public function ratePlan()
+    {
+        return $this->belongsTo(RatePlan::class);
+    }
 }

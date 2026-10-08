@@ -21,7 +21,18 @@ class PosMenuItem extends Model
         'photos' => 'array',
     ];
 
-    public function outlet() { return $this->belongsTo(PosOutlet::class, 'outlet_id'); }
-    public function category() { return $this->belongsTo(PosCategory::class, 'category_id'); }
-    public function recipes()  { return $this->hasMany(PosRecipe::class, 'menu_item_id'); }
+    public function outlet()
+    {
+        return $this->belongsTo(PosOutlet::class, 'outlet_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(PosCategory::class, 'category_id');
+    }
+
+    public function recipes()
+    {
+        return $this->hasMany(PosRecipe::class, 'menu_item_id');
+    }
 }

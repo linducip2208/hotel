@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Schema;
  * Persists every outbound notification (email, WhatsApp, SMS) for audit,
  * deduplication (idempotency_key), and delivery status tracking.
  */
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         Schema::create('notification_logs', function (Blueprint $t) {

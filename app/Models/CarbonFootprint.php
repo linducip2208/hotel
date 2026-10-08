@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class CarbonFootprint extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
+
     protected $casts = [
         'period_date' => 'date',
         'energy_kwh' => 'decimal:2',
@@ -18,6 +20,13 @@ class CarbonFootprint extends Model
         'breakdown' => 'array',
     ];
 
-    public function property()    { return $this->belongsTo(Property::class); }
-    public function reservation() { return $this->belongsTo(Reservation::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class);
+    }
 }

@@ -1,14 +1,14 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+use App\Http\Controllers\Admin\BillingController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LicenseController;
-use App\Http\Controllers\Admin\TenantController;
-use App\Http\Controllers\Admin\BillingController;
-use App\Http\Controllers\Admin\TelemetryController;
 use App\Http\Controllers\Admin\SupportController;
-use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\SystemController;
-use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+use App\Http\Controllers\Admin\TelemetryController;
+use App\Http\Controllers\Admin\TenantController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->name('admin.')->group(function () {

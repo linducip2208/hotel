@@ -16,5 +16,8 @@ class WebhookDelivery extends Model
         'delivered_at' => 'datetime',
     ];
 
-    public function webhook() { return $this->belongsTo(Webhook::class); }
+    public function webhook()
+    {
+        return $this->belongsTo(Webhook::class);
+    }
 }

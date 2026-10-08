@@ -13,9 +13,8 @@ class KidsClubService
     {
         return KidsActivity::where('property_id', $propertyId)
             ->where('is_active', true)
-            ->withCount(['bookings' => fn ($q) =>
-                $q->where('booking_date', today()->toDateString())
-                  ->where('status', '!=', 'cancelled')
+            ->withCount(['bookings' => fn ($q) => $q->where('booking_date', today()->toDateString())
+                ->where('status', '!=', 'cancelled'),
             ])
             ->orderBy('name')
             ->get();
@@ -41,7 +40,7 @@ class KidsClubService
             $activity = KidsActivity::findOrFail($data['kids_activity_id']);
             $avail = $this->checkAvailability($activity, $data['booking_date']);
 
-            if (!$avail['available']) {
+            if (! $avail['available']) {
                 throw new \RuntimeException('Aktivitas sudah penuh untuk tanggal tersebut.');
             }
 
@@ -64,6 +63,7 @@ class KidsClubService
     {
         $booking = KidsBooking::findOrFail($bookingId);
         $booking->update(['status' => 'cancelled']);
+
         return $booking;
     }
 

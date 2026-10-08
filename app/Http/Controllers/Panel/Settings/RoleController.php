@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Panel\Settings;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
@@ -56,6 +56,7 @@ class RoleController extends Controller
     {
         $property = app('current_property');
         $roles = Role::where('guard_name', 'web')->withCount('permissions')->get();
+
         return view('panel.settings.roles.index', compact('property', 'roles'));
     }
 
@@ -64,6 +65,7 @@ class RoleController extends Controller
         $property = app('current_property');
         $permissionGroups = $this->allPermissions;
         $existingPermissions = Permission::where('guard_name', 'web')->pluck('name')->toArray();
+
         return view('panel.settings.roles.create', compact('property', 'permissionGroups', 'existingPermissions'));
     }
 
@@ -80,7 +82,7 @@ class RoleController extends Controller
             'guard_name' => 'web',
         ]);
 
-        if (!empty($validated['permissions'])) {
+        if (! empty($validated['permissions'])) {
             $role->syncPermissions($validated['permissions']);
         }
 
@@ -102,9 +104,9 @@ class RoleController extends Controller
     {
         $role = Role::findOrFail($id);
 
-        if (!in_array($role->name, ['super_owner', 'manager'])) {
+        if (! in_array($role->name, ['super_owner', 'manager'])) {
             $request->validate([
-                'name' => 'required|string|max:50|unique:roles,name,' . $id,
+                'name' => 'required|string|max:50|unique:roles,name,'.$id,
             ]);
             $role->update(['name' => $request->name]);
         }
@@ -125,6 +127,7 @@ class RoleController extends Controller
         }
 
         $role->delete();
+
         return back()->with('success', "Role \"{$role->name}\" dihapus.");
     }
 }

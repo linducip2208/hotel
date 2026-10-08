@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Panel\Hk;
 
 use App\Http\Controllers\Controller;
-use App\Models\LinenCategory;
 use App\Models\UniformAssignment;
 use App\Services\Hk\LinenService;
 use Illuminate\Http\Request;
@@ -49,6 +48,7 @@ class LaundryStockController extends Controller
 
         try {
             $this->service->recordTransaction($data);
+
             return back()->with('success', 'Transaksi linen berhasil dicatat.');
         } catch (\RuntimeException $e) {
             return back()->with('error', $e->getMessage());

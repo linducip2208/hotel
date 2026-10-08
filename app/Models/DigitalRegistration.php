@@ -18,7 +18,18 @@ class DigitalRegistration extends Model
         'form_data' => 'json',
     ];
 
-    public function property()    { return $this->belongsTo(Property::class); }
-    public function reservation() { return $this->belongsTo(Reservation::class); }
-    public function guest()       { return $this->belongsTo(Guest::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class);
+    }
+
+    public function guest()
+    {
+        return $this->belongsTo(Guest::class);
+    }
 }

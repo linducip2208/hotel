@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Services\Seo\IndexNowService;
+use App\Services\Seo\SitemapBuilder;
 use Illuminate\Console\Command;
 
 class IndexNowSubmit extends Command
@@ -18,12 +19,13 @@ class IndexNowSubmit extends Command
     {
         if ($this->option('url')) {
             $result = $service->submitSingle($this->option('url'));
-            $this->info("Submitted 1 URL. Success: " . ($result['success'] ? 'yes' : 'no'));
+            $this->info('Submitted 1 URL. Success: '.($result['success'] ? 'yes' : 'no'));
+
             return 0;
         }
 
         if ($this->option('new')) {
-            $builder = new \App\Services\Seo\SitemapBuilder;
+            $builder = new SitemapBuilder;
             $urls = [];
             foreach ($builder->index() as $group) {
                 foreach ($builder->urlsForGroup($group) as $u) {
@@ -32,6 +34,7 @@ class IndexNowSubmit extends Command
             }
             $result = $service->submitNewOnly($urls);
             $this->info("New URLs submitted: {$result['submitted']}");
+
             return 0;
         }
 

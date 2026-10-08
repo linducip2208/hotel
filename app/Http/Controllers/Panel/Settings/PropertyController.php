@@ -26,6 +26,7 @@ class PropertyController extends Controller
             'check_out_time' => 'nullable',
         ]);
         app('current_property')->update($data);
+
         return back()->with('status', 'Property updated.');
     }
 }

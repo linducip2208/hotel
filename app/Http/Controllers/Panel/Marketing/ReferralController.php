@@ -50,6 +50,7 @@ class ReferralController extends Controller
             'code' => 'REF-'.strtoupper(substr(str_replace(' ', '', $guest->first_name), 0, 4)).'-'.strtoupper(Str::random(4)),
             'is_active' => true,
         ]);
+
         return back()->with('success', 'Referral code created.');
     }
 
@@ -60,7 +61,8 @@ class ReferralController extends Controller
         ]);
         $guest = Guest::where('property_id', app('current_property')->id)->findOrFail($data['guest_id']);
         $code = $service->generateCode($guest);
-        return back()->with('success', 'Referral code generated: ' . $code->code);
+
+        return back()->with('success', 'Referral code generated: '.$code->code);
     }
 
     public function settings()

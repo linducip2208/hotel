@@ -34,7 +34,9 @@ class ResolveCurrentProperty
 
         if ($id = session('current_property_id')) {
             $prop = Property::find($id);
-            if ($prop) return $prop;
+            if ($prop) {
+                return $prop;
+            }
         }
 
         if ($user && $user->property_id) {

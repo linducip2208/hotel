@@ -12,11 +12,18 @@ class NotificationLog extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
-        'metadata'     => 'array',
-        'sent_at'      => 'datetime',
+        'metadata' => 'array',
+        'sent_at' => 'datetime',
         'delivered_at' => 'datetime',
     ];
 
-    public function property()   { return $this->belongsTo(Property::class); }
-    public function notifiable() { return $this->morphTo(); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function notifiable()
+    {
+        return $this->morphTo();
+    }
 }

@@ -63,7 +63,7 @@ class TenantDatabaseManager
             mkdir($backupDir, 0755, true);
         }
 
-        $filename = $backupDir . '/' . now()->format('Y-m-d_His') . '.sql';
+        $filename = $backupDir.'/'.now()->format('Y-m-d_His').'.sql';
 
         $command = sprintf(
             'mysqldump --host=%s --port=%s --user=%s --password=%s --single-transaction --routines --triggers %s > %s',
@@ -118,7 +118,7 @@ class TenantDatabaseManager
 
     protected function getDatabaseName(Tenant $tenant): string
     {
-        return 'tenant_' . substr($tenant->id, 0, 8);
+        return 'tenant_'.substr($tenant->id, 0, 8);
     }
 
     protected function configureTenantConnection(Tenant $tenant): void

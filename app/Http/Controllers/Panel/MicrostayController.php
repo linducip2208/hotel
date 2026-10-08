@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
 use App\Models\MicrostayRate;
+use App\Models\RoomType;
 use App\Services\Fo\MicrostayService;
 use Illuminate\Http\Request;
 
@@ -28,7 +29,7 @@ class MicrostayController extends Controller
             ->with('roomType')
             ->get();
 
-        $roomTypes = \App\Models\RoomType::where('property_id', $property->id)
+        $roomTypes = RoomType::where('property_id', $property->id)
             ->where('is_active', true)
             ->get();
 
@@ -68,6 +69,7 @@ class MicrostayController extends Controller
     public function destroyRate($id)
     {
         MicrostayRate::findOrFail($id)->delete();
+
         return back()->with('success', 'Rate dihapus.');
     }
 
@@ -81,13 +83,15 @@ class MicrostayController extends Controller
             'adults' => 'nullable|integer|min:1|max:4',
         ]);
 
-        $price = $service->calculatePrice($property->id, $validated['room_type_id'], (int)$validated['hours']);
-        if (!$price) return back()->with('error', 'Tidak bisa menghitung harga.');
+        $price = $service->calculatePrice($property->id, $validated['room_type_id'], (int) $validated['hours']);
+        if (! $price) {
+            return back()->with('error', 'Tidak bisa menghitung harga.');
+        }
 
         $reservation = $service->createMicrostayReservation([
             'property_id' => $property->id,
             'check_in' => $validated['check_in'],
-            'microstay_hours' => (int)$validated['hours'],
+            'microstay_hours' => (int) $validated['hours'],
             'total_room' => $price,
             'adults' => $validated['adults'] ?? 1,
         ]);

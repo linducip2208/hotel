@@ -7,12 +7,8 @@ use App\Models\Integration;
 use App\Models\Inventory;
 use App\Models\Provider;
 use App\Models\Review;
-use App\Services\Ai\ConciergeService;
 use App\Services\Ai\DemandForecastAi;
-use App\Services\Ai\ReviewReplyGenerator;
-use App\Services\Ai\TranslationService;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 
 class AiController extends Controller
@@ -25,7 +21,7 @@ class AiController extends Controller
         if (Schema::hasTable('integrations')) {
             $aiProviders = Integration::where('property_id', $property?->id)
                 ->where('category', 'ai')
-                ->get(['id','name','api_format','is_active','default_model']);
+                ->get(['id', 'name', 'api_format', 'is_active', 'default_model']);
         }
 
         $tools = [
@@ -62,7 +58,7 @@ class AiController extends Controller
             try {
                 $forecast = $svc->forecast($property, $from, $to);
             } catch (\Throwable $e) {
-                $forecast['note'] = 'AI provider belum dikonfigurasi atau error: ' . $e->getMessage();
+                $forecast['note'] = 'AI provider belum dikonfigurasi atau error: '.$e->getMessage();
             }
         }
 
@@ -73,7 +69,7 @@ class AiController extends Controller
             $sold = (int) Inventory::where('property_id', $property?->id)->whereDate('date', $date)->sum('sold');
             $historical->push([
                 'date' => $date,
-                'occ'  => round(($sold / $totalRooms) * 100, 1),
+                'occ' => round(($sold / $totalRooms) * 100, 1),
             ]);
         }
 
@@ -88,11 +84,16 @@ class AiController extends Controller
             $cols = Schema::getColumnListing('reviews');
             $q = Review::where('property_id', $property?->id);
             // reply column varies between schema iterations
-            if (in_array('reply_text', $cols, true)) $q->whereNull('reply_text');
-            elseif (in_array('reply', $cols, true)) $q->whereNull('reply');
-            elseif (in_array('reply_at', $cols, true)) $q->whereNull('reply_at');
+            if (in_array('reply_text', $cols, true)) {
+                $q->whereNull('reply_text');
+            } elseif (in_array('reply', $cols, true)) {
+                $q->whereNull('reply');
+            } elseif (in_array('reply_at', $cols, true)) {
+                $q->whereNull('reply_at');
+            }
             $reviews = $q->orderByDesc('created_at')->take(20)->get();
         }
+
         return view('panel.ai.review-replies', compact('reviews'));
     }
 

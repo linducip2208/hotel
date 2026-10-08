@@ -13,6 +13,7 @@ class TravelAgentController extends Controller
         $agents = TravelAgent::where('property_id', app('current_property')->id)
             ->withCount(['reservations', 'allotments'])
             ->orderBy('name')->paginate(25);
+
         return view('panel.sales.travel-agents.index', compact('agents'));
     }
 
@@ -26,14 +27,16 @@ class TravelAgentController extends Controller
             'is_active' => 'boolean',
         ]);
         TravelAgent::create($data + ['property_id' => app('current_property')->id]);
+
         return back()->with('success', 'Travel agent berhasil ditambahkan.');
     }
 
     public function show($id)
     {
         $agent = TravelAgent::where('property_id', app('current_property')->id)
-            ->with(['allotments.roomType', 'reservations' => fn($q) => $q->latest()->limit(20)])
+            ->with(['allotments.roomType', 'reservations' => fn ($q) => $q->latest()->limit(20)])
             ->findOrFail($id);
+
         return view('panel.sales.travel-agents.show', compact('agent'));
     }
 
@@ -48,6 +51,7 @@ class TravelAgentController extends Controller
             'is_active' => 'boolean',
         ]);
         $agent->update($data);
+
         return back()->with('success', 'Travel agent berhasil diperbarui.');
     }
 
@@ -55,6 +59,7 @@ class TravelAgentController extends Controller
     {
         $agent = TravelAgent::where('property_id', app('current_property')->id)->findOrFail($id);
         $agent->delete();
+
         return back()->with('success', 'Travel agent berhasil dihapus.');
     }
 }

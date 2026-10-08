@@ -10,14 +10,15 @@ use Illuminate\Support\Facades\Schema;
  * non-existent table. It should be a plain unsignedBigInteger nullable for
  * polymorphic morphTo usage (source_type + source_id pair).
  */
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         try {
             Schema::table('folio_charges', function (Blueprint $t) {
                 $t->dropForeign(['source_type_id']);
             });
-        } catch (\Throwable) {
+        } catch (Throwable) {
             // FK may not exist on all DB engines — safe to ignore
         }
 

@@ -13,7 +13,7 @@ final class VingcardAdapter extends BaseAdapter implements LockAdapterInterface
     protected function defaultHeaders(): array
     {
         return array_merge(parent::defaultHeaders(), [
-            'Authorization' => 'Bearer ' . $this->apiKey(),
+            'Authorization' => 'Bearer '.$this->apiKey(),
             'X-Visionline-Hotel' => (string) ($this->provider->extra_headers['hotel_id'] ?? ''),
         ]);
     }

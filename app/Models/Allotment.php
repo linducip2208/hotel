@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Allotment extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
+
     protected $casts = [
         'from_date' => 'date',
         'to_date' => 'date',
@@ -16,11 +18,30 @@ class Allotment extends Model
         'negotiated_rate' => 'decimal:2',
     ];
 
-    public function property()   { return $this->belongsTo(Property::class); }
-    public function travelAgent(){ return $this->belongsTo(TravelAgent::class); }
-    public function company()    { return $this->belongsTo(Company::class); }
-    public function roomType()   { return $this->belongsTo(RoomType::class); }
-    public function ratePlan()   { return $this->belongsTo(RatePlan::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function travelAgent()
+    {
+        return $this->belongsTo(TravelAgent::class);
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function roomType()
+    {
+        return $this->belongsTo(RoomType::class);
+    }
+
+    public function ratePlan()
+    {
+        return $this->belongsTo(RatePlan::class);
+    }
 
     public function getRemainingAttribute(): int
     {

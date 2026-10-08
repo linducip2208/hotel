@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 class RebuildSitemapCommand extends Command
 {
     protected $signature = 'seo:rebuild-sitemap';
+
     protected $description = 'Invalidate sitemap cache so it rebuilds on next access';
 
     public function handle(): int
@@ -16,6 +17,7 @@ class RebuildSitemapCommand extends Command
             Cache::forget("sitemap:$g");
         }
         $this->info('Sitemap cache cleared.');
+
         return self::SUCCESS;
     }
 }

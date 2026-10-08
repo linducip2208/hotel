@@ -18,8 +18,23 @@ class PosOutlet extends Model
         'config' => 'array',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function tables() { return $this->hasMany(PosTable::class, 'outlet_id'); }
-    public function categories() { return $this->hasMany(PosCategory::class, 'outlet_id'); }
-    public function menuItems() { return $this->hasMany(PosMenuItem::class, 'outlet_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function tables()
+    {
+        return $this->hasMany(PosTable::class, 'outlet_id');
+    }
+
+    public function categories()
+    {
+        return $this->hasMany(PosCategory::class, 'outlet_id');
+    }
+
+    public function menuItems()
+    {
+        return $this->hasMany(PosMenuItem::class, 'outlet_id');
+    }
 }

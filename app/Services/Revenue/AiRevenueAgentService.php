@@ -68,10 +68,12 @@ class AiRevenueAgentService
             if (! is_array($parsed)) {
                 return ['error' => 'Gagal mem-parsing respons AI.', 'raw' => $content];
             }
+
             return $parsed;
         } catch (\Throwable $e) {
             \Log::error("AI Revenue Agent error: {$e->getMessage()}");
-            return ['error' => 'Gagal menghubungi AI: ' . $e->getMessage()];
+
+            return ['error' => 'Gagal menghubungi AI: '.$e->getMessage()];
         }
     }
 
@@ -93,11 +95,12 @@ class AiRevenueAgentService
                 ],
                 [
                     'price' => $rec['suggested_rate'] ?? 0,
-                    'reason' => 'AI Revenue Agent: ' . ($rec['reason'] ?? 'optimasi'),
+                    'reason' => 'AI Revenue Agent: '.($rec['reason'] ?? 'optimasi'),
                 ]
             );
             $applied++;
         }
+
         return $applied;
     }
 
@@ -108,6 +111,7 @@ class AiRevenueAgentService
             $date = now()->addDays($d);
             $insights[$date->toDateString()] = $this->analyze($property, $date);
         }
+
         return $insights;
     }
 }

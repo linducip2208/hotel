@@ -29,12 +29,12 @@ class HousekeepingController extends Controller
     public function createTask(Request $request)
     {
         $validated = $request->validate([
-            'room_id'        => 'required|integer|exists:rooms,id',
-            'type'           => 'required|in:checkout,stayover,turndown,deep_clean,maintenance',
-            'priority'       => 'nullable|in:low,normal,high,urgent',
+            'room_id' => 'required|integer|exists:rooms,id',
+            'type' => 'required|in:checkout,stayover,turndown,deep_clean,maintenance',
+            'priority' => 'nullable|in:low,normal,high,urgent',
             'scheduled_date' => 'required|date',
-            'notes'          => 'nullable|string|max:500',
-            'assigned_to'    => 'nullable|integer|exists:users,id',
+            'notes' => 'nullable|string|max:500',
+            'assigned_to' => 'nullable|integer|exists:users,id',
         ]);
 
         $validated['property_id'] = $this->property()->id;

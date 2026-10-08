@@ -8,7 +8,6 @@ use App\Models\ArInvoice;
 use App\Models\EFakturRecord;
 use App\Models\Folio;
 use App\Models\Property;
-use Carbon\Carbon;
 
 class EfakturXmlGenerator
 {
@@ -110,7 +109,7 @@ class EfakturXmlGenerator
         $efaktur = EFakturRecord::create([
             'property_id' => $folio->property_id,
             'invoice_id' => null,
-            'invoice_no' => 'FOL-' . $folio->id,
+            'invoice_no' => 'FOL-'.$folio->id,
             'nomor_faktur' => $nsfp,
             'kode_transaksi' => $kodeTransaksi,
             'kode_status' => '01',
@@ -139,44 +138,44 @@ class EfakturXmlGenerator
      */
     private function buildXml(array $data): string
     {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-        $xml .= '<Faktur xmlns="http://factur.pajak.go.id/4.0">' . "\n";
-        $xml .= '  <KeteranganTambahan>Hotel Accommodation — ' . e($data['namaPenjual']) . '</KeteranganTambahan>' . "\n";
-        $xml .= '  <KodeTransaksi>' . $data['kdJenisTransaksi'] . '</KodeTransaksi>' . "\n";
-        $xml .= '  <FgPengganti>' . $data['fgPengganti'] . '</FgPengganti>' . "\n";
-        $xml .= '  <NomorFaktur>' . $data['nomorFaktur'] . '</NomorFaktur>' . "\n";
-        $xml .= '  <TanggalFaktur>' . $data['tanggalFaktur'] . '</TanggalFaktur>' . "\n";
-        $xml .= '  <Penjual>' . "\n";
-        $xml .= '    <NPWP>' . $data['npwpPenjual'] . '</NPWP>' . "\n";
-        $xml .= '    <Nama>' . e($data['namaPenjual']) . '</Nama>' . "\n";
-        $xml .= '    <Alamat>' . e($data['alamatPenjual']) . '</Alamat>' . "\n";
-        $xml .= '  </Penjual>' . "\n";
-        $xml .= '  <Pembeli>' . "\n";
-        $xml .= '    <NPWP>' . $data['npwpPembeli'] . '</NPWP>' . "\n";
-        $xml .= '    <Nama>' . e($data['namaPembeli']) . '</Nama>' . "\n";
-        $xml .= '    <Alamat>' . e($data['alamatPembeli']) . '</Alamat>' . "\n";
-        $xml .= '  </Pembeli>' . "\n";
-        $xml .= '  <DetailTransaksi>' . "\n";
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+        $xml .= '<Faktur xmlns="http://factur.pajak.go.id/4.0">'."\n";
+        $xml .= '  <KeteranganTambahan>Hotel Accommodation — '.e($data['namaPenjual']).'</KeteranganTambahan>'."\n";
+        $xml .= '  <KodeTransaksi>'.$data['kdJenisTransaksi'].'</KodeTransaksi>'."\n";
+        $xml .= '  <FgPengganti>'.$data['fgPengganti'].'</FgPengganti>'."\n";
+        $xml .= '  <NomorFaktur>'.$data['nomorFaktur'].'</NomorFaktur>'."\n";
+        $xml .= '  <TanggalFaktur>'.$data['tanggalFaktur'].'</TanggalFaktur>'."\n";
+        $xml .= '  <Penjual>'."\n";
+        $xml .= '    <NPWP>'.$data['npwpPenjual'].'</NPWP>'."\n";
+        $xml .= '    <Nama>'.e($data['namaPenjual']).'</Nama>'."\n";
+        $xml .= '    <Alamat>'.e($data['alamatPenjual']).'</Alamat>'."\n";
+        $xml .= '  </Penjual>'."\n";
+        $xml .= '  <Pembeli>'."\n";
+        $xml .= '    <NPWP>'.$data['npwpPembeli'].'</NPWP>'."\n";
+        $xml .= '    <Nama>'.e($data['namaPembeli']).'</Nama>'."\n";
+        $xml .= '    <Alamat>'.e($data['alamatPembeli']).'</Alamat>'."\n";
+        $xml .= '  </Pembeli>'."\n";
+        $xml .= '  <DetailTransaksi>'."\n";
 
         foreach ($data['details'] as $detail) {
-            $xml .= '    <Item>' . "\n";
-            $xml .= '      <KodeBarang>' . $detail['kode'] . '</KodeBarang>' . "\n";
-            $xml .= '      <NamaBarang>' . e($detail['nama']) . '</NamaBarang>' . "\n";
-            $xml .= '      <HargaSatuan>' . number_format($detail['harga'], 2, '.', '') . '</HargaSatuan>' . "\n";
-            $xml .= '      <Jumlah>' . $detail['jumlah'] . '</Jumlah>' . "\n";
-            $xml .= '      <Total>' . number_format($detail['total'], 2, '.', '') . '</Total>' . "\n";
-            $xml .= '      <Diskon>0.00</Diskon>' . "\n";
-            $xml .= '      <Dpp>' . number_format($detail['dpp'], 2, '.', '') . '</Dpp>' . "\n";
-            $xml .= '      <Ppn>' . number_format($detail['ppn'], 2, '.', '') . '</Ppn>' . "\n";
-            $xml .= '    </Item>' . "\n";
+            $xml .= '    <Item>'."\n";
+            $xml .= '      <KodeBarang>'.$detail['kode'].'</KodeBarang>'."\n";
+            $xml .= '      <NamaBarang>'.e($detail['nama']).'</NamaBarang>'."\n";
+            $xml .= '      <HargaSatuan>'.number_format($detail['harga'], 2, '.', '').'</HargaSatuan>'."\n";
+            $xml .= '      <Jumlah>'.$detail['jumlah'].'</Jumlah>'."\n";
+            $xml .= '      <Total>'.number_format($detail['total'], 2, '.', '').'</Total>'."\n";
+            $xml .= '      <Diskon>0.00</Diskon>'."\n";
+            $xml .= '      <Dpp>'.number_format($detail['dpp'], 2, '.', '').'</Dpp>'."\n";
+            $xml .= '      <Ppn>'.number_format($detail['ppn'], 2, '.', '').'</Ppn>'."\n";
+            $xml .= '    </Item>'."\n";
         }
 
-        $xml .= '  </DetailTransaksi>' . "\n";
-        $xml .= '  <TotalDPP>' . number_format($data['totalDpp'], 2, '.', '') . '</TotalDPP>' . "\n";
-        $xml .= '  <TotalPPN>' . number_format($data['totalPpn'], 2, '.', '') . '</TotalPPN>' . "\n";
-        $xml .= '  <TotalPPnBM>0.00</TotalPPnBM>' . "\n";
-        $xml .= '  <IsDigunggung>0</IsDigunggung>' . "\n";
-        $xml .= '  <Status>' . $data['status'] . '</Status>' . "\n";
+        $xml .= '  </DetailTransaksi>'."\n";
+        $xml .= '  <TotalDPP>'.number_format($data['totalDpp'], 2, '.', '').'</TotalDPP>'."\n";
+        $xml .= '  <TotalPPN>'.number_format($data['totalPpn'], 2, '.', '').'</TotalPPN>'."\n";
+        $xml .= '  <TotalPPnBM>0.00</TotalPPnBM>'."\n";
+        $xml .= '  <IsDigunggung>0</IsDigunggung>'."\n";
+        $xml .= '  <Status>'.$data['status'].'</Status>'."\n";
         $xml .= '</Faktur>';
 
         return $xml;
@@ -281,7 +280,8 @@ class EfakturXmlGenerator
             return str_pad((string) ((int) $last->nomor_faktur + 1), 13, '0', STR_PAD_LEFT);
         }
 
-        $base = '000' . now()->format('ymd') . '00001';
+        $base = '000'.now()->format('ymd').'00001';
+
         return substr($base, 0, 13);
     }
 
@@ -291,12 +291,14 @@ class EfakturXmlGenerator
             return '';
         }
         $cleaned = preg_replace('/[^0-9]/', '', $npwp);
+
         return $cleaned;
     }
 
     private function isValidNpwp(?string $npwp): bool
     {
         $cleaned = $this->cleanNpwp($npwp);
+
         return strlen($cleaned) === 15 && $cleaned !== '000000000000000';
     }
 

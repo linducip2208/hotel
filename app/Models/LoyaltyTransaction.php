@@ -11,6 +11,13 @@ class LoyaltyTransaction extends Model
 
     protected $guarded = ['id'];
 
-    public function member() { return $this->belongsTo(LoyaltyMember::class, 'member_id'); }
-    public function source() { return $this->morphTo(); }
+    public function member()
+    {
+        return $this->belongsTo(LoyaltyMember::class, 'member_id');
+    }
+
+    public function source()
+    {
+        return $this->morphTo();
+    }
 }

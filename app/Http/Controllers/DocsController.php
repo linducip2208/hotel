@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
 
 class DocsController extends Controller
@@ -22,7 +22,7 @@ class DocsController extends Controller
         $schema = [
             '@context' => 'https://schema.org',
             '@type' => 'TechArticle',
-            'headline' => $title . ' — ' . config('app.name'),
+            'headline' => $title.' — '.config('app.name'),
             'description' => $metaDescription,
             'author' => ['@type' => 'Organization', 'name' => config('app.name')],
             'publisher' => ['@type' => 'Organization', 'name' => config('app.name')],
@@ -67,7 +67,8 @@ class DocsController extends Controller
         $html = (string) $converter->convert($raw);
 
         $html = preg_replace_callback('/<(h[1-6])>(.*?)<\/\1>/s', function ($m) {
-            $id = \Illuminate\Support\Str::slug(strip_tags($m[2]));
+            $id = Str::slug(strip_tags($m[2]));
+
             return "<{$m[1]} id=\"{$id}\">{$m[2]} <a href=\"#{$id}\" class=\"anchor\">#</a></{$m[1]}>";
         }, $html);
 
@@ -92,6 +93,7 @@ class DocsController extends Controller
         $files = $this->listFiles();
         $file = collect($files)->firstWhere('slug', $slug);
         abort_unless($file && is_file($file['path']), 404);
+
         return response(file_get_contents($file['path']), 200, ['Content-Type' => 'text/markdown; charset=utf-8']);
     }
 
@@ -109,22 +111,29 @@ class DocsController extends Controller
             ];
         }
         usort($items, fn ($a, $b) => $a['order'] <=> $b['order'] ?: strcmp($a['slug'], $b['slug']));
+
         return $items;
     }
 
     protected function extractTitle(string $path): ?string
     {
         $h = fopen($path, 'r');
-        if (! $h) return null;
+        if (! $h) {
+            return null;
+        }
         for ($i = 0; $i < 5; $i++) {
             $line = fgets($h);
-            if ($line === false) break;
+            if ($line === false) {
+                break;
+            }
             if (preg_match('/^#\s+(.+)$/', trim($line), $m)) {
                 fclose($h);
+
                 return $m[1];
             }
         }
         fclose($h);
+
         return null;
     }
 
@@ -592,7 +601,7 @@ class DocsController extends Controller
     public function parseFeaturesMd(): array
     {
         $path = base_path('docs/01-FEATURES.md');
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             return [];
         }
 
@@ -610,6 +619,7 @@ class DocsController extends Controller
                     'name' => $m[1],
                     'features' => [],
                 ];
+
                 continue;
             }
             if (preg_match('/^\| (\d+\.\d+) \| (.+?) \| (.+?) \| (.+?) \|$/', $line, $m)) {
@@ -666,7 +676,7 @@ class DocsController extends Controller
                         ['label' => 'Real-time Availability', 'hotelhms' => true, 'qlo' => true, 'hdruid' => true, 'fewoh' => true, 'erp' => false],
                         ['label' => 'Payment Gateway (13+)',  'hotelhms' => true, 'qlo' => false, 'hdruid' => false, 'fewoh' => false, 'erp' => false],
                         ['label' => 'Promo Code Engine',      'hotelhms' => true, 'qlo' => false, 'hdruid' => false, 'fewoh' => false, 'erp' => false],
-                        ['label' => 'Abandoned Cart Recovery','hotelhms' => true, 'qlo' => false, 'hdruid' => false, 'fewoh' => false, 'erp' => false],
+                        ['label' => 'Abandoned Cart Recovery', 'hotelhms' => true, 'qlo' => false, 'hdruid' => false, 'fewoh' => false, 'erp' => false],
                     ],
                 ],
                 [
@@ -754,10 +764,10 @@ class DocsController extends Controller
             ],
             'summary' => [
                 'hotelhms_score' => '51/54',
-                'qlo_score'      => '11/54',
-                'hdruid_score'   => '13/54',
-                'fewoh_score'    => '10/54',
-                'erp_score'      => '18/54',
+                'qlo_score' => '11/54',
+                'hdruid_score' => '13/54',
+                'fewoh_score' => '10/54',
+                'erp_score' => '18/54',
             ],
         ];
     }

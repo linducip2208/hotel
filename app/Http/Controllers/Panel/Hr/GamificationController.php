@@ -41,6 +41,7 @@ class GamificationController extends Controller
     {
         $property = app('current_property');
         $badges = GamificationBadge::where('property_id', $property->id)->get();
+
         return view('panel.hr.gamification', compact('badges'));
     }
 

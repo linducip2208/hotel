@@ -11,6 +11,7 @@ use Illuminate\Console\Command;
 class DiagnosticCommand extends Command
 {
     protected $signature = 'license:diagnostic';
+
     protected $description = 'Run all license-related health checks';
 
     public function handle(TokenVerifier $verifier, FingerprintGenerator $gen): int
@@ -20,8 +21,13 @@ class DiagnosticCommand extends Command
         $checks = [];
         $checks[] = $this->check('Vendor server reachable', function () {
             $client = new Client(['base_uri' => config('license.vendor_base_url'), 'timeout' => 5, 'http_errors' => false]);
-            try { $r = $client->get('/health'); return $r->getStatusCode() < 500; }
-            catch (\Throwable $e) { return false; }
+            try {
+                $r = $client->get('/health');
+
+                return $r->getStatusCode() < 500;
+            } catch (\Throwable $e) {
+                return false;
+            }
         });
 
         $checks[] = $this->check('Public key file present', function () use ($verifier) {
@@ -49,6 +55,7 @@ class DiagnosticCommand extends Command
         $failed = collect($checks)->filter(fn ($v) => $v === false)->count();
         $this->line('');
         $this->line($failed === 0 ? '✓ All checks passed.' : "✗ {$failed} checks failed.");
+
         return $failed === 0 ? self::SUCCESS : self::FAILURE;
     }
 
@@ -60,6 +67,7 @@ class DiagnosticCommand extends Command
             $ok = false;
         }
         $this->line(sprintf('  [%s] %s', $ok ? '✓' : '✗', $label));
+
         return $ok;
     }
 }

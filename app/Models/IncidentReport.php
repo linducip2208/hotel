@@ -16,17 +16,44 @@ class IncidentReport extends Model
         'photos' => 'array',
     ];
 
-    public function property()          { return $this->belongsTo(Property::class); }
-    public function reportedBy()        { return $this->belongsTo(User::class, 'reported_by_user_id'); }
-    public function resolvedBy()        { return $this->belongsTo(User::class, 'resolved_by_user_id'); }
-    public function guest()             { return $this->belongsTo(Guest::class); }
-    public function reservation()       { return $this->belongsTo(Reservation::class); }
-    public function room()              { return $this->belongsTo(Room::class); }
-    public function followups()         { return $this->hasMany(IncidentFollowup::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function reportedBy()
+    {
+        return $this->belongsTo(User::class, 'reported_by_user_id');
+    }
+
+    public function resolvedBy()
+    {
+        return $this->belongsTo(User::class, 'resolved_by_user_id');
+    }
+
+    public function guest()
+    {
+        return $this->belongsTo(Guest::class);
+    }
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class);
+    }
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
+
+    public function followups()
+    {
+        return $this->hasMany(IncidentFollowup::class);
+    }
 
     public function severityColor(): string
     {
-        return match($this->severity) {
+        return match ($this->severity) {
             'low' => 'green',
             'medium' => 'amber',
             'high' => 'red',
@@ -37,7 +64,7 @@ class IncidentReport extends Model
 
     public function statusColor(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             'open' => 'red',
             'investigating' => 'amber',
             'resolved' => 'emerald',
@@ -48,7 +75,7 @@ class IncidentReport extends Model
 
     public function typeLabel(): string
     {
-        return match($this->incident_type) {
+        return match ($this->incident_type) {
             'guest_injury' => 'Cedera Tamu',
             'guest_illness' => 'Sakit Tamu',
             'theft' => 'Pencurian',

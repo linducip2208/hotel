@@ -16,6 +16,13 @@ class ArPayment extends Model
         'amount' => 'decimal:2',
     ];
 
-    public function invoice()      { return $this->belongsTo(ArInvoice::class, 'invoice_id'); }
-    public function journalEntry() { return $this->belongsTo(JournalEntry::class); }
+    public function invoice()
+    {
+        return $this->belongsTo(ArInvoice::class, 'invoice_id');
+    }
+
+    public function journalEntry()
+    {
+        return $this->belongsTo(JournalEntry::class);
+    }
 }

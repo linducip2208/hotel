@@ -1,5 +1,8 @@
 <?php
 
+use App\Adapters\Channel\AgodaAdapter;
+use App\Adapters\Channel\BookingComAdapter;
+use App\Adapters\Channel\TravelokaAdapter;
 use App\Models\AriSyncLog;
 use App\Models\Channel;
 use App\Models\Property;
@@ -22,7 +25,7 @@ it('creates ari sync log with running status on push', function () {
     // pushAri will attempt HTTP to external — catch exception, log should still exist
     try {
         $this->svc->pushAri($channel, [['room_type_id' => 1, 'date' => '2026-07-01', 'available' => 5]]);
-    } catch (\Throwable) {
+    } catch (Throwable) {
     }
 
     expect(AriSyncLog::where('channel_id', $channel->id)->where('operation', 'push_availability')->exists())->toBeTrue();
@@ -37,7 +40,7 @@ it('creates fetch_bookings log entry', function () {
 
     try {
         $this->svc->fetchBookings($channel);
-    } catch (\Throwable) {
+    } catch (Throwable) {
     }
 
     expect(AriSyncLog::where('channel_id', $channel->id)->where('operation', 'fetch_bookings')->exists())->toBeTrue();
@@ -48,9 +51,9 @@ it('resolves correct adapter class per channel code', function () {
     $agoda = Channel::create(['property_id' => $this->property->id, 'name' => 'Agoda', 'code' => 'agoda', 'adapter_class' => 'AgodaAdapter', 'is_active' => true, 'credentials_encrypted' => []]);
     $tvlk = Channel::create(['property_id' => $this->property->id, 'name' => 'Traveloka', 'code' => 'traveloka', 'adapter_class' => 'TravelokaAdapter', 'is_active' => true, 'credentials_encrypted' => []]);
 
-    expect($this->svc->adapter($bdc))->toBeInstanceOf(\App\Adapters\Channel\BookingComAdapter::class)
-        ->and($this->svc->adapter($agoda))->toBeInstanceOf(\App\Adapters\Channel\AgodaAdapter::class)
-        ->and($this->svc->adapter($tvlk))->toBeInstanceOf(\App\Adapters\Channel\TravelokaAdapter::class);
+    expect($this->svc->adapter($bdc))->toBeInstanceOf(BookingComAdapter::class)
+        ->and($this->svc->adapter($agoda))->toBeInstanceOf(AgodaAdapter::class)
+        ->and($this->svc->adapter($tvlk))->toBeInstanceOf(TravelokaAdapter::class);
 });
 
 it('marks channel last_sync_status failed on fetch error', function () {
@@ -62,7 +65,7 @@ it('marks channel last_sync_status failed on fetch error', function () {
 
     try {
         $this->svc->fetchBookings($channel);
-    } catch (\Throwable) {
+    } catch (Throwable) {
     }
 
     $status = $channel->fresh()->last_sync_status;

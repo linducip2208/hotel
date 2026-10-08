@@ -26,13 +26,14 @@ class NsfpService
                 $pool->is_active = false;
             }
             $pool->save();
+
             return $next;
         });
     }
 
     public function generateDemoPool(int $propertyId, int $count = 10): array
     {
-        $rangeStart = (int) (now()->format('ymd') . '00000');
+        $rangeStart = (int) (now()->format('ymd').'00000');
         $generated = [];
 
         for ($i = 0; $i < $count; $i++) {
@@ -57,6 +58,7 @@ class NsfpService
     protected function increment(string $serial): string
     {
         $num = (int) $serial + 1;
+
         return str_pad((string) $num, strlen($serial), '0', STR_PAD_LEFT);
     }
 }

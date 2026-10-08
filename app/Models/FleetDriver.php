@@ -16,7 +16,18 @@ class FleetDriver extends Model
         'license_expiry' => 'date',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function employee() { return $this->belongsTo(Employee::class); }
-    public function trips() { return $this->hasMany(FleetTrip::class, 'driver_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
+
+    public function trips()
+    {
+        return $this->hasMany(FleetTrip::class, 'driver_id');
+    }
 }

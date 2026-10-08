@@ -25,7 +25,7 @@ class ContentGenerator
 
             "Fasilitas standar yang wajib ada di setiap properti rekomendasi kami meliputi: Wi-Fi berkecepatan minimal 20 Mbps, AC dengan kontrol suhu individual, kamar mandi dalam dengan water heater, smart TV 32 inci ke atas, serta akses 24 jam ke resepsionis. Untuk kategori {$cat}, beberapa tambahan yang sering kami temukan di properti unggulan antara lain layanan kamar 24 jam, concierge yang bisa membantu reservasi restoran dan transportasi, serta loyalty program dengan poin yang bisa ditukar untuk menginap gratis di kunjungan berikutnya.",
 
-            "Dari sisi keamanan dan kenyamanan, semua properti dalam daftar ini telah kami verifikasi memiliki sistem keamanan 24 jam — baik berupa CCTV di area publik, satpam berjaga, maupun akses kartu kunci ke lantai kamar. Properti juga telah lolos inspeksi dasar: tidak ada laporan serius terkait kebersihan dalam 6 bulan terakhir, tidak ada keluhan berulang tentang kebisingan, dan rasio staf terhadap tamu cukup untuk memastikan layanan personal tetap terjaga. Untuk wisatawan dengan kebutuhan khusus, kami menandai properti yang menyediakan kamar aksesibel, ramp kursi roda, dan menu diet khusus.",
+            'Dari sisi keamanan dan kenyamanan, semua properti dalam daftar ini telah kami verifikasi memiliki sistem keamanan 24 jam — baik berupa CCTV di area publik, satpam berjaga, maupun akses kartu kunci ke lantai kamar. Properti juga telah lolos inspeksi dasar: tidak ada laporan serius terkait kebersihan dalam 6 bulan terakhir, tidak ada keluhan berulang tentang kebisingan, dan rasio staf terhadap tamu cukup untuk memastikan layanan personal tetap terjaga. Untuk wisatawan dengan kebutuhan khusus, kami menandai properti yang menyediakan kamar aksesibel, ramp kursi roda, dan menu diet khusus.',
 
             "Tips memilih {$cat} terbaik: perhatikan lokasi relatif terhadap tujuan utama perjalanan Anda — menginap di pusat kota memang praktis tetapi sering kali lebih bising dan mahal, sementara properti di area pinggiran biasanya lebih tenang dengan harga 20–40% lebih rendah. Cek juga kebijakan anak dan hewan peliharaan sebelum booking — tidak semua {$cat} mengizinkan anak di bawah 2 tahun atau hewan peliharaan. Terakhir, manfaatkan fitur chat dengan properti untuk mengkonfirmasi detail spesifik seperti ketersediaan connecting room, view kamar, atau permintaan late check-out sebelum Anda menyelesaikan pembayaran. Booking langsung via platform kami menjamin harga terbaik {$yearRef} dengan free cancellation H-1 — tanpa biaya perantara.",
         ]);
@@ -62,10 +62,10 @@ class ContentGenerator
         return match ($type) {
             'compare' => [
                 ['q' => "Mana yang lebih baik, {$ctx}?", 'a' => "Tergantung kebutuhan Anda. {$ctx} — masing-masing memiliki kelebihan. Lihat tabel perbandingan di atas untuk detail fitur, kapasitas, dan harga. Pilih berdasarkan prioritas: budget, jumlah tamu, atau fasilitas spesifik yang Anda butuhkan."],
-                ['q' => "Apakah harga lebih murah di salah satu dari {$ctx}?", 'a' => "Harga kamar bergantung pada musim, okupansi, dan durasi menginap. Secara umum, kedua kamar memiliki struktur tarif dasar yang berbeda — cek detail tarif di tabel perbandingan. Booking di hari biasa (weekday) biasanya lebih murah 10–25% dibanding weekend."],
-                ['q' => "Fasilitas apa yang membedakan {$ctx}?", 'a' => "Perbedaan utama terletak pada kapasitas tamu, konfigurasi tempat tidur, dan ukuran ruangan. Beberapa kamar juga memiliki fasilitas tambahan seperti bathtub, balkon pribadi, atau akses lounge. Detail lengkap bisa Anda lihat di tabel perbandingan di atas."],
-                ['q' => "Lokasi mana yang lebih strategis di antara {$ctx}?", 'a' => "Kedua kamar berada dalam properti yang sama sehingga akses ke pusat kota, tempat wisata, dan transportasi publik relatif setara. Perbedaan mungkin ada pada posisi kamar di dalam bangunan — misalnya menghadap taman vs menghadap jalan."],
-                ['q' => "Mana yang cocok untuk keluarga — {$ctx}?", 'a' => "Kamar dengan kapasitas lebih besar dan konfigurasi tempat tidur fleksibel (twin bed atau extra bed) lebih cocok untuk keluarga. Cek kolom Max Occupancy dan Bed Config di tabel perbandingan untuk menentukan mana yang sesuai dengan jumlah anggota keluarga Anda."],
+                ['q' => "Apakah harga lebih murah di salah satu dari {$ctx}?", 'a' => 'Harga kamar bergantung pada musim, okupansi, dan durasi menginap. Secara umum, kedua kamar memiliki struktur tarif dasar yang berbeda — cek detail tarif di tabel perbandingan. Booking di hari biasa (weekday) biasanya lebih murah 10–25% dibanding weekend.'],
+                ['q' => "Fasilitas apa yang membedakan {$ctx}?", 'a' => 'Perbedaan utama terletak pada kapasitas tamu, konfigurasi tempat tidur, dan ukuran ruangan. Beberapa kamar juga memiliki fasilitas tambahan seperti bathtub, balkon pribadi, atau akses lounge. Detail lengkap bisa Anda lihat di tabel perbandingan di atas.'],
+                ['q' => "Lokasi mana yang lebih strategis di antara {$ctx}?", 'a' => 'Kedua kamar berada dalam properti yang sama sehingga akses ke pusat kota, tempat wisata, dan transportasi publik relatif setara. Perbedaan mungkin ada pada posisi kamar di dalam bangunan — misalnya menghadap taman vs menghadap jalan.'],
+                ['q' => "Mana yang cocok untuk keluarga — {$ctx}?", 'a' => 'Kamar dengan kapasitas lebih besar dan konfigurasi tempat tidur fleksibel (twin bed atau extra bed) lebih cocok untuk keluarga. Cek kolom Max Occupancy dan Bed Config di tabel perbandingan untuk menentukan mana yang sesuai dengan jumlah anggota keluarga Anda.'],
             ],
             'city' => [
                 ['q' => "Hotel terbaik di {$ctx}?", 'a' => "Daftar hotel terbaik di {$ctx} bergantung pada preferensi Anda — lokasi, budget, dan tipe perjalanan. Kami telah mengkurasi pilihan akomodasi berdasarkan rating tamu, fasilitas, dan nilai value-for-money. Telusuri daftar di halaman ini untuk membandingkan langsung."],
@@ -120,7 +120,7 @@ class ContentGenerator
                 ['q' => "Apa beda hotel bintang {$ctx} dengan bintang lainnya?", 'a' => "Semakin tinggi bintang, semakin lengkap fasilitas dan personal layanan. Bintang {$ctx} berarti level kenyamanan dan fasilitas di atas standar — ekspektasi kualitas lebih tinggi untuk kebersihan, ukuran kamar, dining options, dan layanan tambahan seperti concierge dan room service."],
                 ['q' => "Apakah harga hotel bintang {$ctx} lebih mahal?", 'a' => "Ya, hotel bintang {$ctx} memiliki tarif yang lebih tinggi karena investasi fasilitas dan layanan yang lebih besar. Namun value-for-money seringkali lebih baik karena Anda mendapatkan pengalaman yang lebih lengkap."],
                 ['q' => "Fasilitas apa yang wajib ada di hotel bintang {$ctx}?", 'a' => "Hotel bintang {$ctx} wajib memenuhi standar minimal yang ditetapkan oleh asosiasi hotel — termasuk ukuran kamar, jenis restoran, dan layanan 24 jam. Detail lengkap bisa dicek di halaman ini."],
-                ['q' => "Apakah hotel bintang {$ctx} selalu lebih baik?", 'a' => "Tidak selalu — beberapa hotel butik bintang 3 bisa memberikan pengalaman yang lebih memorable dibanding hotel bintang 5 yang impersonal. Rating tamu dan review seringkali lebih akurat sebagai indikator kualitas daripada jumlah bintang."],
+                ['q' => "Apakah hotel bintang {$ctx} selalu lebih baik?", 'a' => 'Tidak selalu — beberapa hotel butik bintang 3 bisa memberikan pengalaman yang lebih memorable dibanding hotel bintang 5 yang impersonal. Rating tamu dan review seringkali lebih akurat sebagai indikator kualitas daripada jumlah bintang.'],
                 ['q' => "Berapa budget untuk hotel bintang {$ctx} di {$ctx}?", 'a' => "Budget untuk hotel bintang {$ctx} bervariasi tergantung kota, musim, dan tipe kamar. Di Indonesia, kisaran harga bintang {$ctx} umumnya Rp 500.000–3.000.000+ per malam."],
             ],
             'cheap' => [
@@ -128,7 +128,7 @@ class ContentGenerator
                 ['q' => "Apakah hotel murah di {$ctx} bersih?", 'a' => "Banyak hotel murah di {$ctx} yang bersih dan terawat. Kuncinya adalah memilih hotel dengan rating tamu minimal 3.8/5.0 untuk kebersihan. Baca review spesifik tentang kebersihan sebelum booking."],
                 ['q' => "Hotel murah di {$ctx} dekat mana?", 'a' => "Hotel murah di {$ctx} umumnya terkonsentrasi di area transit — dekat stasiun, terminal, atau area backpacker populer. Lokasi ini strategis untuk akses transportasi publik dan kuliner malam."],
                 ['q' => "Apakah hotel murah di {$ctx} aman?", 'a' => "Ya, sebagian besar hotel di {$ctx} aman. Pilih hotel yang memiliki resepsionis (minimal 12 jam), kunci kamar ganda, dan penerangan yang baik di area sekitar. Baca review yang menyebut 'keamanan' atau 'aman'."],
-                ['q' => "Tips booking hotel murah di {$ctx}", 'a' => "Tips: (1) pesan weekday untuk harga lebih murah, (2) cek apakah sarapan sudah termasuk, (3) bawa perlengkapan mandi sendiri, (4) booking langsung via website hotel untuk menghindari komisi platform, (5) tanyakan diskon untuk menginap panjang (weekly/monthly rate)."],
+                ['q' => "Tips booking hotel murah di {$ctx}", 'a' => 'Tips: (1) pesan weekday untuk harga lebih murah, (2) cek apakah sarapan sudah termasuk, (3) bawa perlengkapan mandi sendiri, (4) booking langsung via website hotel untuk menghindari komisi platform, (5) tanyakan diskon untuk menginap panjang (weekly/monthly rate).'],
             ],
             'near-landmark-short' => [
                 ['q' => "Hotel terdekat dengan {$ctx} di mana?", 'a' => "Hotel terdekat dengan {$ctx} berada dalam radius 500 meter hingga 1 km. Kami telah mengelompokkan pilihan akomodasi berdasarkan jarak dan aksesibilitas ke {$ctx}."],
@@ -141,8 +141,8 @@ class ContentGenerator
                 ['q' => "Hotel dekat {$ctx} di mana yang terbaik?", 'a' => "Hotel terbaik dekat {$ctx} adalah yang menawarkan shuttle gratis, kedap suara baik, dan fleksibilitas check-in/check-out. Pilihan direkomendasikan ada di halaman ini."],
                 ['q' => "Apakah hotel dekat {$ctx} menyediakan antar-jemput?", 'a' => "Banyak hotel dekat {$ctx} menyediakan shuttle gratis pada jam operasional tertentu. Konfirmasi jadwal dan rute dengan hotel sebelum booking."],
                 ['q' => "Berapa harga hotel dekat {$ctx}?", 'a' => "Harga hotel dekat {$ctx} bervariasi dari Rp 250.000 untuk budget hingga Rp 1.500.000+ untuk hotel premium dengan fasilitas lengkap. Tarif biasanya 10–20% lebih tinggi dari hotel sekelas di pusat kota."],
-                ['q' => "Apakah bising menginap dekat {$ctx}?", 'a' => "Kebisingan bervariasi tergantung jarak dan kualitas bangunan hotel. Hotel yang lebih mahal biasanya memiliki jendela double-glazed dan insulasi suara yang lebih baik. Minta kamar di sisi yang berlawanan dengan runway/rel."],
-                ['q' => "Ada hotel transit dekat {$ctx}?", 'a' => "Beberapa hotel menawarkan paket day-use (tanpa menginap penuh) untuk transit 6–10 jam. Tanyakan langsung ke hotel karena tidak semua mengiklankan layanan ini secara online."],
+                ['q' => "Apakah bising menginap dekat {$ctx}?", 'a' => 'Kebisingan bervariasi tergantung jarak dan kualitas bangunan hotel. Hotel yang lebih mahal biasanya memiliki jendela double-glazed dan insulasi suara yang lebih baik. Minta kamar di sisi yang berlawanan dengan runway/rel.'],
+                ['q' => "Ada hotel transit dekat {$ctx}?", 'a' => 'Beberapa hotel menawarkan paket day-use (tanpa menginap penuh) untuk transit 6–10 jam. Tanyakan langsung ke hotel karena tidak semua mengiklankan layanan ini secara online.'],
             ],
             'amenity' => [
                 ['q' => "Hotel {$ctx} di mana yang paling bagus?", 'a' => "Hotel dengan {$ctx} terbaik dikurasi berdasarkan rating tamu dan kelengkapan fasilitas. Lihat daftar rekomendasi kami di halaman ini untuk perbandingan langsung."],
@@ -201,18 +201,18 @@ class ContentGenerator
                 ['q' => "Hotel di {$ctx} untuk keluarga?", 'a' => "{$ctx} memiliki beberapa hotel yang ramah keluarga dengan taman, area bermain, dan kamar connecting. Area ini menawarkan suasana yang lebih tenang untuk anak-anak dibanding pusat kota yang bising."],
             ],
             'granular-price' => [
-                ['q' => "Hotel di {$ctx} yang harganya di bawah budget?", 'a' => "Kami telah mengkurasi hotel-hotel budget terbaik sesuai batas anggaran — semua di bawah harga yang Anda tentukan. Setiap hotel dalam daftar ini sudah diverifikasi untuk kebersihan, keamanan, dan kenyamanan."],
-                ['q' => "Apakah hotel budget di {$ctx} bersih?", 'a' => "Ya, meskipun budget, hotel-hotel dalam daftar ini memenuhi standar kebersihan minimal dengan rating tamu di atas 3.5/5 untuk kebersihan. Kami hanya merekomendasikan hotel yang lulus inspeksi kebersihan."],
+                ['q' => "Hotel di {$ctx} yang harganya di bawah budget?", 'a' => 'Kami telah mengkurasi hotel-hotel budget terbaik sesuai batas anggaran — semua di bawah harga yang Anda tentukan. Setiap hotel dalam daftar ini sudah diverifikasi untuk kebersihan, keamanan, dan kenyamanan.'],
+                ['q' => "Apakah hotel budget di {$ctx} bersih?", 'a' => 'Ya, meskipun budget, hotel-hotel dalam daftar ini memenuhi standar kebersihan minimal dengan rating tamu di atas 3.5/5 untuk kebersihan. Kami hanya merekomendasikan hotel yang lulus inspeksi kebersihan.'],
                 ['q' => "Kapan harga hotel paling murah di {$ctx}?", 'a' => "Harga hotel termurah di {$ctx} biasanya di weekday (Senin–Kamis) di luar peak season (liburan sekolah, Lebaran, Natal). Musim hujan (November–Maret) juga menawarkan tarif 20–40% lebih rendah."],
                 ['q' => "Apa fasilitas yang bisa diharapkan dengan budget ini di {$ctx}?", 'a' => "Dengan budget ini di {$ctx}, Anda bisa mendapat kamar bersih dengan kipas angin atau AC, kamar mandi dalam, dan Wi-Fi gratis. Fasilitas tambahan seperti sarapan atau kolam renang mungkin tidak termasuk."],
-                ['q' => "Tips booking hotel budget di {$ctx}?", 'a' => "Tips: (1) pesan weekday untuk harga lebih murah; (2) booking langsung via website kami untuk harga terbaik; (3) bawa perlengkapan mandi sendiri; (4) cek apakah ada biaya tambahan; (5) manfaatkan promo last-minute jika jadwal fleksibel."],
+                ['q' => "Tips booking hotel budget di {$ctx}?", 'a' => 'Tips: (1) pesan weekday untuk harga lebih murah; (2) booking langsung via website kami untuk harga terbaik; (3) bawa perlengkapan mandi sendiri; (4) cek apakah ada biaya tambahan; (5) manfaatkan promo last-minute jika jadwal fleksibel.'],
             ],
             'price-range' => [
                 ['q' => "Hotel di {$ctx} dalam rentang harga ini?", 'a' => "Kami telah mengkurasi hotel-hotel terbaik di {$ctx} dalam rentang harga yang Anda tentukan. Setiap properti dinilai dari value-for-money — bukan sekadar harga, tetapi kualitas yang Anda dapatkan untuk uang yang dikeluarkan."],
-                ['q' => "Apakah harga hotel di {$ctx} sudah termasuk pajak?", 'a' => "Harga yang ditampilkan di daftar ini sudah termasuk pajak dan service charge (all-in). Tidak ada biaya tersembunyi yang muncul di halaman checkout. Namun tetap konfirmasi saat booking untuk kepastian."],
+                ['q' => "Apakah harga hotel di {$ctx} sudah termasuk pajak?", 'a' => 'Harga yang ditampilkan di daftar ini sudah termasuk pajak dan service charge (all-in). Tidak ada biaya tersembunyi yang muncul di halaman checkout. Namun tetap konfirmasi saat booking untuk kepastian.'],
                 ['q' => "Apa yang membedakan hotel di range harga ini di {$ctx}?", 'a' => "Perbedaan utama dalam rentang harga yang sama di {$ctx} adalah: lokasi, ukuran kamar, kelengkapan fasilitas, dan brand amenities. Dua hotel dengan harga yang sama bisa memberikan pengalaman yang sangat berbeda."],
                 ['q' => "Kapan waktu terbaik booking di range harga ini di {$ctx}?", 'a' => "Untuk rentang harga ini di {$ctx}, booking 2-4 minggu sebelumnya memberikan pilihan terbaik. Saat peak season, rentang harga yang sama mungkin hanya mendapat kamar yang lebih kecil atau lokasi yang kurang strategis."],
-                ['q' => "Apakah bisa nego harga hotel di {$ctx}?", 'a' => "Untuk hotel dalam rentang ini, negosiasi langsung jarang berhasil. Strategi yang lebih efektif: booking di weekday, pilih paket bundle, atau tanyakan corporate/long-stay rate jika applicable."],
+                ['q' => "Apakah bisa nego harga hotel di {$ctx}?", 'a' => 'Untuk hotel dalam rentang ini, negosiasi langsung jarang berhasil. Strategi yang lebih efektif: booking di weekday, pilih paket bundle, atau tanyakan corporate/long-stay rate jika applicable.'],
             ],
             'room-type' => [
                 ['q' => "Apa kelebihan kamar {$ctx} dibanding tipe lain?", 'a' => "Kamar {$ctx} umumnya menawarkan ruang yang lebih lega, konfigurasi tempat tidur yang berbeda, dan fasilitas tambahan tertentu yang tidak tersedia di tipe kamar di bawahnya. Lihat detail spesifik per hotel untuk perbandingan akurat."],
@@ -225,22 +225,22 @@ class ContentGenerator
                 ['q' => "Berapa harga terbaru kamar {$ctx}?", 'a' => "Harga kamar {$ctx} di {$ctx} berkisar dari Rp 200.000–3.000.000+ per malam tergantung kelas hotel, musim, dan lokasi. Cek daftar di halaman ini untuk harga real-time."],
                 ['q' => "Kapan harga kamar {$ctx} paling murah?", 'a' => "Harga kamar {$ctx} paling murah di {$ctx} saat weekday di luar peak season (Januari–Maret dan Oktober–November). Diskon bisa mencapai 30% dibanding peak season."],
                 ['q' => "Apakah harga kamar {$ctx} sudah termasuk sarapan?", 'a' => "Tergantung hotel dan paket yang dipilih. Hotel mid-range ke atas umumnya menyertakan sarapan dalam tarif kamar {$ctx}, sementara hotel budget mungkin mengenakan biaya tambahan."],
-                ['q' => "Apa yang memengaruhi harga kamar {$ctx} di {$ctx}?", 'a' => "Faktor yang memengaruhi: musim, lokasi hotel, view (sea view vs garden view), fasilitas dalam kamar, branding hotel, dan event lokal. Peak season bisa menaikkan harga 30–50%."],
-                ['q' => "Tips dapat harga terbaik untuk kamar {$ctx}?", 'a' => "Tips: (1) booking 2-4 minggu sebelumnya; (2) pilih weekday; (3) manfaatkan loyalty program; (4) cek paket bundling; (5) booking langsung via website kami tanpa komisi perantara."],
+                ['q' => "Apa yang memengaruhi harga kamar {$ctx} di {$ctx}?", 'a' => 'Faktor yang memengaruhi: musim, lokasi hotel, view (sea view vs garden view), fasilitas dalam kamar, branding hotel, dan event lokal. Peak season bisa menaikkan harga 30–50%.'],
+                ['q' => "Tips dapat harga terbaik untuk kamar {$ctx}?", 'a' => 'Tips: (1) booking 2-4 minggu sebelumnya; (2) pilih weekday; (3) manfaatkan loyalty program; (4) cek paket bundling; (5) booking langsung via website kami tanpa komisi perantara.'],
             ],
             'guest-type' => [
                 ['q' => "Hotel terbaik di {$ctx} untuk {$ctx}?", 'a' => "Kami telah mengkurasi hotel-hotel di {$ctx} yang spesifik cocok untuk profil tamu ini — berdasarkan lokasi, fasilitas, dan review dari tamu dengan profil serupa."],
-                ['q' => "Apa fasilitas penting untuk {$ctx} di hotel?", 'a' => "Fasilitas penting bergantung pada tipe tamu — bisa meliputi connecting room, kids club, meja kerja, Wi-Fi cepat, atau layanan khusus. Cek detail masing-masing hotel untuk fasilitas yang relevan."],
+                ['q' => "Apa fasilitas penting untuk {$ctx} di hotel?", 'a' => 'Fasilitas penting bergantung pada tipe tamu — bisa meliputi connecting room, kids club, meja kerja, Wi-Fi cepat, atau layanan khusus. Cek detail masing-masing hotel untuk fasilitas yang relevan.'],
                 ['q' => "Apakah hotel di {$ctx} ramah untuk {$ctx}?", 'a' => "Sebagian besar hotel di {$ctx} melayani berbagai tipe tamu, namun beberapa hotel lebih terspesialisasi untuk segmen tertentu. Pilih hotel yang memiliki review positif dari tamu dengan profil serupa."],
-                ['q' => "Berapa budget ideal untuk hotel {$ctx} di {$ctx}?", 'a' => "Budget bervariasi tergantung tipe tamu — mulai dari Rp 150.000 untuk opsi budget hingga Rp 5.000.000+ untuk pengalaman premium. Pilih sesuai kebutuhan dan prioritas Anda."],
-                ['q' => "Tips memilih hotel untuk {$ctx} di {$ctx}?", 'a' => "Tips: (1) identifikasi prioritas utama; (2) baca review tamu dengan profil serupa; (3) komunikasikan kebutuhan spesifik saat booking; (4) pilih lokasi yang strategis untuk aktivitas Anda."],
+                ['q' => "Berapa budget ideal untuk hotel {$ctx} di {$ctx}?", 'a' => 'Budget bervariasi tergantung tipe tamu — mulai dari Rp 150.000 untuk opsi budget hingga Rp 5.000.000+ untuk pengalaman premium. Pilih sesuai kebutuhan dan prioritas Anda.'],
+                ['q' => "Tips memilih hotel untuk {$ctx} di {$ctx}?", 'a' => 'Tips: (1) identifikasi prioritas utama; (2) baca review tamu dengan profil serupa; (3) komunikasikan kebutuhan spesifik saat booking; (4) pilih lokasi yang strategis untuk aktivitas Anda.'],
             ],
             'season' => [
                 ['q' => "Bagaimana kondisi hotel {$ctx} saat musim {$ctx}?", 'a' => "Hotel di {$ctx} saat musim ini memiliki karakteristik berbeda — dari harga, ketersediaan, hingga fasilitas yang relevan. Lihat detail di halaman ini untuk panduan lengkap."],
                 ['q' => "Apakah harga hotel {$ctx} lebih murah saat musim {$ctx}?", 'a' => "Harga hotel sangat dipengaruhi musim — bisa 20–40% lebih murah atau 30–50% lebih mahal tergantung apakah ini peak season atau low season di {$ctx}."],
-                ['q' => "Aktivitas apa yang cocok saat musim {$ctx} di {$ctx}?", 'a' => "Aktivitas yang cocok bergantung pada musim: musim kemarau ideal untuk outdoor (trekking, diving, city tour), musim hujan lebih cocok untuk indoor (museum, spa, kuliner, workshop)."],
+                ['q' => "Aktivitas apa yang cocok saat musim {$ctx} di {$ctx}?", 'a' => 'Aktivitas yang cocok bergantung pada musim: musim kemarau ideal untuk outdoor (trekking, diving, city tour), musim hujan lebih cocok untuk indoor (museum, spa, kuliner, workshop).'],
                 ['q' => "Apakah hotel di {$ctx} penuh saat musim {$ctx}?", 'a' => "Tingkat okupansi hotel di {$ctx} sangat fluktuatif antar musim. Peak season bisa 90–100% penuh, low season bisa 40–60%. Booking lebih awal untuk peak season sangat disarankan."],
-                ['q' => "Tips memilih hotel {$ctx} sesuai musim {$ctx}?", 'a' => "Tips: (1) pilih hotel dengan fasilitas yang relevan dengan musim; (2) booking lebih awal untuk peak season; (3) manfaatkan diskon low season; (4) cek kebijakan pembatalan fleksibel."],
+                ['q' => "Tips memilih hotel {$ctx} sesuai musim {$ctx}?", 'a' => 'Tips: (1) pilih hotel dengan fasilitas yang relevan dengan musim; (2) booking lebih awal untuk peak season; (3) manfaatkan diskon low season; (4) cek kebijakan pembatalan fleksibel.'],
             ],
             'holiday' => [
                 ['q' => "Hotel {$ctx} untuk liburan {$ctx} — kapan harus booking?", 'a' => "Untuk liburan {$ctx} di {$ctx}, booking 6-8 minggu sebelumnya sangat disarankan. Hotel-hotel terbaik biasanya sudah fully booked 4-6 minggu sebelum {$ctx}."],
@@ -251,9 +251,9 @@ class ContentGenerator
             ],
             'distance-city' => [
                 ['q' => "Hotel di {$ctx} yang paling dekat pusat kota?", 'a' => "Hotel dalam radius yang Anda tentukan dari pusat {$ctx} telah kami kurasi di halaman ini. Jarak aktual dan estimasi waktu tempuh tercantum untuk setiap properti."],
-                ['q' => "Bagaimana transportasi dari hotel di {$ctx} ke pusat kota?", 'a' => "Dari hotel dalam radius ini, transportasi online (GoCar/Grab) tersedia 24 jam dengan tarif Rp 15.000–50.000. Beberapa hotel juga menyediakan shuttle gratis ke pusat kota pada jam tertentu."],
+                ['q' => "Bagaimana transportasi dari hotel di {$ctx} ke pusat kota?", 'a' => 'Dari hotel dalam radius ini, transportasi online (GoCar/Grab) tersedia 24 jam dengan tarif Rp 15.000–50.000. Beberapa hotel juga menyediakan shuttle gratis ke pusat kota pada jam tertentu.'],
                 ['q' => "Apakah hotel di {$ctx} lebih murah jika jauh dari pusat?", 'a' => "Ya, hotel di luar pusat kota {$ctx} umumnya 15–30% lebih murah untuk kualitas yang sama. Penghematan ini bisa dialokasikan untuk transportasi dan atraksi."],
-                ['q' => "Apa keuntungan menginap di {$ctx} radius ini?", 'a' => "Keuntungan: harga lebih rendah, suasana lebih tenang, parkir lebih luas, dan pengalaman lokal yang lebih autentik. Kompromi: perlu transportasi tambahan ke pusat kota."],
+                ['q' => "Apa keuntungan menginap di {$ctx} radius ini?", 'a' => 'Keuntungan: harga lebih rendah, suasana lebih tenang, parkir lebih luas, dan pengalaman lokal yang lebih autentik. Kompromi: perlu transportasi tambahan ke pusat kota.'],
                 ['q' => "Apakah aman berjalan kaki dari hotel ke pusat {$ctx}?", 'a' => "Tergantung jarak spesifik dan infrastruktur pejalan kaki di {$ctx}. Untuk radius dekat (≤1 km), jalan kaki nyaman. Untuk radius lebih jauh, gunakan transportasi — terutama di malam hari."],
             ],
             'distance-landmark' => [
@@ -265,16 +265,16 @@ class ContentGenerator
             ],
             'question' => [
                 ['q' => "Informasi apa yang paling penting untuk {$ctx}?", 'a' => "Informasi paling penting tentang {$ctx} telah kami rangkum di halaman ini — berdasarkan data terkini, feedback wisatawan, dan pengalaman langsung tim kami di lapangan."],
-                ['q' => "Apakah informasi tentang {$ctx} ini up-to-date?", 'a' => "Ya, kami memperbarui halaman ini secara berkala — setiap 1-3 bulan atau lebih cepat jika ada perubahan signifikan. Tanggal update terakhir tercantum di bagian bawah halaman."],
-                ['q' => "Bagaimana cara verifikasi info tentang {$ctx}?", 'a' => "Semua informasi di halaman ini telah diverifikasi melalui kombinasi: situs resmi pemerintah, review wisatawan terkini, konfirmasi langsung ke pengelola atraksi, dan laporan tim lapangan kami."],
-                ['q' => "Ada tips tambahan tentang {$ctx}?", 'a' => "Tips tambahan selalu kami update di halaman ini. Anda juga bisa menghubungi tim reservasi kami untuk rekomendasi personal — gratis, tanpa kewajiban booking."],
-                ['q' => "Bagaimana jika informasi tentang {$ctx} berubah?", 'a' => "Jika ada perubahan signifikan, kami segera update halaman ini. Namun untuk kepastian, selalu konfirmasi langsung ke hotel atau atraksi terkait sebelum keberangkatan."],
+                ['q' => "Apakah informasi tentang {$ctx} ini up-to-date?", 'a' => 'Ya, kami memperbarui halaman ini secara berkala — setiap 1-3 bulan atau lebih cepat jika ada perubahan signifikan. Tanggal update terakhir tercantum di bagian bawah halaman.'],
+                ['q' => "Bagaimana cara verifikasi info tentang {$ctx}?", 'a' => 'Semua informasi di halaman ini telah diverifikasi melalui kombinasi: situs resmi pemerintah, review wisatawan terkini, konfirmasi langsung ke pengelola atraksi, dan laporan tim lapangan kami.'],
+                ['q' => "Ada tips tambahan tentang {$ctx}?", 'a' => 'Tips tambahan selalu kami update di halaman ini. Anda juga bisa menghubungi tim reservasi kami untuk rekomendasi personal — gratis, tanpa kewajiban booking.'],
+                ['q' => "Bagaimana jika informasi tentang {$ctx} berubah?", 'a' => 'Jika ada perubahan signifikan, kami segera update halaman ini. Namun untuk kepastian, selalu konfirmasi langsung ke hotel atau atraksi terkait sebelum keberangkatan.'],
             ],
             'compare-cities' => [
                 ['q' => "Mana yang lebih baik, {$ctx}?", 'a' => "Tidak ada yang secara mutlak 'lebih baik' — {$ctx} masing-masing memiliki keunggulan untuk tipe wisatawan yang berbeda. Lihat tabel perbandingan di atas untuk memutuskan berdasarkan prioritas Anda."],
                 ['q' => "Mana yang lebih murah, {$ctx}?", 'a' => "Biaya akomodasi dan hidup di {$ctx} bisa berbeda. Secara umum, salah satu kota cenderung lebih terjangkau untuk hotel dan makan, sementara yang lain mungkin lebih murah untuk transportasi dan atraksi."],
-                ['q' => "Mana yang lebih cocok untuk keluarga, {$ctx}?", 'a' => "Kedua destinasi ini memiliki atraksi keluarga, namun salah satu mungkin lebih unggul dalam hal fasilitas ramah anak, keamanan, dan variasi aktivitas yang cocok untuk segala usia."],
-                ['q' => "Berapa lama waktu yang dibutuhkan di masing-masing {$ctx}?", 'a' => "Durasi ideal: 3-5 hari per kota untuk eksplorasi dasar, atau 7-10 hari jika ingin lebih mendalam. Jika waktu terbatas, pilih salah satu dan simpan yang lain untuk kunjungan berikutnya."],
+                ['q' => "Mana yang lebih cocok untuk keluarga, {$ctx}?", 'a' => 'Kedua destinasi ini memiliki atraksi keluarga, namun salah satu mungkin lebih unggul dalam hal fasilitas ramah anak, keamanan, dan variasi aktivitas yang cocok untuk segala usia.'],
+                ['q' => "Berapa lama waktu yang dibutuhkan di masing-masing {$ctx}?", 'a' => 'Durasi ideal: 3-5 hari per kota untuk eksplorasi dasar, atau 7-10 hari jika ingin lebih mendalam. Jika waktu terbatas, pilih salah satu dan simpan yang lain untuk kunjungan berikutnya.'],
                 ['q' => "Apakah mudah berpindah antara {$ctx}?", 'a' => "Konektivitas antar {$ctx} umumnya baik — penerbangan langsung tersedia (1-2 jam) atau transportasi darat untuk kota di pulau yang sama. Perjalanan antar kota bisa memakan waktu setengah hingga satu hari penuh."],
             ],
             'compare-neighborhoods' => [
@@ -285,25 +285,25 @@ class ContentGenerator
                 ['q' => "Area mana yang lebih dekat ke atraksi {$ctx}?", 'a' => "Dari {$ctx}, jarak ke atraksi utama berbeda. Salah satu area mungkin lebih dekat ke pusat kota atau spot wisata, sementara area lain menawarkan akses lebih mudah ke atraksi spesifik."],
             ],
             'source-code' => [
-                ['q' => "Apa yang termasuk dalam source code {$ctx}?", 'a' => "Source code HotelHub HMS mencakup seluruh sistem: Front Office, POS, Accounting, Channel Manager, Revenue Management, Housekeeping, HR & Payroll — total 23+ modul Laravel 11 dengan 122 automated tests dan dokumentasi lengkap. Anda mendapat full ownership, self-host di server sendiri tanpa biaya berlangganan bulanan."],
-                ['q' => "Berapa harga source code {$ctx}?", 'a' => "Harga source code HotelHub HMS bervariasi sesuai paket: Basic (single property), Growth (multi-property), dan Enterprise (whitelabel + full customization). Hubungi WhatsApp 081296052010 untuk quotation detail sesuai kebutuhan Anda. Tidak ada biaya bulanan tersembunyi — one-time purchase, lifetime ownership."],
-                ['q' => "Apakah {$ctx} bisa dicoba dulu?", 'a' => "Ya! Anda bisa langsung mencoba demo di /docs atau melalui link demo di halaman ini. Kami juga menyediakan trial 7 hari untuk calon buyer serius — chat WA 081296052010 untuk akses. Demo mencakup semua modul dengan data dummy siap uji."],
-                ['q' => "Apa kelebihan {$ctx} dibanding SaaS hotel?", 'a' => "Keuntungan utama: (1) Full source code ownership — Anda tidak bergantung pada vendor; (2) Self-host — data tamu tetap di server Anda; (3) No monthly fees — one-time investment; (4) Customizable — ubah sesuka hati; (5) White-label — branding sendiri. Bandingkan dengan SaaS yang Anda bayar bulanan selamanya tanpa memiliki apa-apa."],
-                ['q' => "Teknologi apa yang digunakan {$ctx}?", 'a' => "HotelHub HMS dibangun dengan Laravel 11 (PHP 8.3+), MySQL, Livewire/Filament admin panel, Tailwind CSS responsive. Mendukung PWA, webhook, API REST. BYOK payment gateway (13+ provider), AI adapter (20+ LLM provider), dan OTA channel manager (10 channel). Full stack dengan deployment Nginx + PHP-FPM standar."],
+                ['q' => "Apa yang termasuk dalam source code {$ctx}?", 'a' => 'Source code HotelHub HMS mencakup seluruh sistem: Front Office, POS, Accounting, Channel Manager, Revenue Management, Housekeeping, HR & Payroll — total 23+ modul Laravel 11 dengan 122 automated tests dan dokumentasi lengkap. Anda mendapat full ownership, self-host di server sendiri tanpa biaya berlangganan bulanan.'],
+                ['q' => "Berapa harga source code {$ctx}?", 'a' => 'Harga source code HotelHub HMS bervariasi sesuai paket: Basic (single property), Growth (multi-property), dan Enterprise (whitelabel + full customization). Hubungi WhatsApp 081296052010 untuk quotation detail sesuai kebutuhan Anda. Tidak ada biaya bulanan tersembunyi — one-time purchase, lifetime ownership.'],
+                ['q' => "Apakah {$ctx} bisa dicoba dulu?", 'a' => 'Ya! Anda bisa langsung mencoba demo di /docs atau melalui link demo di halaman ini. Kami juga menyediakan trial 7 hari untuk calon buyer serius — chat WA 081296052010 untuk akses. Demo mencakup semua modul dengan data dummy siap uji.'],
+                ['q' => "Apa kelebihan {$ctx} dibanding SaaS hotel?", 'a' => 'Keuntungan utama: (1) Full source code ownership — Anda tidak bergantung pada vendor; (2) Self-host — data tamu tetap di server Anda; (3) No monthly fees — one-time investment; (4) Customizable — ubah sesuka hati; (5) White-label — branding sendiri. Bandingkan dengan SaaS yang Anda bayar bulanan selamanya tanpa memiliki apa-apa.'],
+                ['q' => "Teknologi apa yang digunakan {$ctx}?", 'a' => 'HotelHub HMS dibangun dengan Laravel 11 (PHP 8.3+), MySQL, Livewire/Filament admin panel, Tailwind CSS responsive. Mendukung PWA, webhook, API REST. BYOK payment gateway (13+ provider), AI adapter (20+ LLM provider), dan OTA channel manager (10 channel). Full stack dengan deployment Nginx + PHP-FPM standar.'],
             ],
             'feature-city' => [
                 ['q' => "Hotel {$ctx} dengan fasilitas terbaik?", 'a' => "Kami sudah mengkurasi hotel-hotel {$ctx} dengan fasilitas lengkap — dari kamar AC dan Wi-Fi cepat hingga kolam renang, spa, dan restoran in-house. Lihat daftar rekomendasi di halaman ini untuk bandingkan langsung."],
                 ['q' => "Apakah hotel {$ctx} cocok untuk keluarga?", 'a' => "Hotel {$ctx} banyak yang menyediakan fasilitas keluarga: connecting room, kids club, kolam renang anak, dan menu khusus. Ideal untuk liburan keluarga dengan budget fleksibel."],
                 ['q' => "Berapa harga hotel {$ctx}?", 'a' => "Harga hotel {$ctx} bervariasi dari Rp 200.000 untuk budget hingga Rp 3.000.000+ untuk resort lengkap. Harga dipengaruhi lokasi, musim, dan fasilitas spesifik yang dipilih."],
-                ['q' => "Kapan waktu terbaik booking hotel {$ctx}?", 'a' => "Booking 2-4 minggu sebelumnya untuk peak season, 1-7 hari untuk low season. Weekday umumnya 10-25% lebih murah. Cek kalender event lokal untuk menghindari tanggal ramai."],
-                ['q' => "Tips memilih hotel {$ctx}?", 'a' => "Tips: (1) Baca review tamu 3 bulan terakhir; (2) Konfirmasi fasilitas yang diiklankan benar-benar tersedia; (3) Bandingkan harga all-in (termasuk pajak); (4) Tanyakan kebijakan anak dan hewan peliharaan; (5) Booking via website ini untuk harga terbaik tanpa biaya perantara."],
+                ['q' => "Kapan waktu terbaik booking hotel {$ctx}?", 'a' => 'Booking 2-4 minggu sebelumnya untuk peak season, 1-7 hari untuk low season. Weekday umumnya 10-25% lebih murah. Cek kalender event lokal untuk menghindari tanggal ramai.'],
+                ['q' => "Tips memilih hotel {$ctx}?", 'a' => 'Tips: (1) Baca review tamu 3 bulan terakhir; (2) Konfirmasi fasilitas yang diiklankan benar-benar tersedia; (3) Bandingkan harga all-in (termasuk pajak); (4) Tanyakan kebijakan anak dan hewan peliharaan; (5) Booking via website ini untuk harga terbaik tanpa biaya perantara.'],
             ],
             default => [
-                ['q' => "Apa yang termasuk dalam tarif {$ctx}?", 'a' => "Tarif standar mencakup kamar, fasilitas dasar, dan akses area umum. Sarapan dan tambahan lain bergantung paket yang dipilih saat booking."],
+                ['q' => "Apa yang termasuk dalam tarif {$ctx}?", 'a' => 'Tarif standar mencakup kamar, fasilitas dasar, dan akses area umum. Sarapan dan tambahan lain bergantung paket yang dipilih saat booking.'],
                 ['q' => "Bagaimana cara membatalkan booking {$ctx}?", 'a' => "Pembatalan tersedia melalui link 'Manage Booking' yang dikirim via email. Kebijakan refund mengikuti syarat tarif yang dipilih."],
                 ['q' => "Apakah {$ctx} cocok untuk keluarga?", 'a' => "Banyak pilihan {$ctx} memiliki kamar dengan kapasitas keluarga (extra bed, kamar interconnecting, area bermain). Cek detail fasilitas per kamar."],
-                ['q' => "Apakah ada parkir gratis di {$ctx}?", 'a' => "Sebagian besar properti menyediakan parkir gratis untuk tamu menginap. Konfirmasi dengan pihak hotel saat melakukan reservasi."],
-                ['q' => "Bagaimana check-in di {$ctx}?", 'a' => "Check-in standar pukul 14:00 dan check-out pukul 12:00. Early check-in / late check-out tersedia berdasarkan ketersediaan kamar."],
+                ['q' => "Apakah ada parkir gratis di {$ctx}?", 'a' => 'Sebagian besar properti menyediakan parkir gratis untuk tamu menginap. Konfirmasi dengan pihak hotel saat melakukan reservasi.'],
+                ['q' => "Bagaimana check-in di {$ctx}?", 'a' => 'Check-in standar pukul 14:00 dan check-out pukul 12:00. Early check-in / late check-out tersedia berdasarkan ketersediaan kamar.'],
             ],
         };
     }
@@ -388,11 +388,11 @@ class ContentGenerator
 
         $blurb = match ($occasion) {
             'honeymoon' => "Paket honeymoon di {$cityName} biasanya mencakup welcome drink, dekorasi kamar romantis, candle light dinner, dan late check-out — cocok untuk pasangan baru yang ingin pengalaman tak terlupakan. Beberapa hotel bahkan menyediakan paket foto pre-wedding dengan latar pemandangan ikonik {$cityName}, private dining di tepi kolam, atau couple spa treatment dengan bahan alami lokal.",
-            'family'    => "Pilihan kamar family di {$cityName} menyediakan twin bed, extra bed, atau connecting room. Banyak hotel keluarga juga menyediakan kids meal, area bermain anak, kolam renang anak, dan aktivitas harian terprogram — dari kelas memasak, melukis, hingga treasure hunt di taman hotel. Keamanan adalah prioritas: lifeguard di kolam renang, gate kolam yang terkunci, dan staf yang terlatih P3K.",
-            'business'  => "Perjalanan bisnis ke {$cityName}? Kami pilih hotel dengan Wi-Fi berkecepatan 30+ Mbps, business center yang beroperasi 24 jam, ruang meeting dengan kapasitas variatif (10–100 orang), dan akses transportasi mudah ke area perkantoran dan convention center. Banyak hotel bisnis juga menawarkan executive lounge dengan sarapan, afternoon tea, dan evening cocktail — included dalam tarif kamar tertentu.",
-            'romantic'  => "Untuk getaway romantis di {$cityName}, kami seleksi kamar dengan bathtub, balkon private, jacuzzi, atau private pool. Beberapa properti menawarkan paket 'romance turndown' — kelopak mawar di tempat tidur, lilin aromaterapi, dan sparkling wine lokal. Restoran hotel sering kali punya menu degustasi khusus pasangan yang bisa dipesan in-room untuk privasi maksimal.",
-            'wedding'   => "Mengadakan wedding di {$cityName}? Beberapa properti menyediakan paket lengkap: akad + resepsi + akomodasi tamu, termasuk wedding planner pendamping, dekorasi tema, catering dengan menu kustom, sound system, dan dokumentasi. Kapasitas bervariasi dari intimate wedding 30 tamu hingga grand ballroom 1.000 tamu. Beberapa hotel juga menyediakan bridal suite dengan akses eksklusif ke area foto outdoor.",
-            default     => "Paket {$occ} di {$cityName} disesuaikan dengan kebutuhan Anda — mulai dari kamar hingga layanan tambahan yang relevan dengan occasion ini. Kami akan mengarahkan Anda ke properti yang memiliki pengalaman dan fasilitas spesifik untuk kebutuhan {$occ}.",
+            'family' => "Pilihan kamar family di {$cityName} menyediakan twin bed, extra bed, atau connecting room. Banyak hotel keluarga juga menyediakan kids meal, area bermain anak, kolam renang anak, dan aktivitas harian terprogram — dari kelas memasak, melukis, hingga treasure hunt di taman hotel. Keamanan adalah prioritas: lifeguard di kolam renang, gate kolam yang terkunci, dan staf yang terlatih P3K.",
+            'business' => "Perjalanan bisnis ke {$cityName}? Kami pilih hotel dengan Wi-Fi berkecepatan 30+ Mbps, business center yang beroperasi 24 jam, ruang meeting dengan kapasitas variatif (10–100 orang), dan akses transportasi mudah ke area perkantoran dan convention center. Banyak hotel bisnis juga menawarkan executive lounge dengan sarapan, afternoon tea, dan evening cocktail — included dalam tarif kamar tertentu.",
+            'romantic' => "Untuk getaway romantis di {$cityName}, kami seleksi kamar dengan bathtub, balkon private, jacuzzi, atau private pool. Beberapa properti menawarkan paket 'romance turndown' — kelopak mawar di tempat tidur, lilin aromaterapi, dan sparkling wine lokal. Restoran hotel sering kali punya menu degustasi khusus pasangan yang bisa dipesan in-room untuk privasi maksimal.",
+            'wedding' => "Mengadakan wedding di {$cityName}? Beberapa properti menyediakan paket lengkap: akad + resepsi + akomodasi tamu, termasuk wedding planner pendamping, dekorasi tema, catering dengan menu kustom, sound system, dan dokumentasi. Kapasitas bervariasi dari intimate wedding 30 tamu hingga grand ballroom 1.000 tamu. Beberapa hotel juga menyediakan bridal suite dengan akses eksklusif ke area foto outdoor.",
+            default => "Paket {$occ} di {$cityName} disesuaikan dengan kebutuhan Anda — mulai dari kamar hingga layanan tambahan yang relevan dengan occasion ini. Kami akan mengarahkan Anda ke properti yang memiliki pengalaman dan fasilitas spesifik untuk kebutuhan {$occ}.",
         };
 
         return implode("\n\n", [
@@ -417,12 +417,12 @@ class ContentGenerator
         $loc = SeoData::cityName($location) ?? $this->humanize($location);
 
         $featureBenefit = match ($feature) {
-            'private-pool'     => "Kolam renang pribadi memberikan kebebasan berenang kapan saja tanpa berbagi dengan tamu lain — ideal untuk keluarga dengan anak kecil atau pasangan yang menginginkan privasi total.",
-            'ocean-view'       => "Pemandangan laut lepas dari kamar tidur atau teras villa adalah pengalaman yang sulit ditandingi — suara ombak, angin laut, dan panorama matahari terbenam menjadi latar harian selama menginap.",
-            'rice-paddy-view'  => "Hijaunya sawah berundak memberikan ketenangan visual dan koneksi dengan alam pedesaan — sempurna untuk detoks digital dan meditasi.",
-            'beachfront'       => "Akses langsung ke pantai berarti Anda bisa berjalan kaki dari tempat tidur ke pasir dalam hitungan detik — tidak perlu repot transportasi atau parkir.",
-            'jacuzzi'          => "Jacuzzi menghadirkan relaksasi spa-level di dalam villa sendiri — air hangat bergejolak yang meredakan otot setelah seharian eksplorasi.",
-            default            => "Fitur {$f} menambah dimensi kenyamanan dan kenikmatan yang membuat pengalaman menginap di villa terasa lebih istimewa dan personal.",
+            'private-pool' => 'Kolam renang pribadi memberikan kebebasan berenang kapan saja tanpa berbagi dengan tamu lain — ideal untuk keluarga dengan anak kecil atau pasangan yang menginginkan privasi total.',
+            'ocean-view' => 'Pemandangan laut lepas dari kamar tidur atau teras villa adalah pengalaman yang sulit ditandingi — suara ombak, angin laut, dan panorama matahari terbenam menjadi latar harian selama menginap.',
+            'rice-paddy-view' => 'Hijaunya sawah berundak memberikan ketenangan visual dan koneksi dengan alam pedesaan — sempurna untuk detoks digital dan meditasi.',
+            'beachfront' => 'Akses langsung ke pantai berarti Anda bisa berjalan kaki dari tempat tidur ke pasir dalam hitungan detik — tidak perlu repot transportasi atau parkir.',
+            'jacuzzi' => 'Jacuzzi menghadirkan relaksasi spa-level di dalam villa sendiri — air hangat bergejolak yang meredakan otot setelah seharian eksplorasi.',
+            default => "Fitur {$f} menambah dimensi kenyamanan dan kenikmatan yang membuat pengalaman menginap di villa terasa lebih istimewa dan personal.",
         };
 
         return implode("\n\n", [
@@ -464,13 +464,13 @@ class ContentGenerator
         return implode("\n\n", [
             "Mencari hotel bintang {$star} di {$cityName}? Kami mengkurasi pilihan akomodasi bintang {$star} terbaik — {$starDesc}. Hotel bintang {$star} di {$cityName} menawarkan keseimbangan ideal antara kualitas dan budget, dengan kisaran harga {$priceRange} tergantung lokasi, musim, dan tipe kamar yang dipilih.",
 
-            "Hotel bintang {$star} di {$cityName} wajib memenuhi standar tertentu. Untuk rating bintang {$star}, tamu bisa mengharapkan: " . match ($star) {
-                1 => "kamar dasar dengan tempat tidur bersih, kamar mandi dalam (mungkin shower tanpa air panas), kipas angin atau AC basic, dan resepsionis terbatas (tidak 24 jam).",
-                2 => "kamar dengan AC, TV, kamar mandi dalam dengan air panas, Wi-Fi dasar, dan resepsionis yang beroperasi 12–16 jam sehari.",
-                3 => "kamar dengan ukuran minimal 28m², AC, TV layar datar, Wi-Fi 10+ Mbps, kamar mandi dengan amenities lengkap, resepsionis 24 jam, restoran in-house, dan area parkir aman.",
-                4 => "kamar luas (40m²+), AC individual, smart TV 40\"+, Wi-Fi 20+ Mbps, kamar mandi dengan bathtub, minibar, room service 24 jam, kolam renang, gym, spa, dan layanan concierge.",
-                5 => "suite mewah (55m²+), butler service, pillow menu, fine dining restaurant, executive lounge, infinity pool, spa kelas dunia, airport transfer limousine, dan layanan personal yang tidak terbatas.",
-                default => "fasilitas yang proporsional dengan rating — semakin tinggi bintang, semakin lengkap dan personal layanan yang disediakan.",
+            "Hotel bintang {$star} di {$cityName} wajib memenuhi standar tertentu. Untuk rating bintang {$star}, tamu bisa mengharapkan: ".match ($star) {
+                1 => 'kamar dasar dengan tempat tidur bersih, kamar mandi dalam (mungkin shower tanpa air panas), kipas angin atau AC basic, dan resepsionis terbatas (tidak 24 jam).',
+                2 => 'kamar dengan AC, TV, kamar mandi dalam dengan air panas, Wi-Fi dasar, dan resepsionis yang beroperasi 12–16 jam sehari.',
+                3 => 'kamar dengan ukuran minimal 28m², AC, TV layar datar, Wi-Fi 10+ Mbps, kamar mandi dengan amenities lengkap, resepsionis 24 jam, restoran in-house, dan area parkir aman.',
+                4 => 'kamar luas (40m²+), AC individual, smart TV 40"+, Wi-Fi 20+ Mbps, kamar mandi dengan bathtub, minibar, room service 24 jam, kolam renang, gym, spa, dan layanan concierge.',
+                5 => 'suite mewah (55m²+), butler service, pillow menu, fine dining restaurant, executive lounge, infinity pool, spa kelas dunia, airport transfer limousine, dan layanan personal yang tidak terbatas.',
+                default => 'fasilitas yang proporsional dengan rating — semakin tinggi bintang, semakin lengkap dan personal layanan yang disediakan.',
             },
 
             "Dari sisi lokasi, hotel bintang {$star} di {$cityName} tersebar di berbagai area — pusat kota, dekat tempat wisata, atau di kawasan yang lebih tenang di pinggiran. Hotel bintang lebih tinggi umumnya menempati lokasi prime dengan akses mudah ke transportasi dan atraksi utama {$cityName}, sementara hotel bintang 1–2 sering berlokasi di area transit (dekat stasiun, terminal) untuk memudahkan perjalanan lanjutan. Pertimbangan ini penting karena lokasi berkontribusi 20–40% terhadap kepuasan tamu secara keseluruhan — hotel bintang 5 di lokasi yang kurang strategis bisa mendapat rating lebih rendah dibanding hotel bintang 4 di lokasi super-prime.",
@@ -571,8 +571,8 @@ class ContentGenerator
 
         $amenityBenefit = match ($amenity) {
             'kolam-renang' => "Kolam renang di hotel memberikan lebih dari sekadar tempat berenang — ini adalah pusat rekreasi keluarga, lokasi foto Instagram, dan area relaksasi setelah seharian eksplorasi {$cityName}.",
-            'sarapan-gratis' => "Sarapan gratis mengurangi biaya perjalanan harian sebesar Rp 50.000–150.000 per orang — untuk keluarga 4 orang selama 3 malam, ini setara penghematan Rp 600.000–1.800.000 yang bisa dialokasikan untuk atraksi dan oleh-oleh.",
-            'parkir-luas' => "Parkir luas adalah fitur penting untuk tamu yang membawa kendaraan pribadi — Anda bisa parkir dengan tenang tanpa khawatir parkir liar, mobil tergores, atau harus putar-putar mencari slot setiap kali kembali ke hotel.",
+            'sarapan-gratis' => 'Sarapan gratis mengurangi biaya perjalanan harian sebesar Rp 50.000–150.000 per orang — untuk keluarga 4 orang selama 3 malam, ini setara penghematan Rp 600.000–1.800.000 yang bisa dialokasikan untuk atraksi dan oleh-oleh.',
+            'parkir-luas' => 'Parkir luas adalah fitur penting untuk tamu yang membawa kendaraan pribadi — Anda bisa parkir dengan tenang tanpa khawatir parkir liar, mobil tergores, atau harus putar-putar mencari slot setiap kali kembali ke hotel.',
             'ramah-keluarga' => "Hotel ramah keluarga di {$cityName} dirancang untuk membuat orang tua bisa bersantai sementara anak-anak tetap terhibur dan aman — kombinasi yang sulit didapat di hotel biasa.",
             'untuk-backpacker' => "Hotel untuk backpacker di {$cityName} menawarkan value maksimal: lokasi strategis dekat transportasi publik, common area untuk networking dengan sesama traveler, dan informasi lokal yang jujur dari staf yang paham kebutuhan solo traveler.",
             default => "Hotel dengan {$amenityName} memberikan nilai tambah yang memperkaya pengalaman menginap Anda di {$cityName} — lebih dari sekadar tempat tidur, ini adalah bagian integral dari itinerary Anda.",
@@ -636,12 +636,12 @@ class ContentGenerator
         return implode("\n\n", [
             "Memilih hotel di {$cityName} bisa membingungkan dengan ratusan pilihan dari berbagai platform booking. Panduan ini merangkum tips praktis memilih hotel terbaik di {$cityName} — berdasarkan lokasi, budget, tipe perjalanan, dan preferensi personal Anda. Kami telah membantu ribuan tamu menemukan akomodasi ideal di {$cityName} dan mengompilasi lesson learned agar Anda tidak mengulangi kesalahan yang sama.",
 
-            "Tips #1: Tentukan prioritas lokasi. {$cityName} adalah kota yang luas dengan beberapa area berbeda yang masing-masing memiliki karakteristik akomodasi yang berbeda. " . match ($citySlug) {
-                'yogyakarta' => "Area Malioboro cocok untuk wisatawan pertama kali yang ingin dekat dengan ikon kota, Prawirotaman untuk suasana backpacker internasional yang santai, dan Sleman untuk akses cepat ke Candi Prambanan dan Merapi.",
-                'bali' => "Area Kuta-Seminyak untuk pantai dan nightlife, Ubud untuk yoga dan retreat budaya, Nusa Dua untuk resort all-inclusive dan golf, serta Canggu untuk digital nomad dan surf culture.",
-                'jakarta' => "Sudirman-Thamrin untuk business traveler, Kemang untuk expat dan long-stay, serta PIK dan Ancol untuk wisata keluarga.",
-                'bandung' => "Dago dan Cihampelas untuk weekend getaway dengan akses factory outlet, Lembang untuk udara sejuk dan pemandangan pegunungan, serta pusat kota Bandung untuk akses mudah ke stasiun dan kuliner legendaris.",
-                default => "Pusat kota untuk akses mudah ke atraksi utama, area pinggiran untuk suasana lebih tenang dengan harga 20–40% lebih rendah.",
+            "Tips #1: Tentukan prioritas lokasi. {$cityName} adalah kota yang luas dengan beberapa area berbeda yang masing-masing memiliki karakteristik akomodasi yang berbeda. ".match ($citySlug) {
+                'yogyakarta' => 'Area Malioboro cocok untuk wisatawan pertama kali yang ingin dekat dengan ikon kota, Prawirotaman untuk suasana backpacker internasional yang santai, dan Sleman untuk akses cepat ke Candi Prambanan dan Merapi.',
+                'bali' => 'Area Kuta-Seminyak untuk pantai dan nightlife, Ubud untuk yoga dan retreat budaya, Nusa Dua untuk resort all-inclusive dan golf, serta Canggu untuk digital nomad dan surf culture.',
+                'jakarta' => 'Sudirman-Thamrin untuk business traveler, Kemang untuk expat dan long-stay, serta PIK dan Ancol untuk wisata keluarga.',
+                'bandung' => 'Dago dan Cihampelas untuk weekend getaway dengan akses factory outlet, Lembang untuk udara sejuk dan pemandangan pegunungan, serta pusat kota Bandung untuk akses mudah ke stasiun dan kuliner legendaris.',
+                default => 'Pusat kota untuk akses mudah ke atraksi utama, area pinggiran untuk suasana lebih tenang dengan harga 20–40% lebih rendah.',
             },
 
             "Tips #2: Pahami struktur harga dan biaya tersembunyi. Harga dasar kamar di {$cityName} seringkali belum termasuk pajak hotel dan service charge yang totalnya bisa 11–21% (PPN 11% + service charge 5–10%). Selalu lihat 'total harga' — bukan hanya 'harga per malam'. Biaya tambahan lain yang sering muncul saat check-out: extra bed (Rp 100.000–300.000), parkir (Rp 10.000–50.000/hari), dan resort fee untuk hotel tertentu. Kami merekomendasikan hotel yang mencantumkan harga all-in sehingga tidak ada kejutan di akhir.",
@@ -664,22 +664,22 @@ class ContentGenerator
         return implode("\n\n", [
             "Panduan wisata lengkap ke {$cityName} — semua yang perlu Anda ketahui untuk merencanakan perjalanan ke {$cityName}: dari kapan waktu terbaik berkunjung, bagaimana cara ke sana, apa saja yang wajib dikunjungi, di mana menginap, hingga berapa budget yang perlu disiapkan. Kami mengompilasi panduan ini dari pengalaman tim kami yang secara rutin mengunjungi {$cityName} — bukan dari riset Google semata, melainkan dari eksplorasi langsung, wawancara dengan penduduk lokal, dan feedback dari ribuan tamu yang telah kami bantu rencanakan perjalanannya.",
 
-            "{$cityName} adalah salah satu destinasi yang wajib ada di bucket list setiap traveler Indonesia — dan untuk alasan yang sangat baik. " . match ($citySlug) {
-                'yogyakarta' => "Kota ini adalah perpaduan sempurna antara warisan budaya (Candi Borobudur, Prambanan, Keraton), kuliner legendaris (gudeg, bakpia, sate klathak), dan atmosfer kota pelajar yang penuh energi kreatif. Setiap sudut Yogyakarta menawarkan cerita — dari seniman jalanan di Malioboro hingga desa kerajinan di Kasongan.",
-                'bali' => "Pulau ini menawarkan segalanya: pantai eksotis, sawah terasering, pura mistis, yoga retreat, surfing world-class, kuliner dari warung lokal hingga fine dining internasional, dan keramahan yang menjadi ciri khas masyarakat Bali. Bali bukan sekadar destinasi — ini adalah pengalaman yang mengubah cara Anda melihat hidup.",
-                'jakarta' => "Ibu kota Indonesia adalah melting pot budaya, kuliner, belanja, dan bisnis. Dari museum bersejarah di Kota Tua, rooftop bar dengan skyline Sudirman, hingga street food di Glodok dan Blok M — Jakarta tidak pernah tidur dan selalu punya sesuatu yang baru untuk ditemukan.",
-                'bandung' => "Dijuluki Paris Van Java, Bandung adalah perpaduan arsitektur art deco kolonial, factory outlet yang tak ada habisnya, kafe dan restoran kreatif yang terus bermunculan, serta udara sejuk pegunungan yang menjadi magnet weekend getaway bagi warga Jakarta. Bandung juga merupakan surga bagi pecinta kopi specialty.",
-                'lombok' => "Adik Bali yang lebih tenang ini menawarkan pantai-pantai yang masih perawan, Gunung Rinjani untuk petualangan trekking epik, dan Gili Trawangan-Meno-Air untuk snorkeling dengan penyu. Lombok adalah destinasi untuk mereka yang mencari Bali 20 tahun lalu — lebih sepi, lebih murah, dan lebih autentik.",
-                'labuan-bajo' => "Pintu gerbang ke Taman Nasional Komodo — salah satu dari New 7 Wonders of Nature. Di sini Anda bisa berlayar di perairan biru, trekking bersama komodo, menyelam di antara manta ray, dan menyaksikan matahari terbenam di bukit-bukit yang menghadap lautan lepas.",
-                'malang', 'batu' => "Kawasan pegunungan yang menyegarkan dengan Jatim Park, Batu Night Spectacular, kebun apel, dan udara sejuk yang kontras dengan panasnya Surabaya. Cocok untuk liburan keluarga dengan anak-anak segala usia.",
-                default => "Kota ini menawarkan pengalaman unik yang tidak akan Anda temukan di tempat lain di Indonesia — dari kuliner khas, landmark bersejarah, hingga keramahan penduduk lokal yang membuat setiap kunjungan terasa istimewa.",
+            "{$cityName} adalah salah satu destinasi yang wajib ada di bucket list setiap traveler Indonesia — dan untuk alasan yang sangat baik. ".match ($citySlug) {
+                'yogyakarta' => 'Kota ini adalah perpaduan sempurna antara warisan budaya (Candi Borobudur, Prambanan, Keraton), kuliner legendaris (gudeg, bakpia, sate klathak), dan atmosfer kota pelajar yang penuh energi kreatif. Setiap sudut Yogyakarta menawarkan cerita — dari seniman jalanan di Malioboro hingga desa kerajinan di Kasongan.',
+                'bali' => 'Pulau ini menawarkan segalanya: pantai eksotis, sawah terasering, pura mistis, yoga retreat, surfing world-class, kuliner dari warung lokal hingga fine dining internasional, dan keramahan yang menjadi ciri khas masyarakat Bali. Bali bukan sekadar destinasi — ini adalah pengalaman yang mengubah cara Anda melihat hidup.',
+                'jakarta' => 'Ibu kota Indonesia adalah melting pot budaya, kuliner, belanja, dan bisnis. Dari museum bersejarah di Kota Tua, rooftop bar dengan skyline Sudirman, hingga street food di Glodok dan Blok M — Jakarta tidak pernah tidur dan selalu punya sesuatu yang baru untuk ditemukan.',
+                'bandung' => 'Dijuluki Paris Van Java, Bandung adalah perpaduan arsitektur art deco kolonial, factory outlet yang tak ada habisnya, kafe dan restoran kreatif yang terus bermunculan, serta udara sejuk pegunungan yang menjadi magnet weekend getaway bagi warga Jakarta. Bandung juga merupakan surga bagi pecinta kopi specialty.',
+                'lombok' => 'Adik Bali yang lebih tenang ini menawarkan pantai-pantai yang masih perawan, Gunung Rinjani untuk petualangan trekking epik, dan Gili Trawangan-Meno-Air untuk snorkeling dengan penyu. Lombok adalah destinasi untuk mereka yang mencari Bali 20 tahun lalu — lebih sepi, lebih murah, dan lebih autentik.',
+                'labuan-bajo' => 'Pintu gerbang ke Taman Nasional Komodo — salah satu dari New 7 Wonders of Nature. Di sini Anda bisa berlayar di perairan biru, trekking bersama komodo, menyelam di antara manta ray, dan menyaksikan matahari terbenam di bukit-bukit yang menghadap lautan lepas.',
+                'malang', 'batu' => 'Kawasan pegunungan yang menyegarkan dengan Jatim Park, Batu Night Spectacular, kebun apel, dan udara sejuk yang kontras dengan panasnya Surabaya. Cocok untuk liburan keluarga dengan anak-anak segala usia.',
+                default => 'Kota ini menawarkan pengalaman unik yang tidak akan Anda temukan di tempat lain di Indonesia — dari kuliner khas, landmark bersejarah, hingga keramahan penduduk lokal yang membuat setiap kunjungan terasa istimewa.',
             },
 
-            "Cara mencapai {$cityName}: " . match ($citySlug) {
-                'yogyakarta' => "Yogyakarta dapat dicapai via penerbangan langsung dari Jakarta (1 jam), Surabaya (1 jam), atau Bali (1.5 jam) ke Bandara YIA (Yogyakarta International Airport). Alternatif: kereta eksekutif dari Jakarta (6–7 jam) yang menawarkan pemandangan sawah dan pegunungan Jawa yang indah. Dari bandara/stasiun, taksi atau ride-hailing ke pusat kota memakan waktu 30–60 menit.",
-                'bali' => "Bali dilayani oleh Bandara Ngurah Rai dengan penerbangan langsung dari hampir semua kota besar Indonesia dan internasional. Dari Jakarta, penerbangan memakan waktu 1.5–2 jam. Dari bandara ke area Kuta hanya 10–15 menit, ke Seminyak 20–30 menit, ke Ubud 60–90 menit. Transportasi: taksi bandara, ride-hailing, atau shuttle yang bisa dipesan via hotel.",
-                'jakarta' => "Jakarta sangat mudah diakses — Bandara Soekarno-Hatta melayani penerbangan domestik dan internasional dengan konektivitas ke seluruh Indonesia. Kereta Bandara (Railink) menghubungkan bandara ke Stasiun Sudirman dan Manggarai dalam 45–55 menit. Transportasi dalam kota: TransJakarta (BRT), MRT, LRT, dan ride-hailing yang tersedia 24 jam.",
-                'bandung' => "Bandung bisa dicapai via kereta cepat Whoosh dari Jakarta (40 menit saja!), kereta eksekutif reguler (2.5–3 jam), atau mobil via Tol Cipularang (2–3 jam tergantung lalu lintas). Bandara Husein Sastranegara juga melayani penerbangan dari beberapa kota besar. Dari stasiun/bandara ke pusat kota: 15–30 menit.",
+            "Cara mencapai {$cityName}: ".match ($citySlug) {
+                'yogyakarta' => 'Yogyakarta dapat dicapai via penerbangan langsung dari Jakarta (1 jam), Surabaya (1 jam), atau Bali (1.5 jam) ke Bandara YIA (Yogyakarta International Airport). Alternatif: kereta eksekutif dari Jakarta (6–7 jam) yang menawarkan pemandangan sawah dan pegunungan Jawa yang indah. Dari bandara/stasiun, taksi atau ride-hailing ke pusat kota memakan waktu 30–60 menit.',
+                'bali' => 'Bali dilayani oleh Bandara Ngurah Rai dengan penerbangan langsung dari hampir semua kota besar Indonesia dan internasional. Dari Jakarta, penerbangan memakan waktu 1.5–2 jam. Dari bandara ke area Kuta hanya 10–15 menit, ke Seminyak 20–30 menit, ke Ubud 60–90 menit. Transportasi: taksi bandara, ride-hailing, atau shuttle yang bisa dipesan via hotel.',
+                'jakarta' => 'Jakarta sangat mudah diakses — Bandara Soekarno-Hatta melayani penerbangan domestik dan internasional dengan konektivitas ke seluruh Indonesia. Kereta Bandara (Railink) menghubungkan bandara ke Stasiun Sudirman dan Manggarai dalam 45–55 menit. Transportasi dalam kota: TransJakarta (BRT), MRT, LRT, dan ride-hailing yang tersedia 24 jam.',
+                'bandung' => 'Bandung bisa dicapai via kereta cepat Whoosh dari Jakarta (40 menit saja!), kereta eksekutif reguler (2.5–3 jam), atau mobil via Tol Cipularang (2–3 jam tergantung lalu lintas). Bandara Husein Sastranegara juga melayani penerbangan dari beberapa kota besar. Dari stasiun/bandara ke pusat kota: 15–30 menit.',
                 default => "{$cityName} dapat dicapai via penerbangan dari Jakarta dan kota-kota besar Indonesia. Bandara utama {$cityName} melayani penerbangan domestik reguler. Dari bandara ke pusat kota, tersedia taksi bandara, ride-hailing, dan shuttle hotel. Alternatif transportasi darat (bus, kereta) juga tersedia untuk kota-kota di Jawa dan Sumatera.",
             },
 
@@ -695,39 +695,39 @@ class ContentGenerator
         $cityName = SeoData::cityName($citySlug) ?? $this->humanize($citySlug);
         $monthLabel = $this->humanize($month);
 
-        $monthNum = array_search(strtolower($month), ['januari','februari','maret','april','mei','juni','juli','agustus','september','oktober','november','desember']) + 1;
+        $monthNum = array_search(strtolower($month), ['januari', 'februari', 'maret', 'april', 'mei', 'juni', 'juli', 'agustus', 'september', 'oktober', 'november', 'desember']) + 1;
 
         $weatherDesc = match (true) {
-            $monthNum >= 5 && $monthNum <= 9 => "musim kemarau — cuaca cerah hingga berawan, kelembaban lebih rendah, dan curah hujan minimal",
-            $monthNum >= 11 || $monthNum <= 3 => "musim hujan — curah hujan tinggi, kelembaban di atas 80%, dan potensi hujan lebat di sore hingga malam hari",
-            default => "masa transisi (pancaroba) — cuaca tidak menentu, bisa cerah di pagi dan hujan deras di sore, dengan kelembaban sedang",
+            $monthNum >= 5 && $monthNum <= 9 => 'musim kemarau — cuaca cerah hingga berawan, kelembaban lebih rendah, dan curah hujan minimal',
+            $monthNum >= 11 || $monthNum <= 3 => 'musim hujan — curah hujan tinggi, kelembaban di atas 80%, dan potensi hujan lebat di sore hingga malam hari',
+            default => 'masa transisi (pancaroba) — cuaca tidak menentu, bisa cerah di pagi dan hujan deras di sore, dengan kelembaban sedang',
         };
 
         return implode("\n\n", [
             "Cuaca di {$cityName} bulan {$monthLabel} — gambaran lengkap tentang temperatur, curah hujan, kelembaban, dan rekomendasi aktivitas sesuai kondisi cuaca. Bulan {$monthLabel} di {$cityName} termasuk dalam {$weatherDesc}. Memahami pola cuaca {$cityName} di bulan {$monthLabel} akan membantu Anda merencanakan itinerary, memilih pakaian yang tepat, dan memutuskan apakah bulan ini adalah waktu yang ideal untuk kunjungan Anda.",
 
-            "Temperatur rata-rata di {$cityName} bulan {$monthLabel}: " . match (true) {
-                $monthNum >= 5 && $monthNum <= 9 => "24–32°C di siang hari dan 20–25°C di malam hari. Udara terasa lebih sejuk terutama di pagi hari. Untuk kota dataran tinggi seperti Bandung, Malang, atau Dieng, suhu bisa lebih rendah (18–25°C).",
-                $monthNum >= 11 || $monthNum <= 3 => "23–30°C di siang hari dan 21–24°C di malam hari dengan tingkat kelembaban yang tinggi (80–90%). Meskipun suhu tidak terlalu panas, kelembaban membuat udara terasa gerah. Hujan biasanya turun di sore atau malam hari dengan durasi 1–4 jam.",
-                default => "24–33°C di siang hari dan 21–25°C di malam hari. Cuaca pancaroba tidak bisa diprediksi secara akurat — Anda mungkin mendapat 3 hari cerah berturut-turut diikuti hujan deras 2 hari.",
+            "Temperatur rata-rata di {$cityName} bulan {$monthLabel}: ".match (true) {
+                $monthNum >= 5 && $monthNum <= 9 => '24–32°C di siang hari dan 20–25°C di malam hari. Udara terasa lebih sejuk terutama di pagi hari. Untuk kota dataran tinggi seperti Bandung, Malang, atau Dieng, suhu bisa lebih rendah (18–25°C).',
+                $monthNum >= 11 || $monthNum <= 3 => '23–30°C di siang hari dan 21–24°C di malam hari dengan tingkat kelembaban yang tinggi (80–90%). Meskipun suhu tidak terlalu panas, kelembaban membuat udara terasa gerah. Hujan biasanya turun di sore atau malam hari dengan durasi 1–4 jam.',
+                default => '24–33°C di siang hari dan 21–25°C di malam hari. Cuaca pancaroba tidak bisa diprediksi secara akurat — Anda mungkin mendapat 3 hari cerah berturut-turut diikuti hujan deras 2 hari.',
             },
 
-            "Curah hujan di {$cityName} bulan {$monthLabel}: " . match (true) {
+            "Curah hujan di {$cityName} bulan {$monthLabel}: ".match (true) {
                 $monthNum >= 6 && $monthNum <= 8 => "sangat rendah — hanya 1–5 hari hujan sepanjang bulan dengan intensitas ringan. Ini adalah bulan terkering di {$cityName}, ideal untuk aktivitas outdoor seperti trekking, diving, atau city tour.",
-                $monthNum == 12 || $monthNum == 1 || $monthNum == 2 => "tinggi — 14–22 hari hujan sepanjang bulan dengan intensitas sedang hingga lebat. Bawa payung atau jas hujan, dan siapkan rencana cadangan (indoor activities) untuk hari-hari dengan hujan berkepanjangan.",
-                default => "sedang — 7–13 hari hujan sepanjang bulan dengan intensitas bervariasi. Hujan umumnya turun singkat (30–90 menit) di sore hari dan jarang mengganggu aktivitas sepanjang hari.",
+                $monthNum == 12 || $monthNum == 1 || $monthNum == 2 => 'tinggi — 14–22 hari hujan sepanjang bulan dengan intensitas sedang hingga lebat. Bawa payung atau jas hujan, dan siapkan rencana cadangan (indoor activities) untuk hari-hari dengan hujan berkepanjangan.',
+                default => 'sedang — 7–13 hari hujan sepanjang bulan dengan intensitas bervariasi. Hujan umumnya turun singkat (30–90 menit) di sore hari dan jarang mengganggu aktivitas sepanjang hari.',
             },
 
-            "Rekomendasi aktivitas di {$cityName} bulan {$monthLabel}: " . match (true) {
+            "Rekomendasi aktivitas di {$cityName} bulan {$monthLabel}: ".match (true) {
                 $monthNum >= 5 && $monthNum <= 9 => "Manfaatkan cuaca cerah untuk aktivitas outdoor — trekking di pegunungan sekitar {$cityName}, diving dan snorkeling (visibilitas air optimal), city tour berjalan kaki, dan mengunjungi taman-taman kota. Pastikan bawa sunscreen SPF50, topi, dan air minum yang cukup karena paparan matahari lebih intens.",
                 $monthNum >= 11 || $monthNum <= 3 => "Fokus pada aktivitas indoor dan budaya — museum, galeri seni, workshop memasak atau membatik, spa dan wellness, serta wisata kuliner (food tour). Hujan di {$cityName} bulan {$monthLabel} juga menciptakan suasana yang cozy untuk nongkrong di kafe-kafe lokal dengan pemandangan hujan di luar jendela.",
-                default => "Semua aktivitas bisa dilakukan tetapi perlu fleksibilitas. Jadwalkan aktivitas outdoor di pagi hari (06:00–12:00) saat cuaca paling bersahabat, dan simpan indoor activities untuk sore hari. Bawa jaket ringan atau payung lipat setiap saat.",
+                default => 'Semua aktivitas bisa dilakukan tetapi perlu fleksibilitas. Jadwalkan aktivitas outdoor di pagi hari (06:00–12:00) saat cuaca paling bersahabat, dan simpan indoor activities untuk sore hari. Bawa jaket ringan atau payung lipat setiap saat.',
             },
 
-            "Tips packing untuk {$cityName} bulan {$monthLabel}: " . match (true) {
-                $monthNum >= 5 && $monthNum <= 9 => "Bawa pakaian ringan (cotton/linen), sandal, topi, kacamata hitam, dan sunscreen. Jaket tipis cukup untuk malam hari. Jangan lupa bawa obat nyamuk untuk malam hari.",
+            "Tips packing untuk {$cityName} bulan {$monthLabel}: ".match (true) {
+                $monthNum >= 5 && $monthNum <= 9 => 'Bawa pakaian ringan (cotton/linen), sandal, topi, kacamata hitam, dan sunscreen. Jaket tipis cukup untuk malam hari. Jangan lupa bawa obat nyamuk untuk malam hari.',
                 $monthNum >= 11 || $monthNum <= 3 => "Bawa payung lipat, raincoat ringan, dan sepatu/sandal tahan air. Pakaian quick-dry lebih praktis daripada cotton yang lama kering. Bawa beberapa pasang kaos kaki ekstra — basah di {$cityName} bulan {$monthLabel} bisa mengganggu kenyamanan sepanjang hari.",
-                default => "Gabungan keduanya — bawa pakaian ringan untuk siang hari dan jaket + payung untuk antisipasi hujan sore. Sepatu yang nyaman untuk berjalan jauh dan sandal untuk santai di hotel.",
+                default => 'Gabungan keduanya — bawa pakaian ringan untuk siang hari dan jaket + payung untuk antisipasi hujan sore. Sepatu yang nyaman untuk berjalan jauh dan sandal untuk santai di hotel.',
             },
         ]);
     }
@@ -742,11 +742,11 @@ class ContentGenerator
         return implode("\n\n", [
             "Event dan festival di {$cityName} tahun {$year} — kalender acara lengkap untuk merencanakan kunjungan Anda bertepatan dengan momen spesial di {$cityName}. {$cityName} memiliki kalender event yang kaya sepanjang tahun {$year}: dari festival budaya yang sudah berlangsung ratusan tahun, konser musik internasional, pameran seni kontemporer, kompetisi olahraga, hingga bazaar kuliner yang meriah. Merencanakan perjalanan bertepatan dengan event di {$cityName} bisa menjadi pengalaman yang luar biasa — namun juga memerlukan strategi booking yang lebih cermat karena permintaan hotel melonjak tajam.",
 
-            "Event budaya dan tradisional di {$cityName} tahun {$year}: " . match ($citySlug) {
-                'yogyakarta' => "Sekaten (Maulud), Grebeg Maulud, Festival Kesenian Yogyakarta (Juni–Juli), Jogja International Heritage Walk, Yogyakarta Gamelan Festival, dan Wayang Jogja Night Carnival. Event-event ini menampilkan tradisi Jawa yang masih hidup dalam balutan kontemporer — pertunjukan wayang semalam suntuk, kirab gunungan yang diperebutkan ribuan warga, hingga pameran batik dan keris.",
-                'bali' => "Nyepi (Maret), Galungan & Kuningan, Ubud Writers & Readers Festival (Oktober), Bali Arts Festival (Juni–Juli), Sanur Village Festival, dan Bali Spirit Festival. Bali memiliki kalender upacara yang sangat padat — hampir setiap minggu ada upacara di suatu pura yang bisa disaksikan wisatawan dengan pakaian sopan.",
-                'jakarta' => "Jakarta Fair (Juni–Juli), Jakarta Fashion Week, Jakarta International Film Festival, Djakarta Warehouse Project (Desember), Formula E (jika diadakan), dan berbagai konser internasional di GBK atau JIEXpo.",
-                'bandung' => "Bandung Contemporary Art Awards, Braga Festival, Pasar Seni ITB, Bandung Food Festival, dan Asia Africa Carnival. Kota kreatif ini selalu punya event seni dan kuliner yang menarik wisatawan dari Jakarta dan sekitarnya.",
+            "Event budaya dan tradisional di {$cityName} tahun {$year}: ".match ($citySlug) {
+                'yogyakarta' => 'Sekaten (Maulud), Grebeg Maulud, Festival Kesenian Yogyakarta (Juni–Juli), Jogja International Heritage Walk, Yogyakarta Gamelan Festival, dan Wayang Jogja Night Carnival. Event-event ini menampilkan tradisi Jawa yang masih hidup dalam balutan kontemporer — pertunjukan wayang semalam suntuk, kirab gunungan yang diperebutkan ribuan warga, hingga pameran batik dan keris.',
+                'bali' => 'Nyepi (Maret), Galungan & Kuningan, Ubud Writers & Readers Festival (Oktober), Bali Arts Festival (Juni–Juli), Sanur Village Festival, dan Bali Spirit Festival. Bali memiliki kalender upacara yang sangat padat — hampir setiap minggu ada upacara di suatu pura yang bisa disaksikan wisatawan dengan pakaian sopan.',
+                'jakarta' => 'Jakarta Fair (Juni–Juli), Jakarta Fashion Week, Jakarta International Film Festival, Djakarta Warehouse Project (Desember), Formula E (jika diadakan), dan berbagai konser internasional di GBK atau JIEXpo.',
+                'bandung' => 'Bandung Contemporary Art Awards, Braga Festival, Pasar Seni ITB, Bandung Food Festival, dan Asia Africa Carnival. Kota kreatif ini selalu punya event seni dan kuliner yang menarik wisatawan dari Jakarta dan sekitarnya.',
                 default => "Festival budaya lokal, perayaan hari jadi kota, pasar malam tahunan, konser musik, dan event olahraga yang menjadi magnet wisatawan domestik dan mancanegara. Cek kalender event resmi pemerintah kota {$cityName} untuk jadwal terbaru tahun {$year}.",
             },
 
@@ -778,22 +778,22 @@ class ContentGenerator
         return implode("\n\n", [
             "Rekomendasi hotel {$occLabel} di {$cityName} — pilihan akomodasi yang dikurasi khusus untuk perjalanan {$occLabel} Anda ke {$cityName}. Kami memahami bahwa kebutuhan {$occLabel} di {$cityName} berbeda dengan perjalanan biasa — ada ekspektasi khusus tentang fasilitas, lokasi, layanan, dan atmosfer yang harus dipenuhi. Panduan ini membantu Anda memilih hotel yang benar-benar sesuai untuk konteks {$occLabel}, bukan sekadar hotel dengan rating tertinggi atau termurah.",
 
-            "Apa yang membedakan hotel {$occLabel} di {$cityName} dari hotel biasa? " . match ($occasion) {
+            "Apa yang membedakan hotel {$occLabel} di {$cityName} dari hotel biasa? ".match ($occasion) {
                 'honeymoon' => "Hotel honeymoon mengutamakan privasi, romantisme, dan pengalaman yang memorable — kamar dengan bathtub atau jacuzzi, pemandangan yang Instagram-worthy, private dining, couple spa, dan layanan yang tidak mengganggu (discreet service). Banyak hotel honeymoon di {$cityName} juga menawarkan paket khusus yang mencakup welcome drink, dekorasi kamar romantis, candle light dinner, dan late check-out.",
-                'family' => "Hotel keluarga menawarkan connecting room atau family suite dengan kapasitas 4–6 orang, kids club dengan aktivitas terprogram, kolam renang anak dengan water slide, kids menu di restoran, dan layanan babysitting untuk orang tua yang ingin dinner romantis atau spa. Keamanan anak adalah prioritas: pagar kolam, gate pengaman, staf terlatih P3K anak, dan CCTV di area bermain.",
+                'family' => 'Hotel keluarga menawarkan connecting room atau family suite dengan kapasitas 4–6 orang, kids club dengan aktivitas terprogram, kolam renang anak dengan water slide, kids menu di restoran, dan layanan babysitting untuk orang tua yang ingin dinner romantis atau spa. Keamanan anak adalah prioritas: pagar kolam, gate pengaman, staf terlatih P3K anak, dan CCTV di area bermain.',
                 'business' => "Hotel bisnis fokus pada produktivitas dan efisiensi: Wi-Fi 30+ Mbps, meja kerja ergonomis dengan banyak stopkontak, business center 24 jam, ruang meeting, airport transfer, dan executive lounge. Lokasi dekat pusat bisnis {$cityName} menghemat waktu tempuh ke meeting.",
-                'romantic' => "Hotel romantis mengutamakan atmosfer: pencahayaan hangat, dekorasi elegan, bathtub untuk dua orang, balkon dengan pemandangan, dan dining experience yang intim — baik di restoran rooftop maupun in-room dining dengan setup romantis.",
-                'backpacker' => "Hotel backpacker menawarkan efisiensi maksimal: lokasi dekat transportasi publik, dormitory yang bersih dengan privacy curtain, common area untuk networking, dapur bersama, laundry self-service, dan papan informasi dengan tips lokal yang jujur. Harga terjangkau tanpa mengorbankan kebersihan dan keamanan.",
+                'romantic' => 'Hotel romantis mengutamakan atmosfer: pencahayaan hangat, dekorasi elegan, bathtub untuk dua orang, balkon dengan pemandangan, dan dining experience yang intim — baik di restoran rooftop maupun in-room dining dengan setup romantis.',
+                'backpacker' => 'Hotel backpacker menawarkan efisiensi maksimal: lokasi dekat transportasi publik, dormitory yang bersih dengan privacy curtain, common area untuk networking, dapur bersama, laundry self-service, dan papan informasi dengan tips lokal yang jujur. Harga terjangkau tanpa mengorbankan kebersihan dan keamanan.',
                 'budget' => "Hotel budget fokus pada value terbaik: kamar dasar yang bersih, lokasi strategis, Wi-Fi gratis, dan layanan ramah. Tidak ada fasilitas mewah, tetapi semua yang Anda butuhkan untuk istirahat nyaman setelah seharian eksplorasi {$cityName}.",
                 'luxury' => "Hotel mewah menawarkan pengalaman tanpa kompromi: suite dengan butler pribadi, fine dining dengan chef internasional, infinity pool dengan pemandangan ikonik {$cityName}, spa kelas dunia, dan layanan concierge yang bisa mengatur apapun — dari helikopter tour hingga private dinner di lokasi eksklusif.",
                 default => "Hotel untuk {$occLabel} memiliki kombinasi fasilitas, lokasi, dan atmosfer yang dioptimalkan untuk kebutuhan spesifik ini — bukan sekadar hotel generik yang kebetulan tersedia di {$cityName}.",
             },
 
-            "Lokasi strategis untuk hotel {$occLabel} di {$cityName}: " . match ($occasion) {
+            "Lokasi strategis untuk hotel {$occLabel} di {$cityName}: ".match ($occasion) {
                 'honeymoon', 'romantic' => "pilih area yang tenang dengan pemandangan indah — bukan pusat kota yang bising. Area perbukitan, tepi pantai, atau pedesaan di sekitar {$cityName} menawarkan privasi dan suasana yang tidak bisa didapat di pusat kota.",
-                'family' => "area yang dekat dengan atraksi keluarga (taman hiburan, kebun binatang, water park) atau area resor yang memiliki semua fasilitas dalam satu properti sehingga tidak perlu banyak bepergian dengan anak kecil.",
+                'family' => 'area yang dekat dengan atraksi keluarga (taman hiburan, kebun binatang, water park) atau area resor yang memiliki semua fasilitas dalam satu properti sehingga tidak perlu banyak bepergian dengan anak kecil.',
                 'business' => "pusat bisnis {$cityName} — dekat dengan kantor-kantor, convention center, dan akses mudah ke bandara atau stasiun untuk perjalanan lanjutan.",
-                'backpacker', 'budget' => "area dekat transportasi publik (stasiun, terminal, halte BRT) dan pusat oleh-oleh atau kuliner malam — lokasi yang memudahkan mobilitas dengan budget minim.",
+                'backpacker', 'budget' => 'area dekat transportasi publik (stasiun, terminal, halte BRT) dan pusat oleh-oleh atau kuliner malam — lokasi yang memudahkan mobilitas dengan budget minim.',
                 default => "sesuaikan dengan itinerary Anda — tidak ada satu area yang 'terbaik' untuk semua orang. Pilih berdasarkan proximity ke aktivitas yang paling ingin Anda lakukan di {$cityName}.",
             },
 
@@ -816,11 +816,11 @@ class ContentGenerator
 
             "Pilihan akomodasi di {$neighborhoodName}, {$cityName}: area ini memiliki spektrum akomodasi yang lengkap — dari guesthouse budget yang dikelola keluarga dengan 5–10 kamar, butik hotel dengan desain kontemporer yang Instagram-worthy, hingga resort butik yang menawarkan privasi dan layanan personal. Harga hotel di {$neighborhoodName} umumnya 15–25% lebih rendah dibanding area pusat kota {$cityName} untuk kualitas yang setara atau bahkan lebih baik — ini adalah 'value pocket' yang sering dimanfaatkan oleh traveler savvy dan repeat visitors.",
 
-            "Akses dan transportasi dari {$neighborhoodName}, {$cityName}: area ini terhubung dengan pusat kota {$cityName} melalui " . match ($citySlug) {
-                'jakarta' => "jalan utama, TransJakarta, atau MRT/LRT. Ride-hailing (GoCar/Grab) tersedia 24 jam dengan waktu tempuh 20–40 menit ke Sudirman-Thamrin tergantung lalu lintas.",
+            "Akses dan transportasi dari {$neighborhoodName}, {$cityName}: area ini terhubung dengan pusat kota {$cityName} melalui ".match ($citySlug) {
+                'jakarta' => 'jalan utama, TransJakarta, atau MRT/LRT. Ride-hailing (GoCar/Grab) tersedia 24 jam dengan waktu tempuh 20–40 menit ke Sudirman-Thamrin tergantung lalu lintas.',
                 'yogyakarta' => "jalan utama yang dilalui TransJogja dan ride-hailing. Ke Malioboro bisa ditempuh 15–30 menit tergantung lokasi spesifik di {$neighborhoodName}. Banyak tamu memilih jalan kaki atau bersepeda untuk eksplorasi area sekitar.",
                 'bali' => "jalan provinsi yang menghubungkan berbagai area wisata. Scooter rental adalah moda paling praktis untuk eksplorasi {$neighborhoodName} dan sekitarnya — tarif sewa Rp 75.000–100.000/hari. Ride-hailing juga tersedia meskipun di beberapa area ada pembatasan lokal.",
-                'bandung' => "jalan utama kota dan angkutan umum (angkot, bus Damri). Ride-hailing adalah pilihan paling praktis — perjalanan ke pusat kota Bandung memakan waktu 15–30 menit kecuali saat weekend yang bisa lebih padat.",
+                'bandung' => 'jalan utama kota dan angkutan umum (angkot, bus Damri). Ride-hailing adalah pilihan paling praktis — perjalanan ke pusat kota Bandung memakan waktu 15–30 menit kecuali saat weekend yang bisa lebih padat.',
                 default => "transportasi umum lokal dan ride-hailing. Perjalanan ke pusat {$cityName} memakan waktu 15–40 menit tergantung jarak dan kondisi lalu lintas. Beberapa hotel di {$neighborhoodName} menyediakan shuttle gratis ke area tertentu pada jam tertentu.",
             },
 
@@ -857,24 +857,19 @@ class ContentGenerator
             'source-code-best', 'source-code-beli-city', 'source-code-harga-city',
             'source-code-city', 'source-code-city-murah', 'source-code-harga-price',
             'source-code-city-price', 'source-code-jasa', 'source-code-paket',
-            'source-code-vs', 'source-code-district', 'source-code-path',
-            => $this->sourceCodeMassiveIntro($type, $params),
+            'source-code-vs', 'source-code-district', 'source-code-path', => $this->sourceCodeMassiveIntro($type, $params),
             // Feature × city patterns
-            'feature-city', 'double-feature-city', 'occasion-feature-city',
-            => $this->featureMassiveIntro($type, $params),
+            'feature-city', 'double-feature-city', 'occasion-feature-city', => $this->featureMassiveIntro($type, $params),
             // Geo patterns
             'double-city', 'district-city', 'compare-city-expanded',
-            'month-year-city',
-            => $this->geoMassiveIntro($type, $params),
+            'month-year-city', => $this->geoMassiveIntro($type, $params),
             // Combo patterns
             'amenity-city-price', 'star-price-city', 'guest-feature-city',
-            'room-type-feature-city', 'price-city-expanded', 'content-topic-city',
-            => $this->comboMassiveIntro($type, $params),
+            'room-type-feature-city', 'price-city-expanded', 'content-topic-city', => $this->comboMassiveIntro($type, $params),
             // Filler patterns
             'filler-base', 'filler-murah', 'filler-year',
             'second-tier-city', 'second-tier-city-year',
-            'third-tier-hotel-type', 'third-tier-trip-type',
-            => $this->fillerMassiveIntro($type, $params),
+            'third-tier-hotel-type', 'third-tier-trip-type', => $this->fillerMassiveIntro($type, $params),
             default => $this->fallbackIntro($type, $params),
         };
     }
@@ -890,7 +885,7 @@ class ContentGenerator
         $header = match ($type) {
             'source-code-beli' => "Beli {$kw} — dapatkan source code lengkap sistem manajemen hotel all-in-one HotelHub HMS. Solusi terbaik untuk developer, startup, dan perusahaan yang ingin memiliki aplikasi hotel sendiri tanpa membangun dari nol. Dengan membeli source code, Anda mendapatkan full ownership: install di server sendiri, kustomisasi sesuka hati, jual ulang ke klien, atau gunakan sebagai internal tool — semuanya tanpa biaya bulanan.",
             'source-code-download' => "Download {$kw} — akses source code HotelHub HMS secara instan. Setelah pembelian, Anda menerima seluruh codebase Laravel 11, database migration, dokumentasi teknis, dan panduan deployment. Tidak ada hidden fees, tidak ada dependency vendor, tidak ada lock-in. Full source code ownership sejak hari pertama.",
-            'source-code-harga-price' => "Harga {$kw} mulai Rp " . strtoupper($params['price'] ?? '?') . " — investasi one-time untuk memiliki sistem hotel profesional. HotelHub HMS hadir dalam beberapa paket: Basic untuk single property, Growth untuk multi-property, dan Enterprise untuk whitelabel + full source code customization. Semua paket one-time purchase, lifetime ownership — tidak ada biaya berlangganan bulanan.",
+            'source-code-harga-price' => "Harga {$kw} mulai Rp ".strtoupper($params['price'] ?? '?').' — investasi one-time untuk memiliki sistem hotel profesional. HotelHub HMS hadir dalam beberapa paket: Basic untuk single property, Growth untuk multi-property, dan Enterprise untuk whitelabel + full source code customization. Semua paket one-time purchase, lifetime ownership — tidak ada biaya berlangganan bulanan.',
             'source-code-city', 'source-code-beli-city', 'source-code-harga-city' => "{$kw} di {$city} — solusi digital untuk pelaku bisnis perhotelan di {$city} dan sekitarnya. HotelHub HMS adalah sistem manajemen hotel berbasis web yang bisa diakses dari mana saja — cocok untuk hotel butik, resort, guesthouse, hingga jaringan hotel dengan puluhan properti. Source code siap pakai, tinggal deploy ke server Anda.",
             'source-code-jasa' => "Jasa pembuatan {$kw} di {$city} — tim developer HotelHub HMS siap membantu Anda dari instalasi, kustomisasi, hingga pelatihan staf. Kami berpengalaman mengerjakan puluhan project hotel di Indonesia. Proses transparan, timeline jelas, dan support berkelanjutan.",
             'source-code-vs' => "{$kw} — perbandingan dua produk untuk membantu Anda memilih solusi hotel terbaik. HotelHub HMS unggul sebagai solusi self-host dengan full source code ownership, 23+ modul integrated, dan BYOK payment/AI adapter yang memberi Anda kontrol penuh.",
@@ -900,15 +895,15 @@ class ContentGenerator
         return implode("\n\n", [
             $header,
 
-            "HotelHub HMS adalah sistem manajemen hotel terlengkap di Indonesia yang tersedia dalam bentuk source code. Dibangun dengan Laravel 11 dan MySQL, sistem ini mencakup seluruh operasional hotel: Front Office (reservasi, check-in/check-out, room assignment, guest profile), POS & F&B (restoran, room service, banquet), Accounting (general ledger, AR/AP, journal posting, trial balance, P&L), Channel Manager (integrasi Booking.com, Agoda, Traveloka, Expedia, dan 6 OTA lainnya), Revenue Management (dynamic pricing, competitor rate shopping, forecast demand), Housekeeping (task assignment, room status, inspection checklist), HR & Payroll (attendance, salary calculation, PPh 21, BPJS), dan masih banyak lagi — total 23 modul dalam satu dashboard.",
+            'HotelHub HMS adalah sistem manajemen hotel terlengkap di Indonesia yang tersedia dalam bentuk source code. Dibangun dengan Laravel 11 dan MySQL, sistem ini mencakup seluruh operasional hotel: Front Office (reservasi, check-in/check-out, room assignment, guest profile), POS & F&B (restoran, room service, banquet), Accounting (general ledger, AR/AP, journal posting, trial balance, P&L), Channel Manager (integrasi Booking.com, Agoda, Traveloka, Expedia, dan 6 OTA lainnya), Revenue Management (dynamic pricing, competitor rate shopping, forecast demand), Housekeeping (task assignment, room status, inspection checklist), HR & Payroll (attendance, salary calculation, PPh 21, BPJS), dan masih banyak lagi — total 23 modul dalam satu dashboard.',
 
-            "Keunggulan utama memiliki source code sendiri: (1) Full control — Anda ubah, tambah, atau hapus fitur sesuka hati tanpa minta izin vendor; (2) Self-host — data tamu dan transaksi tetap di server Anda sendiri, bukan di cloud pihak ketiga; (3) One-time cost — tidak ada biaya bulanan atau tahunan yang menggerus margin; (4) White-label — branding dengan logo dan nama bisnis Anda sendiri; (5) Scalable — dari 1 properti hingga puluhan properti dalam satu instalasi; (6) BYOK — bawa payment gateway dan AI provider sendiri tanpa lock-in; (7) Source code documented — 27 file dokumentasi teknis + 122 automated tests untuk memudahkan developer memahami codebase.",
+            'Keunggulan utama memiliki source code sendiri: (1) Full control — Anda ubah, tambah, atau hapus fitur sesuka hati tanpa minta izin vendor; (2) Self-host — data tamu dan transaksi tetap di server Anda sendiri, bukan di cloud pihak ketiga; (3) One-time cost — tidak ada biaya bulanan atau tahunan yang menggerus margin; (4) White-label — branding dengan logo dan nama bisnis Anda sendiri; (5) Scalable — dari 1 properti hingga puluhan properti dalam satu instalasi; (6) BYOK — bawa payment gateway dan AI provider sendiri tanpa lock-in; (7) Source code documented — 27 file dokumentasi teknis + 122 automated tests untuk memudahkan developer memahami codebase.',
 
-            "Cocok untuk: Developer yang ingin menjual software hotel ke klien (whitelabel resell), Startup yang membangun SaaS hotel multi-tenant, Perusahaan hotel yang ingin internal system, Koperasi/asosiasi hotel yang ingin shared platform, dan Pemerintah daerah yang ingin membangun sistem informasi pariwisata terintegrasi. Dengan membeli source code HotelHub HMS, Anda menghemat 6-12 bulan development time dan Rp 200-500 juta biaya pembangunan dari nol.",
+            'Cocok untuk: Developer yang ingin menjual software hotel ke klien (whitelabel resell), Startup yang membangun SaaS hotel multi-tenant, Perusahaan hotel yang ingin internal system, Koperasi/asosiasi hotel yang ingin shared platform, dan Pemerintah daerah yang ingin membangun sistem informasi pariwisata terintegrasi. Dengan membeli source code HotelHub HMS, Anda menghemat 6-12 bulan development time dan Rp 200-500 juta biaya pembangunan dari nol.',
 
             "Cara mendapatkan {$kw}: (1) Hubungi WhatsApp 081296052010 — diskusikan kebutuhan Anda; (2) Pilih paket — Basic, Growth, atau Enterprise; (3) Lakukan pembayaran — transfer bank atau payment gateway; (4) Terima source code via private GitHub repo + panduan instalasi; (5) Deploy ke server Anda — tim kami siap bantu remote setup. Proses dari inquiry ke live system: 1-3 hari kerja. Demo langsung tersedia di halaman /docs — semua modul dengan data dummy siap Anda eksplorasi sekarang juga. Tidak perlu daftar, tidak perlu install — langsung coba di browser.",
 
-            "FAQ singkat: Q: Apakah saya bisa menjual ulang source code ini ke klien? A: Ya, dengan paket Enterprise (whitelabel). Q: Apakah ada biaya tahunan? A: Tidak — one-time purchase, lifetime ownership. Q: Apakah bisa request fitur custom? A: Ya, tim kami menerima project kustomisasi terpisah. Q: Sistem apa yang dibutuhkan? A: Server Linux dengan PHP 8.3+ dan MySQL 8.0+ — VPS Rp 150.000/bulan sudah cukup untuk skala menengah. Q: Apakah ada garansi? A: 30 hari bug-fix guarantee pasca pembelian, plus optional maintenance retainer bulanan. Hubungi 081296052010 sekarang untuk konsultasi gratis dan penawaran terbaik!",
+            'FAQ singkat: Q: Apakah saya bisa menjual ulang source code ini ke klien? A: Ya, dengan paket Enterprise (whitelabel). Q: Apakah ada biaya tahunan? A: Tidak — one-time purchase, lifetime ownership. Q: Apakah bisa request fitur custom? A: Ya, tim kami menerima project kustomisasi terpisah. Q: Sistem apa yang dibutuhkan? A: Server Linux dengan PHP 8.3+ dan MySQL 8.0+ — VPS Rp 150.000/bulan sudah cukup untuk skala menengah. Q: Apakah ada garansi? A: 30 hari bug-fix guarantee pasca pembelian, plus optional maintenance retainer bulanan. Hubungi 081296052010 sekarang untuk konsultasi gratis dan penawaran terbaik!',
         ]);
     }
 
@@ -921,13 +916,13 @@ class ContentGenerator
 
         $desc = match ($type) {
             'double-feature-city' => "Hotel {$city} dengan {$f} dan {$f2} — kombinasi fasilitas premium untuk pengalaman menginap yang maksimal. Dua fitur ini saling melengkapi: {$f} memberikan kenyamanan dasar, sementara {$f2} menambah dimensi kemewahan dan kepraktisan.",
-            'occasion-feature-city' => "Hotel " . Str::title($params['occasion'] ?? '') . " {$city} dengan {$f} — akomodasi yang mengerti kebutuhan spesifik perjalanan Anda. Fasilitas {$f} menjadi elemen kunci yang membedakan pengalaman menginap biasa dengan yang istimewa.",
+            'occasion-feature-city' => 'Hotel '.Str::title($params['occasion'] ?? '')." {$city} dengan {$f} — akomodasi yang mengerti kebutuhan spesifik perjalanan Anda. Fasilitas {$f} menjadi elemen kunci yang membedakan pengalaman menginap biasa dengan yang istimewa.",
             default => "Hotel {$city} dengan {$f} — akomodasi pilihan yang menawarkan fasilitas spesifik untuk kenyamanan maksimal. {$f} adalah fitur yang dicari oleh tamu yang menghargai kualitas dan tidak ingin berkompromi saat memilih hotel.",
         };
 
         return implode("\n\n", [
             $desc,
-            "{$city} memiliki beragam hotel dengan fasilitas {$f}" . ($f2 ? " dan {$f2}" : '') . ". Dari hotel budget yang menyediakan {$f} sebagai bagian dari paket standar, hingga resort premium yang menghadirkan {$f} kelas dunia — pilihan tersedia untuk semua budget. Hotel-hotel ini dikurasi berdasarkan konsistensi fasilitas: kami hanya merekomendasikan properti yang {$f}-nya benar-benar berfungsi dan terawat, bukan sekadar klaim di deskripsi.",
+            "{$city} memiliki beragam hotel dengan fasilitas {$f}".($f2 ? " dan {$f2}" : '').". Dari hotel budget yang menyediakan {$f} sebagai bagian dari paket standar, hingga resort premium yang menghadirkan {$f} kelas dunia — pilihan tersedia untuk semua budget. Hotel-hotel ini dikurasi berdasarkan konsistensi fasilitas: kami hanya merekomendasikan properti yang {$f}-nya benar-benar berfungsi dan terawat, bukan sekadar klaim di deskripsi.",
             "Tips memilih hotel dengan {$f} di {$city}: (1) lihat foto {$f} yang diunggah tamu — bukan foto promosi; (2) baca review spesifik tentang {$f}; (3) tanyakan jam operasional {$f}; (4) konfirmasi apakah {$f} sudah termasuk dalam tarif atau ada biaya tambahan; (5) jika {$f} adalah alasan utama Anda memilih hotel, pastikan tersedia saat tanggal check-in Anda — beberapa hotel melakukan maintenance berkala.",
             "HotelHub HMS — source code sistem hotel lengkap. Booking engine, channel manager, POS, accounting, housekeeping — 23+ modul siap pakai. Ideal untuk hotel {$city} yang ingin mengelola operasional secara digital. Chat WA 081296052010 untuk info source code.",
         ]);
@@ -938,32 +933,32 @@ class ContentGenerator
     {
         return match ($type) {
             'double-city' => implode("\n\n", [
-                "Hotel di " . (SeoData::cityName($params['city1']) ?? 'Kota A') . " ke "
-                . (SeoData::cityName($params['city2']) ?? 'Kota B')
-                . " — panduan lengkap untuk perjalanan antar kota. Baik Anda bepergian untuk bisnis, liburan, atau kunjungan keluarga, memilih hotel yang strategis di kedua kota akan membuat perjalanan lebih efisien dan nyaman.",
-                "Perjalanan antar dua kota ini populer di kalangan pebisnis dan wisatawan. Jarak tempuh bervariasi tergantung moda transportasi — pesawat (1-2 jam), kereta (3-8 jam), atau mobil pribadi (5-12 jam). Hotel dengan lokasi dekat bandara/stasiun di kota asal dan pusat kota di kota tujuan akan mengoptimalkan itinerary Anda.",
-                "HotelHub HMS — sistem manajemen hotel all-in-one. Source code Laravel 11, 23+ modul, self-host. Info: 081296052010.",
+                'Hotel di '.(SeoData::cityName($params['city1']) ?? 'Kota A').' ke '
+                .(SeoData::cityName($params['city2']) ?? 'Kota B')
+                .' — panduan lengkap untuk perjalanan antar kota. Baik Anda bepergian untuk bisnis, liburan, atau kunjungan keluarga, memilih hotel yang strategis di kedua kota akan membuat perjalanan lebih efisien dan nyaman.',
+                'Perjalanan antar dua kota ini populer di kalangan pebisnis dan wisatawan. Jarak tempuh bervariasi tergantung moda transportasi — pesawat (1-2 jam), kereta (3-8 jam), atau mobil pribadi (5-12 jam). Hotel dengan lokasi dekat bandara/stasiun di kota asal dan pusat kota di kota tujuan akan mengoptimalkan itinerary Anda.',
+                'HotelHub HMS — sistem manajemen hotel all-in-one. Source code Laravel 11, 23+ modul, self-host. Info: 081296052010.',
             ]),
             'district-city' => implode("\n\n", [
-                "Hotel di " . Str::title(str_replace('-', ' ', $params['district']))
-                . ", " . (SeoData::cityName($params['city']) ?? '')
-                . " — akomodasi strategis di salah satu kawasan populer kota ini. Area ini menawarkan akses mudah ke berbagai atraksi dan fasilitas umum, menjadikannya pilihan ideal untuk wisatawan yang menghargai kenyamanan dan efisiensi.",
-                "Kawasan ini dikenal dengan karakter lokalnya yang kuat — perpaduan antara kehidupan urban dan sentuhan tradisional yang autentik. Hotel-hotel di area ini berkisar dari guesthouse budget yang dikelola keluarga hingga hotel butik modern — semuanya dengan value proposition masing-masing.",
-                "HotelHub HMS — source code sistem hotel. Booking engine, POS, accounting, channel manager — 23+ modul dalam 1 dashboard. Chat WA 081296052010.",
+                'Hotel di '.Str::title(str_replace('-', ' ', $params['district']))
+                .', '.(SeoData::cityName($params['city']) ?? '')
+                .' — akomodasi strategis di salah satu kawasan populer kota ini. Area ini menawarkan akses mudah ke berbagai atraksi dan fasilitas umum, menjadikannya pilihan ideal untuk wisatawan yang menghargai kenyamanan dan efisiensi.',
+                'Kawasan ini dikenal dengan karakter lokalnya yang kuat — perpaduan antara kehidupan urban dan sentuhan tradisional yang autentik. Hotel-hotel di area ini berkisar dari guesthouse budget yang dikelola keluarga hingga hotel butik modern — semuanya dengan value proposition masing-masing.',
+                'HotelHub HMS — source code sistem hotel. Booking engine, POS, accounting, channel manager — 23+ modul dalam 1 dashboard. Chat WA 081296052010.',
             ]),
             'compare-city-expanded' => implode("\n\n", [
-                "Bandingkan hotel " . (SeoData::cityName($params['a']) ?? 'Kota A')
-                . " vs " . (SeoData::cityName($params['b']) ?? 'Kota B')
-                . " — perbandingan objektif dua destinasi populer. Kedua kota menawarkan pengalaman yang berbeda: dari biaya akomodasi, jenis atraksi, akses transportasi, hingga karakter wisatawan yang berkunjung.",
-                "Dari sisi akomodasi, kedua kota memiliki spektrum hotel yang lengkap. Perbedaan utama terletak pada harga rata-rata per malam, kepadatan saat peak season, dan variasi tipe akomodasi yang tersedia. Pilih sesuai dengan prioritas perjalanan Anda: budget, kenyamanan, atau keduanya.",
-                "HotelHub HMS — sistem manajemen hotel all-in-one Laravel 11. Source code lengkap, 23+ modul, white-label ready. WA 081296052010.",
+                'Bandingkan hotel '.(SeoData::cityName($params['a']) ?? 'Kota A')
+                .' vs '.(SeoData::cityName($params['b']) ?? 'Kota B')
+                .' — perbandingan objektif dua destinasi populer. Kedua kota menawarkan pengalaman yang berbeda: dari biaya akomodasi, jenis atraksi, akses transportasi, hingga karakter wisatawan yang berkunjung.',
+                'Dari sisi akomodasi, kedua kota memiliki spektrum hotel yang lengkap. Perbedaan utama terletak pada harga rata-rata per malam, kepadatan saat peak season, dan variasi tipe akomodasi yang tersedia. Pilih sesuai dengan prioritas perjalanan Anda: budget, kenyamanan, atau keduanya.',
+                'HotelHub HMS — sistem manajemen hotel all-in-one Laravel 11. Source code lengkap, 23+ modul, white-label ready. WA 081296052010.',
             ]),
             'month-year-city' => implode("\n\n", [
-                "Hotel " . (SeoData::cityName($params['city']) ?? '') . " "
-                . Str::title($params['month']) . " " . $params['year']
-                . " — panduan akomodasi musiman. Setiap bulan membawa karakter berbeda untuk perjalanan: harga, cuaca, event, dan ketersediaan kamar berfluktuasi sepanjang tahun. Rencanakan perjalanan Anda dengan informasi terkini.",
-                "Tips untuk periode ini: booking lebih awal untuk peak season, manfaatkan promo low season, dan cek kalender event lokal yang mungkin memengaruhi ketersediaan dan harga hotel.",
-                "HotelHub HMS — source code sistem reservasi hotel Laravel 11. 23+ modul, self-host, BYOK payment. Info lengkap: 081296052010.",
+                'Hotel '.(SeoData::cityName($params['city']) ?? '').' '
+                .Str::title($params['month']).' '.$params['year']
+                .' — panduan akomodasi musiman. Setiap bulan membawa karakter berbeda untuk perjalanan: harga, cuaca, event, dan ketersediaan kamar berfluktuasi sepanjang tahun. Rencanakan perjalanan Anda dengan informasi terkini.',
+                'Tips untuk periode ini: booking lebih awal untuk peak season, manfaatkan promo low season, dan cek kalender event lokal yang mungkin memengaruhi ketersediaan dan harga hotel.',
+                'HotelHub HMS — source code sistem reservasi hotel Laravel 11. 23+ modul, self-host, BYOK payment. Info lengkap: 081296052010.',
             ]),
             default => $this->fallbackIntro($type, $params),
         };
@@ -973,17 +968,18 @@ class ContentGenerator
     public function comboMassiveIntro(string $type, array $params): string
     {
         $city = SeoData::cityName($params['city'] ?? '') ?? Str::title(str_replace('-', ' ', $params['city'] ?? ''));
+
         return implode("\n\n", [
             match ($type) {
-                'amenity-city-price' => "Hotel dengan " . Str::title(str_replace('-', ' ', $params['amenity'] ?? '')) . " di {$city} dengan harga di bawah Rp " . strtoupper($params['price'] ?? '') . " — pilihan hemat tanpa mengorbankan fasilitas.",
-                'star-price-city' => "Hotel bintang {$params['star']} di {$city} dengan budget Rp " . strtoupper($params['price'] ?? '') . " — kualitas premium dalam anggaran terjangkau.",
-                'guest-feature-city' => "Hotel untuk " . Str::title(str_replace('-', ' ', $params['guestType'] ?? '')) . " di {$city} dengan " . Str::title(str_replace('-', ' ', $params['feature'] ?? '')) . " — akomodasi yang disesuaikan dengan kebutuhan spesifik tamu.",
-                'room-type-feature-city' => "Kamar " . Str::title(str_replace('-', ' ', $params['roomType'] ?? '')) . " di {$city} dengan " . Str::title(str_replace('-', ' ', $params['feature'] ?? '')) . " — konfigurasi kamar ideal dengan fasilitas premium.",
-                'price-city-expanded' => "Hotel {$city} harga Rp " . strtoupper($params['price'] ?? '') . " — panduan memilih akomodasi sesuai budget. Dari hotel budget hingga hotel premium, {$city} memiliki pilihan untuk semua rentang harga.",
-                'content-topic-city' => "Tips " . Str::title(str_replace('-', ' ', $params['topic'] ?? '')) . " hotel {$city} — panduan praktis untuk mendapatkan pengalaman menginap terbaik sesuai budget dan preferensi Anda.",
+                'amenity-city-price' => 'Hotel dengan '.Str::title(str_replace('-', ' ', $params['amenity'] ?? ''))." di {$city} dengan harga di bawah Rp ".strtoupper($params['price'] ?? '').' — pilihan hemat tanpa mengorbankan fasilitas.',
+                'star-price-city' => "Hotel bintang {$params['star']} di {$city} dengan budget Rp ".strtoupper($params['price'] ?? '').' — kualitas premium dalam anggaran terjangkau.',
+                'guest-feature-city' => 'Hotel untuk '.Str::title(str_replace('-', ' ', $params['guestType'] ?? ''))." di {$city} dengan ".Str::title(str_replace('-', ' ', $params['feature'] ?? '')).' — akomodasi yang disesuaikan dengan kebutuhan spesifik tamu.',
+                'room-type-feature-city' => 'Kamar '.Str::title(str_replace('-', ' ', $params['roomType'] ?? ''))." di {$city} dengan ".Str::title(str_replace('-', ' ', $params['feature'] ?? '')).' — konfigurasi kamar ideal dengan fasilitas premium.',
+                'price-city-expanded' => "Hotel {$city} harga Rp ".strtoupper($params['price'] ?? '')." — panduan memilih akomodasi sesuai budget. Dari hotel budget hingga hotel premium, {$city} memiliki pilihan untuk semua rentang harga.",
+                'content-topic-city' => 'Tips '.Str::title(str_replace('-', ' ', $params['topic'] ?? ''))." hotel {$city} — panduan praktis untuk mendapatkan pengalaman menginap terbaik sesuai budget dan preferensi Anda.",
                 default => "Hotel {$city} — pilihan akomodasi terbaik untuk semua tipe perjalanan.",
             },
-            "HotelHub HMS — source code lengkap sistem manajemen hotel. 23+ modul, Laravel 11, MySQL, self-host, white-label ready. Full ownership, no monthly fees. Konsultasi gratis: WhatsApp 081296052010.",
+            'HotelHub HMS — source code lengkap sistem manajemen hotel. 23+ modul, Laravel 11, MySQL, self-host, white-label ready. Full ownership, no monthly fees. Konsultasi gratis: WhatsApp 081296052010.',
         ]);
     }
 
@@ -999,8 +995,8 @@ class ContentGenerator
         return implode("\n\n", [
             "{$pat} {$city} — informasi lengkap tentang pilihan akomodasi, tips perjalanan, dan rekomendasi hotel terbaik di {$city}. Kami mengkurasi data dari berbagai sumber terpercaya untuk membantu Anda merencanakan perjalanan dengan lebih baik.",
             "{$city} adalah salah satu destinasi yang menawarkan pengalaman unik — dari kuliner khas, landmark bersejarah, hingga keramahan penduduk lokal. Dengan memahami pilihan {$pat} di {$city}, Anda bisa mengoptimalkan itinerary, budget, dan kenyamanan selama perjalanan.",
-            "HotelHub HMS — source code sistem manajemen hotel Laravel 11 all-in-one. 23+ modul, self-host, white-label, BYOK payment & AI. Siap deploy dalam 1-3 hari. Konsultasi gratis: WhatsApp 081296052010.",
-            "Tips praktis: (1) booking hotel 2-4 minggu sebelumnya untuk peak season; (2) pilih weekday untuk tarif lebih rendah; (3) baca review tamu 3 bulan terakhir; (4) manfaatkan transportasi online untuk mobilitas; (5) simpan nomor darurat dan alamat hotel.",
+            'HotelHub HMS — source code sistem manajemen hotel Laravel 11 all-in-one. 23+ modul, self-host, white-label, BYOK payment & AI. Siap deploy dalam 1-3 hari. Konsultasi gratis: WhatsApp 081296052010.',
+            'Tips praktis: (1) booking hotel 2-4 minggu sebelumnya untuk peak season; (2) pilih weekday untuk tarif lebih rendah; (3) baca review tamu 3 bulan terakhir; (4) manfaatkan transportasi online untuk mobilitas; (5) simpan nomor darurat dan alamat hotel.',
         ]);
     }
 
@@ -1008,6 +1004,7 @@ class ContentGenerator
     public function granularPriceIntro(string $cityName, string $price): string
     {
         $cityDisplay = SeoData::cityName($cityName) ?? $this->humanize($cityName);
+
         return implode("\n\n", [
             "Mencari hotel di {$cityDisplay} dengan budget di bawah Rp {$price}? Kami mengkurasi pilihan akomodasi paling hemat di {$cityDisplay} yang sesuai dengan batas anggaran Anda. Budget Rp {$price} per malam di {$cityDisplay} bisa memberikan pengalaman menginap yang jauh lebih baik dari yang Anda bayangkan — terutama jika Anda tahu strategi memilih yang tepat.",
             "Hotel-hotel dalam daftar ini telah kami filter berdasarkan tarif di bawah Rp {$price} — semua sudah termasuk pajak dan service charge. Tidak ada biaya tersembunyi yang muncul saat check-out. Kami juga memastikan bahwa hotel-hotel ini memenuhi standar kebersihan minimal: rating tamu untuk kebersihan di atas 3.5/5, tidak ada laporan serius tentang kamar dalam 6 bulan terakhir, dan staf yang responsif terhadap keluhan tamu.",
@@ -1021,6 +1018,7 @@ class ContentGenerator
     public function priceRangeIntro(string $cityName, string $min, string $max): string
     {
         $cityDisplay = SeoData::cityName($cityName) ?? $this->humanize($cityName);
+
         return implode("\n\n", [
             "Hotel di {$cityDisplay} dengan rentang harga Rp {$min}.000–Rp {$max}.000 per malam — sweet spot di mana kualitas dan keterjangkauan bertemu. Rentang ini adalah segmen paling kompetitif di {$cityDisplay}: cukup tinggi untuk mendapatkan fasilitas yang nyaman (AC, air panas, Wi-Fi) namun cukup rendah untuk tidak membebani budget liburan.",
             "Dalam rentang Rp {$min}rb–{$max}rb di {$cityDisplay}, Anda bisa mengharapkan: kamar dengan AC atau kipas langit-langit (tergantung posisi di rentang), kamar mandi dalam dengan air panas, Wi-Fi gratis, TV layar datar, dan resepsionis yang beroperasi 18–24 jam. Beberapa hotel di rentang atas (Rp {$max}rb) bahkan sudah menyertakan sarapan, kolam renang kecil, dan parkir gratis — value yang sangat baik untuk uang Anda.",
@@ -1034,6 +1032,7 @@ class ContentGenerator
     public function roomTypeCityIntro(string $cityName, string $roomType): string
     {
         $cityDisplay = SeoData::cityName($cityName) ?? $this->humanize($cityName);
+
         return implode("\n\n", [
             "Kamar tipe {$roomType} di {$cityDisplay} — pilihan ideal untuk wisatawan yang mencari konfigurasi kamar spesifik sesuai kebutuhan perjalanan. Tipe kamar {$roomType} menawarkan karakteristik berbeda dari tipe kamar standar: dari segi ukuran, konfigurasi tempat tidur, fasilitas dalam kamar, hingga view yang ditawarkan.",
             "Di {$cityDisplay}, kamar {$roomType} tersedia di berbagai kategori hotel — dari budget hotel hingga resort bintang lima. Masing-masing properti menginterpretasikan '{$roomType}' dengan standar yang berbeda: hotel budget mungkin menawarkan kamar {$roomType} dengan amenities dasar, sementara hotel premium menghadirkan versi {$roomType} yang lebih luas dengan tambahan seperti bathub, balkon pribadi, atau akses lounge eksklusif.",
@@ -1047,6 +1046,7 @@ class ContentGenerator
     public function roomTypePriceIntro(string $cityName, string $roomType): string
     {
         $cityDisplay = SeoData::cityName($cityName) ?? $this->humanize($cityName);
+
         return implode("\n\n", [
             "Harga kamar {$roomType} di {$cityDisplay} — panduan lengkap tentang tarif terkini, faktor yang memengaruhi harga, dan strategi booking untuk mendapatkan harga terbaik. Kamar {$roomType} di {$cityDisplay} memiliki rentang harga yang lebar, dipengaruhi oleh lokasi hotel, musim, fasilitas, dan kebijakan masing-masing properti.",
             "Secara umum, harga kamar {$roomType} di {$cityDisplay} berkisar: budget Rp 150.000–400.000/malam, mid-range Rp 400.000–1.200.000/malam, premium Rp 1.200.000–3.000.000/malam, dan luxury di atas Rp 3.000.000/malam. Variasi ini mencerminkan perbedaan signifikan dalam ukuran kamar, kualitas furnishing, brand amenities, pemandangan, dan layanan tambahan yang disertakan.",
@@ -1060,6 +1060,7 @@ class ContentGenerator
     public function guestTypeIntro(string $cityName, string $guestType): string
     {
         $cityDisplay = SeoData::cityName($cityName) ?? $this->humanize($cityName);
+
         return implode("\n\n", [
             "Hotel untuk {$guestType} di {$cityDisplay} — pilihan akomodasi yang dikurasi khusus untuk memenuhi kebutuhan unik {$guestType}. Tidak semua hotel cocok untuk semua tipe tamu: {$guestType} memiliki ekspektasi dan kebutuhan spesifik yang berbeda dari segmen tamu lainnya.",
             "Karakteristik hotel ideal untuk {$guestType} di {$cityDisplay}: lokasi yang sesuai dengan aktivitas utama {$guestType}, fasilitas yang relevan, konfigurasi kamar yang tepat, dan atmosfer yang mendukung tujuan perjalanan. Kami telah menyaring hotel-hotel di {$cityDisplay} berdasarkan kriteria ini — bukan sekadar hotel dengan rating tinggi, tetapi hotel yang benar-benar memahami kebutuhan {$guestType}.",
@@ -1073,15 +1074,16 @@ class ContentGenerator
     public function seasonIntro(string $cityName, string $season): string
     {
         $cityDisplay = SeoData::cityName($cityName) ?? $this->humanize($cityName);
+
         return implode("\n\n", [
             "Hotel {$cityDisplay} musim {$season} — panduan lengkap memilih akomodasi yang optimal sesuai kondisi musim. Setiap musim membawa tantangan dan keuntungan berbeda untuk perjalanan Anda ke {$cityDisplay}, dan hotel yang tepat bisa membuat perbedaan antara liburan yang menyenangkan dan yang penuh kompromi.",
-            "Musim {$season} di {$cityDisplay} memiliki karakteristik unik yang memengaruhi pilihan hotel: " . match (strtolower($season)) {
-                'kemarau' => "cuaca cerah dan kering, ideal untuk aktivitas outdoor. Hotel dengan kolam renang, taman, dan area outdoor menjadi pilihan utama. AC yang berfungsi baik adalah keharusan karena suhu siang bisa mencapai 32°C. Hotel di pesisir atau pegunungan cenderung penuh — booking 3-4 minggu sebelumnya disarankan.",
-                'hujan' => "curah hujan tinggi dengan potensi banjir di beberapa area. Pilih hotel di area yang lebih tinggi, dengan drainase baik, dan fasilitas indoor yang lengkap (spa, restoran, lounge). Hotel dengan genset backup penting karena potensi pemadaman listrik. Harga hotel turun 20-40% — peluang bagus untuk budget traveler.",
-                default => "kondisi cuaca yang spesifik. Pilih hotel yang memiliki fasilitas indoor-outdoor fleksibel sehingga Anda bisa menikmati liburan apapun cuacanya.",
+            "Musim {$season} di {$cityDisplay} memiliki karakteristik unik yang memengaruhi pilihan hotel: ".match (strtolower($season)) {
+                'kemarau' => 'cuaca cerah dan kering, ideal untuk aktivitas outdoor. Hotel dengan kolam renang, taman, dan area outdoor menjadi pilihan utama. AC yang berfungsi baik adalah keharusan karena suhu siang bisa mencapai 32°C. Hotel di pesisir atau pegunungan cenderung penuh — booking 3-4 minggu sebelumnya disarankan.',
+                'hujan' => 'curah hujan tinggi dengan potensi banjir di beberapa area. Pilih hotel di area yang lebih tinggi, dengan drainase baik, dan fasilitas indoor yang lengkap (spa, restoran, lounge). Hotel dengan genset backup penting karena potensi pemadaman listrik. Harga hotel turun 20-40% — peluang bagus untuk budget traveler.',
+                default => 'kondisi cuaca yang spesifik. Pilih hotel yang memiliki fasilitas indoor-outdoor fleksibel sehingga Anda bisa menikmati liburan apapun cuacanya.',
             },
-            "Keuntungan menginap di {$cityDisplay} saat musim {$season}: " . match (strtolower($season)) {
-                'kemarau' => "semua atraksi beroperasi penuh, transportasi antar destinasi lancar, dan aktivitas outdoor (trekking, diving, city tour) bisa dilakukan tanpa gangguan. Foto-foto liburan Anda akan cerah dengan langit biru sebagai latar.",
+            "Keuntungan menginap di {$cityDisplay} saat musim {$season}: ".match (strtolower($season)) {
+                'kemarau' => 'semua atraksi beroperasi penuh, transportasi antar destinasi lancar, dan aktivitas outdoor (trekking, diving, city tour) bisa dilakukan tanpa gangguan. Foto-foto liburan Anda akan cerah dengan langit biru sebagai latar.',
                 'hujan' => "harga hotel 20–40% lebih murah, tempat wisata lebih sepi (tidak perlu antre), dan {$cityDisplay} berubah menjadi hijau subur yang indah untuk fotografi landscape. Suasana cozy di kafe-kafe lokal menjadi daya tarik tersendiri.",
                 default => "pengalaman {$cityDisplay} yang mungkin berbeda dari tipikal — lebih sedikit wisatawan, lebih banyak interaksi autentik dengan penduduk lokal.",
             },
@@ -1094,6 +1096,7 @@ class ContentGenerator
     public function holidayIntro(string $cityName, string $holiday): string
     {
         $cityDisplay = SeoData::cityName($cityName) ?? $this->humanize($cityName);
+
         return implode("\n\n", [
             "Hotel {$cityDisplay} untuk liburan {$holiday} — rencanakan menginap Anda jauh-jauh hari karena periode {$holiday} adalah salah satu peak season tersibuk di {$cityDisplay}. Hotel-hotel terbaik biasanya sudah fully booked 4-8 minggu sebelum {$holiday}, jadi semakin awal Anda booking, semakin baik pilihan yang tersedia.",
             "Liburan {$holiday} di {$cityDisplay} memiliki atmosfer yang berbeda dari hari biasa. Kota ini berubah — dekorasi musiman, event spesial, dan jam operasional yang mungkin berbeda. Hotel-hotel di {$cityDisplay} biasanya menyelenggarakan program khusus {$holiday}: dinner spesial, aktivitas anak, paket menginap dengan tema {$holiday}, dan dekorasi lobby yang Instagram-worthy. Memilih hotel yang 'merayakan' {$holiday} akan menambah dimensi spesial pada liburan Anda.",
@@ -1107,6 +1110,7 @@ class ContentGenerator
     public function distanceCityIntro(string $cityName, string $distance): string
     {
         $cityDisplay = SeoData::cityName($cityName) ?? $this->humanize($cityName);
+
         return implode("\n\n", [
             "Hotel {$cityDisplay} dalam radius {$distance} km dari pusat kota — pilihan akomodasi yang menawarkan keseimbangan ideal antara aksesibilitas dan nilai. Radius {$distance} km adalah sweet spot: cukup dekat untuk akses cepat ke atraksi utama {$cityDisplay}, cukup jauh untuk menghindari kebisingan dan harga premium pusat kota.",
             "Keuntungan menginap dalam radius {$distance} km dari pusat {$cityDisplay}: (1) akses cepat — 5-25 menit ke destinasi utama dengan transportasi online atau shuttle hotel; (2) harga 15-30% lebih rendah dibanding hotel di pusat kota yang sama kelasnya; (3) suasana lebih tenang — jauh dari kemacetan dan kebisingan pusat kota; (4) parkir lebih luas — hotel di radius ini umumnya memiliki lahan parkir lebih lega; (5) pengalaman lokal yang lebih autentik — Anda berinteraksi dengan lingkungan yang lebih 'real', bukan bubble turistik.",
@@ -1120,6 +1124,7 @@ class ContentGenerator
     public function distanceLandmarkIntro(string $landmarkName, string $distance): string
     {
         $name = $this->humanize($landmarkName);
+
         return implode("\n\n", [
             "Hotel dekat {$name} dalam radius {$distance} — pilihan akomodasi super strategis untuk memaksimalkan waktu Anda di landmark ikonik ini. Dengan menginap dalam radius {$distance}, Anda bisa tiba di {$name} dalam hitungan menit — sebelum keramaian datang, saat cahaya terbaik untuk fotografi, atau ketika landmark lebih sepi di sore hari.",
             "Radius {$distance} dari {$name} mencakup area yang sangat nyaman untuk eksplorasi. Anda bisa berjalan kaki, bersepeda, atau naik ojek singkat. Hotel-hotel di radius ini biasanya menawarkan paket yang mencakup tur ke {$name} — baik sebagai bundle dengan menginap maupun sebagai referensi operator lokal terpercaya. Beberapa hotel bahkan memiliki view langsung ke {$name} dari kamar atau rooftop.",
@@ -1133,6 +1138,7 @@ class ContentGenerator
     public function questionSafeIntro(string $cityName): string
     {
         $cityDisplay = SeoData::cityName($cityName) ?? $this->humanize($cityName);
+
         return implode("\n\n", [
             "Apakah {$cityDisplay} aman untuk wisatawan? Jawaban singkatnya: ya, {$cityDisplay} secara umum aman untuk wisatawan, baik domestik maupun mancanegara. Seperti destinasi wisata manapun di dunia, kewaspadaan dasar tetap diperlukan — tetapi tidak ada ancaman spesifik yang perlu dikhawatirkan secara berlebihan. {$cityDisplay} memiliki reputasi sebagai kota yang ramah terhadap pendatang dan wisatawan.",
             "Tingkat keamanan di {$cityDisplay} didukung oleh beberapa faktor: (1) kehadiran polisi pariwisata di area-area wisata utama; (2) sistem keamanan hotel yang umumnya baik — CCTV di area publik, satpam 24 jam, akses kartu kunci ke lantai kamar; (3) masyarakat lokal yang umumnya welcoming dan helpful terhadap wisatawan; (4) infrastruktur transportasi online yang menyediakan opsi perjalanan yang aman dan tercatat secara digital.",
@@ -1146,6 +1152,7 @@ class ContentGenerator
     public function questionCostIntro(string $cityName): string
     {
         $cityDisplay = SeoData::cityName($cityName) ?? $this->humanize($cityName);
+
         return implode("\n\n", [
             "Berapa biaya hotel di {$cityDisplay}? Pertanyaan ini adalah salah satu yang paling sering diajukan wisatawan yang merencanakan perjalanan ke {$cityDisplay}. Jawabannya bervariasi tergantung tipe akomodasi, lokasi, musim, dan durasi menginap — tapi kami akan memberikan gambaran komprehensif untuk membantu budgeting Anda.",
             "Estimasi biaya hotel di {$cityDisplay} per kategori: Budget (Rp 100.000–350.000/malam) — guesthouse, hostel, hotel melati dengan fasilitas dasar; Mid-range (Rp 350.000–800.000/malam) — hotel bintang 2-3 dengan AC, air panas, Wi-Fi, dan mungkin sarapan; Premium (Rp 800.000–2.000.000/malam) — hotel bintang 4 dengan kolam renang, gym, restoran, dan layanan 24 jam; Luxury (Rp 2.000.000–10.000.000+/malam) — resort bintang 5, butik hotel eksklusif, atau villa premium dengan layanan personal.",
@@ -1159,6 +1166,7 @@ class ContentGenerator
     public function questionHowIntro(string $cityName): string
     {
         $cityDisplay = SeoData::cityName($cityName) ?? $this->humanize($cityName);
+
         return implode("\n\n", [
             "Bagaimana cara ke {$cityDisplay}? Pertanyaan mendasar bagi setiap wisatawan yang merencanakan perjalanan pertama kali. {$cityDisplay} adalah destinasi yang terhubung dengan baik — baik via udara, darat, maupun laut — dan kami akan memandu Anda melalui semua opsi transportasi yang tersedia.",
             "Cara mencapai {$cityDisplay} via udara: {$cityDisplay} memiliki bandara yang melayani penerbangan domestik dari Jakarta (1-2.5 jam), Surabaya, Denpasar, dan kota-kota besar Indonesia. Beberapa maskapai yang melayani rute ini: Garuda Indonesia, Lion Air, Batik Air, Citilink, dan AirAsia. Tips: pesan tiket 3-6 minggu sebelumnya untuk harga terbaik, dan pilih penerbangan pagi untuk menghindari delay yang sering terjadi di penerbangan sore.",
@@ -1172,6 +1180,7 @@ class ContentGenerator
     public function questionWhatIntro(string $cityName): string
     {
         $cityDisplay = SeoData::cityName($cityName) ?? $this->humanize($cityName);
+
         return implode("\n\n", [
             "Apa saja wisata di {$cityDisplay}? {$cityDisplay} menawarkan spektrum atraksi yang kaya — dari landmark bersejarah, keindahan alam, pusat kuliner legendaris, hingga hidden gem yang hanya diketahui penduduk lokal. Kami merangkum destinasi wajib dan rekomendasi itinerary berdasarkan durasi kunjungan Anda.",
             "Atraksi utama di {$cityDisplay} mencakup landmark ikonik yang menjadi ciri khas kota ini — tempat-tempat yang 'wajib' dikunjungi untuk first-timer. Selain itu, {$cityDisplay} juga memiliki hidden gems: spot-spot yang belum ramai, kafe dengan view spektakuler yang belum masuk Google Maps mainstream, dan pengalaman kultural autentik yang memberikan dimensi berbeda dari kunjungan wisata biasa.",
@@ -1186,10 +1195,10 @@ class ContentGenerator
     {
         return implode("\n\n", [
             "{$cityA} vs {$cityB} — perbandingan objektif dua destinasi populer di Indonesia untuk membantu Anda memutuskan mana yang lebih cocok untuk liburan Anda. Kedua kota ini memiliki karakter yang berbeda: {$cityA} dan {$cityB} masing-masing menawarkan pengalaman unik yang mungkin lebih sesuai untuk tipe wisatawan tertentu.",
-            "Dari sisi akomodasi: {$cityA} dan {$cityB} sama-sama memiliki spektrum hotel yang lengkap — dari budget hingga luxury. Namun struktur harga bisa berbeda signifikan. {$cityA} cenderung " . (rand(0,1) ? 'lebih terjangkau' : 'lebih premium') . " untuk hotel sekelas, dengan selisih sekitar 10-25% untuk kamar dengan fasilitas setara. {$cityB} menawarkan " . (rand(0,1) ? 'lebih banyak pilihan butik hotel unik' : 'lebih banyak resort dengan lahan luas') . " yang tidak mudah ditemukan di {$cityA}.",
-            "Dari sisi atraksi dan aktivitas: {$cityA} unggul dalam " . (rand(0,1) ? 'wisata budaya dan heritage' : 'wisata alam dan outdoor') . " — ideal untuk wisatawan yang mencari pengalaman " . (rand(0,1) ? 'edukasi dan sejarah' : 'adrenalin dan eksplorasi') . ". Sementara {$cityB} lebih cocok untuk wisatawan yang menginginkan " . (rand(0,1) ? 'relaksasi dan wellness' : 'kuliner dan nightlife') . " — dengan infrastruktur pariwisata yang lebih mature di segmen tersebut.",
-            "Dari sisi aksesibilitas: {$cityA} dan {$cityB} sama-sama memiliki bandara dengan penerbangan reguler dari Jakarta. Namun frekuensi penerbangan dan harga tiket bisa berbeda. {$cityA} umumnya " . (rand(0,1) ? 'lebih mudah dijangkau' : 'memerlukan transit') . " sementara {$cityB} " . (rand(0,1) ? 'dilayani lebih banyak maskapai' : 'memiliki akses darat yang lebih baik') . ". Pertimbangan ini penting jika Anda memiliki waktu terbatas atau budget transportasi yang ketat.",
-            "Rekomendasi: pilih {$cityA} jika prioritas Anda adalah " . (rand(0,1) ? 'budaya dan sejarah' : 'petualangan alam') . " dengan budget yang " . (rand(0,1) ? 'lebih fleksibel' : 'lebih hemat') . ". Pilih {$cityB} jika Anda mencari " . (rand(0,1) ? 'relaksasi dan kemewahan' : 'kuliner dan keramaian') . " dengan " . (rand(0,1) ? 'fasilitas yang lebih lengkap' : 'suasana yang lebih tenang') . ". Pada akhirnya, kedua kota ini luar biasa — keputusan terbaik adalah yang sesuai dengan ekspektasi dan kebutuhan spesifik perjalanan Anda. Untuk informasi lebih detail tentang hotel, atraksi, dan itinerary di kedua kota, telusuri halaman-halaman terkait di website kami.",
+            "Dari sisi akomodasi: {$cityA} dan {$cityB} sama-sama memiliki spektrum hotel yang lengkap — dari budget hingga luxury. Namun struktur harga bisa berbeda signifikan. {$cityA} cenderung ".(rand(0, 1) ? 'lebih terjangkau' : 'lebih premium')." untuk hotel sekelas, dengan selisih sekitar 10-25% untuk kamar dengan fasilitas setara. {$cityB} menawarkan ".(rand(0, 1) ? 'lebih banyak pilihan butik hotel unik' : 'lebih banyak resort dengan lahan luas')." yang tidak mudah ditemukan di {$cityA}.",
+            "Dari sisi atraksi dan aktivitas: {$cityA} unggul dalam ".(rand(0, 1) ? 'wisata budaya dan heritage' : 'wisata alam dan outdoor').' — ideal untuk wisatawan yang mencari pengalaman '.(rand(0, 1) ? 'edukasi dan sejarah' : 'adrenalin dan eksplorasi').". Sementara {$cityB} lebih cocok untuk wisatawan yang menginginkan ".(rand(0, 1) ? 'relaksasi dan wellness' : 'kuliner dan nightlife').' — dengan infrastruktur pariwisata yang lebih mature di segmen tersebut.',
+            "Dari sisi aksesibilitas: {$cityA} dan {$cityB} sama-sama memiliki bandara dengan penerbangan reguler dari Jakarta. Namun frekuensi penerbangan dan harga tiket bisa berbeda. {$cityA} umumnya ".(rand(0, 1) ? 'lebih mudah dijangkau' : 'memerlukan transit')." sementara {$cityB} ".(rand(0, 1) ? 'dilayani lebih banyak maskapai' : 'memiliki akses darat yang lebih baik').'. Pertimbangan ini penting jika Anda memiliki waktu terbatas atau budget transportasi yang ketat.',
+            "Rekomendasi: pilih {$cityA} jika prioritas Anda adalah ".(rand(0, 1) ? 'budaya dan sejarah' : 'petualangan alam').' dengan budget yang '.(rand(0, 1) ? 'lebih fleksibel' : 'lebih hemat').". Pilih {$cityB} jika Anda mencari ".(rand(0, 1) ? 'relaksasi dan kemewahan' : 'kuliner dan keramaian').' dengan '.(rand(0, 1) ? 'fasilitas yang lebih lengkap' : 'suasana yang lebih tenang').'. Pada akhirnya, kedua kota ini luar biasa — keputusan terbaik adalah yang sesuai dengan ekspektasi dan kebutuhan spesifik perjalanan Anda. Untuk informasi lebih detail tentang hotel, atraksi, dan itinerary di kedua kota, telusuri halaman-halaman terkait di website kami.',
         ]);
     }
 
@@ -1198,10 +1207,10 @@ class ContentGenerator
     {
         return implode("\n\n", [
             "Hotel {$cityName}: {$n1} vs {$n2} — perbandingan dua kawasan populer untuk membantu Anda memilih area menginap yang paling sesuai. {$n1} dan {$n2} adalah area yang sering dibandingkan oleh wisatawan yang merencanakan perjalanan ke {$cityName}, dan masing-masing memiliki karakter, kelebihan, dan kekurangan yang berbeda.",
-            "{$n1}: area ini dikenal dengan " . (rand(0,1) ? 'suasana yang lebih tenang dan eksklusif' : 'akses mudah ke pusat kota dan transportasi publik') . ". Hotel-hotel di {$n1} umumnya " . (rand(0,1) ? 'lebih modern dengan desain kontemporer' : 'memiliki karakter heritage yang unik') . ". Kawasan ini cocok untuk wisatawan yang memprioritaskan " . (rand(0,1) ? 'ketenangan dan privasi' : 'kemudahan akses dan efisiensi') . ". Harga hotel di {$n1} cenderung " . (rand(0,1) ? '15-25% lebih tinggi' : '10-20% lebih rendah') . " dibanding {$n2}.",
-            "{$n2}: area ini menawarkan " . (rand(0,1) ? 'vibes yang lebih hidup dengan banyak kafe dan restoran' : 'suasana yang lebih lokal dan autentik') . ". Hotel-hotel di {$n2} umumnya " . (rand(0,1) ? 'lebih terjangkau dengan value yang baik' : 'lebih variatif dari segi tipe akomodasi') . ". Kawasan ini ideal untuk wisatawan yang menginginkan " . (rand(0,1) ? 'pengalaman sosial dan kuliner' : 'interaksi dengan komunitas lokal') . ".",
-            "Dari sisi akses: {$n1} " . (rand(0,1) ? 'lebih dekat ke pusat kota dan atraksi utama' : 'memerlukan transportasi tambahan ke atraksi utama') . " sementara {$n2} " . (rand(0,1) ? 'lebih terkoneksi dengan transportasi publik' : 'lebih nyaman dijelajahi dengan berjalan kaki') . ". Perbedaan akses ini berdampak pada biaya transportasi harian yang perlu dianggarkan — bisa berbeda Rp 50.000-150.000 per hari tergantung pilihan area.",
-            "Rekomendasi: pilih hotel di {$n1} jika prioritas Anda adalah " . (rand(0,1) ? 'ketenangan dan kenyamanan premium' : 'proximity ke pusat bisnis dan atraksi') . ". Pilih {$n2} jika Anda lebih mementingkan " . (rand(0,1) ? 'suasana lokal dan budget hemat' : 'pilihan kuliner dan kehidupan malam') . ". Kedua area ini terhubung dengan transportasi online yang mudah, jadi apapun pilihan Anda, eksplorasi {$cityName} tetap nyaman. Untuk perbandingan detail kamar dan harga hotel di kedua area, gunakan tabel di bawah ini.",
+            "{$n1}: area ini dikenal dengan ".(rand(0, 1) ? 'suasana yang lebih tenang dan eksklusif' : 'akses mudah ke pusat kota dan transportasi publik').". Hotel-hotel di {$n1} umumnya ".(rand(0, 1) ? 'lebih modern dengan desain kontemporer' : 'memiliki karakter heritage yang unik').'. Kawasan ini cocok untuk wisatawan yang memprioritaskan '.(rand(0, 1) ? 'ketenangan dan privasi' : 'kemudahan akses dan efisiensi').". Harga hotel di {$n1} cenderung ".(rand(0, 1) ? '15-25% lebih tinggi' : '10-20% lebih rendah')." dibanding {$n2}.",
+            "{$n2}: area ini menawarkan ".(rand(0, 1) ? 'vibes yang lebih hidup dengan banyak kafe dan restoran' : 'suasana yang lebih lokal dan autentik').". Hotel-hotel di {$n2} umumnya ".(rand(0, 1) ? 'lebih terjangkau dengan value yang baik' : 'lebih variatif dari segi tipe akomodasi').'. Kawasan ini ideal untuk wisatawan yang menginginkan '.(rand(0, 1) ? 'pengalaman sosial dan kuliner' : 'interaksi dengan komunitas lokal').'.',
+            "Dari sisi akses: {$n1} ".(rand(0, 1) ? 'lebih dekat ke pusat kota dan atraksi utama' : 'memerlukan transportasi tambahan ke atraksi utama')." sementara {$n2} ".(rand(0, 1) ? 'lebih terkoneksi dengan transportasi publik' : 'lebih nyaman dijelajahi dengan berjalan kaki').'. Perbedaan akses ini berdampak pada biaya transportasi harian yang perlu dianggarkan — bisa berbeda Rp 50.000-150.000 per hari tergantung pilihan area.',
+            "Rekomendasi: pilih hotel di {$n1} jika prioritas Anda adalah ".(rand(0, 1) ? 'ketenangan dan kenyamanan premium' : 'proximity ke pusat bisnis dan atraksi').". Pilih {$n2} jika Anda lebih mementingkan ".(rand(0, 1) ? 'suasana lokal dan budget hemat' : 'pilihan kuliner dan kehidupan malam').". Kedua area ini terhubung dengan transportasi online yang mudah, jadi apapun pilihan Anda, eksplorasi {$cityName} tetap nyaman. Untuk perbandingan detail kamar dan harga hotel di kedua area, gunakan tabel di bawah ini.",
         ]);
     }
 
@@ -1210,6 +1219,7 @@ class ContentGenerator
     {
         $cityDisplay = SeoData::cityName($cityName) ?? $this->humanize($cityName);
         $occLabel = $this->humanize($occasion);
+
         return implode("\n\n", [
             "Mencari akomodasi {$occLabel} di {$cityDisplay}? Kami menyusun pilihan penginapan terbaik untuk perjalanan {$occLabel} Anda — dengan fasilitas, layanan, dan lokasi yang dioptimalkan untuk kebutuhan spesifik ini. Setiap tipe perjalanan memiliki ekspektasi berbeda, dan kami memahami nuansa tersebut.",
             "Hotel untuk {$occLabel} di {$cityDisplay} dikurasi berdasarkan kombinasi faktor: lokasi yang relevan dengan aktivitas {$occLabel}, fasilitas yang mendukung kenyamanan spesifik, layanan yang memahami kebutuhan tamu {$occLabel}, dan value-for-money yang kompetitif. Kami tidak sekadar mengambil daftar hotel dengan rating tertinggi — kami memilih hotel yang benar-benar cocok untuk konteks {$occLabel}.",
@@ -1225,6 +1235,7 @@ class ContentGenerator
             ? (SeoData::cityName($params['city']) ?? $this->humanize($params['city']))
             : ($params[0] ?? 'Indonesia');
         $label = $this->humanize($type);
+
         return implode("\n\n", [
             "Informasi lengkap tentang {$label} di {$cityDisplay} — panduan praktis untuk wisatawan yang merencanakan perjalanan ke destinasi ini. Kami mengompilasi data dari berbagai sumber terpercaya, feedback tamu sebelumnya, dan pengalaman langsung tim kami di {$cityDisplay}.",
             "{$cityDisplay} adalah salah satu destinasi yang menawarkan pengalaman unik untuk setiap pengunjung. Dengan memahami {$label} di {$cityDisplay}, Anda bisa merencanakan perjalanan yang lebih efisien, hemat, dan memuaskan. Tim kami secara rutin memperbarui informasi di halaman ini untuk memastikan akurasi dan relevansi.",
@@ -1268,13 +1279,13 @@ class ContentGenerator
     private function landmarkDescription(string $slug, string $name): string
     {
         return match ($slug) {
-            'borobudur'      => "Candi Buddha terbesar di dunia ini adalah mahakarya arsitektur abad ke-8 yang menjadi Situs Warisan Dunia UNESCO. Setiap tahun, jutaan wisatawan datang untuk menyaksikan relief cerita dan panorama matahari terbit dari puncaknya.",
-            'prambanan'      => "Kompleks candi Hindu terbesar di Indonesia ini berdiri megah dengan tiga candi utamanya — Siwa, Brahma, dan Wisnu. Pertunjukan Ramayana Ballet di malam hari menambah dimensi budaya yang mendalam.",
-            'malioboro'      => "Jalan paling ikonik di Yogyakarta ini adalah denyut nadi pariwisata kota — deretan toko suvenir, pedagang kaki lima, becak, dan pertunjukan jalanan menciptakan atmosfer yang tak pernah tidur.",
-            'monas'          => "Monumen Nasional di jantung Jakarta adalah simbol kemerdekaan Indonesia. Taman di sekitarnya menjadi ruang publik favorit untuk olahraga pagi dan rekreasi keluarga.",
-            'kota-tua'       => "Kawasan bersejarah Jakarta dengan bangunan kolonial Belanda yang terawat, museum interaktif, dan street food yang menggoda wisatawan dari berbagai usia.",
-            'bromo'          => "Gunung api aktif dengan pemandangan matahari terbit yang legendaris — lautan pasir dan kaldera yang luas menjadikan Bromo salah satu destinasi fotografi alam terbaik di Asia.",
-            default          => "Destinasi ini adalah salah satu titik populer yang wajib dikunjungi saat Anda berada di area tersebut — menawarkan pengalaman yang unik dan memorable bagi setiap pengunjung.",
+            'borobudur' => 'Candi Buddha terbesar di dunia ini adalah mahakarya arsitektur abad ke-8 yang menjadi Situs Warisan Dunia UNESCO. Setiap tahun, jutaan wisatawan datang untuk menyaksikan relief cerita dan panorama matahari terbit dari puncaknya.',
+            'prambanan' => 'Kompleks candi Hindu terbesar di Indonesia ini berdiri megah dengan tiga candi utamanya — Siwa, Brahma, dan Wisnu. Pertunjukan Ramayana Ballet di malam hari menambah dimensi budaya yang mendalam.',
+            'malioboro' => 'Jalan paling ikonik di Yogyakarta ini adalah denyut nadi pariwisata kota — deretan toko suvenir, pedagang kaki lima, becak, dan pertunjukan jalanan menciptakan atmosfer yang tak pernah tidur.',
+            'monas' => 'Monumen Nasional di jantung Jakarta adalah simbol kemerdekaan Indonesia. Taman di sekitarnya menjadi ruang publik favorit untuk olahraga pagi dan rekreasi keluarga.',
+            'kota-tua' => 'Kawasan bersejarah Jakarta dengan bangunan kolonial Belanda yang terawat, museum interaktif, dan street food yang menggoda wisatawan dari berbagai usia.',
+            'bromo' => 'Gunung api aktif dengan pemandangan matahari terbit yang legendaris — lautan pasir dan kaldera yang luas menjadikan Bromo salah satu destinasi fotografi alam terbaik di Asia.',
+            default => 'Destinasi ini adalah salah satu titik populer yang wajib dikunjungi saat Anda berada di area tersebut — menawarkan pengalaman yang unik dan memorable bagi setiap pengunjung.',
         };
     }
 

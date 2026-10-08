@@ -96,7 +96,7 @@ class DripCampaignController extends Controller
             $campaign->steps()->create([
                 'delay_hours' => $step['delay_hours'],
                 'channel' => $step['channel'] ?? 'whatsapp',
-                'template_key' => $step['template_key'] ?? 'drip_' . ($i + 1),
+                'template_key' => $step['template_key'] ?? 'drip_'.($i + 1),
                 'subject' => $step['subject'] ?? null,
                 'message' => $step['message'],
                 'sort_order' => $i + 1,

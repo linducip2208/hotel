@@ -9,6 +9,7 @@ use Illuminate\Console\Command;
 class CheckpointCommand extends Command
 {
     protected $signature = 'audit:checkpoint {--date=}';
+
     protected $description = 'Create daily checkpoint of audit log cumulative hash for external archival';
 
     public function handle(): int
@@ -21,6 +22,7 @@ class CheckpointCommand extends Command
         $count = (clone $entries)->count();
         if (! $first || ! $last) {
             $this->info("No entries for {$date}, skipping.");
+
             return self::SUCCESS;
         }
 
@@ -35,6 +37,7 @@ class CheckpointCommand extends Command
         );
 
         $this->info("Checkpoint {$date}: {$count} entries.");
+
         return self::SUCCESS;
     }
 }

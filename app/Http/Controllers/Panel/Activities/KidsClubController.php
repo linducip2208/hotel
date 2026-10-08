@@ -117,6 +117,7 @@ class KidsClubController extends Controller
 
         try {
             $booking = $this->service->book($data);
+
             return back()->with('success', "Booking untuk {$data['child_name']} berhasil dibuat.");
         } catch (\RuntimeException $e) {
             return back()->with('error', $e->getMessage())->withInput();

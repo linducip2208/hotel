@@ -15,5 +15,8 @@ class SeoKeyword extends Model
         'last_checked_at' => 'datetime',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
 }

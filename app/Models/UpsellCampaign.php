@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class UpsellCampaign extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
+
     protected $casts = [
         'offer_ids' => 'array',
         'guest_filters' => 'array',
@@ -17,6 +19,13 @@ class UpsellCampaign extends Model
         'ended_at' => 'datetime',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function logs() { return $this->hasMany(UpsellCampaignLog::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function logs()
+    {
+        return $this->hasMany(UpsellCampaignLog::class);
+    }
 }

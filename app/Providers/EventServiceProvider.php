@@ -4,6 +4,59 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Events\AriSyncCompleted;
+use App\Events\ChannelBookingReceived;
+use App\Events\FolioCharged;
+use App\Events\FolioPaymentReceived;
+use App\Events\FolioSettled;
+use App\Events\GuestProfileUpdated;
+use App\Events\GuestRegistered;
+use App\Events\HousekeepingTaskAssigned;
+use App\Events\HousekeepingTaskCompleted;
+use App\Events\InvoiceIssued;
+use App\Events\JournalEntryPosted;
+use App\Events\NightAuditCompleted;
+use App\Events\NightAuditStarted;
+use App\Events\PaymentFailed;
+use App\Events\PaymentGatewayCallbackReceived;
+use App\Events\ReservationCancelled;
+use App\Events\ReservationCheckedIn;
+use App\Events\ReservationCheckedOut;
+use App\Events\ReservationCreated;
+use App\Events\ReservationModified;
+use App\Events\ReservationNoShow;
+use App\Events\RoomStatusChanged;
+use App\Events\TenantCreated;
+use App\Events\TenantSubscriptionChanged;
+use App\Listeners\ActivateRoomKeys;
+use App\Listeners\CancelFoliosForReservation;
+use App\Listeners\CloseGuestFolio;
+use App\Listeners\CreateFolioForReservation;
+use App\Listeners\CreateOrMergeGuestProfile;
+use App\Listeners\CreateReservationFromChannel;
+use App\Listeners\GenerateNightAuditReport;
+use App\Listeners\LogCancellationAudit;
+use App\Listeners\LogCheckInAudit;
+use App\Listeners\LogCheckOutAudit;
+use App\Listeners\LogReservationAudit;
+use App\Listeners\LogRoomStatusHistory;
+use App\Listeners\MarkRoomDirty;
+use App\Listeners\NotifyGuestOfCharge;
+use App\Listeners\PostPaymentToJournal;
+use App\Listeners\PostToNightAuditJournal;
+use App\Listeners\PushToExternalAccounting;
+use App\Listeners\ReleaseRoomInventory;
+use App\Listeners\SendBookingConfirmation;
+use App\Listeners\SendCancellationEmail;
+use App\Listeners\SendPaymentReceipt;
+use App\Listeners\SendPostStaySurvey;
+use App\Listeners\SendWelcomeMessage;
+use App\Listeners\SyncInventoryAfterBooking;
+use App\Listeners\SyncRoomCountToChannels;
+use App\Listeners\UpdateGuestLoyaltyPoints;
+use App\Listeners\UpdateGuestProfileVisit;
+use App\Listeners\UpdateHousekeepingBoard;
+use App\Listeners\VerifyAccountingBalance;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -18,95 +71,95 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         // ── Reservation Events ──
-        \App\Events\ReservationCreated::class => [
-            \App\Listeners\CreateFolioForReservation::class,
-            \App\Listeners\SendBookingConfirmation::class,
-            \App\Listeners\LogReservationAudit::class,
+        ReservationCreated::class => [
+            CreateFolioForReservation::class,
+            SendBookingConfirmation::class,
+            LogReservationAudit::class,
         ],
 
-        \App\Events\ReservationCancelled::class => [
-            \App\Listeners\CancelFoliosForReservation::class,
-            \App\Listeners\ReleaseRoomInventory::class,
-            \App\Listeners\SendCancellationEmail::class,
-            \App\Listeners\LogCancellationAudit::class,
+        ReservationCancelled::class => [
+            CancelFoliosForReservation::class,
+            ReleaseRoomInventory::class,
+            SendCancellationEmail::class,
+            LogCancellationAudit::class,
         ],
 
-        \App\Events\ReservationCheckedIn::class => [
-            \App\Listeners\ActivateRoomKeys::class,
-            \App\Listeners\UpdateGuestProfileVisit::class,
-            \App\Listeners\LogCheckInAudit::class,
+        ReservationCheckedIn::class => [
+            ActivateRoomKeys::class,
+            UpdateGuestProfileVisit::class,
+            LogCheckInAudit::class,
         ],
 
-        \App\Events\ReservationCheckedOut::class => [
-            \App\Listeners\MarkRoomDirty::class,
-            \App\Listeners\CloseGuestFolio::class,
-            \App\Listeners\SendPostStaySurvey::class,
-            \App\Listeners\LogCheckOutAudit::class,
+        ReservationCheckedOut::class => [
+            MarkRoomDirty::class,
+            CloseGuestFolio::class,
+            SendPostStaySurvey::class,
+            LogCheckOutAudit::class,
         ],
 
-        \App\Events\ReservationModified::class => [],
-        \App\Events\ReservationNoShow::class => [],
+        ReservationModified::class => [],
+        ReservationNoShow::class => [],
 
         // ── Folio / Financial Events ──
-        \App\Events\FolioCharged::class => [
-            \App\Listeners\PostToNightAuditJournal::class,
-            \App\Listeners\NotifyGuestOfCharge::class,
+        FolioCharged::class => [
+            PostToNightAuditJournal::class,
+            NotifyGuestOfCharge::class,
         ],
 
-        \App\Events\FolioPaymentReceived::class => [
-            \App\Listeners\PostPaymentToJournal::class,
-            \App\Listeners\UpdateGuestLoyaltyPoints::class,
-            \App\Listeners\SendPaymentReceipt::class,
+        FolioPaymentReceived::class => [
+            PostPaymentToJournal::class,
+            UpdateGuestLoyaltyPoints::class,
+            SendPaymentReceipt::class,
         ],
 
-        \App\Events\FolioSettled::class => [],
+        FolioSettled::class => [],
 
         // ── Night Audit Events ──
-        \App\Events\NightAuditStarted::class => [],
-        \App\Events\NightAuditCompleted::class => [
-            \App\Listeners\GenerateNightAuditReport::class,
-            \App\Listeners\SyncRoomCountToChannels::class,
+        NightAuditStarted::class => [],
+        NightAuditCompleted::class => [
+            GenerateNightAuditReport::class,
+            SyncRoomCountToChannels::class,
         ],
 
         // ── Housekeeping Events ──
-        \App\Events\RoomStatusChanged::class => [
-            \App\Listeners\UpdateHousekeepingBoard::class,
-            \App\Listeners\LogRoomStatusHistory::class,
+        RoomStatusChanged::class => [
+            UpdateHousekeepingBoard::class,
+            LogRoomStatusHistory::class,
         ],
 
-        \App\Events\HousekeepingTaskAssigned::class => [],
-        \App\Events\HousekeepingTaskCompleted::class => [],
+        HousekeepingTaskAssigned::class => [],
+        HousekeepingTaskCompleted::class => [],
 
         // ── Channel Manager Events ──
-        \App\Events\AriSyncCompleted::class => [],
-        \App\Events\ChannelBookingReceived::class => [
-            \App\Listeners\CreateReservationFromChannel::class,
-            \App\Listeners\SyncInventoryAfterBooking::class,
+        AriSyncCompleted::class => [],
+        ChannelBookingReceived::class => [
+            CreateReservationFromChannel::class,
+            SyncInventoryAfterBooking::class,
         ],
 
         // ── Guest Events ──
-        \App\Events\GuestRegistered::class => [
-            \App\Listeners\CreateOrMergeGuestProfile::class,
-            \App\Listeners\SendWelcomeMessage::class,
+        GuestRegistered::class => [
+            CreateOrMergeGuestProfile::class,
+            SendWelcomeMessage::class,
         ],
 
-        \App\Events\GuestProfileUpdated::class => [],
+        GuestProfileUpdated::class => [],
 
         // ── Accounting Events ──
-        \App\Events\JournalEntryPosted::class => [
-            \App\Listeners\VerifyAccountingBalance::class,
-            \App\Listeners\PushToExternalAccounting::class,
+        JournalEntryPosted::class => [
+            VerifyAccountingBalance::class,
+            PushToExternalAccounting::class,
         ],
 
-        \App\Events\InvoiceIssued::class => [],
+        InvoiceIssued::class => [],
 
         // ── Payment Gateway Events ──
-        \App\Events\PaymentGatewayCallbackReceived::class => [],
-        \App\Events\PaymentFailed::class => [],
+        PaymentGatewayCallbackReceived::class => [],
+        PaymentFailed::class => [],
 
         // ── SaaS / Multi-tenant Events ──
-        \App\Events\TenantCreated::class => [],
-        \App\Events\TenantSubscriptionChanged::class => [],
+        TenantCreated::class => [],
+        TenantSubscriptionChanged::class => [],
     ];
 
     /**

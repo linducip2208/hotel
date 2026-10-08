@@ -55,8 +55,12 @@ class IntegrationController extends Controller
             'is_active' => true,
             'is_default' => (bool) ($data['is_default'] ?? false),
         ]);
-        if (! empty($data['api_key'])) $provider->setApiKey($data['api_key']);
-        if (! empty($data['secret'])) $provider->setSecret($data['secret']);
+        if (! empty($data['api_key'])) {
+            $provider->setApiKey($data['api_key']);
+        }
+        if (! empty($data['secret'])) {
+            $provider->setSecret($data['secret']);
+        }
         $provider->save();
 
         return back()->with('status', 'Integration created.');
@@ -76,9 +80,14 @@ class IntegrationController extends Controller
             'is_default' => 'nullable|boolean',
         ]);
         $provider->fill($data);
-        if (array_key_exists('api_key', $data) && $data['api_key']) $provider->setApiKey($data['api_key']);
-        if (array_key_exists('secret', $data) && $data['secret']) $provider->setSecret($data['secret']);
+        if (array_key_exists('api_key', $data) && $data['api_key']) {
+            $provider->setApiKey($data['api_key']);
+        }
+        if (array_key_exists('secret', $data) && $data['secret']) {
+            $provider->setSecret($data['secret']);
+        }
         $provider->save();
+
         return back();
     }
 
@@ -93,15 +102,24 @@ class IntegrationController extends Controller
                 'last_tested_at' => now(),
                 'test_message' => $result['message'] ?? null,
             ]);
-            return response()->json($result);
+
+            return response()->json([
+                'ok' => $result['ok'],
+                'message' => $result['message'] ?? null,
+                'tested_at' => $provider->last_tested_at?->toISOString(),
+            ]);
         } catch (\Throwable $e) {
-            return response()->json(['ok' => false, 'message' => $e->getMessage()], 500);
+            // Never leak exception internals / credentials to the browser.
+            \Log::warning('Provider test failed', ['provider_id' => $provider->id, 'error' => $e->getMessage()]);
+
+            return response()->json(['ok' => false, 'message' => 'Tes koneksi gagal — periksa konfigurasi provider.'], 200);
         }
     }
 
     public function destroy(int $id)
     {
         Provider::where('property_id', app('current_property')->id)->findOrFail($id)->delete();
+
         return back();
     }
 
@@ -130,7 +148,7 @@ class IntegrationController extends Controller
         $presets = json_decode(file_get_contents(storage_path('app/payment-presets/payment-presets.json')), true);
         $preset = collect($presets)->firstWhere('name', $request->provider_name);
 
-        if (!$preset) {
+        if (! $preset) {
             return back()->with('error', 'Provider tidak ditemukan.');
         }
 
@@ -139,7 +157,7 @@ class IntegrationController extends Controller
             if ($key === 'is_production') {
                 continue;
             }
-            if (!empty($value)) {
+            if (! empty($value)) {
                 $credentials[$key] = Crypt::encryptString($value);
             }
         }
@@ -147,7 +165,7 @@ class IntegrationController extends Controller
         $isProduction = $request->boolean('fields.is_production');
         $baseUrl = $request->custom_base_url ?: ($isProduction ? $preset['base_url'] : ($preset['sandbox_url'] ?? $preset['base_url']));
 
-        $slug = Str::slug($request->provider_name) . '-' . Str::random(4);
+        $slug = Str::slug($request->provider_name).'-'.Str::random(4);
 
         $provider = Provider::create([
             'property_id' => app('current_property')->id,
@@ -175,14 +193,15 @@ class IntegrationController extends Controller
             'provider_id' => $provider->id,
         ]);
 
-        return redirect()->route('panel.settings.payments.index')->with('status', $request->provider_name . ' berhasil dikonfigurasi.');
+        return redirect()->route('panel.settings.payments.index')->with('status', $request->provider_name.' berhasil dikonfigurasi.');
     }
 
     public function togglePayment(int $id)
     {
         $provider = Provider::where('property_id', app('current_property')->id)->findOrFail($id);
-        $provider->update(['is_active' => !$provider->is_active]);
-        return back()->with('status', $provider->name . ' ' . ($provider->is_active ? 'diaktifkan' : 'dinonaktifkan') . '.');
+        $provider->update(['is_active' => ! $provider->is_active]);
+
+        return back()->with('status', $provider->name.' '.($provider->is_active ? 'diaktifkan' : 'dinonaktifkan').'.');
     }
 
     public function destroyPayment(int $id)
@@ -190,6 +209,7 @@ class IntegrationController extends Controller
         $provider = Provider::where('property_id', app('current_property')->id)->findOrFail($id);
         ProviderFeatureAssignment::where('provider_id', $provider->id)->delete();
         $provider->delete();
+
         return back()->with('status', 'Provider dihapus.');
     }
 }

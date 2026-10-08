@@ -5,10 +5,11 @@ namespace App\Services\Compliance;
 use App\Models\Property;
 use App\Models\PropertyLicense;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 
 class LicenseService
 {
-    public function list(Property $property): \Illuminate\Database\Eloquent\Collection
+    public function list(Property $property): Collection
     {
         return PropertyLicense::where('property_id', $property->id)
             ->orderBy('expiry_date')
@@ -19,6 +20,7 @@ class LicenseService
     {
         $data['property_id'] = $property->id;
         $data['status'] = $this->computeStatus($data['expiry_date'] ?? null);
+
         return PropertyLicense::create($data);
     }
 
@@ -28,6 +30,7 @@ class LicenseService
             $data['status'] = $this->computeStatus($data['expiry_date']);
         }
         $license->update($data);
+
         return $license->fresh();
     }
 
@@ -38,23 +41,30 @@ class LicenseService
 
     public function computeStatus(?string $expiryDate): string
     {
-        if (!$expiryDate) return 'active';
+        if (! $expiryDate) {
+            return 'active';
+        }
         $expiry = Carbon::parse($expiryDate)->startOfDay();
         $now = now()->startOfDay();
-        if ($expiry->isPast()) return 'expired';
-        if ($expiry->diffInDays($now) <= 30) return 'expiring_soon';
+        if ($expiry->isPast()) {
+            return 'expired';
+        }
+        if ($expiry->diffInDays($now) <= 30) {
+            return 'expiring_soon';
+        }
+
         return 'active';
     }
 
     public function checkExpiry(Property $property): array
     {
         $expiring = PropertyLicense::where('property_id', $property->id)->get()
-            ->filter(fn($l) => $l->daysUntilExpiry() <= $l->renewal_reminder_days && $l->daysUntilExpiry() >= 0)
+            ->filter(fn ($l) => $l->daysUntilExpiry() <= $l->renewal_reminder_days && $l->daysUntilExpiry() >= 0)
             ->values();
 
         $expired = PropertyLicense::where('property_id', $property->id)
             ->where('status', '!=', 'expired')->get()
-            ->filter(fn($l) => $l->daysUntilExpiry() < 0)
+            ->filter(fn ($l) => $l->daysUntilExpiry() < 0)
             ->values();
 
         foreach ($expired as $l) {

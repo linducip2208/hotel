@@ -19,9 +19,28 @@ class KeycardInventory extends Model
         'returned_at' => 'datetime',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function keycardType() { return $this->belongsTo(KeycardType::class); }
-    public function assignedRoom() { return $this->belongsTo(Room::class, 'assigned_to_room_id'); }
-    public function assignedReservation() { return $this->belongsTo(Reservation::class, 'assigned_to_reservation_id'); }
-    public function currentGuest() { return $this->belongsTo(Guest::class, 'current_guest_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function keycardType()
+    {
+        return $this->belongsTo(KeycardType::class);
+    }
+
+    public function assignedRoom()
+    {
+        return $this->belongsTo(Room::class, 'assigned_to_room_id');
+    }
+
+    public function assignedReservation()
+    {
+        return $this->belongsTo(Reservation::class, 'assigned_to_reservation_id');
+    }
+
+    public function currentGuest()
+    {
+        return $this->belongsTo(Guest::class, 'current_guest_id');
+    }
 }

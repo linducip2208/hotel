@@ -57,6 +57,7 @@ class LicenseClient
                 'headers' => ['Accept' => 'application/json'],
             ]);
             $payload = json_decode((string) $response->getBody(), true) ?? [];
+
             return [
                 'ok' => $response->getStatusCode() >= 200 && $response->getStatusCode() < 300,
                 'status' => $response->getStatusCode(),

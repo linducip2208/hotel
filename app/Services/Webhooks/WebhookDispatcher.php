@@ -43,7 +43,7 @@ class WebhookDispatcher
                 $r = $client->post($w->url, [
                     'headers' => [
                         'Content-Type' => 'application/json',
-                        'X-HotelHub-Signature' => "t=".time().",v1=".$signature,
+                        'X-HotelHub-Signature' => 't='.time().',v1='.$signature,
                         'X-HotelHub-Event' => $event,
                     ],
                     'body' => $body,

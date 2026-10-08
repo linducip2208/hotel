@@ -28,15 +28,15 @@ final class SendCancellationEmail implements ShouldQueue
         $dispatcher->bookingCancelled($reservation, $event->reason);
 
         NotificationLog::create([
-            'property_id'     => $reservation->property_id,
-            'channel'         => 'mail',
-            'event'           => 'booking_cancelled',
-            'recipient'       => $reservation->primaryGuest?->email ?? 'unknown',
+            'property_id' => $reservation->property_id,
+            'channel' => 'mail',
+            'event' => 'booking_cancelled',
+            'recipient' => $reservation->primaryGuest?->email ?? 'unknown',
             'notifiable_type' => get_class($reservation),
-            'notifiable_id'   => $reservation->id,
-            'status'          => 'sent',
+            'notifiable_id' => $reservation->id,
+            'status' => 'sent',
             'idempotency_key' => $key,
-            'sent_at'         => now(),
+            'sent_at' => now(),
         ]);
     }
 }

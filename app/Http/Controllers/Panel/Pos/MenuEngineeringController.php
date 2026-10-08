@@ -49,6 +49,7 @@ class MenuEngineeringController extends Controller
         ]);
 
         MenuRecipe::create($data + ['property_id' => app('current_property')->id]);
+
         return back()->with('success', 'Resep berhasil ditambahkan.');
     }
 
@@ -64,6 +65,7 @@ class MenuEngineeringController extends Controller
         ]);
 
         $recipe->update($data);
+
         return back()->with('success', 'Resep berhasil diperbarui.');
     }
 
@@ -72,6 +74,7 @@ class MenuEngineeringController extends Controller
         $recipe = MenuRecipe::where('property_id', app('current_property')->id)->findOrFail($id);
         $recipe->ingredients()->delete();
         $recipe->delete();
+
         return back()->with('success', 'Resep berhasil dihapus.');
     }
 
@@ -91,6 +94,7 @@ class MenuEngineeringController extends Controller
         $data['property_id'] = app('current_property')->id;
 
         RecipeIngredient::create($data);
+
         return back()->with('success', 'Bahan berhasil ditambahkan.');
     }
 
@@ -98,13 +102,14 @@ class MenuEngineeringController extends Controller
     {
         $ingredient = RecipeIngredient::where('property_id', app('current_property')->id)->findOrFail($id);
         $ingredient->delete();
+
         return back()->with('success', 'Bahan berhasil dihapus.');
     }
 
     public function recipeDetail($id)
     {
         $recipe = MenuRecipe::where('property_id', app('current_property')->id)
-            ->with(['ingredients', 'menuItem', 'performances' => fn($q) => $q->orderByDesc('period_start')->limit(3)])
+            ->with(['ingredients', 'menuItem', 'performances' => fn ($q) => $q->orderByDesc('period_start')->limit(3)])
             ->findOrFail($id);
 
         $recommendedPrice = $recipe->food_cost > 0
@@ -117,6 +122,7 @@ class MenuEngineeringController extends Controller
     public function calculate()
     {
         $this->svc->calculatePerformance(app('current_property'));
+
         return back()->with('success', 'Data performa menu berhasil dihitung ulang.');
     }
 }

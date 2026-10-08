@@ -62,7 +62,9 @@ class PseoController extends Controller
         $roomA = RoomType::where('slug', $a)->where('property_id', $property?->id)->first();
         $roomB = RoomType::where('slug', $b)->where('property_id', $property?->id)->first();
 
-        if (! $roomA || ! $roomB) abort(404);
+        if (! $roomA || ! $roomB) {
+            abort(404);
+        }
 
         $title = "{$roomA->name} vs {$roomB->name} — Perbandingan Lengkap";
 
@@ -112,6 +114,7 @@ class PseoController extends Controller
         }
         $lm = Landmark::where('slug', $landmark)->first();
         $citySlug = $lm ? Str::slug($lm->city) : $landmark;
+
         return $this->cityListing($citySlug, null, null, null, 'near-'.$landmark);
     }
 
@@ -233,6 +236,7 @@ class PseoController extends Controller
         imagepng($img);
         $bytes = ob_get_clean();
         imagedestroy($img);
+
         return response($bytes, 200, ['Content-Type' => 'image/png', 'Cache-Control' => 'public, max-age=86400']);
     }
 
@@ -242,8 +246,10 @@ class PseoController extends Controller
     public function hotelByStar(int $star, string $city)
     {
         $cityName = SeoData::cityName($city) ?? Str::title(str_replace('-', ' ', $city));
-        $title = "Hotel Bintang {$star} di {$cityName} — Pilihan Terbaik " . date('Y');
-        $description = "Daftar hotel bintang {$star} terbaik di {$cityName}. Harga mulai Rp " . match ($star) {1=>'100rb',2=>'200rb',3=>'350rb',4=>'700rb',5=>'1.5jt',default=>'bervariasi'} . " per malam. Fasilitas lengkap, lokasi strategis. Booking langsung!";
+        $title = "Hotel Bintang {$star} di {$cityName} — Pilihan Terbaik ".date('Y');
+        $description = "Daftar hotel bintang {$star} terbaik di {$cityName}. Harga mulai Rp ".match ($star) {
+            1 => '100rb',2 => '200rb',3 => '350rb',4 => '700rb',5 => '1.5jt',default => 'bervariasi'
+        }.' per malam. Fasilitas lengkap, lokasi strategis. Booking langsung!';
 
         return view('pseo.city-listing', [
             'city' => $city,
@@ -278,7 +284,7 @@ class PseoController extends Controller
         $property = Property::first();
         $name = SeoData::SHORT_LANDMARKS[$landmark]
             ?? Str::title(str_replace('-', ' ', $landmark));
-        $title = "Hotel Dekat {$name} — Akomodasi Strategis " . date('Y');
+        $title = "Hotel Dekat {$name} — Akomodasi Strategis ".date('Y');
 
         return view('pseo.city-listing', [
             'city' => $landmark,
@@ -308,19 +314,53 @@ class PseoController extends Controller
     // ═══════════════════════════════════════════════════════════════════════
     // ─── /hotel-{city}-{amenity} ──────────────────────────────────────────
     // ═══════════════════════════════════════════════════════════════════════
-    public function withPool(string $city)         { return $this->renderAmenity($city, 'kolam-renang'); }
-    public function withBreakfast(string $city)    { return $this->renderAmenity($city, 'sarapan-gratis'); }
-    public function withParking(string $city)      { return $this->renderAmenity($city, 'parkir-luas'); }
-    public function familyFriendly(string $city)   { return $this->renderAmenity($city, 'ramah-keluarga'); }
-    public function backpacker(string $city)       { return $this->renderAmenity($city, 'untuk-backpacker'); }
+    public function withPool(string $city)
+    {
+        return $this->renderAmenity($city, 'kolam-renang');
+    }
+
+    public function withBreakfast(string $city)
+    {
+        return $this->renderAmenity($city, 'sarapan-gratis');
+    }
+
+    public function withParking(string $city)
+    {
+        return $this->renderAmenity($city, 'parkir-luas');
+    }
+
+    public function familyFriendly(string $city)
+    {
+        return $this->renderAmenity($city, 'ramah-keluarga');
+    }
+
+    public function backpacker(string $city)
+    {
+        return $this->renderAmenity($city, 'untuk-backpacker');
+    }
 
     // ═══════════════════════════════════════════════════════════════════════
     // ─── /penginapan-{city}, /apartemen-{city}, /villa-{city}, /guesthouse-{city}
     // ═══════════════════════════════════════════════════════════════════════
-    public function lodging(string $city)      { return $this->renderAltAccommodation('penginapan', $city); }
-    public function apartments(string $city)   { return $this->renderAltAccommodation('apartemen', $city); }
-    public function villas(string $city)       { return $this->renderAltAccommodation('villa', $city); }
-    public function guesthouses(string $city)  { return $this->renderAltAccommodation('guesthouse', $city); }
+    public function lodging(string $city)
+    {
+        return $this->renderAltAccommodation('penginapan', $city);
+    }
+
+    public function apartments(string $city)
+    {
+        return $this->renderAltAccommodation('apartemen', $city);
+    }
+
+    public function villas(string $city)
+    {
+        return $this->renderAltAccommodation('villa', $city);
+    }
+
+    public function guesthouses(string $city)
+    {
+        return $this->renderAltAccommodation('guesthouse', $city);
+    }
 
     // ═══════════════════════════════════════════════════════════════════════
     // ─── Content pages: tips, guide, weather, events, recommendation ─────
@@ -415,7 +455,7 @@ class PseoController extends Controller
     {
         $cityName = SeoData::cityName($city) ?? Str::title(str_replace('-', ' ', $city));
         $property = Property::first();
-        $title = "Hotel Paling Populer di {$cityName} — Favorit Wisatawan " . date('Y');
+        $title = "Hotel Paling Populer di {$cityName} — Favorit Wisatawan ".date('Y');
         $description = "Daftar hotel paling populer di {$cityName} berdasarkan jumlah booking dan rating tamu. Pilihan terbaik untuk liburan Anda!";
 
         $rooms = $property
@@ -443,7 +483,7 @@ class PseoController extends Controller
     {
         $cityName = SeoData::cityName($city) ?? Str::title(str_replace('-', ' ', $city));
         $property = Property::first();
-        $title = "Hotel Baru di {$cityName} — Akomodasi Terkini " . date('Y');
+        $title = "Hotel Baru di {$cityName} — Akomodasi Terkini ".date('Y');
         $description = "Daftar hotel terbaru di {$cityName}. Akomodasi fresh dengan fasilitas modern dan harga promo pembukaan. Booking sekarang!";
 
         $intro = "<p>Hotel baru di {$cityName} — akomodasi yang baru dibuka atau direnovasi, menawarkan fasilitas terbaru dengan kondisi prima. Hotel baru seringkali menawarkan promo opening yang menarik (diskon 20–40% untuk 3 bulan pertama) sebagai strategi membangun basis tamu. Ini adalah kesempatan terbaik untuk menikmati fasilitas fresh dengan harga di bawah pasar.</p>";
@@ -466,7 +506,7 @@ class PseoController extends Controller
     public function granularPrice(string $city, string $price)
     {
         $cityName = SeoData::cityName($city) ?? Str::title(str_replace('-', ' ', $city));
-        $title = "Hotel {$cityName} di Bawah Rp " . strtoupper($price) . " — Budget Hemat " . date('Y');
+        $title = "Hotel {$cityName} di Bawah Rp ".strtoupper($price).' — Budget Hemat '.date('Y');
         $description = "Daftar hotel di {$cityName} dengan tarif di bawah Rp {$price}. Pilihan akomodasi budget terbaik untuk liburan hemat. Booking langsung!";
 
         return view('pseo.city-listing', [
@@ -487,7 +527,7 @@ class PseoController extends Controller
     public function priceRange(string $city, string $min, string $max)
     {
         $cityName = SeoData::cityName($city) ?? Str::title(str_replace('-', ' ', $city));
-        $title = "Hotel {$cityName} Harga Rp {$min}rb–{$max}rb — Pilihan Terjangkau " . date('Y');
+        $title = "Hotel {$cityName} Harga Rp {$min}rb–{$max}rb — Pilihan Terjangkau ".date('Y');
         $description = "Daftar hotel di {$cityName} dalam rentang harga Rp {$min}.000–Rp {$max}.000 per malam. Kualitas terjaga, harga bersahabat. Booking sekarang!";
 
         return view('pseo.city-listing', [
@@ -509,7 +549,7 @@ class PseoController extends Controller
     {
         $cityName = SeoData::cityName($city) ?? Str::title(str_replace('-', ' ', $city));
         $typeName = Str::title(str_replace('-', ' ', $type));
-        $title = "Kamar {$typeName} di {$cityName} — Pilihan Akomodasi " . date('Y');
+        $title = "Kamar {$typeName} di {$cityName} — Pilihan Akomodasi ".date('Y');
         $description = "Pilihan kamar tipe {$typeName} di {$cityName}. Fasilitas lengkap, harga kompetitif. Booking langsung, konfirmasi instan!";
 
         return view('pseo.city-listing', [
@@ -528,7 +568,7 @@ class PseoController extends Controller
     {
         $cityName = SeoData::cityName($city) ?? Str::title(str_replace('-', ' ', $city));
         $typeName = Str::title(str_replace('-', ' ', $type));
-        $title = "Harga Kamar {$typeName} di {$cityName} — Tarif Terbaru " . date('Y');
+        $title = "Harga Kamar {$typeName} di {$cityName} — Tarif Terbaru ".date('Y');
         $description = "Cek harga kamar {$typeName} di {$cityName}. Perbandingan tarif, fasilitas, dan promo terbaru. Booking langsung, harga terbaik!";
 
         return view('pseo.city-listing', [
@@ -550,7 +590,7 @@ class PseoController extends Controller
     {
         $cityName = SeoData::cityName($city) ?? Str::title(str_replace('-', ' ', $city));
         $typeLabel = Str::title(str_replace('-', ' ', $type));
-        $title = "Hotel untuk {$typeLabel} di {$cityName} — Akomodasi Ideal " . date('Y');
+        $title = "Hotel untuk {$typeLabel} di {$cityName} — Akomodasi Ideal ".date('Y');
         $description = "Pilihan hotel terbaik untuk {$typeLabel} di {$cityName}. Lokasi strategis, fasilitas sesuai kebutuhan, harga bersahabat. Booking sekarang!";
 
         return view('pseo.city-listing', [
@@ -572,7 +612,7 @@ class PseoController extends Controller
     {
         $cityName = SeoData::cityName($city) ?? Str::title(str_replace('-', ' ', $city));
         $seasonLabel = Str::title($season);
-        $title = "Hotel {$cityName} Musim {$seasonLabel} — Panduan & Tips " . date('Y');
+        $title = "Hotel {$cityName} Musim {$seasonLabel} — Panduan & Tips ".date('Y');
         $description = "Tips memilih hotel di {$cityName} saat musim {$seasonLabel}. Rekomendasi akomodasi, aktivitas, dan persiapan. Booking langsung!";
 
         return view('pseo.city-listing', [
@@ -598,7 +638,7 @@ class PseoController extends Controller
             'imlek' => 'Imlek', 'waisak' => 'Waisak', 'galungan' => 'Galungan',
         ];
         $holidayLabel = $holidayLabels[$holiday] ?? Str::title(str_replace('-', ' ', $holiday));
-        $title = "Hotel {$cityName} Liburan {$holidayLabel} — Akomodasi Nyaman " . date('Y');
+        $title = "Hotel {$cityName} Liburan {$holidayLabel} — Akomodasi Nyaman ".date('Y');
         $description = "Booking hotel di {$cityName} untuk liburan {$holidayLabel}. Pilihan akomodasi terbaik, dekat pusat perayaan. Pesan sekarang — cepat penuh!";
 
         return view('pseo.city-listing', [
@@ -619,7 +659,7 @@ class PseoController extends Controller
     public function distanceCity(string $city, string $distance)
     {
         $cityName = SeoData::cityName($city) ?? Str::title(str_replace('-', ' ', $city));
-        $title = "Hotel {$cityName} Jarak {$distance} km dari Pusat — Akses Cepat " . date('Y');
+        $title = "Hotel {$cityName} Jarak {$distance} km dari Pusat — Akses Cepat ".date('Y');
         $description = "Hotel di {$cityName} dalam radius {$distance} km dari pusat kota. Dekat atraksi utama, hemat transportasi. Booking langsung!";
 
         return view('pseo.city-listing', [
@@ -661,12 +701,13 @@ class PseoController extends Controller
     public function questionSafe(string $city)
     {
         $cityName = SeoData::cityName($city) ?? Str::title(str_replace('-', ' ', $city));
+
         return view('pseo.content-page', [
             'page_type' => 'question',
             'city' => $city,
             'city_name' => $cityName,
             'property' => Property::first(),
-            'title' => "Apakah {$cityName} Aman untuk Wisatawan? — Panduan Keamanan " . date('Y'),
+            'title' => "Apakah {$cityName} Aman untuk Wisatawan? — Panduan Keamanan ".date('Y'),
             'intro' => $this->content->genericIntro('question-safe', ['city' => $cityName]),
             'faqs' => $this->content->defaultFaqs("keamanan {$cityName}", 'question'),
             'meta_description' => "Panduan lengkap keamanan wisatawan di {$cityName}. Tips aman, area yang harus dihindari, dan rekomendasi hotel dengan sistem keamanan 24 jam.",
@@ -677,12 +718,13 @@ class PseoController extends Controller
     public function questionWhen(string $city)
     {
         $cityName = SeoData::cityName($city) ?? Str::title(str_replace('-', ' ', $city));
+
         return view('pseo.content-page', [
             'page_type' => 'question',
             'city' => $city,
             'city_name' => $cityName,
             'property' => Property::first(),
-            'title' => "Kapan Waktu Terbaik ke {$cityName}? — Panduan Musim " . date('Y'),
+            'title' => "Kapan Waktu Terbaik ke {$cityName}? — Panduan Musim ".date('Y'),
             'intro' => $this->content->bestTimeIntro($city),
             'faqs' => $this->content->defaultFaqs("waktu terbaik {$cityName}", 'question'),
             'meta_description' => "Kapan sebaiknya berkunjung ke {$cityName}? Panduan musim, cuaca, event, dan harga hotel termurah di {$cityName}.",
@@ -693,12 +735,13 @@ class PseoController extends Controller
     public function questionCost(string $city)
     {
         $cityName = SeoData::cityName($city) ?? Str::title(str_replace('-', ' ', $city));
+
         return view('pseo.content-page', [
             'page_type' => 'question',
             'city' => $city,
             'city_name' => $cityName,
             'property' => Property::first(),
-            'title' => "Berapa Biaya Hotel di {$cityName}? — Estimasi Budget " . date('Y'),
+            'title' => "Berapa Biaya Hotel di {$cityName}? — Estimasi Budget ".date('Y'),
             'intro' => $this->content->genericIntro('question-cost', ['city' => $cityName]),
             'faqs' => $this->content->defaultFaqs("biaya hotel {$cityName}", 'question'),
             'meta_description' => "Estimasi biaya menginap di {$cityName}: harga hotel, makan, transportasi, dan atraksi. Panduan budget harian backpacker hingga luxury.",
@@ -709,12 +752,13 @@ class PseoController extends Controller
     public function questionHow(string $city)
     {
         $cityName = SeoData::cityName($city) ?? Str::title(str_replace('-', ' ', $city));
+
         return view('pseo.content-page', [
             'page_type' => 'question',
             'city' => $city,
             'city_name' => $cityName,
             'property' => Property::first(),
-            'title' => "Bagaimana Cara ke {$cityName}? — Panduan Transportasi " . date('Y'),
+            'title' => "Bagaimana Cara ke {$cityName}? — Panduan Transportasi ".date('Y'),
             'intro' => $this->content->genericIntro('question-how', ['city' => $cityName]),
             'faqs' => $this->content->defaultFaqs("cara ke {$cityName}", 'question'),
             'meta_description' => "Panduan lengkap cara mencapai {$cityName}: pesawat, kereta, bus, dan transportasi lokal. Tips tiket murah dan rute tercepat.",
@@ -725,12 +769,13 @@ class PseoController extends Controller
     public function questionWhat(string $city)
     {
         $cityName = SeoData::cityName($city) ?? Str::title(str_replace('-', ' ', $city));
+
         return view('pseo.content-page', [
             'page_type' => 'question',
             'city' => $city,
             'city_name' => $cityName,
             'property' => Property::first(),
-            'title' => "Apa Saja Wisata di {$cityName}? — Atraksi Wajib " . date('Y'),
+            'title' => "Apa Saja Wisata di {$cityName}? — Atraksi Wajib ".date('Y'),
             'intro' => $this->content->genericIntro('question-what', ['city' => $cityName]),
             'faqs' => $this->content->defaultFaqs("wisata {$cityName}", 'question'),
             'meta_description' => "Daftar lengkap tempat wisata di {$cityName}: alam, budaya, kuliner, dan hidden gem. Rekomendasi itinerary dan hotel terdekat.",
@@ -795,11 +840,12 @@ class PseoController extends Controller
 
         $pattern = $this->matchPattern($segments);
 
-        if (!$pattern) {
+        if (! $pattern) {
             abort(404);
         }
 
         $data = $this->buildSeoData($pattern['type'], $pattern['params']);
+
         return view($data['view'], $data);
     }
 
@@ -808,7 +854,9 @@ class PseoController extends Controller
     // ═══════════════════════════════════════════════════════════════════════
     protected function matchPattern(array $segments): ?array
     {
-        if (count($segments) !== 1 && count($segments) !== 2) return null;
+        if (count($segments) !== 1 && count($segments) !== 2) {
+            return null;
+        }
         $url = $segments[0];
 
         $cities = array_keys(SeoData::CITIES);
@@ -836,6 +884,7 @@ class PseoController extends Controller
             foreach (SeoData::scCities() as $city) {
                 if (str_ends_with($rest, "-{$city}")) {
                     $kw = substr($rest, 0, -strlen("-{$city}"));
+
                     return ['type' => 'source-code-beli-city', 'params' => ['keyword' => $kw, 'city' => $city]];
                 }
             }
@@ -848,6 +897,7 @@ class PseoController extends Controller
             foreach (SeoData::SC_PRICE_TIERS as $p) {
                 if (str_ends_with($rest, "-mulai-{$p}")) {
                     $kw = substr($rest, 0, -strlen("-mulai-{$p}"));
+
                     return ['type' => 'source-code-harga-price', 'params' => ['keyword' => $kw, 'price' => $p]];
                 }
             }
@@ -855,6 +905,7 @@ class PseoController extends Controller
             foreach ($cities as $city) {
                 if (str_ends_with($rest, "-{$city}")) {
                     $kw = substr($rest, 0, -strlen("-{$city}"));
+
                     return ['type' => 'source-code-harga-city', 'params' => ['keyword' => $kw, 'city' => $city]];
                 }
             }
@@ -862,6 +913,7 @@ class PseoController extends Controller
             if (in_array($rest, SeoData::SOURCE_CODE_KEYWORDS)) {
                 return ['type' => 'source-code-harga', 'params' => ['keyword' => $rest]];
             }
+
             return null;
         }
 
@@ -871,6 +923,7 @@ class PseoController extends Controller
             if (in_array($rest, SeoData::SOURCE_CODE_KEYWORDS)) {
                 return ['type' => 'source-code-download', 'params' => ['keyword' => $rest]];
             }
+
             return null;
         }
 
@@ -880,9 +933,11 @@ class PseoController extends Controller
             foreach ($cities as $city) {
                 if (str_ends_with($rest, "-{$city}")) {
                     $kw = substr($rest, 0, -strlen("-{$city}"));
+
                     return ['type' => 'source-code-jasa', 'params' => ['keyword' => $kw, 'city' => $city]];
                 }
             }
+
             return null;
         }
 
@@ -892,9 +947,12 @@ class PseoController extends Controller
             foreach ($cities as $city) {
                 if (str_ends_with($rest, "-{$city}")) {
                     $kw = substr($rest, 0, -strlen("-{$city}"));
-                    if ($kw) return ['type' => 'source-code-paket', 'params' => ['keyword' => $kw, 'city' => $city]];
+                    if ($kw) {
+                        return ['type' => 'source-code-paket', 'params' => ['keyword' => $kw, 'city' => $city]];
+                    }
                 }
             }
+
             return null;
         }
 
@@ -936,9 +994,11 @@ class PseoController extends Controller
             foreach ($cities as $city) {
                 if (str_ends_with($rest, "-{$city}")) {
                     $kw = substr($rest, 0, -strlen("-{$city}"));
+
                     return ['type' => 'source-code-path', 'params' => ['keyword' => $kw, 'city' => $city]];
                 }
             }
+
             return null;
         }
 
@@ -948,6 +1008,7 @@ class PseoController extends Controller
             foreach ($cities as $city) {
                 if (str_ends_with($rest, "-{$city}")) {
                     $kw = substr($rest, 0, -strlen("-{$city}"));
+
                     return ['type' => 'source-code-city-murah', 'params' => ['keyword' => $kw, 'city' => $city]];
                 }
             }
@@ -1169,12 +1230,14 @@ class PseoController extends Controller
                 // {pat}-{kw}-murah
                 if (str_ends_with($rest, '-murah')) {
                     $kw = substr($rest, 0, -6);
+
                     return ['type' => 'filler-murah', 'params' => ['pattern' => $pat, 'kw' => $kw]];
                 }
                 // {pat}-{kw}-2026
                 foreach (SeoData::eventYears() as $y) {
                     if (str_ends_with($rest, "-{$y}")) {
                         $kw = substr($rest, 0, -strlen("-{$y}"));
+
                         return ['type' => 'filler-year', 'params' => ['pattern' => $pat, 'kw' => $kw, 'year' => $y]];
                     }
                 }
@@ -1212,10 +1275,10 @@ class PseoController extends Controller
 
         // ── Third tier massive: /hotel-{ht}-{city} ──
         $hotelTypes = ['bintang', 'melati', 'butik', 'resor', 'kota', 'pantai',
-                       'gunung', 'bisnis', 'keluarga', 'romantis', 'mewah', 'hemat',
-                       'syariah', 'modern', 'tradisional', 'internasional', 'lokal',
-                       'kapsul', 'hostel', 'motel', 'guest-house', 'homestay', 'villa',
-                       'apartment', 'losmen', 'penginapan'];
+            'gunung', 'bisnis', 'keluarga', 'romantis', 'mewah', 'hemat',
+            'syariah', 'modern', 'tradisional', 'internasional', 'lokal',
+            'kapsul', 'hostel', 'motel', 'guest-house', 'homestay', 'villa',
+            'apartment', 'losmen', 'penginapan'];
         foreach ($hotelTypes as $ht) {
             $prefix = "hotel-{$ht}-";
             if (str_starts_with($url, $prefix)) {
@@ -1228,9 +1291,9 @@ class PseoController extends Controller
 
         // ── Third tier massive: /hotel-untuk-{tt}-{city} ──
         $tripTypes = ['liburan', 'bisnis', 'honeymoon', 'family-trip', 'backpacking',
-                      'staycation', 'workation', 'short-trip', 'long-stay', 'transit',
-                      'weekend', 'study-tour', 'company-gathering', 'reuni', 'outing',
-                      'romantic-getaway', 'adventure', 'spiritual', 'culinary', 'belanja'];
+            'staycation', 'workation', 'short-trip', 'long-stay', 'transit',
+            'weekend', 'study-tour', 'company-gathering', 'reuni', 'outing',
+            'romantic-getaway', 'adventure', 'spiritual', 'culinary', 'belanja'];
         foreach ($tripTypes as $tt) {
             $prefix = "hotel-untuk-{$tt}-";
             if (str_starts_with($url, $prefix)) {
@@ -1285,8 +1348,8 @@ class PseoController extends Controller
         // ── Price combo: /{prefix}-{price}-{city} ──
         $pricePrefixes = ['hotel-dibawah', 'penginapan-dibawah', 'villa-dibawah', 'apartemen-dibawah'];
         $pricePoints = ['100rb', '150rb', '200rb', '250rb', '300rb', '350rb', '400rb',
-                        '450rb', '500rb', '600rb', '750rb', '800rb', '1jt', '1-5jt',
-                        '2jt', '2-5jt', '3jt', '5jt'];
+            '450rb', '500rb', '600rb', '750rb', '800rb', '1jt', '1-5jt',
+            '2jt', '2-5jt', '3jt', '5jt'];
         foreach ($pricePrefixes as $pp) {
             $prefix = "{$pp}-";
             if (str_starts_with($url, $prefix)) {
@@ -1537,7 +1600,7 @@ class PseoController extends Controller
 
         // ── Tag expansion: /hotel-{tag}-{city} and /hotel-{city}-{tag} ──
         $tags = ['murah', 'mahal', 'terbaik', 'termewah', 'terhemat', 'eksklusif',
-                 'premium', 'standar', 'ekonomis', 'nyaman', 'bersih', 'aman'];
+            'premium', 'standar', 'ekonomis', 'nyaman', 'bersih', 'aman'];
         foreach ($tags as $tag) {
             $prefix = "hotel-{$tag}-";
             if (str_starts_with($url, $prefix)) {
@@ -1622,7 +1685,7 @@ class PseoController extends Controller
         }
         // /hotel-{q}-{ht}-{city}-{year} triple year
         $qualities = ['terbaik', 'ternyaman', 'terbersih', 'teraman', 'terlengkap',
-                      'termewah', 'terpopuler', 'terfavorit', 'rekomendasi'];
+            'termewah', 'terpopuler', 'terfavorit', 'rekomendasi'];
         $htShort2 = ['butik', 'resor', 'bisnis', 'keluarga', 'mewah', 'hemat', 'syariah'];
         foreach ($qualities as $q) {
             $pref = "hotel-{$q}-";
@@ -1685,10 +1748,17 @@ class PseoController extends Controller
     protected function extractCity(string $slug, array $cities): ?string
     {
         foreach ($cities as $city) {
-            if ($slug === $city) return $city;
-            if (str_ends_with($slug, "-{$city}")) return $city;
-            if (str_starts_with($slug, "{$city}-")) return $city;
+            if ($slug === $city) {
+                return $city;
+            }
+            if (str_ends_with($slug, "-{$city}")) {
+                return $city;
+            }
+            if (str_starts_with($slug, "{$city}-")) {
+                return $city;
+            }
         }
+
         return null;
     }
 
@@ -1705,12 +1775,12 @@ class PseoController extends Controller
             'source-code-harga' => "Harga {$kwLabel} — Biaya & Paket Source Code",
             'source-code-download' => "Download {$kwLabel} — Source Code Laravel 11",
             'source-code-best' => "{$kwLabel} Terbaik — HotelHub HMS All-in-One",
-            'source-code-harga-price' => "Harga {$kwLabel} Mulai Rp " . strtoupper($params['price'] ?? '')
-                . " — Source Code Hotel",
+            'source-code-harga-price' => "Harga {$kwLabel} Mulai Rp ".strtoupper($params['price'] ?? '')
+                .' — Source Code Hotel',
             default => match (true) {
-                isset($params['city']) => "{$kwLabel} di " . (SeoData::cityName($params['city']) ?? Str::title(str_replace('-', ' ', $params['city'])))
-                    . (isset($params['price']) ? " Mulai Rp " . strtoupper($params['price']) : ''),
-                isset($params['kw2']) => "{$kwLabel} vs " . Str::title(str_replace('-', ' ', $params['kw2'])),
+                isset($params['city']) => "{$kwLabel} di ".(SeoData::cityName($params['city']) ?? Str::title(str_replace('-', ' ', $params['city'])))
+                    .(isset($params['price']) ? ' Mulai Rp '.strtoupper($params['price']) : ''),
+                isset($params['kw2']) => "{$kwLabel} vs ".Str::title(str_replace('-', ' ', $params['kw2'])),
                 default => $kwLabel,
             },
         };
@@ -1744,9 +1814,9 @@ class PseoController extends Controller
 
         $title = match ($type) {
             'double-feature-city' => "Hotel {$cityName} dengan {$featName} dan "
-                . Str::title(str_replace('-', ' ', $params['f2'] ?? '')),
-            'occasion-feature-city' => "Hotel " . Str::title($params['occasion'] ?? '')
-                . " {$cityName} dengan {$featName}",
+                .Str::title(str_replace('-', ' ', $params['f2'] ?? '')),
+            'occasion-feature-city' => 'Hotel '.Str::title($params['occasion'] ?? '')
+                ." {$cityName} dengan {$featName}",
             default => "Hotel {$cityName} dengan {$featName} — Pilihan Kamar Terbaik",
         };
 
@@ -1811,17 +1881,17 @@ class PseoController extends Controller
         $cityName = SeoData::cityName($city) ?? Str::title(str_replace('-', ' ', $city));
 
         $title = match ($type) {
-            'amenity-city-price' => "Hotel " . Str::title(str_replace('-', ' ', $params['amenity']))
-                . " {$cityName} di Bawah Rp " . strtoupper($params['price']),
+            'amenity-city-price' => 'Hotel '.Str::title(str_replace('-', ' ', $params['amenity']))
+                ." {$cityName} di Bawah Rp ".strtoupper($params['price']),
             'star-price-city' => "Hotel Bintang {$params['star']} {$cityName} Rp "
-                . strtoupper($params['price']),
-            'guest-feature-city' => "Hotel untuk " . Str::title(str_replace('-', ' ', $params['guestType']))
-                . " {$cityName} dengan " . Str::title(str_replace('-', ' ', $params['feature'])),
-            'room-type-feature-city' => "Kamar " . Str::title(str_replace('-', ' ', $params['roomType']))
-                . " {$cityName} dengan " . Str::title(str_replace('-', ' ', $params['feature'])),
-            'price-city-expanded' => "Hotel {$cityName} Harga Rp " . strtoupper($params['price']),
-            'content-topic-city' => "Tips " . Str::title(str_replace('-', ' ', $params['topic']))
-                . " Hotel {$cityName} — Panduan Lengkap",
+                .strtoupper($params['price']),
+            'guest-feature-city' => 'Hotel untuk '.Str::title(str_replace('-', ' ', $params['guestType']))
+                ." {$cityName} dengan ".Str::title(str_replace('-', ' ', $params['feature'])),
+            'room-type-feature-city' => 'Kamar '.Str::title(str_replace('-', ' ', $params['roomType']))
+                ." {$cityName} dengan ".Str::title(str_replace('-', ' ', $params['feature'])),
+            'price-city-expanded' => "Hotel {$cityName} Harga Rp ".strtoupper($params['price']),
+            'content-topic-city' => 'Tips '.Str::title(str_replace('-', ' ', $params['topic']))
+                ." Hotel {$cityName} — Panduan Lengkap",
             default => "Hotel {$cityName} — Pilihan Akomodasi Terbaik",
         };
 
@@ -1845,11 +1915,11 @@ class PseoController extends Controller
         $cityName = SeoData::cityName($city) ?? Str::title(str_replace('-', ' ', $city));
 
         $title = match ($type) {
-            'third-tier-hotel-type' => $pat . " {$cityName} — Pilihan Akomodasi Terbaik",
-            'third-tier-trip-type' => "Hotel untuk " . Str::title(str_replace('-', ' ', $params['tripType']))
-                . " {$cityName} — Akomodasi Ideal",
-            'second-tier-city-year' => $pat . " {$cityName} {$params['year']} — Pilihan Update",
-            default => $pat . " {$cityName} — Panduan Lengkap",
+            'third-tier-hotel-type' => $pat." {$cityName} — Pilihan Akomodasi Terbaik",
+            'third-tier-trip-type' => 'Hotel untuk '.Str::title(str_replace('-', ' ', $params['tripType']))
+                ." {$cityName} — Akomodasi Ideal",
+            'second-tier-city-year' => $pat." {$cityName} {$params['year']} — Pilihan Update",
+            default => $pat." {$cityName} — Panduan Lengkap",
         };
 
         return [
@@ -1877,27 +1947,22 @@ class PseoController extends Controller
             'source-code-city', 'source-code-city-murah',
             'source-code-harga-price', 'source-code-city-price',
             'source-code-jasa', 'source-code-paket', 'source-code-vs',
-            'source-code-district', 'source-code-path',
-            => $this->buildSourceCodePage($type, $params, $property),
+            'source-code-district', 'source-code-path', => $this->buildSourceCodePage($type, $params, $property),
             // Feature patterns
-            'feature-city', 'double-feature-city', 'occasion-feature-city',
-            => $this->buildFeaturePage($type, $params, $property),
+            'feature-city', 'double-feature-city', 'occasion-feature-city', => $this->buildFeaturePage($type, $params, $property),
             // Geo patterns
             'double-city', 'district-city', 'compare-city-expanded',
-            'month-year-city',
-            => $this->buildGeoPage($type, $params, $property),
+            'month-year-city', => $this->buildGeoPage($type, $params, $property),
             // Amenity patterns
             'amenity-city-price', 'star-price-city', 'guest-feature-city',
-            'room-type-feature-city', 'price-city-expanded', 'content-topic-city',
-            => $this->buildComboPage($type, $params, $property),
+            'room-type-feature-city', 'price-city-expanded', 'content-topic-city', => $this->buildComboPage($type, $params, $property),
             // Filler patterns
             'filler-base', 'filler-murah', 'filler-year',
             'second-tier-city', 'second-tier-city-year',
             'third-tier-hotel-type', 'third-tier-trip-type',
             'star-landmark-city', 'occasion-landmark-city', 'source-code-feature',
             'district-star-city', 'distance-radius', 'occasion-all-city',
-            'triple-year', 'occasion-hotel-type-city', 'room-type-city-price',
-            => $this->buildFillerPage($type, $params, $property),
+            'triple-year', 'occasion-hotel-type-city', 'room-type-city-price', => $this->buildFillerPage($type, $params, $property),
             default => $this->buildFallbackData($type, $params, $property),
         };
     }
@@ -1924,6 +1989,7 @@ class PseoController extends Controller
     protected function buildFallbackData(string $type, array $params, $property): array
     {
         $title = Str::title(str_replace('-', ' ', $type ?? 'Halaman'));
+
         return [
             'view' => 'pseo.city-listing',
             'city' => $params['city'] ?? 'jakarta',
@@ -1945,7 +2011,7 @@ class PseoController extends Controller
     {
         $cityName = SeoData::cityName($city) ?? Str::title(str_replace('-', ' ', $city));
         $prefix = $isCheapest ? 'Termurah' : 'Murah';
-        $title = "Hotel {$prefix} di {$cityName} — Budget Hemat " . date('Y');
+        $title = "Hotel {$prefix} di {$cityName} — Budget Hemat ".date('Y');
         $description = "Daftar hotel {$prefix} di {$cityName} — under budget, tetap nyaman. Harga mulai Rp 100rb/malam. Cocok untuk backpacker & hemat traveler.";
 
         return view('pseo.city-listing', [
@@ -1990,7 +2056,7 @@ class PseoController extends Controller
             'untuk-backpacker' => 'Untuk Backpacker',
         ];
         $amenityLabel = $amenityLabels[$amenity] ?? Str::title(str_replace('-', ' ', $amenity));
-        $title = "Hotel {$amenityLabel} di {$cityName} — Pilihan Nyaman " . date('Y');
+        $title = "Hotel {$amenityLabel} di {$cityName} — Pilihan Nyaman ".date('Y');
         $description = "Daftar hotel dengan {$amenityLabel} di {$cityName}. Fasilitas lengkap, rating tamu tinggi. Booking langsung, harga terbaik!";
 
         return view('pseo.city-listing', [
@@ -2036,7 +2102,7 @@ class PseoController extends Controller
                 'city' => $city,
                 'city_name' => $cityName,
                 'property' => $property,
-                'title' => "Tips Memilih Hotel di {$cityName} — Panduan Lengkap " . date('Y'),
+                'title' => "Tips Memilih Hotel di {$cityName} — Panduan Lengkap ".date('Y'),
                 'intro' => $this->content->tipsIntro($city),
                 'faqs' => $this->content->defaultFaqs("{$cityName}", 'tips'),
                 'meta_description' => "Tips memilih hotel terbaik di {$cityName}: lokasi, budget, fasilitas, dan strategi booking. Panduan praktis untuk first-timer & repeat visitor.",
@@ -2047,7 +2113,7 @@ class PseoController extends Controller
                 'city' => $city,
                 'city_name' => $cityName,
                 'property' => $property,
-                'title' => "Panduan Wisata {$cityName} — Itinerary & Tips Lengkap " . date('Y'),
+                'title' => "Panduan Wisata {$cityName} — Itinerary & Tips Lengkap ".date('Y'),
                 'intro' => $this->content->travelGuideIntro($city),
                 'faqs' => $this->content->defaultFaqs("{$cityName}", 'travel-guide'),
                 'meta_description' => "Panduan wisata {$cityName} lengkap: waktu terbaik, cara ke sana, atraksi wajib, hotel rekomendasi, budget, dan tips lokal.",
@@ -2117,10 +2183,10 @@ class PseoController extends Controller
 
         $title = match (true) {
             $variant === 'pet-friendly' => "Hotel Pet-Friendly di {$cityName}",
-            (bool) $neighborhood        => "Hotel di {$cityName}, {$neighborhoodName}",
-            (bool) $year                => "Hotel Terbaik di {$cityName} {$year}",
-            (bool) $price               => "Hotel di {$cityName} di Bawah Rp ".strtoupper($price),
-            default                     => "Hotel di {$cityName}",
+            (bool) $neighborhood => "Hotel di {$cityName}, {$neighborhoodName}",
+            (bool) $year => "Hotel Terbaik di {$cityName} {$year}",
+            (bool) $price => "Hotel di {$cityName} di Bawah Rp ".strtoupper($price),
+            default => "Hotel di {$cityName}",
         };
 
         $intro = $this->content->cityListingIntro($city, $neighborhood, $year, $price);

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\MicrostayRate;
 use App\Models\Reservation;
+use App\Models\RoomType;
 use Carbon\Carbon;
 
 class MicrostayService
@@ -26,10 +27,13 @@ class MicrostayService
             ->where('is_active', true)
             ->first();
 
-        if (!$rate) {
+        if (! $rate) {
             // Pro-rata from base 24hr rate if no microstay rate defined
-            $roomType = \App\Models\RoomType::find($roomTypeId);
-            if (!$roomType) return null;
+            $roomType = RoomType::find($roomTypeId);
+            if (! $roomType) {
+                return null;
+            }
+
             return round(($roomType->base_rate / 24) * $hours, 2);
         }
 
@@ -44,7 +48,7 @@ class MicrostayService
 
         $reservation = Reservation::create([
             'property_id' => $data['property_id'],
-            'ref' => 'MS-' . strtoupper(substr(md5(uniqid()), 0, 8)),
+            'ref' => 'MS-'.strtoupper(substr(md5(uniqid()), 0, 8)),
             'check_in' => $checkIn,
             'check_out' => $checkOutHour,
             'nights' => 0,

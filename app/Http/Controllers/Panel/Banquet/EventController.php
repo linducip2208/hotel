@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Panel\Banquet;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use App\Models\Event;
 use App\Models\FunctionRoom;
+use App\Models\Guest;
 use App\Services\Banquet\EventService;
 use Illuminate\Http\Request;
 
@@ -21,7 +23,7 @@ class EventController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('event_no', 'like', "%{$search}%");
+                    ->orWhere('event_no', 'like', "%{$search}%");
             });
         }
 
@@ -30,6 +32,7 @@ class EventController extends Controller
         }
 
         $events = $query->orderByDesc('event_date')->paginate(50)->appends($request->query());
+
         return view('panel.banquet.events.index', compact('events'));
     }
 
@@ -39,12 +42,14 @@ class EventController extends Controller
         $events = Event::where('property_id', app('current_property')->id)
             ->whereBetween('event_date', [now()->subDays(7), now()->addMonths(2)])
             ->with('functionRoom')->get();
+
         return view('panel.banquet.calendar', compact('rooms', 'events'));
     }
 
     public function create()
     {
         $rooms = FunctionRoom::where('property_id', app('current_property')->id)->where('is_active', true)->get();
+
         return view('panel.banquet.events.create', compact('rooms'));
     }
 
@@ -64,12 +69,14 @@ class EventController extends Controller
         ]);
         $data['property_id'] = app('current_property')->id;
         $event = $this->svc->create($data);
+
         return redirect()->route('panel.banquet.events.show', $event->id);
     }
 
     public function show(int $id)
     {
         $event = Event::with('functionRoom', 'company', 'primaryContact', 'menuItems')->findOrFail($id);
+
         return view('panel.banquet.events.show', compact('event'));
     }
 
@@ -77,8 +84,9 @@ class EventController extends Controller
     {
         $event = Event::with('functionRoom')->findOrFail($id);
         $functionRooms = FunctionRoom::where('property_id', app('current_property')->id)->get();
-        $companies = \App\Models\Company::where('property_id', app('current_property')->id)->get();
-        $guests = \App\Models\Guest::where('property_id', app('current_property')->id)->orderBy('last_name')->get();
+        $companies = Company::where('property_id', app('current_property')->id)->get();
+        $guests = Guest::where('property_id', app('current_property')->id)->orderBy('last_name')->get();
+
         return view('panel.banquet.events.edit', compact('event', 'functionRooms', 'companies', 'guests'));
     }
 
@@ -101,6 +109,7 @@ class EventController extends Controller
             'notes' => 'nullable|string',
         ]);
         $event->update($validated);
+
         return redirect()->route('panel.banquet.events.show', $event->id)->with('success', 'Event berhasil diperbarui.');
     }
 
@@ -108,6 +117,7 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($id);
         $event->delete();
+
         return redirect()->route('panel.banquet.index')->with('success', 'Event berhasil dihapus.');
     }
 
@@ -116,6 +126,7 @@ class EventController extends Controller
         $event = Event::findOrFail($id);
         $request->validate(['status' => 'required|in:inquiry,tentative,definite,completed,cancelled']);
         $event->update(['status' => $request->status]);
+
         return back()->with('success', 'Status event diperbarui.');
     }
 
@@ -128,6 +139,7 @@ class EventController extends Controller
             'unit_price' => 'required|numeric|min:0',
         ]);
         $this->svc->addMenuItem($event, $data);
+
         return back();
     }
 
@@ -135,12 +147,14 @@ class EventController extends Controller
     {
         $event = Event::with('functionRoom', 'menuItems')->findOrFail($id);
         $beo = $this->svc->generateBeo($event);
+
         return view('panel.banquet.events.beo', compact('beo', 'event'));
     }
 
     public function functionRooms()
     {
         $rooms = FunctionRoom::where('property_id', app('current_property')->id)->paginate(50);
+
         return view('panel.banquet.function-rooms', compact('rooms'));
     }
 
@@ -156,6 +170,7 @@ class EventController extends Controller
             'full_day_rate' => 'nullable|numeric',
         ]);
         FunctionRoom::create($data + ['property_id' => app('current_property')->id]);
+
         return back()->with('success', 'Function room berhasil ditambahkan.');
     }
 
@@ -172,6 +187,7 @@ class EventController extends Controller
             'full_day_rate' => 'nullable|numeric',
         ]);
         $room->update($data);
+
         return back()->with('success', 'Function room berhasil diperbarui.');
     }
 
@@ -179,6 +195,7 @@ class EventController extends Controller
     {
         $room = FunctionRoom::where('property_id', app('current_property')->id)->findOrFail($id);
         $room->delete();
+
         return back()->with('success', 'Function room berhasil dihapus.');
     }
 }

@@ -18,7 +18,7 @@ beforeEach(function () {
     ]);
     $this->guest = Guest::create([
         'property_id' => $this->property->id, 'first_name' => 'Test', 'last_name' => 'Guest',
-        'id_number' => 'ID' . uniqid(),
+        'id_number' => 'ID'.uniqid(),
     ]);
     $this->folio = Folio::create([
         'property_id' => $this->property->id,
@@ -33,7 +33,7 @@ function makeGuest(Property $prop): Guest
 {
     return Guest::create([
         'property_id' => $prop->id, 'first_name' => 'Test', 'last_name' => 'Guest',
-        'id_number' => 'ID' . uniqid(),
+        'id_number' => 'ID'.uniqid(),
     ]);
 }
 

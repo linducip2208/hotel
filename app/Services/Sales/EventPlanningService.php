@@ -5,11 +5,8 @@ namespace App\Services\Sales;
 use App\Models\EventBooking;
 use App\Models\EventService;
 use App\Models\EventType;
-use App\Models\Guest;
 use App\Models\Property;
-use App\Models\Room;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 
 class EventPlanningService
 {
@@ -26,12 +23,14 @@ class EventPlanningService
     {
         $data['property_id'] = $property->id;
         $data['status'] = $data['status'] ?? 'inquiry';
+
         return EventBooking::create($data);
     }
 
     public function updateStatus(EventBooking $booking, string $status): EventBooking
     {
         $booking->update(['status' => $status]);
+
         return $booking->fresh();
     }
 
@@ -74,8 +73,8 @@ class EventPlanningService
             return [
                 'id' => $b->id,
                 'title' => $b->event_name,
-                'start' => $b->event_date->format('Y-m-d') . 'T' . $b->start_time->format('H:i:s'),
-                'end' => $b->event_date->format('Y-m-d') . 'T' . $b->end_time->format('H:i:s'),
+                'start' => $b->event_date->format('Y-m-d').'T'.$b->start_time->format('H:i:s'),
+                'end' => $b->event_date->format('Y-m-d').'T'.$b->end_time->format('H:i:s'),
                 'status' => $b->status,
                 'type' => $b->eventType?->name ?? '-',
                 'guest' => $b->guest?->full_name ?? '-',

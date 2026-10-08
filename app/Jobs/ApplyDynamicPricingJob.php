@@ -16,6 +16,7 @@ class ApplyDynamicPricingJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 1;
+
     public int $timeout = 180;
 
     public function __construct(public int $propertyId) {}
@@ -24,6 +25,6 @@ class ApplyDynamicPricingJob implements ShouldQueue
     {
         $property = Property::findOrFail($this->propertyId);
         $applied = $svc->applyRules($property);
-        Log::info("DynamicPricing applied", ['property' => $this->propertyId, 'overrides' => $applied]);
+        Log::info('DynamicPricing applied', ['property' => $this->propertyId, 'overrides' => $applied]);
     }
 }

@@ -33,15 +33,15 @@ final class NotifyGuestOfCharge implements ShouldQueue
         $dispatcher->folioChargeNotification($folio, $charge);
 
         NotificationLog::create([
-            'property_id'     => $folio->property_id,
-            'channel'         => 'mail',
-            'event'           => 'folio_charged',
-            'recipient'       => $folio->guest->email,
+            'property_id' => $folio->property_id,
+            'channel' => 'mail',
+            'event' => 'folio_charged',
+            'recipient' => $folio->guest->email,
             'notifiable_type' => get_class($folio),
-            'notifiable_id'   => $folio->id,
-            'status'          => 'sent',
+            'notifiable_id' => $folio->id,
+            'status' => 'sent',
             'idempotency_key' => $key,
-            'sent_at'         => now(),
+            'sent_at' => now(),
         ]);
     }
 }

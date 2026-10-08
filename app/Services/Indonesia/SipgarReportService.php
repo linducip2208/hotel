@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Services\Indonesia;
 
+use App\Models\Employee;
 use App\Models\Property;
 use App\Models\Reservation;
-use App\Models\Employee;
+use App\Models\Room;
 use Carbon\Carbon;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -22,7 +23,7 @@ final class SipgarReportService
         $start = $month->copy()->startOfMonth();
         $end = $month->copy()->endOfMonth();
 
-        $totalRooms = \App\Models\Room::where('property_id', $propertyId)
+        $totalRooms = Room::where('property_id', $propertyId)
             ->where('is_active', true)->count();
 
         $totalRoomNights = $totalRooms * $start->daysInMonth;
@@ -31,15 +32,16 @@ final class SipgarReportService
             ->where('status', '!=', 'cancelled')
             ->where(function ($q) use ($start, $end) {
                 $q->whereBetween('check_in', [$start, $end])
-                  ->orWhereBetween('check_out', [$start, $end])
-                  ->orWhere(function ($q) use ($start, $end) {
-                      $q->where('check_in', '<', $start)->where('check_out', '>', $end);
-                  });
+                    ->orWhereBetween('check_out', [$start, $end])
+                    ->orWhere(function ($q) use ($start, $end) {
+                        $q->where('check_in', '<', $start)->where('check_out', '>', $end);
+                    });
             })
             ->get()
             ->sum(function (Reservation $r) use ($start, $end) {
                 $checkIn = max($r->check_in, $start);
                 $checkOut = min($r->check_out, $end);
+
                 return max(0, $checkIn->diffInDays($checkOut));
             });
 
@@ -90,12 +92,12 @@ final class SipgarReportService
     public function exportExcel(int $propertyId, Carbon $month): string
     {
         $data = $this->generateMonthlyReport($propertyId, $month);
-        $spreadsheet = new Spreadsheet();
+        $spreadsheet = new Spreadsheet;
         $sheet = $spreadsheet->getActiveSheet();
 
-        $sheet->setTitle('SIPGAR ' . $month->format('Y-m'));
+        $sheet->setTitle('SIPGAR '.$month->format('Y-m'));
         $sheet->setCellValue('A1', 'LAPORAN SIPGAR — KEMENPAREKRAF');
-        $sheet->setCellValue('A2', 'Periode: ' . $month->format('F Y'));
+        $sheet->setCellValue('A2', 'Periode: '.$month->format('F Y'));
         $sheet->mergeCells('A1:B1');
         $sheet->mergeCells('A2:B2');
 

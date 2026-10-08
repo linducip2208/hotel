@@ -17,6 +17,13 @@ class ApSupplier extends Model
         'is_active' => 'boolean',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function bills() { return $this->hasMany(ApBill::class, 'supplier_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function bills()
+    {
+        return $this->hasMany(ApBill::class, 'supplier_id');
+    }
 }

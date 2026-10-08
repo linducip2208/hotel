@@ -16,5 +16,8 @@ class EventService extends Model
         'sell_price' => 'decimal:2',
     ];
 
-    public function eventBooking() { return $this->belongsTo(EventBooking::class); }
+    public function eventBooking()
+    {
+        return $this->belongsTo(EventBooking::class);
+    }
 }

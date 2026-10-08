@@ -17,10 +17,33 @@ class ArAccount extends Model
         'is_active' => 'boolean',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function company() { return $this->belongsTo(Company::class); }
-    public function travelAgent() { return $this->belongsTo(TravelAgent::class); }
-    public function channel() { return $this->belongsTo(Channel::class); }
-    public function guest() { return $this->belongsTo(Guest::class); }
-    public function invoices() { return $this->hasMany(ArInvoice::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function travelAgent()
+    {
+        return $this->belongsTo(TravelAgent::class);
+    }
+
+    public function channel()
+    {
+        return $this->belongsTo(Channel::class);
+    }
+
+    public function guest()
+    {
+        return $this->belongsTo(Guest::class);
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(ArInvoice::class);
+    }
 }

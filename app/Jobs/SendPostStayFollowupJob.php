@@ -16,7 +16,6 @@ class SendPostStayFollowupJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 3;
-    public int $delay = 3600; // send 1 hour after checkout
 
     public function __construct(public int $reservationId) {}
 
@@ -41,15 +40,15 @@ class SendPostStayFollowupJob implements ShouldQueue
         $dispatcher->reviewRequest($reservation);
 
         NotificationLog::create([
-            'property_id'     => $reservation->property_id,
-            'channel'         => 'mail',
-            'event'           => 'post_stay',
-            'recipient'       => $reservation->primaryGuest?->email ?? 'unknown',
+            'property_id' => $reservation->property_id,
+            'channel' => 'mail',
+            'event' => 'post_stay',
+            'recipient' => $reservation->primaryGuest?->email ?? 'unknown',
             'notifiable_type' => Reservation::class,
-            'notifiable_id'   => $reservation->id,
-            'status'          => 'sent',
+            'notifiable_id' => $reservation->id,
+            'status' => 'sent',
             'idempotency_key' => $key,
-            'sent_at'         => now(),
+            'sent_at' => now(),
         ]);
     }
 }

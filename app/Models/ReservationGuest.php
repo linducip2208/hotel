@@ -13,6 +13,13 @@ class ReservationGuest extends Model
 
     protected $casts = ['is_primary' => 'boolean'];
 
-    public function reservationRoom() { return $this->belongsTo(ReservationRoom::class); }
-    public function guest() { return $this->belongsTo(Guest::class); }
+    public function reservationRoom()
+    {
+        return $this->belongsTo(ReservationRoom::class);
+    }
+
+    public function guest()
+    {
+        return $this->belongsTo(Guest::class);
+    }
 }

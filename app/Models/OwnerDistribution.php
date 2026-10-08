@@ -22,7 +22,18 @@ class OwnerDistribution extends Model
         'paid_at' => 'datetime',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function owner() { return $this->belongsTo(User::class, 'owner_user_id'); }
-    public function createdBy() { return $this->belongsTo(User::class, 'created_by_user_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_user_id');
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by_user_id');
+    }
 }

@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\ChartOfAccount;
-use App\Models\JournalEntry;
 use App\Models\Property;
 use App\Services\Accounting\JournalPoster;
 
@@ -32,14 +31,14 @@ it('throws on unbalanced entry', function () {
     expect(fn () => $this->svc->post($this->property->id, 'Bad entry', [
         ['account_code' => '1101', 'debit' => 500000, 'credit' => 0],
         ['account_code' => '4001', 'debit' => 0, 'credit' => 300000],
-    ]))->toThrow(\RuntimeException::class, 'Unbalanced journal');
+    ]))->toThrow(RuntimeException::class, 'Unbalanced journal');
 });
 
 it('throws on unknown COA code', function () {
     expect(fn () => $this->svc->post($this->property->id, 'Unknown code', [
         ['account_code' => '9999', 'debit' => 100000, 'credit' => 0],
         ['account_code' => '4001', 'debit' => 0, 'credit' => 100000],
-    ]))->toThrow(\RuntimeException::class, 'Unknown COA code');
+    ]))->toThrow(RuntimeException::class, 'Unknown COA code');
 });
 
 it('assigns source_type and source_id when provided', function () {

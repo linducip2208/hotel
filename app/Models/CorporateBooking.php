@@ -13,7 +13,18 @@ class CorporateBooking extends Model
         'discount_amount' => 'decimal:2',
     ];
 
-    public function property()          { return $this->belongsTo(Property::class); }
-    public function corporateAccount()  { return $this->belongsTo(CorporateAccount::class); }
-    public function reservation()       { return $this->belongsTo(Reservation::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function corporateAccount()
+    {
+        return $this->belongsTo(CorporateAccount::class);
+    }
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class);
+    }
 }

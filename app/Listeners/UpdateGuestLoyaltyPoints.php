@@ -16,7 +16,7 @@ final class UpdateGuestLoyaltyPoints implements ShouldQueue
 
     public function handle(FolioPaymentReceived $event): void
     {
-        $folio  = $event->folio;
+        $folio = $event->folio;
         $payment = $event->folioPayment;
 
         if (! $folio->guest_id) {
@@ -39,14 +39,14 @@ final class UpdateGuestLoyaltyPoints implements ShouldQueue
         $loyaltyMember->increment('lifetime_points', $pointsEarned);
 
         LoyaltyTransaction::create([
-            'property_id'      => $folio->property_id,
+            'property_id' => $folio->property_id,
             'loyalty_member_id' => $loyaltyMember->id,
-            'guest_id'         => $folio->guest_id,
-            'transaction_type'  => 'earn',
-            'points'           => $pointsEarned,
-            'description'      => 'Points earned from payment #' . $payment->id,
-            'source_type'      => get_class($payment),
-            'source_id'        => $payment->id,
+            'guest_id' => $folio->guest_id,
+            'transaction_type' => 'earn',
+            'points' => $pointsEarned,
+            'description' => 'Points earned from payment #'.$payment->id,
+            'source_type' => get_class($payment),
+            'source_id' => $payment->id,
         ]);
     }
 }

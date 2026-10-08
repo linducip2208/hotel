@@ -32,6 +32,7 @@ class KtpOcrService
                 return ['ok' => false, 'error' => 'AI call failed'];
             }
             $parsed = json_decode($r['content'] ?? '', true);
+
             return ['ok' => true, 'data' => $parsed ?? ['raw' => $r['content']]];
         } catch (\Throwable $e) {
             return ['ok' => false, 'error' => $e->getMessage()];

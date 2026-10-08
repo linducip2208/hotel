@@ -7,6 +7,7 @@ use App\Models\LocalLicense;
 use App\Models\Property;
 use App\Models\User;
 use App\Services\License\LicenseManager;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -34,8 +35,13 @@ class WizardController extends Controller
         // Marketplace pairing (whitelabel.co.id, kit v3) is enforced upstream by
         // RequirePair middleware, so by this point activation is already valid
         // (or dev-bypassed). Skip the legacy HMS-format pair step.
-        if (! Property::exists()) return 'property';
-        if (! User::exists()) return 'admin';
+        if (! Property::exists()) {
+            return 'property';
+        }
+        if (! User::exists()) {
+            return 'admin';
+        }
+
         return 'done';
     }
 
@@ -45,11 +51,13 @@ class WizardController extends Controller
             'database' => $this->safeCheck(fn () => DB::connection()->getPdo() !== null),
             'storage' => $this->safeCheck(fn () => is_writable(storage_path())),
             'vendor_server' => $this->safeCheck(function () {
-                $client = new \GuzzleHttp\Client(['timeout' => 5, 'http_errors' => false]);
+                $client = new Client(['timeout' => 5, 'http_errors' => false]);
                 $r = $client->get(rtrim(config('license.vendor_base_url'), '/').'/health');
+
                 return $r->getStatusCode() < 500;
             }),
         ];
+
         return response()->json(['checks' => $checks, 'all_ok' => ! in_array(false, $checks, true)]);
     }
 
@@ -83,6 +91,7 @@ class WizardController extends Controller
         ]);
 
         Property::firstOrCreate(['name' => $data['name']], $data);
+
         return redirect()->route('setup.wizard');
     }
 
@@ -118,7 +127,10 @@ class WizardController extends Controller
 
     protected function safeCheck(\Closure $fn): bool
     {
-        try { return (bool) $fn(); }
-        catch (\Throwable $e) { return false; }
+        try {
+            return (bool) $fn();
+        } catch (\Throwable $e) {
+            return false;
+        }
     }
 }

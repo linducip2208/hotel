@@ -13,7 +13,7 @@ final class SaltoAdapter extends BaseAdapter implements LockAdapterInterface
     protected function defaultHeaders(): array
     {
         return array_merge(parent::defaultHeaders(), [
-            'Authorization' => 'Bearer ' . $this->apiKey(),
+            'Authorization' => 'Bearer '.$this->apiKey(),
             'X-Property-Id' => (string) ($this->provider->extra_headers['property_id'] ?? ''),
         ]);
     }

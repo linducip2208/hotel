@@ -21,6 +21,7 @@ class ApiMailAdapter extends BaseAdapter implements MailAdapterInterface
                 'html' => $html,
             ],
         ]);
+
         return [
             'ok' => $response->getStatusCode() < 400,
             'raw' => json_decode((string) $response->getBody(), true) ?? [],

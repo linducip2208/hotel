@@ -8,8 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class PointOfInterest extends Model
 {
     use HasFactory;
+
     protected $table = 'points_of_interest';
+
     protected $guarded = ['id'];
+
     protected $casts = [
         'photos' => 'array',
         'opening_hours' => 'array',
@@ -19,6 +22,13 @@ class PointOfInterest extends Model
         'lng' => 'decimal:7',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function landmark() { return $this->belongsTo(Landmark::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function landmark()
+    {
+        return $this->belongsTo(Landmark::class);
+    }
 }

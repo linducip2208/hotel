@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Panel\Fo;
 
 use App\Http\Controllers\Controller;
+use App\Models\Employee;
 use App\Models\FleetDriver;
 use App\Models\FleetTrip;
 use App\Models\FleetVehicle;
-use App\Models\Folio;
 use App\Models\Guest;
 use App\Models\Reservation;
 use App\Models\ShuttleSchedule;
@@ -21,6 +21,7 @@ class FleetController extends Controller
     {
         $property = app('current_property');
         $data = $this->svc->getDashboard($property);
+
         return view('panel.fo.fleet-dashboard', $data);
     }
 
@@ -28,6 +29,7 @@ class FleetController extends Controller
     {
         $propertyId = app('current_property')->id;
         $vehicles = FleetVehicle::where('property_id', $propertyId)->orderBy('name')->get();
+
         return view('panel.fo.fleet-vehicles', compact('vehicles'));
     }
 
@@ -66,6 +68,7 @@ class FleetController extends Controller
         ]);
 
         $vehicle->update($data);
+
         return back()->with('success', 'Kendaraan berhasil diperbarui.');
     }
 
@@ -73,7 +76,8 @@ class FleetController extends Controller
     {
         $propertyId = app('current_property')->id;
         $drivers = FleetDriver::where('property_id', $propertyId)->with('employee')->orderBy('id')->get();
-        $employees = \App\Models\Employee::where('property_id', $propertyId)->orderBy('full_name')->get();
+        $employees = Employee::where('property_id', $propertyId)->orderBy('full_name')->get();
+
         return view('panel.fo.fleet-trips', compact('drivers', 'employees')); // drivers shown in same page
     }
 
@@ -104,6 +108,7 @@ class FleetController extends Controller
         ]);
 
         $driver->update($data);
+
         return back()->with('success', 'Driver berhasil diperbarui.');
     }
 
@@ -144,6 +149,7 @@ class FleetController extends Controller
         ]);
 
         $this->svc->scheduleTrip(app('current_property'), $data);
+
         return back()->with('success', 'Trip berhasil dijadwalkan.');
     }
 
@@ -151,6 +157,7 @@ class FleetController extends Controller
     {
         $trip = FleetTrip::where('property_id', app('current_property')->id)->findOrFail($id);
         $this->svc->startTrip($trip->id);
+
         return back()->with('success', 'Trip dimulai.');
     }
 
@@ -158,6 +165,7 @@ class FleetController extends Controller
     {
         $trip = FleetTrip::where('property_id', app('current_property')->id)->findOrFail($id);
         $this->svc->completeTrip($trip->id);
+
         return back()->with('success', 'Trip selesai.');
     }
 
@@ -165,6 +173,7 @@ class FleetController extends Controller
     {
         $trip = FleetTrip::where('property_id', app('current_property')->id)->findOrFail($id);
         $this->svc->cancelTrip($trip->id);
+
         return back()->with('success', 'Trip dibatalkan.');
     }
 
@@ -173,6 +182,7 @@ class FleetController extends Controller
         $trip = FleetTrip::where('property_id', app('current_property')->id)->findOrFail($id);
         $folioId = $request->validate(['folio_id' => 'required|exists:folios,id'])['folio_id'];
         $this->svc->chargeToFolio($trip, $folioId);
+
         return back()->with('success', 'Biaya transport dibebankan ke folio.');
     }
 
@@ -180,6 +190,7 @@ class FleetController extends Controller
     {
         $propertyId = app('current_property')->id;
         $schedules = ShuttleSchedule::where('property_id', $propertyId)->orderBy('departure_time')->get();
+
         return view('panel.fo.fleet-shuttle', compact('schedules'));
     }
 
@@ -218,6 +229,7 @@ class FleetController extends Controller
         ]);
 
         $schedule->update($data);
+
         return back()->with('success', 'Jadwal shuttle berhasil diperbarui.');
     }
 }

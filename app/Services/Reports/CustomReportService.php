@@ -2,8 +2,9 @@
 
 namespace App\Services\Reports;
 
-use App\Models\CustomReport;
+use App\Models\HkTask;
 use App\Models\Property;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class CustomReportService
@@ -60,9 +61,10 @@ class CustomReportService
         $labels = [];
         $data = [];
         foreach ($days as $d) {
-            $labels[] = \Carbon\Carbon::parse($d)->format('d M');
+            $labels[] = Carbon::parse($d)->format('d M');
             $data[] = $bookings[$d] ?? 0;
         }
+
         return ['labels' => $labels, 'data' => $data];
     }
 
@@ -83,9 +85,10 @@ class CustomReportService
         $labels = [];
         $data = [];
         foreach ($months as $m) {
-            $labels[] = \Carbon\Carbon::createFromFormat('Y-m', $m)->translatedFormat('M Y');
+            $labels[] = Carbon::createFromFormat('Y-m', $m)->translatedFormat('M Y');
             $data[] = round($revenue[$m] ?? 0, 2);
         }
+
         return ['labels' => $labels, 'data' => $data];
     }
 
@@ -104,6 +107,7 @@ class CustomReportService
             $labels[] = $c->source ?: 'Lainnya';
             $data[] = $c->count;
         }
+
         return ['labels' => $labels, 'data' => $data];
     }
 
@@ -145,11 +149,11 @@ class CustomReportService
 
     protected function hkStats(Property $property): array
     {
-        $done = \App\Models\HkTask::where('property_id', $property->id)
+        $done = HkTask::where('property_id', $property->id)
             ->where('status', 'done')->whereDate('completed_at', now())->count();
-        $pending = \App\Models\HkTask::where('property_id', $property->id)
+        $pending = HkTask::where('property_id', $property->id)
             ->where('status', 'pending')->count();
-        $inProgress = \App\Models\HkTask::where('property_id', $property->id)
+        $inProgress = HkTask::where('property_id', $property->id)
             ->where('status', 'in_progress')->count();
 
         return [
@@ -196,7 +200,7 @@ class CustomReportService
 
         return [
             'labels' => $charges->pluck('category')->toArray(),
-            'data' => $charges->pluck('total')->map(fn($v) => round((float)$v, 2))->toArray(),
+            'data' => $charges->pluck('total')->map(fn ($v) => round((float) $v, 2))->toArray(),
         ];
     }
 
@@ -211,7 +215,7 @@ class CustomReportService
 
         return [
             'labels' => $methods->pluck('method')->toArray(),
-            'data' => $methods->pluck('total')->map(fn($v) => round((float)$v, 2))->toArray(),
+            'data' => $methods->pluck('total')->map(fn ($v) => round((float) $v, 2))->toArray(),
         ];
     }
 }

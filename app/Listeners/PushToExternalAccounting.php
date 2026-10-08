@@ -13,6 +13,7 @@ final class PushToExternalAccounting implements ShouldQueue
     use InteractsWithQueue;
 
     public int $tries = 5;
+
     public array $backoff = [60, 300, 900, 3600];
 
     public function handle(JournalEntryPosted $event): void

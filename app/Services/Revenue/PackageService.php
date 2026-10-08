@@ -2,11 +2,10 @@
 
 namespace App\Services\Revenue;
 
-use App\Models\Package;
-use App\Models\PackageItem;
-use App\Models\ReservationPackage;
-use App\Models\Reservation;
 use App\Models\FolioCharge;
+use App\Models\Package;
+use App\Models\Reservation;
+use App\Models\ReservationPackage;
 
 class PackageService
 {

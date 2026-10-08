@@ -19,6 +19,30 @@
     </form>
 </div>
 
+{{-- Pre-check --}}
+<div class="bg-white rounded-2xl shadow-card border border-gray-100 overflow-hidden mb-5">
+    <div class="px-5 py-4 border-b border-gray-50 flex items-center gap-2">
+        <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M5 19h14a2 2 0 001.84-2.75L13.74 4a2 2 0 00-3.5 0L3.16 16.25A2 2 0 005 19z"/></svg>
+        <h2 class="text-sm font-semibold text-gray-700">Pre-Check Audit Hari Ini</h2>
+        <span class="text-xs text-gray-400">— periksa sebelum roll business date</span>
+    </div>
+    @forelse ($precheck as $issue)
+        <div class="px-5 py-3 border-b border-gray-50 flex items-start gap-3 {{ $loop->last ? '' : '' }}">
+            <span class="mt-0.5 text-sm {{ $issue['severity'] === 'error' ? 'text-red-500' : 'text-amber-500' }}">
+                {{ $issue['severity'] === 'error' ? '✗' : '⚠' }}
+            </span>
+            <div>
+                <p class="text-sm font-medium text-gray-800">{{ $issue['label'] }}</p>
+                <p class="text-xs text-gray-500">{{ $issue['detail'] }}</p>
+            </div>
+        </div>
+    @empty
+        <div class="px-5 py-3 text-sm text-emerald-600 flex items-center gap-2">
+            ✓ Semua bersih — tidak ada isu yang perlu ditangani sebelum audit.
+        </div>
+    @endforelse
+</div>
+
 <div class="bg-white rounded-2xl shadow-card border border-gray-100 overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-sm">

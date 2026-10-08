@@ -50,7 +50,7 @@ class LoyaltyController extends Controller
     public function redeem(Request $request, int $id, LoyaltyService $svc)
     {
         $request->validate([
-            'points'      => 'required|integer|min:1',
+            'points' => 'required|integer|min:1',
             'description' => 'nullable|string|max:255',
         ]);
 

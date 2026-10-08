@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Portal;
 
 use App\Http\Controllers\Controller;
+use App\Models\Property;
 use App\Models\Reservation;
-use Illuminate\Http\Request;
 
 class GuestAppController extends Controller
 {
@@ -25,7 +25,7 @@ class GuestAppController extends Controller
     public function chat()
     {
         $guest = auth('customer')->user();
-        $property = \App\Models\Property::find($guest->property_id);
+        $property = Property::find($guest->property_id);
 
         return view('portal.guest.chat', compact('guest', 'property'));
     }

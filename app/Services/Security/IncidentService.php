@@ -5,15 +5,14 @@ namespace App\Services\Security;
 use App\Models\IncidentFollowup;
 use App\Models\IncidentReport;
 use App\Models\Property;
-use Illuminate\Support\Facades\DB;
 
 class IncidentService
 {
     public function generateReportNumber(Property $property): string
     {
-        $prefix = 'INC-' . date('Ymd');
+        $prefix = 'INC-'.date('Ymd');
         $last = IncidentReport::where('property_id', $property->id)
-            ->where('report_number', 'like', $prefix . '%')
+            ->where('report_number', 'like', $prefix.'%')
             ->orderBy('report_number', 'desc')
             ->first();
 
@@ -22,7 +21,8 @@ class IncidentService
         } else {
             $seq = 1;
         }
-        return $prefix . '-' . str_pad($seq, 4, '0', STR_PAD_LEFT);
+
+        return $prefix.'-'.str_pad($seq, 4, '0', STR_PAD_LEFT);
     }
 
     public function create(Property $property, array $data): IncidentReport
@@ -30,6 +30,7 @@ class IncidentService
         $data['property_id'] = $property->id;
         $data['report_number'] = $this->generateReportNumber($property);
         $data['status'] = 'open';
+
         return IncidentReport::create($data);
     }
 
@@ -41,6 +42,7 @@ class IncidentService
             'resolved_by_user_id' => auth()->id(),
             'resolved_at' => now(),
         ]);
+
         return $report->fresh();
     }
 
@@ -48,12 +50,14 @@ class IncidentService
     {
         $data['property_id'] = $property->id;
         $data['incident_report_id'] = $report->id;
+
         return IncidentFollowup::create($data);
     }
 
     public function completeFollowup(IncidentFollowup $followup): IncidentFollowup
     {
         $followup->update(['completed_at' => now()]);
+
         return $followup->fresh();
     }
 
@@ -92,6 +96,7 @@ class IncidentService
                     ->count(),
             ];
         }
+
         return $trend;
     }
 

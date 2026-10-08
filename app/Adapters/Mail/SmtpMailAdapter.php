@@ -28,8 +28,11 @@ class SmtpMailAdapter extends BaseAdapter implements MailAdapterInterface
             Mail::mailer('dynamic')->html($html, function ($m) use ($to, $subject, $options) {
                 $m->to($to);
                 $m->subject($subject);
-                if ($f = ($options['from'] ?? null)) $m->from($f);
+                if ($f = ($options['from'] ?? null)) {
+                    $m->from($f);
+                }
             });
+
             return ['ok' => true];
         } catch (\Throwable $e) {
             return ['ok' => false, 'error' => $e->getMessage()];

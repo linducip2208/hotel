@@ -9,6 +9,7 @@ use Illuminate\Console\Command;
 class SendBirthdayGreetings extends Command
 {
     protected $signature = 'hotel:send-birthday-greetings';
+
     protected $description = 'Kirim ucapan selamat ulang tahun kepada tamu yang berulang tahun hari ini';
 
     public function handle(): int
@@ -23,6 +24,7 @@ class SendBirthdayGreetings extends Command
 
         if ($guests->isEmpty()) {
             $this->info('Tidak ada tamu yang berulang tahun hari ini.');
+
             return self::SUCCESS;
         }
 
@@ -36,13 +38,13 @@ class SendBirthdayGreetings extends Command
                 'notifiable_id' => $guest->id,
                 'channel' => 'email',
                 'type' => 'birthday_greeting',
-                'subject' => 'Selamat Ulang Tahun, ' . $guest->full_name . '!',
+                'subject' => 'Selamat Ulang Tahun, '.$guest->full_name.'!',
                 'body' => $message,
                 'status' => 'queued',
                 'metadata' => [
                     'guest_name' => $guest->full_name,
                     'birthday' => $guest->date_of_birth->toDateString(),
-                    'trigger' => 'scheduler:' . now()->toDateTimeString(),
+                    'trigger' => 'scheduler:'.now()->toDateTimeString(),
                 ],
             ]);
 

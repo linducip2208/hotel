@@ -8,6 +8,7 @@ use App\Models\Guest;
 use App\Models\PosLaundryOrder;
 use App\Models\Reservation;
 use App\Models\Room;
+use App\Services\Fo\FolioService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -101,7 +102,7 @@ class LaundryController extends Controller
             ];
         }
 
-        $orderNumber = 'LDRY-' . now()->format('YmdHis') . '-' . Str::upper(Str::random(3));
+        $orderNumber = 'LDRY-'.now()->format('YmdHis').'-'.Str::upper(Str::random(3));
 
         $order = PosLaundryOrder::create([
             'property_id' => app('current_property')->id,
@@ -132,8 +133,10 @@ class LaundryController extends Controller
     {
         $order = PosLaundryOrder::where('property_id', app('current_property')->id)->findOrFail($id);
 
+        // 'delivered' must go through markDelivered() which posts the folio
+        // charge — setting it here would deliver the order without charging.
         $data = $request->validate([
-            'status' => 'required|in:received,washing,drying,folding,ready,delivered',
+            'status' => 'required|in:received,washing,drying,folding,ready',
         ]);
 
         $order->update(['status' => $data['status']]);
@@ -147,15 +150,16 @@ class LaundryController extends Controller
             ->where('payment_status', 'unpaid')
             ->findOrFail($id);
 
-        // Find guest's folio to charge
+        // Find guest's OPEN folio to charge (closed folio → leave unpaid).
         if ($order->guest_id && $order->total_amount > 0) {
             $folio = Folio::where('property_id', app('current_property')->id)
+                ->where('status', 'open')
                 ->whereHas('reservation', fn ($q) => $q->where('primary_guest_id', $order->guest_id)->where('status', 'checked_in'))
                 ->first();
 
             if ($folio) {
-                app(\App\Services\Fo\FolioService::class)->postCharge($folio, [
-                    'description' => 'Laundry ' . $order->order_number,
+                app(FolioService::class)->postCharge($folio, [
+                    'description' => 'Laundry '.$order->order_number,
                     'category' => 'laundry',
                     'amount' => $order->total_amount,
                     'tax_code' => 'PPN_OUT',

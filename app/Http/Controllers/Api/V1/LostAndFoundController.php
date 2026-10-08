@@ -26,19 +26,19 @@ class LostAndFoundController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'description'    => 'required|string|max:500',
+            'description' => 'required|string|max:500',
             'found_location' => 'nullable|string|max:200',
-            'found_date'     => 'required|date',
-            'room_id'        => 'nullable|exists:rooms,id',
-            'photo_path'     => 'nullable|string',
-            'notes'          => 'nullable|string|max:1000',
+            'found_date' => 'required|date',
+            'room_id' => 'nullable|exists:rooms,id',
+            'photo_path' => 'nullable|string',
+            'notes' => 'nullable|string|max:1000',
         ]);
 
         $item = LostAndFound::create([
             ...$data,
-            'property_id'      => $request->user()->property->id,
+            'property_id' => $request->user()->property->id,
             'found_by_user_id' => $request->user()->id,
-            'status'           => 'found',
+            'status' => 'found',
         ]);
 
         return response()->json($item, 201);
@@ -58,12 +58,12 @@ class LostAndFoundController extends Controller
         $item = LostAndFound::where('property_id', $request->user()->property->id)->findOrFail($id);
 
         $data = $request->validate([
-            'description'    => 'sometimes|string|max:500',
+            'description' => 'sometimes|string|max:500',
             'found_location' => 'nullable|string|max:200',
-            'found_date'     => 'sometimes|date',
-            'room_id'        => 'nullable|exists:rooms,id',
-            'photo_path'     => 'nullable|string',
-            'notes'          => 'nullable|string|max:1000',
+            'found_date' => 'sometimes|date',
+            'room_id' => 'nullable|exists:rooms,id',
+            'photo_path' => 'nullable|string',
+            'notes' => 'nullable|string|max:1000',
         ]);
 
         $item->update($data);
@@ -77,14 +77,14 @@ class LostAndFoundController extends Controller
 
         $data = $request->validate([
             'claimed_by_guest_id' => 'nullable|exists:guests,id',
-            'notes'               => 'nullable|string|max:500',
+            'notes' => 'nullable|string|max:500',
         ]);
 
         $item->update([
-            'status'              => 'claimed',
+            'status' => 'claimed',
             'claimed_by_guest_id' => $data['claimed_by_guest_id'] ?? null,
-            'claimed_date'        => now(),
-            'notes'               => $data['notes'] ?? $item->notes,
+            'claimed_date' => now(),
+            'notes' => $data['notes'] ?? $item->notes,
         ]);
 
         return response()->json($item);

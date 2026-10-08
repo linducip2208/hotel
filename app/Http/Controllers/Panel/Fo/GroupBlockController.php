@@ -9,6 +9,7 @@ use App\Models\Guest;
 use App\Models\RatePlan;
 use App\Models\Room;
 use App\Models\RoomType;
+use App\Services\Fo\GroupBlockService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -88,12 +89,10 @@ class GroupBlockController extends Controller
         $availableRooms = Room::where('property_id', $property->id)
             ->where('is_active', true)
             ->where('hk_status', 'clean')
-            ->whereDoesntHave('reservationRooms', fn ($q) =>
-                $q->whereHas('reservation', fn ($q) =>
-                    $q->whereIn('status', ['confirmed', 'checked_in'])
-                        ->where('check_in', '<', $block->check_out)
-                        ->where('check_out', '>', $block->check_in)
-                )
+            ->whereDoesntHave('reservationRooms', fn ($q) => $q->whereHas('reservation', fn ($q) => $q->whereIn('status', ['confirmed', 'checked_in'])
+                ->where('check_in', '<', $block->check_out)
+                ->where('check_out', '>', $block->check_in)
+            )
             )
             ->with('roomType')
             ->orderBy('floor')->orderBy('number')
@@ -183,7 +182,7 @@ class GroupBlockController extends Controller
             ->with('rooms')
             ->findOrFail($id);
 
-        app(\App\Services\Fo\GroupBlockService::class)->releaseUnpickedRooms($block);
+        app(GroupBlockService::class)->releaseUnpickedRooms($block);
 
         return back()->with('success', 'Kamar yang belum di-pickup berhasil direlease ke inventory.');
     }

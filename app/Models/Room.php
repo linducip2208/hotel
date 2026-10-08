@@ -18,16 +18,63 @@ class Room extends Model
         'features' => 'array',
     ];
 
-    public function property()     { return $this->belongsTo(Property::class); }
-    public function roomType()     { return $this->belongsTo(RoomType::class); }
-    public function hkTasks()      { return $this->hasMany(HkTask::class); }
-    public function lostAndFound() { return $this->hasMany(LostAndFound::class); }
-    public function assets()       { return $this->hasMany(Asset::class); }
-    public function workOrders()   { return $this->hasMany(WorkOrder::class); }
-    public function doorLockEvents(){ return $this->hasMany(DoorLockEvent::class); }
-    public function reservationRooms() { return $this->hasMany(ReservationRoom::class); }
-    public function outOfOrderPeriods() { return $this->hasMany(OutOfOrderPeriod::class); }
-    public function guestRequests()    { return $this->hasMany(GuestRequest::class); }
-    public function ownerStatements()  { return $this->hasMany(OwnerStatement::class); }
-    public function iotDevices()       { return $this->hasMany(IotDevice::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function roomType()
+    {
+        return $this->belongsTo(RoomType::class);
+    }
+
+    public function hkTasks()
+    {
+        return $this->hasMany(HkTask::class);
+    }
+
+    public function lostAndFound()
+    {
+        return $this->hasMany(LostAndFound::class);
+    }
+
+    public function assets()
+    {
+        return $this->hasMany(Asset::class);
+    }
+
+    public function workOrders()
+    {
+        return $this->hasMany(WorkOrder::class);
+    }
+
+    public function doorLockEvents()
+    {
+        return $this->hasMany(DoorLockEvent::class);
+    }
+
+    public function reservationRooms()
+    {
+        return $this->hasMany(ReservationRoom::class);
+    }
+
+    public function outOfOrderPeriods()
+    {
+        return $this->hasMany(OutOfOrderPeriod::class);
+    }
+
+    public function guestRequests()
+    {
+        return $this->hasMany(GuestRequest::class);
+    }
+
+    public function ownerStatements()
+    {
+        return $this->hasMany(OwnerStatement::class);
+    }
+
+    public function iotDevices()
+    {
+        return $this->hasMany(IotDevice::class);
+    }
 }

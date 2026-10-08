@@ -1,19 +1,17 @@
 @extends('admin.layout')
-
-@section('title', 'Billing Coupons')
+@section('title', 'Coupons')
 
 @section('content')
-<div class="flex items-center justify-between mb-6">
-    <h1 class="text-2xl font-bold">Coupons</h1>
-    <a href="{{ route('admin.billing.index') }}" class="text-primary-600">Back to Billing</a>
+<div class="mb-6">
+    <h1 class="text-2xl font-bold text-gray-900">Coupons</h1>
 </div>
-<div class="bg-white rounded shadow border border-gray-100 p-6">
-    <form method="POST" action="{{ route('admin.billing.coupons.store') }}" class="space-y-3 max-w-md mb-6">
-        @csrf
-        <div><label class="block text-sm font-medium">Code</label><input type="text" name="code" required class="w-full border rounded p-2"></div>
-        <div><label class="block text-sm font-medium">Discount (%)</label><input type="number" name="discount_pct" step="0.01" class="w-full border rounded p-2"></div>
-        <button type="submit" class="bg-primary-600 text-white px-6 py-2 rounded">Create Coupon</button>
-    </form>
-    <p class="text-gray-500 text-center py-6">No coupons defined yet.</p>
+
+@if ($errors->any())
+<div class="mb-4 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded text-sm">{{ $errors->first() }}</div>
+@endif
+
+<div class="bg-white rounded-xl border border-gray-200 py-16 text-center max-w-lg mx-auto">
+    <p class="text-sm font-medium text-gray-600">Sistem kupon diskon belum tersedia pada instalasi ini.</p>
+    <p class="text-xs text-gray-400 mt-2">Diskon tingkat tenant saat ini dikelola manual melalui penyesuaian invoice.</p>
 </div>
 @endsection

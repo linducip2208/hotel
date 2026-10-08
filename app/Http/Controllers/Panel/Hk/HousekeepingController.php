@@ -13,16 +13,21 @@ class HousekeepingController extends Controller
     {
         $rooms = Room::where('property_id', app('current_property')->id)
             ->orderBy('floor')->orderBy('number')->get();
+
         return view('panel.hk.board', compact('rooms'));
     }
 
-    public function rooms() { return $this->board(); }
+    public function rooms()
+    {
+        return $this->board();
+    }
 
     public function updateStatus(Request $request, int $id)
     {
         $room = Room::where('property_id', app('current_property')->id)->findOrFail($id);
         $data = $request->validate(['status' => 'required|in:clean,dirty,inspected,out_of_order']);
         $room->update(['hk_status' => $data['status']]);
+
         return back();
     }
 
@@ -31,6 +36,7 @@ class HousekeepingController extends Controller
         $tasks = HkTask::where('property_id', app('current_property')->id)
             ->whereDate('scheduled_date', $request->query('date', now()->toDateString()))
             ->with('room', 'assignee')->paginate(50);
+
         return view('panel.hk.tasks', compact('tasks'));
     }
 
@@ -44,6 +50,7 @@ class HousekeepingController extends Controller
             'scheduled_date' => 'required|date',
         ]);
         HkTask::create($data + ['property_id' => app('current_property')->id, 'status' => 'pending']);
+
         return back();
     }
 
@@ -52,7 +59,10 @@ class HousekeepingController extends Controller
         $task = HkTask::where('property_id', app('current_property')->id)->findOrFail($id);
         $data = $request->validate(['status' => 'required|in:pending,in_progress,done,skipped']);
         $task->update($data);
-        if ($data['status'] === 'done') $task->update(['completed_at' => now()]);
+        if ($data['status'] === 'done') {
+            $task->update(['completed_at' => now()]);
+        }
+
         return back();
     }
 }

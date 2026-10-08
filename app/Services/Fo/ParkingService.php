@@ -4,12 +4,9 @@ namespace App\Services\Fo;
 
 use App\Models\Folio;
 use App\Models\FolioCharge;
-use App\Models\Guest;
 use App\Models\ParkingRecord;
 use App\Models\ParkingSlot;
 use App\Models\Property;
-use App\Models\Reservation;
-use Carbon\Carbon;
 
 class ParkingService
 {
@@ -100,6 +97,7 @@ class ParkingService
         $now = now();
         $duration = $record->check_in->diffInHours($now);
         $hours = max(1, ceil($duration));
+
         return $hours * $record->daily_rate;
     }
 
@@ -122,7 +120,7 @@ class ParkingService
             'property_id' => $folio->property_id,
             'amount' => $amount,
             'tax_amount' => 0,
-            'description' => 'Parkir - ' . $record->vehicle_plate . ' (' . $record->parkingSlot->slot_number . ')',
+            'description' => 'Parkir - '.$record->vehicle_plate.' ('.$record->parkingSlot->slot_number.')',
             'source_type' => ParkingRecord::class,
             'source_id' => $record->id,
         ]);

@@ -11,12 +11,12 @@ final class ChannelResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id'           => $this->id,
-            'name'         => $this->name,
-            'api_format'   => $this->api_format,
-            'is_active'    => $this->is_active,
+            'id' => $this->id,
+            'name' => $this->name,
+            'api_format' => $this->api_format,
+            'is_active' => $this->is_active,
             'last_sync_at' => $this->last_sync_at?->toIso8601String(),
-            'created_at'   => $this->created_at?->toIso8601String(),
+            'created_at' => $this->created_at?->toIso8601String(),
         ];
     }
 }

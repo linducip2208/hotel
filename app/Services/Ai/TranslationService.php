@@ -22,6 +22,7 @@ class TranslationService
 
         try {
             $r = $adapter->chat($messages, options: ['max_tokens' => 600, 'temperature' => 0.3]);
+
             return ['ok' => $r['ok'] ?? false, 'translation' => $r['content'] ?? null];
         } catch (\Throwable $e) {
             return ['ok' => false, 'error' => $e->getMessage()];

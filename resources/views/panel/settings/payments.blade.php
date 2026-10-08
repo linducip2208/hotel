@@ -208,11 +208,17 @@
                             </span>
                         </td>
                         <td class="px-4 py-3.5">
+                            <div class="flex items-center gap-1 justify-end" x-data="providerTest({{ $provider->id }}, @json($provider->test_status ?? 'untested'), @json($provider->last_tested_at?->format('d M Y H:i')))">
+                                <button type="button" @click="run()" :disabled="loading"
+                                        class="text-xs font-medium text-primary-600 hover:text-primary-800 bg-primary-50 hover:bg-primary-100 disabled:opacity-50 px-2.5 py-1 rounded-lg transition-colors">
+                                    <span x-show="!loading">Tes</span>
+                                    <span x-show="loading" x-cloak>Menguji…</span>
+                                </button>
+                                <span x-show="testedAt" x-cloak class="text-[10px] text-gray-400" x-text="testedAt"></span>
+                            </div>
+                        </td>
+                        <td class="px-4 py-3.5">
                             <div class="flex items-center gap-1 justify-end">
-                                <form method="POST" action="{{ route('panel.settings.integrations.test', $provider->id) }}" class="inline">
-                                    @csrf
-                                    <button type="submit" class="text-xs font-medium text-primary-600 hover:text-primary-800 bg-primary-50 hover:bg-primary-100 px-2.5 py-1 rounded-lg transition-colors">Tes</button>
-                                </form>
                                 <form method="POST" action="{{ route('panel.settings.payments.toggle', $provider->id) }}" class="inline">
                                     @csrf @method('PATCH')
                                     <button class="text-xs font-medium {{ $provider->is_active ? 'text-amber-600 hover:bg-amber-50' : 'text-emerald-600 hover:bg-emerald-50' }} px-2.5 py-1 rounded-lg transition-colors">
@@ -246,6 +252,39 @@ function paymentSettings() {
         onPresetChange() {
             this.currentPreset = this.presets.find(p => p.name === this.selectedPreset) || null;
         }
+    };
+}
+
+function providerTest(id, initialStatus, initialTestedAt) {
+    return {
+        loading: false,
+        status: initialStatus,
+        testedAt: initialTestedAt,
+        message: '',
+        async run() {
+            this.loading = true;
+            try {
+                const res = await fetch('{{ route('panel.settings.integrations.test', '__ID__') }}'.replace('__ID__', String(id)), {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' },
+                });
+                const data = await res.json();
+                this.status = res.ok && data.ok ? 'ok' : 'failed';
+                this.message = data.message || (res.ok ? '' : 'Koneksi gagal');
+                this.testedAt = new Date().toLocaleString('id-ID', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+                this.$el.closest('tr').querySelector('.test-status-badge');
+            } catch (e) {
+                this.status = 'failed';
+                this.message = 'Gagal terhubung ke server.';
+            } finally {
+                this.loading = false;
+                if (this.status === 'ok') {
+                    window.dispatchEvent(new CustomEvent('toast', { detail: { type: 'success', message: 'Tes koneksi berhasil' } }));
+                } else {
+                    window.dispatchEvent(new CustomEvent('toast', { detail: { type: 'error', message: 'Tes gagal: ' + this.message } }));
+                }
+            }
+        },
     };
 }
 </script>

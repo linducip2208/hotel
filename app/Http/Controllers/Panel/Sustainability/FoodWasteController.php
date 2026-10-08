@@ -82,6 +82,7 @@ class FoodWasteController extends Controller
     {
         $target = FoodWasteTarget::where('property_id', app('current_property')->id)->findOrFail($id);
         $target->update(['status' => 'completed']);
+
         return back()->with('success', 'Target ditandai selesai.');
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Services\Seo;
 
-use App\Models\Landmark;
+use App\Models\BlogPost;
 use App\Models\Property;
 use App\Models\RoomType;
 use App\Support\SeoData;
@@ -26,7 +26,7 @@ class SitemapBuilder
                 $groups[] = $group;
             } else {
                 for ($i = 1; $i <= $chunks; $i++) {
-                    $groups[] = $group . '-' . $i;
+                    $groups[] = $group.'-'.$i;
                 }
             }
         }
@@ -44,101 +44,101 @@ class SitemapBuilder
         $districtCount = array_sum(array_map('count', SeoData::DISTRICTS));
 
         return [
-            'pages'                      => 8,
-            'rooms'                      => 50,
-            'blogs'                      => 30,
-            'pseo-best'                  => 48,
-            'pseo-compare'               => 30,
-            'pseo-cities'                => $cityCount * 5,
-            'pseo-cities-occasion'       => $cityCount * count(SeoData::OCCASIONS),
-            'pseo-cities-budget'         => $cityCount * count(SeoData::PRICE_TIERS),
-            'pseo-cities-neighborhood'   => array_sum(array_map('count', SeoData::NEIGHBORHOODS)),
-            'pseo-landmark'              => count(SeoData::LANDMARKS) * 2,
-            'pseo-villa-feature'         => $cityCount * count(SeoData::VILLA_FEATURES),
-            'pseo-star-city'             => $cityCount * count(SeoData::STARS),
-            'pseo-price-city'            => $cityCount * 2,
-            'pseo-nearby'                => $cityCount * 2,
-            'pseo-amenity'               => $cityCount * count(SeoData::AMENITIES),
-            'pseo-short-landmark'        => count(SeoData::SHORT_LANDMARKS),
-            'pseo-alt-accommodation'     => $cityCount * 4,
-            'pseo-content'               => $cityCount * 2,
-            'pseo-weather'               => $cityCount * 12,
-            'pseo-events'                => $cityCount * 3,
-            'pseo-recommendation'        => $cityCount * count(SeoData::SEARCH_OCCASIONS),
-            'pseo-area'                  => array_sum(array_map('count', SeoData::NEIGHBORHOODS)),
-            'pseo-popular-new'           => $cityCount * 2,
-            'pseo-granular-price'        => $cityCount * count(SeoData::GRANULAR_PRICES),
-            'pseo-price-range'           => count(SeoData::priceRanges()),
-            'pseo-room-type-city'        => $cityCount * count(SeoData::ROOM_TYPES) * 2,
-            'pseo-guest-type-city'       => $cityCount * count(SeoData::GUEST_TYPES),
-            'pseo-season-city'           => $cityCount * 2,
-            'pseo-holiday-city'          => $cityCount * count(SeoData::HOLIDAYS),
-            'pseo-distance-city'         => $cityCount * count(SeoData::DISTANCES),
-            'pseo-distance-landmark'     => 80,
-            'pseo-question'              => $cityCount * 5,
-            'pseo-compare-cities'        => count(SeoData::compareCities()),
+            'pages' => 8,
+            'rooms' => 50,
+            'blogs' => 30,
+            'pseo-best' => 48,
+            'pseo-compare' => 30,
+            'pseo-cities' => $cityCount * 5,
+            'pseo-cities-occasion' => $cityCount * count(SeoData::OCCASIONS),
+            'pseo-cities-budget' => $cityCount * count(SeoData::PRICE_TIERS),
+            'pseo-cities-neighborhood' => array_sum(array_map('count', SeoData::NEIGHBORHOODS)),
+            'pseo-landmark' => count(SeoData::LANDMARKS) * 2,
+            'pseo-villa-feature' => $cityCount * count(SeoData::VILLA_FEATURES),
+            'pseo-star-city' => $cityCount * count(SeoData::STARS),
+            'pseo-price-city' => $cityCount * 2,
+            'pseo-nearby' => $cityCount * 2,
+            'pseo-amenity' => $cityCount * count(SeoData::AMENITIES),
+            'pseo-short-landmark' => count(SeoData::SHORT_LANDMARKS),
+            'pseo-alt-accommodation' => $cityCount * 4,
+            'pseo-content' => $cityCount * 2,
+            'pseo-weather' => $cityCount * 12,
+            'pseo-events' => $cityCount * 3,
+            'pseo-recommendation' => $cityCount * count(SeoData::SEARCH_OCCASIONS),
+            'pseo-area' => array_sum(array_map('count', SeoData::NEIGHBORHOODS)),
+            'pseo-popular-new' => $cityCount * 2,
+            'pseo-granular-price' => $cityCount * count(SeoData::GRANULAR_PRICES),
+            'pseo-price-range' => count(SeoData::priceRanges()),
+            'pseo-room-type-city' => $cityCount * count(SeoData::ROOM_TYPES) * 2,
+            'pseo-guest-type-city' => $cityCount * count(SeoData::GUEST_TYPES),
+            'pseo-season-city' => $cityCount * 2,
+            'pseo-holiday-city' => $cityCount * count(SeoData::HOLIDAYS),
+            'pseo-distance-city' => $cityCount * count(SeoData::DISTANCES),
+            'pseo-distance-landmark' => 80,
+            'pseo-question' => $cityCount * 5,
+            'pseo-compare-cities' => count(SeoData::compareCities()),
             'pseo-compare-neighborhoods' => count(SeoData::allCompareNeighborhoodUrls()),
             // ── NEW MASSIVE GROUPS ──
-            'pseo-sc-base'               => count(SeoData::SOURCE_CODE_KEYWORDS) + count(SeoData::SOURCE_CODE_KEYWORDS) + count(SeoData::SOURCE_CODE_KEYWORDS), // allSourceCodeUrls + allSourceCodeDownloadUrls + allSourceCodeBestUrls
-            'pseo-sc-city'               => count(SeoData::allSourceCodeCityUrls()),
-            'pseo-sc-price'              => count(SeoData::allSourceCodePriceUrls()),
-            'pseo-sc-city-price'         => count(SeoData::allSourceCodeCityPriceUrls()),
-            'pseo-sc-city-murah'         => count(SeoData::allSourceCodeCityMurahUrls()),
-            'pseo-sc-jasa'               => count(SeoData::allSourceCodeJasaUrls()),
-            'pseo-sc-paket'              => count(SeoData::allSourceCodePaketUrls()),
-            'pseo-sc-vs'                 => count(SeoData::allSourceCodeVsUrls()),
-            'pseo-sc-district'           => count(SeoData::allSourceCodeDistrictUrls()),
-            'pseo-sc-massive'            => count(SeoData::allSourceCodeMassiveUrls()),
-            'pseo-feature-city'          => $cityCount * count(SeoData::ROOM_FEATURES),
-            'pseo-double-feature-city'   => $cityCount * count(SeoData::FEATURE_COMBOS),
+            'pseo-sc-base' => count(SeoData::SOURCE_CODE_KEYWORDS) + count(SeoData::SOURCE_CODE_KEYWORDS) + count(SeoData::SOURCE_CODE_KEYWORDS), // allSourceCodeUrls + allSourceCodeDownloadUrls + allSourceCodeBestUrls
+            'pseo-sc-city' => count(SeoData::allSourceCodeCityUrls()),
+            'pseo-sc-price' => count(SeoData::allSourceCodePriceUrls()),
+            'pseo-sc-city-price' => count(SeoData::allSourceCodeCityPriceUrls()),
+            'pseo-sc-city-murah' => count(SeoData::allSourceCodeCityMurahUrls()),
+            'pseo-sc-jasa' => count(SeoData::allSourceCodeJasaUrls()),
+            'pseo-sc-paket' => count(SeoData::allSourceCodePaketUrls()),
+            'pseo-sc-vs' => count(SeoData::allSourceCodeVsUrls()),
+            'pseo-sc-district' => count(SeoData::allSourceCodeDistrictUrls()),
+            'pseo-sc-massive' => count(SeoData::allSourceCodeMassiveUrls()),
+            'pseo-feature-city' => $cityCount * count(SeoData::ROOM_FEATURES),
+            'pseo-double-feature-city' => $cityCount * count(SeoData::FEATURE_COMBOS),
             'pseo-occasion-feature-city' => count(SeoData::allOccasionFeatureCityUrls()),
-            'pseo-double-city'           => count(SeoData::allDoubleCityUrls()),
-            'pseo-compare-expanded'      => count(SeoData::allCompareCityExpandedUrls()),
-            'pseo-month-year-city'       => count(SeoData::allMonthYearCityUrls()),
-            'pseo-district-city'         => $districtCount,
-            'pseo-amenity-city-price'    => count(SeoData::allAmenityCityPriceUrls()),
-            'pseo-star-price-city'       => count(SeoData::allStarPriceCityUrls()),
-            'pseo-guest-feature-city'    => count(SeoData::allGuestFeatureCityUrls()),
-            'pseo-room-type-feature-city'=> count(SeoData::allRoomTypeFeatureCityUrls()),
-            'pseo-price-city-expanded'   => count(SeoData::allPriceCityExpandedUrls()),
-            'pseo-content-topic-city'    => count(SeoData::allContentTopicCityUrls()),
-            'pseo-mega-filler'           => count(SeoData::allMegaFillerUrls()),
-            'pseo-second-tier-filler'    => count(SeoData::allSecondTierFillerUrls()),
-            'pseo-massive-volume'        => count(SeoData::allMassiveVolumeUrls()),
-            'pseo-super-mega-1'          => count(SeoData::allSuperMegaUrls()),
-            'pseo-super-mega-2'          => count(SeoData::allSuperMegaUrls2()),
-            'pseo-price-combo'           => count(SeoData::allPriceComboUrls()),
-            'pseo-star-cross'            => count(SeoData::allStarCrossUrls()),
-            'pseo-status-label'          => count(SeoData::allStatusLabelUrls()),
-            'pseo-transport-routes'      => count(SeoData::allTransportRouteUrls()),
-            'pseo-landmark-star-city'    => count(SeoData::allLandmarkStarCityUrls()),
-            'pseo-occasion-landmark-city'=> count(SeoData::allOccasionLandmarkCityUrls()),
-            'pseo-sc-feature'            => count(SeoData::allSourceCodeFeatureUrls()),
-            'pseo-district-star'         => count(SeoData::allDistrictStarUrls()),
-            'pseo-city-pairs-massive'    => count(SeoData::allCityPairsMassiveUrls()),
-            'pseo-distance-radius'       => count(SeoData::allDistanceRadiusUrls()),
-            'pseo-occasion-all-city'     => count(SeoData::allOccasionAllCityUrls()),
-            'pseo-year-extension'        => count(SeoData::allYearExtensionUrls()),
-            'pseo-tag-expansion'         => count(SeoData::allTagExpansionUrls()),
-            'pseo-month-variation'       => count(SeoData::allMonthVariationUrls()),
-            'pseo-sc-full-cross'         => count(SeoData::allSourceCodeFullCrossUrls()),
-            'pseo-hotel-type-district'   => count(SeoData::allHotelTypeDistrictUrls()),
-            'pseo-occasion-ht-city'      => count(SeoData::allOccasionHotelTypeCityUrls()),
-            'pseo-full-kw-city'          => count(SeoData::allFullKeywordCityUrls()),
-            'pseo-room-type-city-price'  => count(SeoData::allRoomTypeCityPriceUrls()),
-            'pseo-bulk-compare'          => count(SeoData::allBulkCompareUrls()),
-            'pseo-quality-feature'       => count(SeoData::allQualityFeatureUrls()),
-            'pseo-triple-year'           => count(SeoData::allTripleYearUrls()),
-            'pseo-feature-massive'       => count(SeoData::allFeatureMassiveUrls()),
-            'pseo-sc-kw-city-price-all'  => count(SeoData::allScKwCityPriceAll()),
-            'pseo-rt-feature-all-city'   => count(SeoData::allRtFeatureAllCity()),
-            'pseo-occasion-city-price'   => count(SeoData::allOccasionCityPriceAll()),
-            'pseo-guest-feature-all'     => count(SeoData::allGuestFeatureAllCity()),
-            'pseo-star-price-all-city'   => count(SeoData::allStarPriceAllCity()),
-            'pseo-year-full-cross'       => count(SeoData::allYearFullCross()),
-            'pseo-sc-kw-rt-city'         => count(SeoData::allScKwRoomTypeCity()),
-            'pseo-ht-occ-city-all'       => count(SeoData::allHtOccCityAll()),
-            'pseo-rt-occ-city-all'       => count(SeoData::allRtOccCityAll()),
+            'pseo-double-city' => count(SeoData::allDoubleCityUrls()),
+            'pseo-compare-expanded' => count(SeoData::allCompareCityExpandedUrls()),
+            'pseo-month-year-city' => count(SeoData::allMonthYearCityUrls()),
+            'pseo-district-city' => $districtCount,
+            'pseo-amenity-city-price' => count(SeoData::allAmenityCityPriceUrls()),
+            'pseo-star-price-city' => count(SeoData::allStarPriceCityUrls()),
+            'pseo-guest-feature-city' => count(SeoData::allGuestFeatureCityUrls()),
+            'pseo-room-type-feature-city' => count(SeoData::allRoomTypeFeatureCityUrls()),
+            'pseo-price-city-expanded' => count(SeoData::allPriceCityExpandedUrls()),
+            'pseo-content-topic-city' => count(SeoData::allContentTopicCityUrls()),
+            'pseo-mega-filler' => count(SeoData::allMegaFillerUrls()),
+            'pseo-second-tier-filler' => count(SeoData::allSecondTierFillerUrls()),
+            'pseo-massive-volume' => count(SeoData::allMassiveVolumeUrls()),
+            'pseo-super-mega-1' => count(SeoData::allSuperMegaUrls()),
+            'pseo-super-mega-2' => count(SeoData::allSuperMegaUrls2()),
+            'pseo-price-combo' => count(SeoData::allPriceComboUrls()),
+            'pseo-star-cross' => count(SeoData::allStarCrossUrls()),
+            'pseo-status-label' => count(SeoData::allStatusLabelUrls()),
+            'pseo-transport-routes' => count(SeoData::allTransportRouteUrls()),
+            'pseo-landmark-star-city' => count(SeoData::allLandmarkStarCityUrls()),
+            'pseo-occasion-landmark-city' => count(SeoData::allOccasionLandmarkCityUrls()),
+            'pseo-sc-feature' => count(SeoData::allSourceCodeFeatureUrls()),
+            'pseo-district-star' => count(SeoData::allDistrictStarUrls()),
+            'pseo-city-pairs-massive' => count(SeoData::allCityPairsMassiveUrls()),
+            'pseo-distance-radius' => count(SeoData::allDistanceRadiusUrls()),
+            'pseo-occasion-all-city' => count(SeoData::allOccasionAllCityUrls()),
+            'pseo-year-extension' => count(SeoData::allYearExtensionUrls()),
+            'pseo-tag-expansion' => count(SeoData::allTagExpansionUrls()),
+            'pseo-month-variation' => count(SeoData::allMonthVariationUrls()),
+            'pseo-sc-full-cross' => count(SeoData::allSourceCodeFullCrossUrls()),
+            'pseo-hotel-type-district' => count(SeoData::allHotelTypeDistrictUrls()),
+            'pseo-occasion-ht-city' => count(SeoData::allOccasionHotelTypeCityUrls()),
+            'pseo-full-kw-city' => count(SeoData::allFullKeywordCityUrls()),
+            'pseo-room-type-city-price' => count(SeoData::allRoomTypeCityPriceUrls()),
+            'pseo-bulk-compare' => count(SeoData::allBulkCompareUrls()),
+            'pseo-quality-feature' => count(SeoData::allQualityFeatureUrls()),
+            'pseo-triple-year' => count(SeoData::allTripleYearUrls()),
+            'pseo-feature-massive' => count(SeoData::allFeatureMassiveUrls()),
+            'pseo-sc-kw-city-price-all' => count(SeoData::allScKwCityPriceAll()),
+            'pseo-rt-feature-all-city' => count(SeoData::allRtFeatureAllCity()),
+            'pseo-occasion-city-price' => count(SeoData::allOccasionCityPriceAll()),
+            'pseo-guest-feature-all' => count(SeoData::allGuestFeatureAllCity()),
+            'pseo-star-price-all-city' => count(SeoData::allStarPriceAllCity()),
+            'pseo-year-full-cross' => count(SeoData::allYearFullCross()),
+            'pseo-sc-kw-rt-city' => count(SeoData::allScKwRoomTypeCity()),
+            'pseo-ht-occ-city-all' => count(SeoData::allHtOccCityAll()),
+            'pseo-rt-occ-city-all' => count(SeoData::allRtOccCityAll()),
         ];
     }
 
@@ -402,6 +402,7 @@ class SitemapBuilder
         foreach ($this->patternGroups() as $group => $estimate) {
             $sum += $estimate;
         }
+
         return $sum;
     }
 
@@ -410,7 +411,7 @@ class SitemapBuilder
     private function mapUrls(string $base, array $paths, float $priority = 0.6): array
     {
         return array_map(fn ($p) => [
-            'loc' => $base . $p,
+            'loc' => $base.$p,
             'priority' => $priority,
         ], $paths);
     }
@@ -420,9 +421,10 @@ class SitemapBuilder
         $urls = [];
         foreach (array_keys(SeoData::CITIES) as $c) {
             foreach ($patternFns as $fn) {
-                $urls[] = ['loc' => $base . $fn($c), 'priority' => 0.7];
+                $urls[] = ['loc' => $base.$fn($c), 'priority' => 0.7];
             }
         }
+
         return $urls;
     }
 
@@ -432,9 +434,10 @@ class SitemapBuilder
         foreach (array_keys(SeoData::CITIES) as $c) {
             foreach ($values as $v) {
                 $url = strtr($pattern, ['{c}' => $c, '{'.$valKey.'}' => $v]);
-                $urls[] = ['loc' => $base . $url, 'priority' => 0.6];
+                $urls[] = ['loc' => $base.$url, 'priority' => 0.6];
             }
         }
+
         return $urls;
     }
 
@@ -446,12 +449,15 @@ class SitemapBuilder
                 $urls[] = ['loc' => "$base/hotels-in-{$city}-{$n}", 'priority' => 0.6];
             }
         }
+
         return $urls;
     }
 
     private function compareUrls(string $base, ?int $propertyId): array
     {
-        if (! $propertyId) return [];
+        if (! $propertyId) {
+            return [];
+        }
         $rts = RoomType::where('property_id', $propertyId)
             ->where('is_active', true)
             ->get();
@@ -463,20 +469,22 @@ class SitemapBuilder
                 }
             }
         }
+
         return $urls;
     }
 
     private function blogUrls(string $base): array
     {
         $urls = [];
-        if (class_exists(\App\Models\BlogPost::class)) {
-            $posts = \App\Models\BlogPost::published()->select('slug', 'updated_at')->get();
+        if (class_exists(BlogPost::class)) {
+            $posts = BlogPost::published()->select('slug', 'updated_at')->get();
             foreach ($posts as $post) {
-                $urls[] = ['loc' => $base . '/blog/' . $post->slug, 'priority' => '0.7'];
+                $urls[] = ['loc' => $base.'/blog/'.$post->slug, 'priority' => '0.7'];
             }
         }
-        $urls[] = ['loc' => $base . '/blog', 'priority' => '0.8'];
-        $urls[] = ['loc' => $base . '/blog/feed.xml', 'priority' => '0.5'];
+        $urls[] = ['loc' => $base.'/blog', 'priority' => '0.8'];
+        $urls[] = ['loc' => $base.'/blog/feed.xml', 'priority' => '0.5'];
+
         return $urls;
     }
 }

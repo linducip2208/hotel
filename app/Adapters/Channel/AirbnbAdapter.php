@@ -20,13 +20,14 @@ class AirbnbAdapter extends BaseChannelAdapter
     protected function http(): Client
     {
         $cred = $this->channel->getCredentials();
+
         return new Client([
             'base_uri' => $this->getBaseUrl(),
             'timeout' => 30,
             'connect_timeout' => 10,
             'http_errors' => false,
             'headers' => [
-                'Authorization' => 'Bearer ' . ($cred['access_token'] ?? ''),
+                'Authorization' => 'Bearer '.($cred['access_token'] ?? ''),
                 'X-Airbnb-API-Key' => $cred['api_key'] ?? '',
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
@@ -54,7 +55,7 @@ class AirbnbAdapter extends BaseChannelAdapter
                 ];
 
                 $response = $this->http()->put(
-                    'listings/' . urlencode((string) $listingId) . '/calendar',
+                    'listings/'.urlencode((string) $listingId).'/calendar',
                     ['json' => $payload]
                 );
 
@@ -99,7 +100,7 @@ class AirbnbAdapter extends BaseChannelAdapter
                 ];
 
                 $response = $this->http()->post(
-                    'listings/' . urlencode((string) $listingId) . '/pricing',
+                    'listings/'.urlencode((string) $listingId).'/pricing',
                     ['json' => $payload]
                 );
 
@@ -144,7 +145,7 @@ class AirbnbAdapter extends BaseChannelAdapter
                 ], fn ($v) => $v !== null);
 
                 $response = $this->http()->put(
-                    'listings/' . urlencode((string) $listingId) . '/booking_settings',
+                    'listings/'.urlencode((string) $listingId).'/booking_settings',
                     ['json' => $payload]
                 );
 
@@ -189,7 +190,7 @@ class AirbnbAdapter extends BaseChannelAdapter
 
             do {
                 $params['_offset'] = $offset;
-                $response = $this->http()->get('reservations?' . http_build_query($params));
+                $response = $this->http()->get('reservations?'.http_build_query($params));
                 $data = $this->parseJsonResponse($response, 'bookings');
 
                 $bookings = $data['data']['reservations'] ?? $data['data']['results'] ?? [];
@@ -210,7 +211,8 @@ class AirbnbAdapter extends BaseChannelAdapter
     public function fetchBooking(string $bookingId): array
     {
         return $this->executeSync('fetch_booking', function () use ($bookingId) {
-            $response = $this->http()->get('reservations/' . urlencode($bookingId));
+            $response = $this->http()->get('reservations/'.urlencode($bookingId));
+
             return $this->parseJsonResponse($response, 'booking');
         });
     }
@@ -223,7 +225,7 @@ class AirbnbAdapter extends BaseChannelAdapter
             ];
 
             $response = $this->http()->post(
-                'reservations/' . urlencode($bookingId) . '/cancel',
+                'reservations/'.urlencode($bookingId).'/cancel',
                 ['json' => $payload]
             );
 
@@ -256,7 +258,8 @@ class AirbnbAdapter extends BaseChannelAdapter
         }
         try {
             $r = $this->http()->get('host/me');
-            return ['ok' => $r->getStatusCode() < 400, 'message' => 'HTTP ' . $r->getStatusCode()];
+
+            return ['ok' => $r->getStatusCode() < 400, 'message' => 'HTTP '.$r->getStatusCode()];
         } catch (\Throwable $e) {
             return ['ok' => false, 'message' => $e->getMessage()];
         }
@@ -280,10 +283,11 @@ class AirbnbAdapter extends BaseChannelAdapter
 
         if ($statusCode === 429) {
             $retryAfter = $response->getHeader('Retry-After')[0] ?? 'unknown';
+
             return [
                 'success' => false,
                 'data' => [],
-                'error' => 'Rate limited. Retry after ' . $retryAfter,
+                'error' => 'Rate limited. Retry after '.$retryAfter,
                 'retry_after' => $retryAfter,
             ];
         }
@@ -298,6 +302,7 @@ class AirbnbAdapter extends BaseChannelAdapter
 
         if ($statusCode >= 400) {
             $errorMsg = $data['message'] ?? $data['error'] ?? $data['error_description'] ?? 'Unknown error';
+
             return [
                 'success' => false,
                 'data' => $data,
@@ -351,7 +356,6 @@ class AirbnbAdapter extends BaseChannelAdapter
                 'context' => $e->getContext(),
             ]);
             throw $e;
-
         } catch (ConnectException $e) {
             $log->update([
                 'status' => 'failed',
@@ -364,7 +368,6 @@ class AirbnbAdapter extends BaseChannelAdapter
                 'error' => $e->getMessage(),
             ]);
             throw ChannelSyncException::networkError($this->channel->id, $operation, $e->getMessage());
-
         } catch (\Throwable $e) {
             $log->update([
                 'status' => 'failed',

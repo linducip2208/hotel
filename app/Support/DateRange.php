@@ -11,8 +11,7 @@ final readonly class DateRange
     public function __construct(
         public Carbon $start,
         public Carbon $end,
-    ) {
-    }
+    ) {}
 
     public static function of(Carbon|string $start, Carbon|string $end): self
     {

@@ -37,12 +37,12 @@ class SecurityHeaders
         }
 
         $headers = [
-            'X-Frame-Options'        => 'SAMEORIGIN',
+            'X-Frame-Options' => 'SAMEORIGIN',
             'X-Content-Type-Options' => 'nosniff',
-            'Referrer-Policy'        => 'strict-origin-when-cross-origin',
-            'Permissions-Policy'     => 'camera=(), microphone=(), geolocation=(self), payment=(self)',
-            'X-XSS-Protection'       => '1; mode=block',
-            'Content-Security-Policy'=> $this->csp($request),
+            'Referrer-Policy' => 'strict-origin-when-cross-origin',
+            'Permissions-Policy' => 'camera=(), microphone=(), geolocation=(self), payment=(self)',
+            'X-XSS-Protection' => '1; mode=block',
+            'Content-Security-Policy' => $this->csp($request),
         ];
 
         if (app()->isProduction()) {
@@ -80,7 +80,7 @@ class SecurityHeaders
         // Only force HTTPS upgrade when actually serving HTTPS — otherwise local
         // http://*.test dev breaks (browser upgrades asset URLs to https that don't exist).
         if (app()->isProduction() || $request->isSecure()) {
-            $directives[] = "upgrade-insecure-requests";
+            $directives[] = 'upgrade-insecure-requests';
         }
 
         return implode('; ', $directives);
@@ -89,6 +89,7 @@ class SecurityHeaders
     private function isStaticAsset(Request $request): bool
     {
         $path = $request->path();
+
         return str_starts_with($path, 'build/')
             || str_starts_with($path, 'storage/')
             || preg_match('/\.(css|js|png|jpg|jpeg|webp|svg|ico|woff2?|ttf|otf)$/i', $path) === 1;

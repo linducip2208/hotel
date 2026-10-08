@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
+use App\Models\Property;
 use App\Services\Rms\RateShopperService;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -11,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 final class FetchCompetitorRatesJob implements ShouldQueue
 {
@@ -28,12 +30,12 @@ final class FetchCompetitorRatesJob implements ShouldQueue
         if ($this->propertyId) {
             $svc->fetchCompetitorRates($this->propertyId, $date);
         } else {
-            $properties = \App\Models\Property::where('is_active', true)->get();
+            $properties = Property::where('is_active', true)->get();
             foreach ($properties as $property) {
                 try {
                     $svc->fetchCompetitorRates($property->id, $date);
                 } catch (\Throwable $e) {
-                    \Illuminate\Support\Facades\Log::error("Rate shopper failed for property {$property->id}: {$e->getMessage()}");
+                    Log::error("Rate shopper failed for property {$property->id}: {$e->getMessage()}");
                 }
             }
         }

@@ -161,10 +161,10 @@ class PegipegiAdapter extends BaseChannelAdapter
             do {
                 $params['page'] = $page;
                 $queryString = http_build_query($params);
-                $endpoint = 'bookings?' . $queryString;
+                $endpoint = 'bookings?'.$queryString;
                 $signature = $this->generateSignature('GET', $endpoint, '');
 
-                $response = $this->http()->get('bookings?' . $queryString, [
+                $response = $this->http()->get('bookings?'.$queryString, [
                     'headers' => [
                         'X-API-Key' => ($this->channel->getCredentials() ?? [])['api_key'] ?? '',
                         'X-Signature' => $signature,
@@ -191,10 +191,10 @@ class PegipegiAdapter extends BaseChannelAdapter
     public function fetchBooking(string $bookingId): array
     {
         return $this->executeSync('fetch_booking', function () use ($bookingId) {
-            $endpoint = 'bookings/' . urlencode($bookingId);
+            $endpoint = 'bookings/'.urlencode($bookingId);
             $signature = $this->generateSignature('GET', $endpoint, '');
 
-            $response = $this->http()->get('bookings/' . urlencode($bookingId), [
+            $response = $this->http()->get('bookings/'.urlencode($bookingId), [
                 'headers' => [
                     'X-API-Key' => ($this->channel->getCredentials() ?? [])['api_key'] ?? '',
                     'X-Signature' => $signature,
@@ -236,7 +236,8 @@ class PegipegiAdapter extends BaseChannelAdapter
                     'X-Signature' => $signature,
                 ],
             ]);
-            return ['ok' => $r->getStatusCode() < 400, 'message' => 'HTTP ' . $r->getStatusCode()];
+
+            return ['ok' => $r->getStatusCode() < 400, 'message' => 'HTTP '.$r->getStatusCode()];
         } catch (\Throwable $e) {
             return ['ok' => false, 'message' => $e->getMessage()];
         }
@@ -253,21 +254,22 @@ class PegipegiAdapter extends BaseChannelAdapter
             Log::warning('Pegipegi API secret not configured.', [
                 'channel_id' => $this->channel->id,
             ]);
+
             return '';
         }
 
         $timestamp = (string) time();
         $nonce = bin2hex(random_bytes(16));
 
-        $stringToSign = strtoupper($method) . "\n"
-            . '/' . ltrim($endpoint, '/') . "\n"
-            . $timestamp . "\n"
-            . $nonce . "\n"
-            . hash('sha256', $body);
+        $stringToSign = strtoupper($method)."\n"
+            .'/'.ltrim($endpoint, '/')."\n"
+            .$timestamp."\n"
+            .$nonce."\n"
+            .hash('sha256', $body);
 
         $signature = hash_hmac('sha256', $stringToSign, $apiSecret);
 
-        return $timestamp . ':' . $nonce . ':' . $signature;
+        return $timestamp.':'.$nonce.':'.$signature;
     }
 
     // ─── Private Helpers ──────────────────────────────────────────
@@ -288,16 +290,18 @@ class PegipegiAdapter extends BaseChannelAdapter
 
         if ($statusCode === 429) {
             $retryAfter = $response->getHeader('Retry-After')[0] ?? 'unknown';
+
             return [
                 'success' => false,
                 'data' => [],
-                'error' => 'Rate limited. Retry after ' . $retryAfter,
+                'error' => 'Rate limited. Retry after '.$retryAfter,
                 'retry_after' => $retryAfter,
             ];
         }
 
         if ($statusCode >= 400) {
             $errorMsg = $data['message'] ?? $data['error'] ?? $data['description'] ?? 'Unknown error';
+
             return [
                 'success' => false,
                 'data' => $data,
@@ -351,7 +355,6 @@ class PegipegiAdapter extends BaseChannelAdapter
                 'context' => $e->getContext(),
             ]);
             throw $e;
-
         } catch (ConnectException $e) {
             $log->update([
                 'status' => 'failed',
@@ -364,7 +367,6 @@ class PegipegiAdapter extends BaseChannelAdapter
                 'error' => $e->getMessage(),
             ]);
             throw ChannelSyncException::networkError($this->channel->id, $operation, $e->getMessage());
-
         } catch (\Throwable $e) {
             $log->update([
                 'status' => 'failed',

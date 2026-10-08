@@ -20,6 +20,13 @@ class Webhook extends Model
 
     protected $hidden = ['secret_encrypted'];
 
-    public function property()  { return $this->belongsTo(Property::class); }
-    public function deliveries() { return $this->hasMany(WebhookDelivery::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function deliveries()
+    {
+        return $this->hasMany(WebhookDelivery::class);
+    }
 }

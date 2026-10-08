@@ -10,6 +10,7 @@ class AriSyncLog extends Model
     use HasFactory;
 
     protected $table = 'ari_sync_log';
+
     protected $guarded = ['id'];
 
     protected $casts = [
@@ -19,5 +20,8 @@ class AriSyncLog extends Model
         'finished_at' => 'datetime',
     ];
 
-    public function channel() { return $this->belongsTo(Channel::class); }
+    public function channel()
+    {
+        return $this->belongsTo(Channel::class);
+    }
 }

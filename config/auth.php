@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\AdminUser;
+use App\Models\CustomerLogin;
+use App\Models\User;
+
 return [
     'defaults' => [
         'guard' => env('AUTH_GUARD', 'web'),
@@ -28,15 +32,15 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => \App\Models\User::class,
+            'model' => User::class,
         ],
         'admin_users' => [
             'driver' => 'eloquent',
-            'model' => \App\Models\AdminUser::class,
+            'model' => AdminUser::class,
         ],
         'customers' => [
             'driver' => 'eloquent',
-            'model' => \App\Models\CustomerLogin::class,
+            'model' => CustomerLogin::class,
         ],
     ],
 

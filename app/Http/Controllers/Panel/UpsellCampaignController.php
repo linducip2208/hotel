@@ -19,6 +19,7 @@ class UpsellCampaignController extends Controller
         $offers = UpsellOffer::where('property_id', $property->id)
             ->where('is_active', true)
             ->get();
+
         return view('panel.upsell.campaigns.index', compact('property', 'campaigns', 'offers'));
     }
 
@@ -28,6 +29,7 @@ class UpsellCampaignController extends Controller
         $offers = UpsellOffer::where('property_id', $property->id)
             ->where('is_active', true)
             ->get();
+
         return view('panel.upsell.campaigns.create', compact('property', 'offers'));
     }
 
@@ -55,12 +57,14 @@ class UpsellCampaignController extends Controller
     {
         $property = app('current_property');
         $campaign = UpsellCampaign::with('logs')->findOrFail($id);
+
         return view('panel.upsell.campaigns.show', compact('property', 'campaign'));
     }
 
     public function run(UpsellPreArrivalService $service, $id)
     {
         $result = $service->runCampaign((int) $id);
+
         return back()->with('success', "Campaign selesai. {$result['sent']} upsell terkirim.");
     }
 
@@ -69,12 +73,14 @@ class UpsellCampaignController extends Controller
         $campaign = UpsellCampaign::findOrFail($id);
         $newStatus = $campaign->status === 'active' ? 'paused' : 'active';
         $campaign->update(['status' => $newStatus]);
+
         return back()->with('success', "Campaign di-{$newStatus}.");
     }
 
     public function acceptPresentation(UpsellPreArrivalService $service, $id)
     {
         $service->recordAcceptance((int) $id);
+
         return back()->with('success', 'Upsell diterima! Revenue bertambah.');
     }
 }

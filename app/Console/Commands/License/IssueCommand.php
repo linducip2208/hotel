@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\License;
 
+use App\Models\LocalLicense;
 use Carbon\Carbon;
 use Firebase\JWT\JWT;
 use Illuminate\Console\Command;
@@ -46,6 +47,7 @@ class IssueCommand extends Command
         if ($privateKey === null) {
             $this->error('Vendor private key not found. Run license:generate-keypair first.');
             $this->line('Expected at: storage/app/vendor-private.pem');
+
             return self::FAILURE;
         }
 
@@ -60,16 +62,16 @@ class IssueCommand extends Command
             'exp' => $expiresAt->timestamp,
             'jti' => Str::uuid()->toString(),
             'license' => [
-                'id'         => $licenseId,
-                'domain'     => $domain,
-                'email'      => $email,
-                'plan'       => $plan,
-                'issued_at'  => $now->toIso8601String(),
+                'id' => $licenseId,
+                'domain' => $domain,
+                'email' => $email,
+                'plan' => $plan,
+                'issued_at' => $now->toIso8601String(),
                 'expires_at' => $expiresAt->toIso8601String(),
                 'properties' => $properties,
-                'max_rooms'  => $rooms,
-                'max_users'  => $users,
-                'features'   => $features,
+                'max_rooms' => $rooms,
+                'max_users' => $users,
+                'features' => $features,
             ],
         ];
 
@@ -81,19 +83,20 @@ class IssueCommand extends Command
 
         if ($this->option('json')) {
             $this->line(json_encode([
-                'license_id'      => $licenseId,
-                'license_key'     => $token,
+                'license_id' => $licenseId,
+                'license_key' => $token,
                 'activation_code' => $activationCode,
-                'domain'          => $domain,
-                'email'           => $email,
-                'plan'            => $plan,
-                'expires_at'      => $expiresAt->toIso8601String(),
-                'properties'      => $properties,
-                'max_rooms'       => $rooms,
-                'max_users'       => $users,
-                'features'        => $features,
-                'issued_at'       => $now->toIso8601String(),
+                'domain' => $domain,
+                'email' => $email,
+                'plan' => $plan,
+                'expires_at' => $expiresAt->toIso8601String(),
+                'properties' => $properties,
+                'max_rooms' => $rooms,
+                'max_users' => $users,
+                'features' => $features,
+                'issued_at' => $now->toIso8601String(),
             ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+
             return self::SUCCESS;
         }
 
@@ -106,12 +109,12 @@ class IssueCommand extends Command
         $this->line("  <comment>Plan:</comment>            {$plan}");
         $this->line("  <comment>Properties:</comment>      {$properties}");
         $this->line("  <comment>Expires:</comment>         {$expiresAt->toDateString()}");
-        $this->line("  <comment>Features:</comment>        ".($features ? implode(', ', $features) : 'none'));
+        $this->line('  <comment>Features:</comment>        '.($features ? implode(', ', $features) : 'none'));
         $this->newLine();
-        $this->line("  <comment>License Key (JWT):</comment>");
+        $this->line('  <comment>License Key (JWT):</comment>');
         $this->line("  {$token}");
         $this->newLine();
-        $this->line("  <comment>Activation Code:</comment>");
+        $this->line('  <comment>Activation Code:</comment>');
         $this->line("  {$activationCode}");
         $this->newLine();
         $this->info('Share the License Key and Activation Code with the property owner.');
@@ -147,6 +150,7 @@ class IssueCommand extends Command
         for ($i = 0; $i < 4; $i++) {
             $blocks[] = strtoupper(Str::random(4));
         }
+
         return implode('-', $blocks);
     }
 
@@ -162,22 +166,22 @@ class IssueCommand extends Command
         ?int $users,
         array $features
     ): void {
-        if (! class_exists(\App\Models\LocalLicense::class)) {
+        if (! class_exists(LocalLicense::class)) {
             return;
         }
 
         try {
-            \App\Models\LocalLicense::create([
-                'install_id'               => $licenseId,
-                'license_key_hash'         => hash('sha256', $token),
-                'token_encrypted'          => $token,
-                'status'                   => 'unpaired',
-                'plan'                     => $plan,
-                'features'                 => $features,
-                'max_rooms'                => $rooms,
-                'max_users'                => $users,
-                'max_properties'           => $properties,
-                'valid_until'              => $expiresAt,
+            LocalLicense::create([
+                'install_id' => $licenseId,
+                'license_key_hash' => hash('sha256', $token),
+                'token_encrypted' => $token,
+                'status' => 'unpaired',
+                'plan' => $plan,
+                'features' => $features,
+                'max_rooms' => $rooms,
+                'max_users' => $users,
+                'max_properties' => $properties,
+                'valid_until' => $expiresAt,
             ]);
         } catch (\Throwable $e) {
             $this->warn('Could not store license in local database: '.$e->getMessage());

@@ -15,7 +15,9 @@ class IdempotencyKey
             return $next($request);
         }
         $key = $request->header('Idempotency-Key');
-        if (! $key) return $next($request);
+        if (! $key) {
+            return $next($request);
+        }
 
         $hash = hash('sha256', $request->method().'|'.$request->path().'|'.$request->getContent());
         $existing = DB::table('api_idempotency_keys')->where('key', $key)->first();

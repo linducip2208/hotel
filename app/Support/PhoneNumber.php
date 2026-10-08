@@ -10,8 +10,7 @@ final readonly class PhoneNumber
         public string $countryCode,
         public string $number,
         public string $full,
-    ) {
-    }
+    ) {}
 
     public static function parse(string $raw): self
     {
@@ -34,7 +33,7 @@ final readonly class PhoneNumber
             $number = $raw;
         }
 
-        $full = $countryCode ? '+' . $countryCode . $number : $number;
+        $full = $countryCode ? '+'.$countryCode.$number : $number;
 
         return new self(
             countryCode: $countryCode,
@@ -45,7 +44,7 @@ final readonly class PhoneNumber
 
     public function toE164(): string
     {
-        return '+' . $this->countryCode . $this->number;
+        return '+'.$this->countryCode.$this->number;
     }
 
     public function toReadable(): string
@@ -54,7 +53,7 @@ final readonly class PhoneNumber
         $len = strlen($digits);
 
         if ($len < 7) {
-            return '+' . $this->countryCode . ' ' . $digits;
+            return '+'.$this->countryCode.' '.$digits;
         }
 
         $parts = [
@@ -65,7 +64,7 @@ final readonly class PhoneNumber
 
         $readable = implode('-', array_filter($parts));
 
-        return '+' . $this->countryCode . ' ' . $readable;
+        return '+'.$this->countryCode.' '.$readable;
     }
 
     public function isIndonesian(): bool
@@ -84,6 +83,6 @@ final readonly class PhoneNumber
         $visible = substr($this->number, -4);
         $masked = str_repeat('*', $len - 4);
 
-        return '+' . $this->countryCode . ' ' . $masked . $visible;
+        return '+'.$this->countryCode.' '.$masked.$visible;
     }
 }

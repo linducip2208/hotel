@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\AriSyncLog;
 use App\Models\Channel;
 use App\Models\ChannelConflict;
+use App\Models\ChannelParityAlert;
 use App\Models\ChannelRoomMapping;
+use App\Models\GdsBooking;
+use App\Models\OtaVirtualCard;
 use App\Models\Provider;
-use App\Models\Rate;
 use App\Models\RatePlan;
+use App\Models\Reservation;
 use App\Models\RoomType;
 use Illuminate\Http\Request;
 
@@ -18,6 +21,7 @@ class ChannelController extends Controller
     public function index()
     {
         $channels = Channel::where('property_id', app('current_property')->id)->get();
+
         return view('panel.channel.index', compact('channels'));
     }
 
@@ -30,6 +34,7 @@ class ChannelController extends Controller
         $mappings = ChannelRoomMapping::whereHas('channel', fn ($q) => $q->where('property_id', $pid))
             ->with('channel', 'roomType', 'ratePlan')
             ->get();
+
         return view('panel.channel.mapping', compact('channels', 'roomTypes', 'ratePlans', 'mappings'));
     }
 
@@ -43,6 +48,7 @@ class ChannelController extends Controller
             'channel_rate_id' => 'required|string',
         ]);
         ChannelRoomMapping::create($data + ['is_active' => true]);
+
         return back()->with('success', 'Mapping ruangan berhasil disimpan.');
     }
 
@@ -50,6 +56,7 @@ class ChannelController extends Controller
     {
         $mapping = ChannelRoomMapping::findOrFail($id);
         $mapping->delete();
+
         return back()->with('success', 'Mapping ruangan telah dihapus.');
     }
 
@@ -59,6 +66,7 @@ class ChannelController extends Controller
         $mappings = ChannelRoomMapping::whereHas('channel', fn ($q) => $q->where('property_id', $pid))
             ->with('channel', 'roomType', 'ratePlan')
             ->get();
+
         return view('panel.channel.rates', compact('mappings'));
     }
 
@@ -97,6 +105,7 @@ class ChannelController extends Controller
         $mappings = ChannelRoomMapping::whereHas('channel', fn ($q) => $q->where('property_id', $pid))
             ->with('channel', 'roomType', 'ratePlan')
             ->get();
+
         return view('panel.channel.restrictions', compact('channels', 'mappings'));
     }
 
@@ -149,7 +158,7 @@ class ChannelController extends Controller
             'date_to' => 'nullable|date|after_or_equal:date_from',
         ]);
 
-        $restrictions = array_merge($mapping->restrictions ?? [], array_filter($data, fn ($v) => !is_null($v)));
+        $restrictions = array_merge($mapping->restrictions ?? [], array_filter($data, fn ($v) => ! is_null($v)));
         $restrictions['updated_at'] = now()->toDateTimeString();
 
         $mapping->update(['restrictions' => $restrictions]);
@@ -161,6 +170,7 @@ class ChannelController extends Controller
     {
         $logs = AriSyncLog::whereHas('channel', fn ($q) => $q->where('property_id', app('current_property')->id))
             ->latest()->paginate(50);
+
         return view('panel.channel.sync-log', compact('logs'));
     }
 
@@ -168,6 +178,7 @@ class ChannelController extends Controller
     {
         $conflicts = ChannelConflict::where('property_id', app('current_property')->id)
             ->where('status', 'open')->latest()->paginate(25);
+
         return view('panel.channel.conflicts', compact('conflicts'));
     }
 
@@ -180,6 +191,7 @@ class ChannelController extends Controller
             'resolved_by_user_id' => $request->user()?->id,
             'resolution_notes' => $request->input('notes'),
         ]);
+
         return back();
     }
 
@@ -197,34 +209,38 @@ class ChannelController extends Controller
     // ── Virtual Cards ─────────────────────────────────────────────────
     public function virtualCards()
     {
-        $cards = \App\Models\OtaVirtualCard::where('property_id', app('current_property')->id)
+        $cards = OtaVirtualCard::where('property_id', app('current_property')->id)
             ->with('reservation', 'channel')
             ->latest()->paginate(25);
+
         return view('panel.channel.vcc-index', compact('cards'));
     }
 
     public function virtualCardDetail($id)
     {
-        $card = \App\Models\OtaVirtualCard::where('property_id', app('current_property')->id)
+        $card = OtaVirtualCard::where('property_id', app('current_property')->id)
             ->with('reservation.primaryGuest', 'channel')
             ->findOrFail($id);
+
         return view('panel.channel.vcc-detail', compact('card'));
     }
 
     // ── GDS Bookings ──────────────────────────────────────────────────
     public function gdsBookings()
     {
-        $bookings = \App\Models\GdsBooking::where('property_id', app('current_property')->id)
+        $bookings = GdsBooking::where('property_id', app('current_property')->id)
             ->with('reservation')
             ->latest('received_at')->paginate(25);
+
         return view('panel.channel.gds-index', compact('bookings'));
     }
 
     public function gdsBookingDetail($id)
     {
-        $booking = \App\Models\GdsBooking::where('property_id', app('current_property')->id)
+        $booking = GdsBooking::where('property_id', app('current_property')->id)
             ->with('reservation.primaryGuest')
             ->findOrFail($id);
+
         return view('panel.channel.gds-detail', compact('booking'));
     }
 
@@ -232,22 +248,22 @@ class ChannelController extends Controller
     public function dashboard()
     {
         $property = app('current_property');
-        $channels = \App\Models\Channel::where('property_id', $property->id)
+        $channels = Channel::where('property_id', $property->id)
             ->withCount(['mappings', 'syncLogs', 'virtualCards'])
-            ->with(['conflicts' => fn($q) => $q->where('status', 'open')])
+            ->with(['conflicts' => fn ($q) => $q->where('status', 'open')])
             ->get();
 
         $totalMappings = $channels->sum('mappings_count');
-        $totalConflicts = $channels->sum(fn($c) => $c->conflicts->count());
+        $totalConflicts = $channels->sum(fn ($c) => $c->conflicts->count());
         $totalVcc = $channels->sum('virtual_cards_count');
 
-        $recentLogs = \App\Models\AriSyncLog::whereHas('channel', fn($q) => $q->where('property_id', $property->id))
+        $recentLogs = AriSyncLog::whereHas('channel', fn ($q) => $q->where('property_id', $property->id))
             ->with('channel')->latest()->limit(10)->get();
 
-        $recentConflicts = \App\Models\ChannelConflict::where('property_id', $property->id)
+        $recentConflicts = ChannelConflict::where('property_id', $property->id)
             ->where('status', 'open')->latest()->limit(5)->get();
 
-        $parityAlerts = \App\Models\ChannelParityAlert::where('property_id', $property->id)
+        $parityAlerts = ChannelParityAlert::where('property_id', $property->id)
             ->where('status', 'open')->count();
 
         return view('panel.channel.dashboard', compact(
@@ -259,23 +275,23 @@ class ChannelController extends Controller
     // ── Per-OTA Detail ────────────────────────────────────────────────
     public function detail($id)
     {
-        $channel = \App\Models\Channel::where('property_id', app('current_property')->id)
+        $channel = Channel::where('property_id', app('current_property')->id)
             ->with(['mappings.roomType', 'mappings.ratePlan', 'provider'])
             ->findOrFail($id);
 
-        $syncLogs = \App\Models\AriSyncLog::where('channel_id', $channel->id)
+        $syncLogs = AriSyncLog::where('channel_id', $channel->id)
             ->latest()->limit(20)->get();
 
-        $conflicts = \App\Models\ChannelConflict::where('property_id', app('current_property')->id)
+        $conflicts = ChannelConflict::where('property_id', app('current_property')->id)
             ->where('channel_id', $channel->id)->latest()->limit(10)->get();
 
-        $vccs = \App\Models\OtaVirtualCard::where('channel_id', $channel->id)
+        $vccs = OtaVirtualCard::where('channel_id', $channel->id)
             ->with('reservation')->latest()->limit(10)->get();
 
-        $parityAlerts = \App\Models\ChannelParityAlert::where('channel_id', $channel->id)
+        $parityAlerts = ChannelParityAlert::where('channel_id', $channel->id)
             ->where('status', 'open')->latest()->limit(5)->get();
 
-        $otaBookings = \App\Models\Reservation::where('property_id', app('current_property')->id)
+        $otaBookings = Reservation::where('property_id', app('current_property')->id)
             ->where('source', 'LIKE', 'ota:'.$channel->code.'%')
             ->latest()->limit(10)->get();
 

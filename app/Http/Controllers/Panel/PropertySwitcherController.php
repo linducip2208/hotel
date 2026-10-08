@@ -19,6 +19,7 @@ class PropertySwitcherController extends Controller
         }
 
         session(['current_property_id' => $prop->id]);
+
         return back()->with('status', "Switched to {$prop->name}");
     }
 }

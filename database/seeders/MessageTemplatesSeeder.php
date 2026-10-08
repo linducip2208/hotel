@@ -21,7 +21,7 @@ class MessageTemplatesSeeder extends Seeder
                     'body' => "Halo {{guest_name}},\n\nBooking Anda telah dibatalkan.\n- Ref: {{ref}}\n- Penalty: Rp {{penalty}}\n- Refund: Rp {{refund}}\n\nKami harap dapat melayani Anda di lain waktu.",
                     'variables' => ['guest_name', 'ref', 'penalty', 'refund']],
                 ['name' => 'Pre Check-in Reminder WA', 'channel' => 'whatsapp', 'locale' => 'id',
-                    'body' => "Halo {{guest_name}}! Besok Anda check-in di {{property_name}}. Untuk speed-up, silakan pre check-in di {{precheckin_url}} 🙏",
+                    'body' => 'Halo {{guest_name}}! Besok Anda check-in di {{property_name}}. Untuk speed-up, silakan pre check-in di {{precheckin_url}} 🙏',
                     'variables' => ['guest_name', 'property_name', 'precheckin_url']],
                 ['name' => 'Review Request Email', 'channel' => 'email', 'locale' => 'id',
                     'subject' => 'Bagaimana pengalaman Anda di {{property_name}}?',

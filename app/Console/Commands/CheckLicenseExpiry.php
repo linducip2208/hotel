@@ -9,6 +9,7 @@ use Illuminate\Console\Command;
 class CheckLicenseExpiry extends Command
 {
     protected $signature = 'compliance:check-licenses';
+
     protected $description = 'Cek izin yang akan kadaluarsa dan update status';
 
     public function handle(LicenseService $service): int
@@ -24,6 +25,7 @@ class CheckLicenseExpiry extends Command
         }
 
         $this->info("License expiry check complete: {$totalExpiring} expiring soon, {$totalExpired} expired.");
+
         return self::SUCCESS;
     }
 }

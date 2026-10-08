@@ -11,7 +11,18 @@ class LinenTransaction extends Model
 
     protected $guarded = ['id'];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function linenItem() { return $this->belongsTo(LinenItem::class, 'linen_item_id'); }
-    public function staff() { return $this->belongsTo(User::class, 'staff_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function linenItem()
+    {
+        return $this->belongsTo(LinenItem::class, 'linen_item_id');
+    }
+
+    public function staff()
+    {
+        return $this->belongsTo(User::class, 'staff_id');
+    }
 }

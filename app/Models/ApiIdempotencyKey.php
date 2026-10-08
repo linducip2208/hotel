@@ -12,7 +12,7 @@ class ApiIdempotencyKey extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
-        'response'   => 'array',
+        'response' => 'array',
         'expires_at' => 'datetime',
     ];
 }

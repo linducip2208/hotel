@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Console\Commands\Accounting\ExportDailyCommand;
+use App\Console\Commands\NightAuditCloseCommand;
 use App\Services\Accounting\JournalPoster;
 use App\Services\Accounting\NightAuditService;
 use App\Services\Accounting\Pb1Calculator;
@@ -21,8 +23,8 @@ class AccountingServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->commands([
-            \App\Console\Commands\NightAuditCloseCommand::class,
-            \App\Console\Commands\Accounting\ExportDailyCommand::class,
+            NightAuditCloseCommand::class,
+            ExportDailyCommand::class,
         ]);
     }
 }

@@ -35,15 +35,15 @@ class SendCheckinReminderJob implements ShouldQueue
         $dispatcher->checkinReminder($reservation);
 
         NotificationLog::create([
-            'property_id'     => $reservation->property_id,
-            'channel'         => 'mail',
-            'event'           => 'checkin_reminder',
-            'recipient'       => $reservation->primaryGuest?->email ?? 'unknown',
+            'property_id' => $reservation->property_id,
+            'channel' => 'mail',
+            'event' => 'checkin_reminder',
+            'recipient' => $reservation->primaryGuest?->email ?? 'unknown',
             'notifiable_type' => Reservation::class,
-            'notifiable_id'   => $reservation->id,
-            'status'          => 'sent',
+            'notifiable_id' => $reservation->id,
+            'status' => 'sent',
             'idempotency_key' => $key,
-            'sent_at'         => now(),
+            'sent_at' => now(),
         ]);
     }
 }

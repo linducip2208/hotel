@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class TenantInvoice extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
+
     protected $casts = [
         'issued_at' => 'date',
         'due_at' => 'date',
@@ -21,6 +23,13 @@ class TenantInvoice extends Model
         'balance' => 'decimal:2',
     ];
 
-    public function tenant()       { return $this->belongsTo(Tenant::class); }
-    public function subscription() { return $this->belongsTo(TenantSubscription::class, 'subscription_id'); }
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class);
+    }
+
+    public function subscription()
+    {
+        return $this->belongsTo(TenantSubscription::class, 'subscription_id');
+    }
 }

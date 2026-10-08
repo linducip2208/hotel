@@ -31,11 +31,15 @@ class GeminiAdapter extends BaseAdapter implements AiAdapterInterface
         ];
     }
 
-    public function listModels(): array { return []; }
+    public function listModels(): array
+    {
+        return [];
+    }
 
     public function test(): array
     {
         $r = $this->chat([['role' => 'user', 'content' => 'ping']]);
+
         return ['ok' => $r['ok'] ?? false, 'message' => $r['ok'] ? 'OK' : ('HTTP '.$r['status'])];
     }
 }

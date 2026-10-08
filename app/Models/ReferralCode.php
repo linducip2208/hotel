@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class ReferralCode extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
+
     protected $casts = [
         'referrer_reward_amount' => 'decimal:2',
         'referee_discount_pct' => 'decimal:3',
@@ -17,8 +19,23 @@ class ReferralCode extends Model
         'total_rewards_earned' => 'decimal:2',
     ];
 
-    public function property()    { return $this->belongsTo(Property::class); }
-    public function ownerGuest()  { return $this->belongsTo(Guest::class, 'owner_guest_id'); }
-    public function redemptions() { return $this->hasMany(ReferralRedemption::class); }
-    public function referrals()   { return $this->hasMany(Referral::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function ownerGuest()
+    {
+        return $this->belongsTo(Guest::class, 'owner_guest_id');
+    }
+
+    public function redemptions()
+    {
+        return $this->hasMany(ReferralRedemption::class);
+    }
+
+    public function referrals()
+    {
+        return $this->hasMany(Referral::class);
+    }
 }

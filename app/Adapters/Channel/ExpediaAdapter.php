@@ -6,19 +6,20 @@ namespace App\Adapters\Channel;
 
 use App\Exceptions\ChannelSyncException;
 use App\Models\AriSyncLog;
+use App\Models\Channel;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class ExpediaAdapter extends BaseChannelAdapter
 {
     private string $tokenCacheKey;
 
-    public function __construct(\App\Models\Channel $channel)
+    public function __construct(Channel $channel)
     {
         parent::__construct($channel);
-        $this->tokenCacheKey = 'expedia_oauth_token:' . $channel->id;
+        $this->tokenCacheKey = 'expedia_oauth_token:'.$channel->id;
     }
 
     protected function defaultBaseUrl(): string
@@ -41,7 +42,7 @@ class ExpediaAdapter extends BaseChannelAdapter
             'connect_timeout' => 10,
             'http_errors' => false,
             'headers' => [
-                'Authorization' => 'Bearer ' . $this->getOAuthToken(),
+                'Authorization' => 'Bearer '.$this->getOAuthToken(),
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
             ],
@@ -64,12 +65,13 @@ class ExpediaAdapter extends BaseChannelAdapter
             Log::warning('Expedia OAuth credentials not configured.', [
                 'channel_id' => $this->channel->id,
             ]);
+
             return '';
         }
 
         try {
             $oauthClient = new Client([
-                'base_uri' => rtrim($this->oauthBaseUrl(), '/') . '/',
+                'base_uri' => rtrim($this->oauthBaseUrl(), '/').'/',
                 'timeout' => 30,
                 'http_errors' => false,
             ]);
@@ -91,6 +93,7 @@ class ExpediaAdapter extends BaseChannelAdapter
                 $token = $data['access_token'];
                 $expiresIn = (int) ($data['expires_in'] ?? 3600);
                 Cache::put($this->tokenCacheKey, $token, max($expiresIn - 60, 60));
+
                 return $token;
             }
 
@@ -98,6 +101,7 @@ class ExpediaAdapter extends BaseChannelAdapter
                 'channel_id' => $this->channel->id,
                 'response' => $data,
             ]);
+
             return '';
 
         } catch (\Throwable $e) {
@@ -105,6 +109,7 @@ class ExpediaAdapter extends BaseChannelAdapter
                 'channel_id' => $this->channel->id,
                 'error' => $e->getMessage(),
             ]);
+
             return '';
         }
     }
@@ -130,7 +135,7 @@ class ExpediaAdapter extends BaseChannelAdapter
             ];
 
             $response = $this->http()->put(
-                'properties/' . urlencode((string) $propertyId) . '/rooms/availability',
+                'properties/'.urlencode((string) $propertyId).'/rooms/availability',
                 ['json' => $payload]
             );
 
@@ -158,7 +163,7 @@ class ExpediaAdapter extends BaseChannelAdapter
             ];
 
             $response = $this->http()->put(
-                'properties/' . urlencode((string) $propertyId) . '/rooms/rates',
+                'properties/'.urlencode((string) $propertyId).'/rooms/rates',
                 ['json' => $payload]
             );
 
@@ -186,7 +191,7 @@ class ExpediaAdapter extends BaseChannelAdapter
             ];
 
             $response = $this->http()->put(
-                'properties/' . urlencode((string) $propertyId) . '/rooms/restrictions',
+                'properties/'.urlencode((string) $propertyId).'/rooms/restrictions',
                 ['json' => $payload]
             );
 
@@ -218,7 +223,7 @@ class ExpediaAdapter extends BaseChannelAdapter
 
             do {
                 $params['offset'] = $offset;
-                $response = $this->http()->get('bookings?' . http_build_query($params));
+                $response = $this->http()->get('bookings?'.http_build_query($params));
                 $data = $this->parseJsonResponse($response, 'bookings');
 
                 $bookings = $data['data']['bookings'] ?? $data['data']['items'] ?? [];
@@ -239,7 +244,8 @@ class ExpediaAdapter extends BaseChannelAdapter
     public function fetchBooking(string $bookingId): array
     {
         return $this->executeSync('fetch_booking', function () use ($bookingId) {
-            $response = $this->http()->get('bookings/' . urlencode($bookingId));
+            $response = $this->http()->get('bookings/'.urlencode($bookingId));
+
             return $this->parseJsonResponse($response, 'booking');
         });
     }
@@ -272,6 +278,7 @@ class ExpediaAdapter extends BaseChannelAdapter
             if (empty($token)) {
                 return ['ok' => false, 'message' => 'Failed to obtain OAuth token'];
             }
+
             return ['ok' => true, 'message' => 'OAuth token obtained successfully'];
         } catch (\Throwable $e) {
             return ['ok' => false, 'message' => $e->getMessage()];
@@ -296,16 +303,18 @@ class ExpediaAdapter extends BaseChannelAdapter
 
         if ($statusCode === 429) {
             $retryAfter = $response->getHeader('Retry-After')[0] ?? 'unknown';
+
             return [
                 'success' => false,
                 'data' => [],
-                'error' => 'Rate limited. Retry after ' . $retryAfter,
+                'error' => 'Rate limited. Retry after '.$retryAfter,
                 'retry_after' => $retryAfter,
             ];
         }
 
         if ($statusCode >= 400) {
             $errorMsg = $data['message'] ?? $data['error'] ?? $data['status'] ?? 'Unknown error';
+
             return [
                 'success' => false,
                 'data' => $data,
@@ -359,7 +368,6 @@ class ExpediaAdapter extends BaseChannelAdapter
                 'context' => $e->getContext(),
             ]);
             throw $e;
-
         } catch (ConnectException $e) {
             $log->update([
                 'status' => 'failed',
@@ -372,7 +380,6 @@ class ExpediaAdapter extends BaseChannelAdapter
                 'error' => $e->getMessage(),
             ]);
             throw ChannelSyncException::networkError($this->channel->id, $operation, $e->getMessage());
-
         } catch (\Throwable $e) {
             $log->update([
                 'status' => 'failed',

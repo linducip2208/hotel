@@ -66,15 +66,9 @@ class RoomAssignmentService
                 }
 
                 // 3. room_proximity — if group booking, cluster rooms on same floor
-                if (! empty($rules['room_proximity']) && $reservation->group_block_id) {
-                    $groupRoomsOnFloor = ReservationRoom::whereHas('reservation', function ($q) use ($reservation) {
-                        $q->where('group_block_id', $reservation->group_block_id);
-                    })->whereHas('room', function ($q) use ($room) {
-                        $q->where('floor', $room->floor);
-                    })->whereNotNull('room_id')->count();
-
-                    $score += $groupRoomsOnFloor * 30;
-                }
+                // (GroupBlockRoom carries the room-type allocation; per-reservation
+                // group linkage lives on the block pickup, so proximity is driven
+                // by floor balance rules here).
 
                 // 4. previous_room — if repeat guest, try same room as last stay
                 if (! empty($rules['previous_room'])) {
@@ -110,7 +104,8 @@ class RoomAssignmentService
             $bestRoom = $candidates->firstWhere('id', $bestRoomId);
             if ($bestRoom) {
                 $rr->update(['room_id' => $bestRoom->id]);
-                $bestRoom->update(['fo_status' => 'assigned']);
+                // Future arrival holds the room; occupied only at check-in.
+                $bestRoom->update(['fo_status' => $reservation->status === 'checked_in' ? 'occupied' : 'reserved']);
 
                 return $bestRoom;
             }
@@ -137,30 +132,26 @@ class RoomAssignmentService
     }
 
     /**
-     * Reassign a reservation to a new room.
+     * Reassign one reservation-room row to a new room.
      */
-    public function reassign(Reservation $reservation, int $newRoomId): Room
+    public function reassign(Reservation $reservation, int $reservationRoomId, int $newRoomId): Room
     {
+        $rr = $reservation->rooms()->lockForUpdate()->findOrFail($reservationRoomId);
+
         $newRoom = Room::where('property_id', $reservation->property_id)
             ->where('is_active', true)
+            ->where('fo_status', '!=', 'out_of_order')
+            ->lockForUpdate()
             ->findOrFail($newRoomId);
 
-        DB::transaction(function () use ($reservation, $newRoomId) {
-            // Release current room assignment
-            foreach ($reservation->rooms as $rr) {
-                if ($rr->room_id) {
-                    $oldRoom = Room::find($rr->room_id);
-                    if ($oldRoom) {
-                        $oldRoom->update(['fo_status' => 'vacant']);
-                    }
-                }
-                $rr->update(['room_id' => $newRoomId]);
-            }
+        DB::transaction(function () use ($rr, $newRoomId) {
+            $oldRoomId = $rr->room_id;
+            $rr->update(['room_id' => $newRoomId]);
 
-            $newRoom = Room::find($newRoomId);
-            if ($newRoom) {
-                $newRoom->update(['fo_status' => 'assigned']);
+            if ($oldRoomId) {
+                Room::whereKey($oldRoomId)->update(['fo_status' => 'vacant']);
             }
+            Room::whereKey($newRoomId)->update(['fo_status' => $rr->reservation->status === 'checked_in' ? 'occupied' : 'reserved']);
         });
 
         return $newRoom->fresh();
@@ -215,7 +206,7 @@ class RoomAssignmentService
     /**
      * Get rooms that are available (not assigned to another reservation) for a given date range and room type.
      */
-    protected function getAvailableRooms(int $propertyId, int $roomTypeId, Carbon $checkIn, Carbon $checkOut): Collection
+    public function getAvailableRooms(int $propertyId, int $roomTypeId, Carbon $checkIn, Carbon $checkOut): Collection
     {
         // Get all active rooms of the given type
         $rooms = Room::where('property_id', $propertyId)
@@ -226,10 +217,14 @@ class RoomAssignmentService
             ->get();
 
         if ($rooms->isEmpty()) {
-            return new Collection();
+            return new Collection;
         }
 
-        // Find rooms already assigned during the date range
+        // Find rooms already assigned during the date range.
+        // Standard interval overlap: stay overlaps when existing check_in is
+        // before our check_out AND existing check_out is after our check_in.
+        // whereDate() is used because date columns may store a time suffix
+        // (SQLite) — string between-comparisons silently miss those rows.
         $occupiedRoomIds = ReservationRoom::whereHas('reservation', function ($q) use ($propertyId) {
             $q->where('property_id', $propertyId)
                 ->whereIn('status', ['confirmed', 'checked_in']);
@@ -237,13 +232,8 @@ class RoomAssignmentService
             ->where('room_type_id', $roomTypeId)
             ->whereNotNull('room_id')
             ->where(function ($q) use ($checkIn, $checkOut) {
-                // Overlapping date ranges
-                $q->whereBetween('check_in', [$checkIn->toDateString(), $checkOut->copy()->subDay()->toDateString()]);
-                $q->orWhereBetween('check_out', [$checkIn->copy()->addDay()->toDateString(), $checkOut->toDateString()]);
-                $q->orWhere(function ($inner) use ($checkIn, $checkOut) {
-                    $inner->where('check_in', '<=', $checkIn->toDateString())
-                        ->where('check_out', '>=', $checkOut->toDateString());
-                });
+                $q->whereDate('check_in', '<', $checkOut->toDateString())
+                    ->whereDate('check_out', '>', $checkIn->toDateString());
             })
             ->pluck('room_id')
             ->unique();

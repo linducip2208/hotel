@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -27,7 +28,7 @@ class AuthenticatedSessionController extends Controller
             throw ValidationException::withMessages(['email' => __('auth.failed')]);
         }
 
-        $user = \App\Models\User::where('email', $request->input('email'))->first();
+        $user = User::where('email', $request->input('email'))->first();
 
         if ($user->two_factor_enabled) {
             session([
@@ -56,6 +57,7 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect('/');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Property;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,7 +15,7 @@ class DatabaseSeeder extends Seeder
             LandmarksSeeder::class,
             PlansSeeder::class,
             KbArticlesSeeder::class,
-            \Database\Seeders\BlogSeeder::class,
+            BlogSeeder::class,
         ]);
 
         if (app()->environment('local', 'demo')) {
@@ -22,7 +23,7 @@ class DatabaseSeeder extends Seeder
         }
 
         // Property-dependent seeders run after demo (or any property exists)
-        if (\App\Models\Property::exists()) {
+        if (Property::exists()) {
             $this->call([
                 ChartOfAccountsSeeder::class,
                 DefaultPoliciesSeeder::class,

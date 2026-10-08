@@ -4,20 +4,20 @@ return [
     'mode' => env('APP_MODE', 'standalone'),
 
     'features' => [
-        'channel_manager'      => true,
-        'pos'                  => true,
-        'housekeeping_mobile'  => true,
-        'accounting'           => true,
-        'pseo'                 => env('PSEO_ENABLED', true),
-        'guest_portal'         => true,
-        'self_checkin'         => false,
-        'banquet'              => false,
-        'spa'                  => false,
-        'hr_payroll'           => false,
-        'revenue_management'   => false,
-        'ai_concierge'         => false,
-        'marketplace_addons'   => false,
-        'white_label'          => false,
+        'channel_manager' => true,
+        'pos' => true,
+        'housekeeping_mobile' => true,
+        'accounting' => true,
+        'pseo' => env('PSEO_ENABLED', true),
+        'guest_portal' => true,
+        'self_checkin' => false,
+        'banquet' => false,
+        'spa' => false,
+        'hr_payroll' => false,
+        'revenue_management' => false,
+        'ai_concierge' => false,
+        'marketplace_addons' => false,
+        'white_label' => false,
     ],
 
     'limits' => [
@@ -27,7 +27,7 @@ return [
     ],
 
     'currency_default' => 'IDR',
-    'locale_default'   => env('APP_LOCALE', 'id'),
+    'locale_default' => env('APP_LOCALE', 'id'),
 
     'date_operating' => 'today',
 

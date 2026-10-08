@@ -17,8 +17,23 @@ class TravelAgent extends Model
         'credit_limit' => 'decimal:2',
     ];
 
-    public function property()    { return $this->belongsTo(Property::class); }
-    public function reservations(){ return $this->hasMany(Reservation::class); }
-    public function arAccounts()  { return $this->hasMany(ArAccount::class); }
-    public function allotments()  { return $this->hasMany(Allotment::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
+    public function arAccounts()
+    {
+        return $this->hasMany(ArAccount::class);
+    }
+
+    public function allotments()
+    {
+        return $this->hasMany(Allotment::class);
+    }
 }

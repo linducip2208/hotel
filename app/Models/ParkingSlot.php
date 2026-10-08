@@ -15,6 +15,13 @@ class ParkingSlot extends Model
         'is_vip' => 'boolean',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function records() { return $this->hasMany(ParkingRecord::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function records()
+    {
+        return $this->hasMany(ParkingRecord::class);
+    }
 }

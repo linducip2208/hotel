@@ -9,8 +9,7 @@ final readonly class IdNumber
     public function __construct(
         public string $type,
         public string $value,
-    ) {
-    }
+    ) {}
 
     public static function parse(string $raw, string $type = 'ktp'): self
     {
@@ -48,7 +47,7 @@ final readonly class IdNumber
         $last = substr($this->value, -3);
         $middle = str_repeat('*', $len - 5);
 
-        return $first . $middle . $last;
+        return $first.$middle.$last;
     }
 
     public function isNpwp(): bool

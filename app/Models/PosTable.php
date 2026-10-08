@@ -13,5 +13,8 @@ class PosTable extends Model
 
     protected $casts = ['is_active' => 'boolean'];
 
-    public function outlet() { return $this->belongsTo(PosOutlet::class, 'outlet_id'); }
+    public function outlet()
+    {
+        return $this->belongsTo(PosOutlet::class, 'outlet_id');
+    }
 }

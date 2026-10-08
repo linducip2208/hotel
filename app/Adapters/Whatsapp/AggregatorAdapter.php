@@ -17,6 +17,7 @@ class AggregatorAdapter extends BaseAdapter implements WhatsappAdapterInterface
                 'variables' => $variables,
             ],
         ]);
+
         return [
             'ok' => $response->getStatusCode() < 400,
             'raw' => json_decode((string) $response->getBody(), true) ?? [],

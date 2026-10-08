@@ -38,7 +38,9 @@ class PmService
                 $exists = PmSchedule::where('property_id', $property->id)
                     ->where('asset_id', $asset->id)
                     ->where('task_name', $tpl['task'])->exists();
-                if ($exists) continue;
+                if ($exists) {
+                    continue;
+                }
 
                 PmSchedule::create([
                     'property_id' => $property->id,

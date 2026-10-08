@@ -18,6 +18,13 @@ class NightAudit extends Model
         'summary' => 'array',
     ];
 
-    public function property()   { return $this->belongsTo(Property::class); }
-    public function runByUser() { return $this->belongsTo(User::class, 'run_by_user_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function runByUser()
+    {
+        return $this->belongsTo(User::class, 'run_by_user_id');
+    }
 }

@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Panel\Finance;
 
 use App\Http\Controllers\Controller;
 use App\Models\Deposit;
-use App\Models\Guest;
-use App\Models\Reservation;
+use App\Models\FolioCharge;
 use App\Services\Finance\DepositService;
 use Illuminate\Http\Request;
 
@@ -54,6 +53,7 @@ class DepositController extends Controller
         ]);
 
         $this->depositService->receive($property, $data);
+
         return back()->with('success', 'Deposit berhasil diterima.');
     }
 
@@ -61,12 +61,13 @@ class DepositController extends Controller
     {
         $deposit = Deposit::findOrFail($id);
         $data = $request->validate([
-            'amount' => 'required|numeric|min:1|max:' . ($deposit->amount - $deposit->refunded_amount),
+            'amount' => 'required|numeric|min:1|max:'.($deposit->amount - $deposit->refunded_amount),
             'refund_method' => 'required|string',
             'reason' => 'nullable|string',
         ]);
 
         $this->depositService->refund($deposit, $data['amount'], $data['refund_method'], $data['reason'] ?? null);
+
         return back()->with('success', 'Refund deposit berhasil diproses.');
     }
 
@@ -78,6 +79,7 @@ class DepositController extends Controller
         ]);
 
         $this->depositService->forfeit($deposit, $data['reason']);
+
         return back()->with('success', 'Deposit ditandai hangus.');
     }
 
@@ -88,7 +90,7 @@ class DepositController extends Controller
             'folio_charge_id' => 'required|integer|exists:folio_charges,id',
         ]);
 
-        $charge = \App\Models\FolioCharge::findOrFail($data['folio_charge_id']);
+        $charge = FolioCharge::findOrFail($data['folio_charge_id']);
         $this->depositService->applyToFolio($deposit, $charge);
 
         return back()->with('success', 'Deposit diaplikasikan ke folio.');

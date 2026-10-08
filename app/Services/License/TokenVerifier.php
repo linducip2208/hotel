@@ -19,6 +19,7 @@ class TokenVerifier
             return JWT::decode($token, new Key($publicKey, 'RS256'));
         } catch (\Throwable $e) {
             Log::channel('license')->warning('License token verify failed: '.$e->getMessage());
+
             return null;
         }
     }
@@ -26,21 +27,29 @@ class TokenVerifier
     public function publicKeyHashOk(): bool
     {
         $expected = config('license.public_key_sha256');
-        if (! $expected) return true; // not set in env => skip integrity check (dev)
+        if (! $expected) {
+            return true;
+        } // not set in env => skip integrity check (dev)
 
         $key = $this->loadPublicKey();
-        if (! $key) return false;
+        if (! $key) {
+            return false;
+        }
+
         return hash_equals($expected, hash('sha256', $key));
     }
 
     protected function loadPublicKey(): ?string
     {
         $path = base_path(config('license.public_key_path'));
-        if (! is_readable($path)) return null;
+        if (! is_readable($path)) {
+            return null;
+        }
         $content = file_get_contents($path);
         if (! $content || str_contains($content, 'PLACEHOLDER')) {
             return null;
         }
+
         return $content;
     }
 }

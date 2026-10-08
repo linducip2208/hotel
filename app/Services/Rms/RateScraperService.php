@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
-use App\Models\RateScraperTarget;
-use App\Models\RateScraperLog;
+use App\Models\Rate;
 use App\Models\RateScraperAlert;
+use App\Models\RateScraperLog;
+use App\Models\RateScraperTarget;
 use App\Models\RateShopperSnapshot;
+use App\Models\RoomType;
 use Carbon\Carbon;
 
 class RateScraperService
@@ -134,7 +136,7 @@ class RateScraperService
 
     protected function getOurLowestPrice(int $propertyId, Carbon $date): ?float
     {
-        $rates = \App\Models\Rate::where('property_id', $propertyId)
+        $rates = Rate::where('property_id', $propertyId)
             ->where('date', $date->toDateString())
             ->where('cta', false)
             ->where('ctd', false)
@@ -144,10 +146,11 @@ class RateScraperService
             ->pluck('amount');
 
         if ($rates->isEmpty()) {
-            $roomType = \App\Models\RoomType::where('property_id', $propertyId)
+            $roomType = RoomType::where('property_id', $propertyId)
                 ->where('is_active', true)
                 ->orderBy('base_rate')
                 ->first();
+
             return $roomType ? (float) $roomType->base_rate : null;
         }
 

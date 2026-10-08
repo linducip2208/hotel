@@ -22,9 +22,9 @@ final class CreateReservationFromChannel implements ShouldQueue
         // Post-processing: map OTA-specific fields, attach virtual card, etc.
         if (! empty($payload['ota_virtual_card'] ?? null)) {
             $reservation->otaVirtualCard()->create([
-                'property_id'    => $reservation->property_id,
-                'card_data'      => $payload['ota_virtual_card'],
-                'expires_at'     => now()->addDays(30),
+                'property_id' => $reservation->property_id,
+                'card_data' => $payload['ota_virtual_card'],
+                'expires_at' => now()->addDays(30),
             ]);
         }
     }

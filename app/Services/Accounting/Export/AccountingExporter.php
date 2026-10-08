@@ -35,8 +35,11 @@ class AccountingExporter
         }
 
         $out = fopen('php://temp', 'r+');
-        foreach ($rows as $r) fputcsv($out, $r);
+        foreach ($rows as $r) {
+            fputcsv($out, $r);
+        }
         rewind($out);
+
         return stream_get_contents($out);
     }
 
@@ -69,8 +72,11 @@ class AccountingExporter
         }
 
         $out = fopen('php://temp', 'r+');
-        foreach ($rows as $r) fputcsv($out, $r);
+        foreach ($rows as $r) {
+            fputcsv($out, $r);
+        }
         rewind($out);
+
         return stream_get_contents($out);
     }
 }

@@ -16,12 +16,35 @@ class PosLaundryOrder extends Model
         'total_amount' => 'decimal:2',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function guest() { return $this->belongsTo(Guest::class); }
-    public function reservation() { return $this->belongsTo(Reservation::class); }
-    public function room() { return $this->belongsTo(Room::class); }
-    public function receivedBy() { return $this->belongsTo(User::class, 'received_by'); }
-    public function deliveredBy() { return $this->belongsTo(User::class, 'delivered_by'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function guest()
+    {
+        return $this->belongsTo(Guest::class);
+    }
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class);
+    }
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
+
+    public function receivedBy()
+    {
+        return $this->belongsTo(User::class, 'received_by');
+    }
+
+    public function deliveredBy()
+    {
+        return $this->belongsTo(User::class, 'delivered_by');
+    }
 
     public static function laundryItems(): array
     {

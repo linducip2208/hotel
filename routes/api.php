@@ -1,32 +1,42 @@
 <?php
 
+use App\Http\Controllers\Api\OpenApiController;
+use App\Http\Controllers\Api\V1\AccountingController;
+use App\Http\Controllers\Api\V1\AiController;
+use App\Http\Controllers\Api\V1\ApprovalController;
+use App\Http\Controllers\Api\V1\ArApController;
+use App\Http\Controllers\Api\V1\AriController;
+use App\Http\Controllers\Api\V1\AssetController;
 use App\Http\Controllers\Api\V1\AvailabilityController;
-use App\Http\Controllers\Api\V1\ReservationController;
+use App\Http\Controllers\Api\V1\BanquetController;
+use App\Http\Controllers\Api\V1\ChannelBookingController;
+use App\Http\Controllers\Api\V1\CommController;
+use App\Http\Controllers\Api\V1\CoreTaxController;
+use App\Http\Controllers\Api\V1\DynamicPricingController;
+use App\Http\Controllers\Api\V1\FinanceController;
 use App\Http\Controllers\Api\V1\FolioController;
 use App\Http\Controllers\Api\V1\GuestController;
-use App\Http\Controllers\Api\V1\RoomController;
-use App\Http\Controllers\Api\V1\RateController;
-use App\Http\Controllers\Api\V1\HousekeepingController;
-use App\Http\Controllers\Api\V1\PosController;
-use App\Http\Controllers\Api\V1\AriController;
-use App\Http\Controllers\Api\V1\ChannelBookingController;
-use App\Http\Controllers\Api\V1\AccountingController;
-use App\Http\Controllers\Api\V1\WebhookController;
-use App\Http\Controllers\Api\V1\PropertyController;
-use App\Http\Controllers\Api\V1\NightAuditController;
-use App\Http\Controllers\Api\V1\ApprovalController;
 use App\Http\Controllers\Api\V1\GuestRequestController;
-use App\Http\Controllers\Api\V1\ReviewController;
-use App\Http\Controllers\Api\V1\PromoController;
-use App\Http\Controllers\Api\V1\SurveyController;
-use App\Http\Controllers\Api\V1\StockController;
-use App\Http\Controllers\Api\V1\ReportController;
-use App\Http\Controllers\Api\V1\ArApController;
+use App\Http\Controllers\Api\V1\HousekeepingController;
+use App\Http\Controllers\Api\V1\HrController;
 use App\Http\Controllers\Api\V1\KbController;
+use App\Http\Controllers\Api\V1\LostAndFoundController;
+use App\Http\Controllers\Api\V1\LoyaltyController;
+use App\Http\Controllers\Api\V1\NightAuditController;
 use App\Http\Controllers\Api\V1\OpenPricingController;
-use App\Http\Controllers\Api\V1\DynamicPricingController;
 use App\Http\Controllers\Api\V1\ParityController;
-use App\Http\Controllers\Api\V1\CoreTaxController;
+use App\Http\Controllers\Api\V1\PosController;
+use App\Http\Controllers\Api\V1\PromoController;
+use App\Http\Controllers\Api\V1\PropertyController;
+use App\Http\Controllers\Api\V1\RateController;
+use App\Http\Controllers\Api\V1\ReportController;
+use App\Http\Controllers\Api\V1\ReservationController;
+use App\Http\Controllers\Api\V1\ReviewController;
+use App\Http\Controllers\Api\V1\RoomController;
+use App\Http\Controllers\Api\V1\SpaController;
+use App\Http\Controllers\Api\V1\StockController;
+use App\Http\Controllers\Api\V1\SurveyController;
+use App\Http\Controllers\Api\V1\WebhookController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->middleware(['license', 'auth:sanctum', 'throttle:api'])->group(function () {
@@ -93,74 +103,74 @@ Route::prefix('v1')->middleware(['license', 'auth:sanctum', 'throttle:api'])->gr
 
     // Phase 2 — Banquet
     Route::prefix('banquet')->group(function () {
-        Route::get('function-rooms', [\App\Http\Controllers\Api\V1\BanquetController::class, 'functionRooms']);
-        Route::get('events', [\App\Http\Controllers\Api\V1\BanquetController::class, 'events']);
-        Route::post('events', [\App\Http\Controllers\Api\V1\BanquetController::class, 'storeEvent']);
-        Route::get('events/{id}', [\App\Http\Controllers\Api\V1\BanquetController::class, 'showEvent']);
-        Route::post('events/{id}/menu', [\App\Http\Controllers\Api\V1\BanquetController::class, 'addMenu']);
-        Route::get('events/{id}/beo', [\App\Http\Controllers\Api\V1\BanquetController::class, 'beo']);
+        Route::get('function-rooms', [BanquetController::class, 'functionRooms']);
+        Route::get('events', [BanquetController::class, 'events']);
+        Route::post('events', [BanquetController::class, 'storeEvent']);
+        Route::get('events/{id}', [BanquetController::class, 'showEvent']);
+        Route::post('events/{id}/menu', [BanquetController::class, 'addMenu']);
+        Route::get('events/{id}/beo', [BanquetController::class, 'beo']);
     });
 
     // Phase 2 — Spa
     Route::prefix('spa')->group(function () {
-        Route::get('treatments', [\App\Http\Controllers\Api\V1\SpaController::class, 'treatments']);
-        Route::get('appointments', [\App\Http\Controllers\Api\V1\SpaController::class, 'appointments']);
-        Route::post('appointments', [\App\Http\Controllers\Api\V1\SpaController::class, 'book']);
-        Route::patch('appointments/{id}/complete', [\App\Http\Controllers\Api\V1\SpaController::class, 'complete']);
+        Route::get('treatments', [SpaController::class, 'treatments']);
+        Route::get('appointments', [SpaController::class, 'appointments']);
+        Route::post('appointments', [SpaController::class, 'book']);
+        Route::patch('appointments/{id}/complete', [SpaController::class, 'complete']);
     });
 
     // Phase 2 — HR
     Route::prefix('hr')->group(function () {
-        Route::get('employees', [\App\Http\Controllers\Api\V1\HrController::class, 'employees']);
-        Route::get('employees/{id}', [\App\Http\Controllers\Api\V1\HrController::class, 'showEmployee']);
-        Route::post('attendance/clock', [\App\Http\Controllers\Api\V1\HrController::class, 'clockIn']);
-        Route::get('payslips', [\App\Http\Controllers\Api\V1\HrController::class, 'payslips']);
-        Route::post('payroll/generate', [\App\Http\Controllers\Api\V1\HrController::class, 'generatePayroll']);
+        Route::get('employees', [HrController::class, 'employees']);
+        Route::get('employees/{id}', [HrController::class, 'showEmployee']);
+        Route::post('attendance/clock', [HrController::class, 'clockIn']);
+        Route::get('payslips', [HrController::class, 'payslips']);
+        Route::post('payroll/generate', [HrController::class, 'generatePayroll']);
     });
 
     // Phase 2 — Loyalty
     Route::prefix('loyalty')->group(function () {
-        Route::get('members', [\App\Http\Controllers\Api\V1\LoyaltyController::class, 'members']);
-        Route::get('members/{id}', [\App\Http\Controllers\Api\V1\LoyaltyController::class, 'show']);
-        Route::post('enroll', [\App\Http\Controllers\Api\V1\LoyaltyController::class, 'enroll']);
-        Route::post('members/{id}/redeem', [\App\Http\Controllers\Api\V1\LoyaltyController::class, 'redeem']);
-        Route::get('vouchers', [\App\Http\Controllers\Api\V1\LoyaltyController::class, 'vouchers']);
+        Route::get('members', [LoyaltyController::class, 'members']);
+        Route::get('members/{id}', [LoyaltyController::class, 'show']);
+        Route::post('enroll', [LoyaltyController::class, 'enroll']);
+        Route::post('members/{id}/redeem', [LoyaltyController::class, 'redeem']);
+        Route::get('vouchers', [LoyaltyController::class, 'vouchers']);
     });
 
     // Phase 2 — Asset & Maintenance
     Route::prefix('asset')->group(function () {
-        Route::get('assets', [\App\Http\Controllers\Api\V1\AssetController::class, 'assets']);
-        Route::get('assets/{id}', [\App\Http\Controllers\Api\V1\AssetController::class, 'show']);
-        Route::get('work-orders', [\App\Http\Controllers\Api\V1\AssetController::class, 'workOrders']);
-        Route::post('work-orders', [\App\Http\Controllers\Api\V1\AssetController::class, 'createWorkOrder']);
-        Route::patch('work-orders/{id}', [\App\Http\Controllers\Api\V1\AssetController::class, 'updateWorkOrder']);
+        Route::get('assets', [AssetController::class, 'assets']);
+        Route::get('assets/{id}', [AssetController::class, 'show']);
+        Route::get('work-orders', [AssetController::class, 'workOrders']);
+        Route::post('work-orders', [AssetController::class, 'createWorkOrder']);
+        Route::patch('work-orders/{id}', [AssetController::class, 'updateWorkOrder']);
     });
 
     // Phase 2 — Communication
     Route::prefix('comm')->group(function () {
-        Route::get('threads', [\App\Http\Controllers\Api\V1\CommController::class, 'threads']);
-        Route::get('threads/{id}', [\App\Http\Controllers\Api\V1\CommController::class, 'show']);
-        Route::post('threads/{id}/reply', [\App\Http\Controllers\Api\V1\CommController::class, 'reply']);
-        Route::post('inbound', [\App\Http\Controllers\Api\V1\CommController::class, 'inbound'])
+        Route::get('threads', [CommController::class, 'threads']);
+        Route::get('threads/{id}', [CommController::class, 'show']);
+        Route::post('threads/{id}/reply', [CommController::class, 'reply']);
+        Route::post('inbound', [CommController::class, 'inbound'])
             ->withoutMiddleware('auth:sanctum'); // public webhook endpoint, signature-verified
     });
 
     // Phase 2 — Finance
     Route::prefix('finance')->group(function () {
-        Route::get('bank-accounts', [\App\Http\Controllers\Api\V1\FinanceController::class, 'bankAccounts']);
-        Route::get('owner-statements', [\App\Http\Controllers\Api\V1\FinanceController::class, 'ownerStatements']);
-        Route::get('fx-rates', [\App\Http\Controllers\Api\V1\FinanceController::class, 'fxRates']);
-        Route::get('fx-rates/lookup', [\App\Http\Controllers\Api\V1\FinanceController::class, 'fxLookup']);
-        Route::get('budgets', [\App\Http\Controllers\Api\V1\FinanceController::class, 'budgets']);
+        Route::get('bank-accounts', [FinanceController::class, 'bankAccounts']);
+        Route::get('owner-statements', [FinanceController::class, 'ownerStatements']);
+        Route::get('fx-rates', [FinanceController::class, 'fxRates']);
+        Route::get('fx-rates/lookup', [FinanceController::class, 'fxLookup']);
+        Route::get('budgets', [FinanceController::class, 'budgets']);
     });
 
     // Phase 2 — AI features
     Route::prefix('ai')->group(function () {
-        Route::post('translate', [\App\Http\Controllers\Api\V1\AiController::class, 'translate']);
-        Route::post('concierge', [\App\Http\Controllers\Api\V1\AiController::class, 'concierge']);
-        Route::post('reviews/{id}/reply', [\App\Http\Controllers\Api\V1\AiController::class, 'reviewReply']);
-        Route::get('demand-forecast', [\App\Http\Controllers\Api\V1\AiController::class, 'demandForecast']);
-        Route::post('chatbot', [\App\Http\Controllers\Api\V1\AiController::class, 'chatbot']);
+        Route::post('translate', [AiController::class, 'translate']);
+        Route::post('concierge', [AiController::class, 'concierge']);
+        Route::post('reviews/{id}/reply', [AiController::class, 'reviewReply']);
+        Route::get('demand-forecast', [AiController::class, 'demandForecast']);
+        Route::post('chatbot', [AiController::class, 'chatbot']);
     });
 
     // Night Audit
@@ -285,18 +295,18 @@ Route::prefix('v1')->middleware(['license', 'auth:sanctum', 'throttle:api'])->gr
 
     // Guest Intelligence / 360 Profiles
     Route::prefix('guests')->group(function () {
-        Route::get('/{id}/profile', [\App\Http\Controllers\Api\V1\GuestController::class, 'profile']);
+        Route::get('/{id}/profile', [GuestController::class, 'profile']);
     });
 
     // Lost & Found
     Route::prefix('lost-found')->group(function () {
-        Route::get('/', [\App\Http\Controllers\Api\V1\LostAndFoundController::class, 'index']);
-        Route::post('/', [\App\Http\Controllers\Api\V1\LostAndFoundController::class, 'store']);
-        Route::get('{id}', [\App\Http\Controllers\Api\V1\LostAndFoundController::class, 'show']);
-        Route::patch('{id}', [\App\Http\Controllers\Api\V1\LostAndFoundController::class, 'update']);
-        Route::post('{id}/claim', [\App\Http\Controllers\Api\V1\LostAndFoundController::class, 'claim']);
-        Route::post('{id}/dispose', [\App\Http\Controllers\Api\V1\LostAndFoundController::class, 'dispose']);
+        Route::get('/', [LostAndFoundController::class, 'index']);
+        Route::post('/', [LostAndFoundController::class, 'store']);
+        Route::get('{id}', [LostAndFoundController::class, 'show']);
+        Route::patch('{id}', [LostAndFoundController::class, 'update']);
+        Route::post('{id}/claim', [LostAndFoundController::class, 'claim']);
+        Route::post('{id}/dispose', [LostAndFoundController::class, 'dispose']);
     });
 });
 
-Route::get('v1/openapi.json', [\App\Http\Controllers\Api\OpenApiController::class, 'spec']);
+Route::get('v1/openapi.json', [OpenApiController::class, 'spec']);

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 class ProvisionCommand extends Command
 {
     protected $signature = 'tenant:provision {tenant_id? : Tenant UUID or slug} {--all : Provision all pending tenants}';
+
     protected $description = 'Provision tenant databases and run migrations';
 
     public function handle(TenantDatabaseManager $manager): int
@@ -24,6 +25,7 @@ class ProvisionCommand extends Command
 
         if (! $tenantId) {
             $this->error('Provide a tenant_id or use --all.');
+
             return self::FAILURE;
         }
 
@@ -33,6 +35,7 @@ class ProvisionCommand extends Command
 
         if (! $tenant) {
             $this->error("Tenant not found: {$tenantId}");
+
             return self::FAILURE;
         }
 
@@ -49,6 +52,7 @@ class ProvisionCommand extends Command
 
         if ($tenants->isEmpty()) {
             $this->info('No pending tenants to provision.');
+
             return self::SUCCESS;
         }
 

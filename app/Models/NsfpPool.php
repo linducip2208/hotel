@@ -13,5 +13,8 @@ class NsfpPool extends Model
 
     protected $casts = ['is_active' => 'boolean'];
 
-    public function property() { return $this->belongsTo(Property::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
 }

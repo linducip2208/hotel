@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Panel\Iot;
 
 use App\Http\Controllers\Controller;
 use App\Models\IotDevice;
-use App\Models\IotEnergyLog;
 use App\Models\Room;
 use App\Services\Iot\IotService;
 use Illuminate\Http\Request;
@@ -15,7 +14,7 @@ class IotController extends Controller
     {
         $property = app('current_property');
         $rooms = Room::where('property_id', $property->id)
-            ->with(['iotDevices' => fn($q) => $q->where('status', '!=', 'offline')])
+            ->with(['iotDevices' => fn ($q) => $q->where('status', '!=', 'offline')])
             ->orderBy('floor')->orderBy('number')
             ->get();
 

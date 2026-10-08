@@ -4,14 +4,15 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         Schema::table('referral_codes', function (Blueprint $t) {
-            if (!Schema::hasColumn('referral_codes', 'total_referrals')) {
+            if (! Schema::hasColumn('referral_codes', 'total_referrals')) {
                 $t->integer('total_referrals')->default(0)->after('uses_limit');
             }
-            if (!Schema::hasColumn('referral_codes', 'total_rewards_earned')) {
+            if (! Schema::hasColumn('referral_codes', 'total_rewards_earned')) {
                 $t->decimal('total_rewards_earned', 14, 2)->default(0)->after('total_referrals');
             }
         });

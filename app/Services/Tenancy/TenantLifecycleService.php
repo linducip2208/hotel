@@ -3,12 +3,12 @@
 namespace App\Services\Tenancy;
 
 use App\Models\Tenant;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class TenantLifecycleService
 {
     public const SUSPEND_GRACE_DAYS = 7;
+
     public const HARD_DELETE_DAYS = 90;
 
     public function processAll(): array
@@ -54,6 +54,7 @@ class TenantLifecycleService
         });
 
         Log::info('Tenant lifecycle processed', $stats);
+
         return $stats;
     }
 

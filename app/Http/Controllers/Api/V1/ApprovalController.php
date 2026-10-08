@@ -28,9 +28,9 @@ class ApprovalController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'type'    => 'required|string',
+            'type' => 'required|string',
             'payload' => 'required|array',
-            'amount'  => 'nullable|numeric|min:0',
+            'amount' => 'nullable|numeric|min:0',
         ]);
 
         $approval = $this->svc->request(
@@ -49,6 +49,7 @@ class ApprovalController extends Controller
         $property = $request->user()->property;
         $approval = ApprovalRequest::where('property_id', $property->id)->findOrFail($id);
         $result = $this->svc->approve($approval, $request->user(), $request->notes);
+
         return response()->json($result);
     }
 
@@ -57,6 +58,7 @@ class ApprovalController extends Controller
         $property = $request->user()->property;
         $approval = ApprovalRequest::where('property_id', $property->id)->findOrFail($id);
         $result = $this->svc->reject($approval, $request->user(), $request->notes);
+
         return response()->json($result);
     }
 }

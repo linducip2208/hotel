@@ -15,6 +15,7 @@ class AssetController extends Controller
     public function index()
     {
         $assets = Asset::where('property_id', app('current_property')->id)->paginate(50);
+
         return view('panel.asset.index', compact('assets'));
     }
 
@@ -33,12 +34,14 @@ class AssetController extends Controller
             'asset_no' => 'AST-'.now()->format('Y').'-'.Str::upper(Str::random(5)),
             'status' => 'active',
         ]);
+
         return back();
     }
 
     public function show(int $id)
     {
         $asset = Asset::where('property_id', app('current_property')->id)->with('workOrders', 'ppmSchedules')->findOrFail($id);
+
         return view('panel.asset.show', compact('asset'));
     }
 
@@ -46,6 +49,7 @@ class AssetController extends Controller
     {
         $orders = WorkOrder::where('property_id', app('current_property')->id)
             ->with('asset', 'room', 'assignee')->orderByDesc('reported_at')->paginate(50);
+
         return view('panel.asset.work-orders', compact('orders'));
     }
 
@@ -60,6 +64,7 @@ class AssetController extends Controller
             'assignee_id' => 'nullable|integer',
         ]);
         $svc->create($data + ['property_id' => app('current_property')->id]);
+
         return back();
     }
 
@@ -73,6 +78,7 @@ class AssetController extends Controller
             'verify' => $svc->verify($wo),
             default => null,
         };
+
         return back();
     }
 
@@ -80,6 +86,7 @@ class AssetController extends Controller
     {
         $schedules = PreventiveMaintenanceSchedule::where('property_id', app('current_property')->id)
             ->with('asset')->orderBy('next_due_at')->paginate(50);
+
         return view('panel.asset.ppm', compact('schedules'));
     }
 }

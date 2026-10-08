@@ -10,11 +10,15 @@ class ChargebackEvidence extends Model
     use HasFactory;
 
     protected $table = 'chargeback_evidence';
+
     protected $guarded = ['id'];
 
     protected $casts = [
         'uploaded_at' => 'datetime',
     ];
 
-    public function chargeback() { return $this->belongsTo(Chargeback::class); }
+    public function chargeback()
+    {
+        return $this->belongsTo(Chargeback::class);
+    }
 }

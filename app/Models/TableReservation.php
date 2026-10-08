@@ -17,9 +17,28 @@ class TableReservation extends Model
         'end_time' => 'datetime',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function restaurantTable() { return $this->belongsTo(RestaurantTable::class); }
-    public function reservation() { return $this->belongsTo(Reservation::class); }
-    public function guest() { return $this->belongsTo(Guest::class); }
-    public function bookedBy() { return $this->belongsTo(User::class, 'booked_by_user_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function restaurantTable()
+    {
+        return $this->belongsTo(RestaurantTable::class);
+    }
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class);
+    }
+
+    public function guest()
+    {
+        return $this->belongsTo(Guest::class);
+    }
+
+    public function bookedBy()
+    {
+        return $this->belongsTo(User::class, 'booked_by_user_id');
+    }
 }

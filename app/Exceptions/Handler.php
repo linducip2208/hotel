@@ -11,8 +11,9 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Response;
 use Illuminate\Session\TokenMismatchException;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
@@ -40,7 +41,7 @@ class Handler extends ExceptionHandler
         'bank_account',
     ];
 
-    public function render($request, Throwable $e): JsonResponse|RedirectResponse|\Illuminate\Http\Response
+    public function render($request, Throwable $e): JsonResponse|RedirectResponse|Response
     {
         if ($e instanceof HotelException) {
             return $this->renderHotelException($request, $e);

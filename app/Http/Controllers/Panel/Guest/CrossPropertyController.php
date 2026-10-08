@@ -28,6 +28,7 @@ class CrossPropertyController extends Controller
         }
 
         $profile = $this->service->getUnifiedProfile((array) $guestIds);
+
         return view('panel.guests.cross-property', ['profile' => $profile, 'results' => []]);
     }
 }

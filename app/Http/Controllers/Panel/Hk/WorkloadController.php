@@ -37,6 +37,6 @@ class WorkloadController extends Controller
 
         session()->flash('workload_assignments', $assignments);
 
-        return back()->with('success', 'Assignments generated for ' . count($assignments) . ' attendants.');
+        return back()->with('success', 'Assignments generated for '.count($assignments).' attendants.');
     }
 }

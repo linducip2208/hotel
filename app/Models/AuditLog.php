@@ -10,6 +10,7 @@ class AuditLog extends Model
     use HasFactory;
 
     public $timestamps = false;
+
     protected $guarded = ['id'];
 
     protected $casts = [
@@ -19,9 +20,20 @@ class AuditLog extends Model
         'created_at' => 'datetime',
     ];
 
-    public function auditable() { return $this->morphTo(); }
-    public function property()  { return $this->belongsTo(Property::class); }
-    public function user()      { return $this->belongsTo(User::class, 'user_id'); }
+    public function auditable()
+    {
+        return $this->morphTo();
+    }
+
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     /**
      * Compute hash for this entry, optionally chained to previous.
@@ -42,6 +54,7 @@ class AuditLog extends Model
             'created_at' => $this->created_at?->toIso8601String(),
             'previous_hash' => $previousHash,
         ];
+
         return hash('sha256', json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
     }
 

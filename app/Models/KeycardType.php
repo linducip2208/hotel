@@ -15,6 +15,13 @@ class KeycardType extends Model
         'is_active' => 'boolean',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function inventory() { return $this->hasMany(KeycardInventory::class, 'keycard_type_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function inventory()
+    {
+        return $this->hasMany(KeycardInventory::class, 'keycard_type_id');
+    }
 }

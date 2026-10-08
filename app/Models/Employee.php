@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Employee extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
+
     protected $casts = [
         'date_of_birth' => 'date',
         'joined_at' => 'date',
@@ -21,10 +23,25 @@ class Employee extends Model
         'other_allowances' => 'array',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function user() { return $this->belongsTo(User::class); }
-    public function attendance() { return $this->hasMany(AttendanceLog::class); }
-    public function payslips() { return $this->hasMany(Payslip::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function attendance()
+    {
+        return $this->hasMany(AttendanceLog::class);
+    }
+
+    public function payslips()
+    {
+        return $this->hasMany(Payslip::class);
+    }
 
     public function getFullNameAttribute(): string
     {

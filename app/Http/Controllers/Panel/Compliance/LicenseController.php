@@ -14,6 +14,7 @@ class LicenseController extends Controller
     public function index()
     {
         $licenses = $this->service->list(app('current_property'));
+
         return view('panel.compliance.licenses', compact('licenses'));
     }
 
@@ -29,6 +30,7 @@ class LicenseController extends Controller
             'notes' => 'nullable|string',
         ]);
         $this->service->create(app('current_property'), $data);
+
         return back()->with('success', 'Izin berhasil ditambahkan.');
     }
 
@@ -45,6 +47,7 @@ class LicenseController extends Controller
             'notes' => 'nullable|string',
         ]);
         $this->service->update($license, $data);
+
         return back()->with('success', 'Izin berhasil diperbarui.');
     }
 
@@ -52,6 +55,7 @@ class LicenseController extends Controller
     {
         $license = PropertyLicense::where('property_id', app('current_property')->id)->findOrFail($id);
         $this->service->delete($license);
+
         return back()->with('success', 'Izin berhasil dihapus.');
     }
 
@@ -61,6 +65,7 @@ class LicenseController extends Controller
         $request->validate(['document' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240']);
         $path = $request->file('document')->store('licenses', 'public');
         $license->update(['document_path' => $path]);
+
         return back()->with('success', 'Dokumen berhasil diunggah.');
     }
 }

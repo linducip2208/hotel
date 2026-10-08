@@ -69,7 +69,9 @@ class InspectionController extends Controller
 
         foreach ($data['items'] as $key => $itemData) {
             $status = $itemData['status'];
-            if ($status === 'fail') $allPassed = false;
+            if ($status === 'fail') {
+                $allPassed = false;
+            }
 
             $items[] = [
                 'name' => $itemLabels[$key] ?? $key,

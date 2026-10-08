@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Panel\Compliance;
 
 use App\Http\Controllers\Controller;
 use App\Models\Guest;
-use App\Models\Reservation;
+use App\Models\ReservationGuest;
+use App\Models\Review;
 use Illuminate\Http\Request;
 
 class PrivacyController extends Controller
@@ -16,9 +17,9 @@ class PrivacyController extends Controller
             $guests = Guest::where('property_id', app('current_property')->id)
                 ->where(function ($q) use ($request) {
                     $q->where('first_name', 'like', "%{$request->search}%")
-                      ->orWhere('last_name', 'like', "%{$request->search}%")
-                      ->orWhere('email', 'like', "%{$request->search}%")
-                      ->orWhere('phone', 'like', "%{$request->search}%");
+                        ->orWhere('last_name', 'like', "%{$request->search}%")
+                        ->orWhere('email', 'like', "%{$request->search}%")
+                        ->orWhere('phone', 'like', "%{$request->search}%");
                 })
                 ->withCount('reservations')
                 ->orderBy('created_at', 'desc')
@@ -31,9 +32,10 @@ class PrivacyController extends Controller
     public function consentLog($id)
     {
         $guest = Guest::where('property_id', app('current_property')->id)->findOrFail($id);
+
         return response()->json([
             'guest_id' => $guest->id,
-            'name' => $guest->first_name . ' ' . ($guest->last_name ?? ''),
+            'name' => $guest->first_name.' '.($guest->last_name ?? ''),
             'marketing_consent' => $guest->marketing_consent,
             'data_sharing_consent' => $guest->data_sharing_consent ?? false,
             'forgotten_at' => $guest->forgotten_at,
@@ -59,11 +61,12 @@ class PrivacyController extends Controller
         $guest = Guest::where('property_id', app('current_property')->id)->findOrFail($id);
         $data = $guest->toArray();
         $data['reservations'] = $guest->reservations()->with('rooms', 'folios')->get()->toArray();
-        $data['reviews'] = \App\Models\Review::whereHas('reservation', fn($q) => $q->whereIn('id',
-            \App\Models\ReservationGuest::where('guest_id', $guest->id)->pluck('reservation_id')
+        $data['reviews'] = Review::whereHas('reservation', fn ($q) => $q->whereIn('id',
+            ReservationGuest::where('guest_id', $guest->id)->pluck('reservation_id')
         ))->get()->toArray();
 
-        $filename = 'data-tamu-' . $guest->id . '-' . now()->format('Ymd') . '.json';
+        $filename = 'data-tamu-'.$guest->id.'-'.now()->format('Ymd').'.json';
+
         return response(json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE), 200, [
             'Content-Type' => 'application/json',
             'Content-Disposition' => "attachment; filename={$filename}",
@@ -75,7 +78,7 @@ class PrivacyController extends Controller
         $guest = Guest::where('property_id', app('current_property')->id)->findOrFail($id);
         $guest->update([
             'first_name' => 'Anonim',
-            'last_name' => 'Guest-' . $guest->id,
+            'last_name' => 'Guest-'.$guest->id,
             'email' => null,
             'phone' => null,
             'address_line1' => null,

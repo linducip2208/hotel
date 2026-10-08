@@ -20,6 +20,7 @@ class TravelokaAdapter extends BaseChannelAdapter
     protected function http(): Client
     {
         $cred = $this->channel->getCredentials();
+
         return new Client([
             'base_uri' => $this->getBaseUrl(),
             'timeout' => 30,
@@ -166,10 +167,10 @@ class TravelokaAdapter extends BaseChannelAdapter
                 }
 
                 $queryString = http_build_query($params);
-                $endpoint = 'bookings?' . $queryString;
+                $endpoint = 'bookings?'.$queryString;
                 $signature = $this->generateSignature('GET', $endpoint, '');
 
-                $response = $this->http()->get('bookings?' . $queryString, [
+                $response = $this->http()->get('bookings?'.$queryString, [
                     'headers' => ['X-Signature' => $signature],
                 ]);
 
@@ -194,10 +195,10 @@ class TravelokaAdapter extends BaseChannelAdapter
     public function fetchBooking(string $bookingId): array
     {
         return $this->executeSync('fetch_booking', function () use ($bookingId) {
-            $endpoint = 'bookings/' . urlencode($bookingId);
+            $endpoint = 'bookings/'.urlencode($bookingId);
             $signature = $this->generateSignature('GET', $endpoint, '');
 
-            $response = $this->http()->get('bookings/' . urlencode($bookingId), [
+            $response = $this->http()->get('bookings/'.urlencode($bookingId), [
                 'headers' => [
                     'X-Signature' => $signature,
                 ],
@@ -215,7 +216,7 @@ class TravelokaAdapter extends BaseChannelAdapter
                 'reason' => $reason ?: 'Cancelled by hotel',
             ];
 
-            $endpoint = 'bookings/' . urlencode($bookingId) . '/cancel';
+            $endpoint = 'bookings/'.urlencode($bookingId).'/cancel';
             $body = json_encode($payload, JSON_UNESCAPED_UNICODE);
             $signature = $this->generateSignature('POST', $endpoint, $body);
 
@@ -258,7 +259,8 @@ class TravelokaAdapter extends BaseChannelAdapter
             $r = $this->http()->get('health', [
                 'headers' => ['X-Signature' => $signature],
             ]);
-            return ['ok' => $r->getStatusCode() < 400, 'message' => 'HTTP ' . $r->getStatusCode()];
+
+            return ['ok' => $r->getStatusCode() < 400, 'message' => 'HTTP '.$r->getStatusCode()];
         } catch (\Throwable $e) {
             return ['ok' => false, 'message' => $e->getMessage()];
         }
@@ -275,21 +277,22 @@ class TravelokaAdapter extends BaseChannelAdapter
             Log::warning('Traveloka API secret not configured. Using empty signature.', [
                 'channel_id' => $this->channel->id,
             ]);
+
             return '';
         }
 
         $timestamp = (string) time();
         $nonce = bin2hex(random_bytes(16));
 
-        $stringToSign = strtoupper($method) . "\n"
-            . '/' . ltrim($endpoint, '/') . "\n"
-            . $timestamp . "\n"
-            . $nonce . "\n"
-            . hash('sha256', $body);
+        $stringToSign = strtoupper($method)."\n"
+            .'/'.ltrim($endpoint, '/')."\n"
+            .$timestamp."\n"
+            .$nonce."\n"
+            .hash('sha256', $body);
 
         $signature = hash_hmac('sha256', $stringToSign, $apiSecret);
 
-        return $timestamp . ':' . $nonce . ':' . $signature;
+        return $timestamp.':'.$nonce.':'.$signature;
     }
 
     // ─── Private Helpers ──────────────────────────────────────────
@@ -310,16 +313,18 @@ class TravelokaAdapter extends BaseChannelAdapter
 
         if ($statusCode === 429) {
             $retryAfter = $response->getHeader('Retry-After')[0] ?? 'unknown';
+
             return [
                 'success' => false,
                 'data' => [],
-                'error' => 'Rate limited. Retry after ' . $retryAfter,
+                'error' => 'Rate limited. Retry after '.$retryAfter,
                 'retry_after' => $retryAfter,
             ];
         }
 
         if ($statusCode >= 400) {
             $errorMsg = $data['message'] ?? $data['error'] ?? $data['description'] ?? 'Unknown error';
+
             return [
                 'success' => false,
                 'data' => $data,
@@ -373,7 +378,6 @@ class TravelokaAdapter extends BaseChannelAdapter
                 'context' => $e->getContext(),
             ]);
             throw $e;
-
         } catch (ConnectException $e) {
             $log->update([
                 'status' => 'failed',
@@ -386,7 +390,6 @@ class TravelokaAdapter extends BaseChannelAdapter
                 'error' => $e->getMessage(),
             ]);
             throw ChannelSyncException::networkError($this->channel->id, $operation, $e->getMessage());
-
         } catch (\Throwable $e) {
             $log->update([
                 'status' => 'failed',

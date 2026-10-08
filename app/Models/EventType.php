@@ -17,6 +17,13 @@ class EventType extends Model
         'is_active' => 'boolean',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function bookings() { return $this->hasMany(EventBooking::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(EventBooking::class);
+    }
 }

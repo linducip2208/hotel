@@ -13,6 +13,7 @@ class PoiController extends Controller
     {
         $pois = PointOfInterest::where('property_id', app('current_property')->id)
             ->orWhereNull('property_id')->paginate(50);
+
         return view('panel.concierge.pois', compact('pois'));
     }
 
@@ -33,6 +34,7 @@ class PoiController extends Controller
             'slug' => Str::slug($data['name']).'-'.Str::random(4),
             'is_active' => true,
         ]);
+
         return back();
     }
 }

@@ -49,13 +49,13 @@ class BanquetController extends Controller
     {
         $validated = $request->validate([
             'function_room_id' => 'required|integer|exists:function_rooms,id',
-            'client_name'      => 'required|string|max:191',
-            'event_date'       => 'required|date',
-            'start_time'       => 'required|date_format:H:i',
-            'end_time'         => 'required|date_format:H:i|after:start_time',
-            'pax'              => 'required|integer|min:1',
-            'type'             => 'nullable|string|max:50',
-            'notes'            => 'nullable|string',
+            'client_name' => 'required|string|max:191',
+            'event_date' => 'required|date',
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i|after:start_time',
+            'pax' => 'required|integer|min:1',
+            'type' => 'nullable|string|max:50',
+            'notes' => 'nullable|string',
         ]);
 
         $validated['property_id'] = $this->property()->id;
@@ -66,10 +66,10 @@ class BanquetController extends Controller
     public function addMenu(Request $request, int $id, EventService $svc)
     {
         $validated = $request->validate([
-            'name'      => 'required|string|max:191',
-            'quantity'  => 'required|integer|min:1',
-            'unit_price'=> 'required|numeric|min:0',
-            'notes'     => 'nullable|string|max:255',
+            'name' => 'required|string|max:191',
+            'quantity' => 'required|integer|min:1',
+            'unit_price' => 'required|numeric|min:0',
+            'notes' => 'nullable|string|max:255',
         ]);
 
         $event = Event::where('property_id', $this->property()->id)->findOrFail($id);

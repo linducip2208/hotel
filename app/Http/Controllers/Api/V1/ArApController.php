@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\ArAccount;
-use App\Models\ArInvoice;
 use App\Models\ApBill;
 use App\Models\ApSupplier;
+use App\Models\ArAccount;
+use App\Models\ArInvoice;
 use Illuminate\Http\Request;
 
 class ArApController extends Controller
@@ -20,6 +20,7 @@ class ArApController extends Controller
             ->with(['company', 'travelAgent', 'channel', 'guest'])
             ->where('is_active', true)
             ->get();
+
         return response()->json($accounts);
     }
 
@@ -43,6 +44,7 @@ class ArApController extends Controller
         $invoice = ArInvoice::where('property_id', $property->id)
             ->with(['arAccount', 'lines', 'payments'])
             ->findOrFail($id);
+
         return response()->json($invoice);
     }
 
@@ -52,8 +54,8 @@ class ArApController extends Controller
         $invoice = ArInvoice::where('property_id', $property->id)->findOrFail($id);
 
         $data = $request->validate([
-            'amount'       => 'required|numeric|min:0.01',
-            'method'       => 'required|string',
+            'amount' => 'required|numeric|min:0.01',
+            'method' => 'required|string',
             'reference_no' => 'nullable|string',
         ]);
 
@@ -80,6 +82,7 @@ class ArApController extends Controller
             ->where('is_active', true)
             ->orderBy('name')
             ->get();
+
         return response()->json($suppliers);
     }
 
@@ -103,8 +106,8 @@ class ArApController extends Controller
         $bill = ApBill::where('property_id', $property->id)->findOrFail($id);
 
         $data = $request->validate([
-            'amount'       => 'required|numeric|min:0.01',
-            'method'       => 'required|string',
+            'amount' => 'required|numeric|min:0.01',
+            'method' => 'required|string',
             'reference_no' => 'nullable|string',
         ]);
 

@@ -14,6 +14,7 @@ class TaxConfigController extends Controller
         $property = app('current_property');
         $rates = Pb1Rate::where('region_code', $property->region_code)->orderByDesc('effective_from')->get();
         $ratePlans = RatePlan::where('property_id', $property->id)->where('is_active', true)->orderBy('name')->get();
+
         return view('panel.settings.tax', compact('property', 'rates', 'ratePlans'));
     }
 
@@ -26,6 +27,7 @@ class TaxConfigController extends Controller
             'nsfp_series' => 'nullable|string',
         ]);
         app('current_property')->update($data);
+
         return back()->with('status', 'Tax config updated.');
     }
 

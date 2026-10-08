@@ -18,7 +18,7 @@ final class SendPaymentReceipt implements ShouldQueue
 
     public function handle(FolioPaymentReceived $event, NotificationDispatcher $dispatcher): void
     {
-        $folio   = $event->folio->loadMissing('guest', 'reservation', 'property');
+        $folio = $event->folio->loadMissing('guest', 'reservation', 'property');
         $payment = $event->folioPayment;
 
         if (! $folio->guest?->email) {
@@ -33,15 +33,15 @@ final class SendPaymentReceipt implements ShouldQueue
         $dispatcher->paymentReceipt($folio, $payment);
 
         NotificationLog::create([
-            'property_id'     => $folio->property_id,
-            'channel'         => 'mail',
-            'event'           => 'payment_receipt',
-            'recipient'       => $folio->guest->email,
+            'property_id' => $folio->property_id,
+            'channel' => 'mail',
+            'event' => 'payment_receipt',
+            'recipient' => $folio->guest->email,
             'notifiable_type' => get_class($payment),
-            'notifiable_id'   => $payment->id,
-            'status'          => 'sent',
+            'notifiable_id' => $payment->id,
+            'status' => 'sent',
             'idempotency_key' => $key,
-            'sent_at'         => now(),
+            'sent_at' => now(),
         ]);
     }
 }

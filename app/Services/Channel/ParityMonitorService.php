@@ -25,7 +25,7 @@ class ParityMonitorService
     public function checkAndAlert(Property $property): array
     {
         $alerts = [];
-        $today  = Carbon::today()->toDateString();
+        $today = Carbon::today()->toDateString();
         $window = Carbon::today()->addDays(30)->toDateString();
 
         $snapshots = RateShopperSnapshot::where('property_id', $property->id)
@@ -40,7 +40,7 @@ class ParityMonitorService
                 $snap->check_date->toDateString()
             );
 
-            $directRate  = $directPricing['price'];
+            $directRate = $directPricing['price'];
             $channelRate = (float) $snap->competitor_rate;
 
             if ($directRate <= 0 || $channelRate <= 0) {
@@ -48,7 +48,7 @@ class ParityMonitorService
             }
 
             $gapAmount = $directRate - $channelRate;
-            $gapPct    = ($gapAmount / $directRate) * 100;
+            $gapPct = ($gapAmount / $directRate) * 100;
 
             // Only alert when OTA is cheaper than direct (negative gap = breach)
             if ($gapPct >= -2) {
@@ -56,10 +56,10 @@ class ParityMonitorService
             }
 
             $severity = match (true) {
-                $gapPct > -5   => 'low',
-                $gapPct > -10  => 'medium',
-                $gapPct > -20  => 'high',
-                default        => 'critical',
+                $gapPct > -5 => 'low',
+                $gapPct > -10 => 'medium',
+                $gapPct > -20 => 'high',
+                default => 'critical',
             };
 
             $channel = Channel::where('property_id', $property->id)
@@ -74,16 +74,16 @@ class ParityMonitorService
 
             if (! $existing) {
                 $alert = ChannelParityAlert::create([
-                    'property_id'  => $property->id,
+                    'property_id' => $property->id,
                     'room_type_id' => $snap->room_type_id ?? $property->roomTypes()->value('id'),
-                    'channel_id'   => $channel?->id,
-                    'check_date'   => $snap->check_date->toDateString(),
-                    'direct_rate'  => $directRate,
+                    'channel_id' => $channel?->id,
+                    'check_date' => $snap->check_date->toDateString(),
+                    'direct_rate' => $directRate,
                     'channel_rate' => $channelRate,
-                    'gap_amount'   => $gapAmount,
-                    'gap_pct'      => $gapPct,
-                    'severity'     => $severity,
-                    'status'       => 'open',
+                    'gap_amount' => $gapAmount,
+                    'gap_pct' => $gapPct,
+                    'severity' => $severity,
+                    'status' => 'open',
                 ]);
                 $alerts[] = $alert;
             }
@@ -95,20 +95,20 @@ class ParityMonitorService
     public function acknowledge(ChannelParityAlert $alert, int $userId, ?string $notes = null): void
     {
         $alert->update([
-            'status'                => 'acknowledged',
-            'resolved_by_user_id'   => $userId,
-            'notes'                 => $notes,
+            'status' => 'acknowledged',
+            'resolved_by_user_id' => $userId,
+            'notes' => $notes,
         ]);
     }
 
     public function resolve(ChannelParityAlert $alert, int $userId, string $action, ?string $notes = null): void
     {
         $alert->update([
-            'status'                => 'resolved',
-            'action_taken'          => $action,
-            'resolved_by_user_id'   => $userId,
-            'resolved_at'           => now(),
-            'notes'                 => $notes,
+            'status' => 'resolved',
+            'action_taken' => $action,
+            'resolved_by_user_id' => $userId,
+            'resolved_at' => now(),
+            'notes' => $notes,
         ]);
     }
 }

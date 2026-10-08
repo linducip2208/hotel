@@ -18,5 +18,8 @@ class SeoPage extends Model
         'regenerate_after' => 'datetime',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
 }

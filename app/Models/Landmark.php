@@ -17,5 +17,8 @@ class Landmark extends Model
         'photos' => 'array',
     ];
 
-    public function pointsOfInterest() { return $this->hasMany(PointOfInterest::class); }
+    public function pointsOfInterest()
+    {
+        return $this->hasMany(PointOfInterest::class);
+    }
 }

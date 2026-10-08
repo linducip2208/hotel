@@ -17,6 +17,7 @@ class EventService
                 'status' => 'inquiry',
             ]);
             $this->recalculateTotal($event);
+
             return $event->fresh();
         });
     }
@@ -31,6 +32,7 @@ class EventService
             'subtotal' => $item['qty'] * $item['unit_price'],
         ]);
         $this->recalculateTotal($event->fresh());
+
         return $line;
     }
 

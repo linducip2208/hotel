@@ -17,8 +17,23 @@ class LaundryTransaction extends Model
         'quantity' => 'integer',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function linenCategory() { return $this->belongsTo(LinenCategory::class); }
-    public function room() { return $this->belongsTo(Room::class); }
-    public function performedBy() { return $this->belongsTo(User::class, 'performed_by_user_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function linenCategory()
+    {
+        return $this->belongsTo(LinenCategory::class);
+    }
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
+
+    public function performedBy()
+    {
+        return $this->belongsTo(User::class, 'performed_by_user_id');
+    }
 }

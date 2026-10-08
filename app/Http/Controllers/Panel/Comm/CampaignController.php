@@ -6,11 +6,13 @@ namespace App\Http\Controllers\Panel\Comm;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\SendCampaignMessageJob;
-use App\Models\MarketingCampaign;
-use App\Models\MessageTemplate;
 use App\Models\Guest;
-use Illuminate\Http\Request;
+use App\Models\MarketingCampaign;
+use App\Models\Message;
+use App\Models\MessageTemplate;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 
 final class CampaignController extends Controller
 {
@@ -18,12 +20,14 @@ final class CampaignController extends Controller
     {
         $campaigns = MarketingCampaign::where('property_id', app('current_property')->id)
             ->with('template')->orderByDesc('id')->paginate(50);
+
         return view('panel.comm.campaigns.index', compact('campaigns'));
     }
 
     public function create()
     {
         $templates = MessageTemplate::where('property_id', app('current_property')->id)->where('is_active', true)->get();
+
         return view('panel.comm.campaigns.create', compact('templates'));
     }
 
@@ -73,7 +77,7 @@ final class CampaignController extends Controller
         $campaign = MarketingCampaign::where('property_id', app('current_property')->id)
             ->with('template')->findOrFail($id);
 
-        $logs = \App\Models\Message::where('thread_id', $id)->latest()->paginate(50);
+        $logs = Message::where('thread_id', $id)->latest()->paginate(50);
 
         return view('panel.comm.campaigns.show', compact('campaign', 'logs'));
     }
@@ -101,6 +105,7 @@ final class CampaignController extends Controller
     {
         $campaign = MarketingCampaign::where('property_id', app('current_property')->id)->findOrFail($id);
         $campaign->update(['status' => 'paused']);
+
         return back()->with('success', 'Campaign paused.');
     }
 
@@ -126,6 +131,7 @@ final class CampaignController extends Controller
 
         if ($guests->isEmpty()) {
             $campaign->update(['status' => 'sent', 'recipients_count' => 0, 'sent_count' => 0]);
+
             return;
         }
 
@@ -139,7 +145,7 @@ final class CampaignController extends Controller
         }
     }
 
-    private function buildAudienceQuery(string $type, ?array $custom): \Illuminate\Database\Eloquent\Builder
+    private function buildAudienceQuery(string $type, ?array $custom): Builder
     {
         $query = Guest::query();
 
@@ -147,7 +153,7 @@ final class CampaignController extends Controller
             'vip_only' => $query->where('is_vip', true),
             'by_last_stay' => $query->whereHas('reservations', function ($q) {
                 $q->where('check_out', '>=', Carbon::now()->subMonths(6))
-                  ->where('check_out', '<=', Carbon::now()->subMonths(1));
+                    ->where('check_out', '<=', Carbon::now()->subMonths(1));
             }),
             'by_birthday_month' => $query->whereMonth('date_of_birth', Carbon::now()->month),
             'custom_filter' => $this->applyCustomFilter($query, $custom ?? []),
@@ -155,7 +161,7 @@ final class CampaignController extends Controller
         };
     }
 
-    private function applyCustomFilter($query, array $filter): \Illuminate\Database\Eloquent\Builder
+    private function applyCustomFilter($query, array $filter): Builder
     {
         if (isset($filter['country'])) {
             $query->where('country', $filter['country']);
@@ -164,6 +170,7 @@ final class CampaignController extends Controller
             $min = (int) $filter['min_stays'];
             $query->whereHas('reservations', fn ($q) => $q->havingRaw("COUNT(*) >= {$min}"));
         }
+
         return $query;
     }
 }

@@ -12,19 +12,22 @@ use Illuminate\Support\Str;
 class ImportPaymentPresets extends Command
 {
     protected $signature = 'hotel:import-payment-presets {--property= : Property ID} {--activate : Aktifkan provider pertama sebagai default}';
+
     protected $description = 'Impor 13+ payment gateway presets dari storage/app/payment-presets/payment-presets.json';
 
     public function handle(): int
     {
         $path = storage_path('app/payment-presets/payment-presets.json');
         if (! File::exists($path)) {
-            $this->error('File preset tidak ditemukan: ' . $path);
+            $this->error('File preset tidak ditemukan: '.$path);
+
             return self::FAILURE;
         }
 
         $presets = json_decode(File::get($path), true);
         if (! is_array($presets)) {
             $this->error('Format JSON tidak valid.');
+
             return self::FAILURE;
         }
 
@@ -35,6 +38,7 @@ class ImportPaymentPresets extends Command
 
         if (! $property) {
             $this->error('Property tidak ditemukan.');
+
             return self::FAILURE;
         }
 
@@ -55,6 +59,7 @@ class ImportPaymentPresets extends Command
             if ($exists) {
                 $this->line("  <fg=gray>Lewati: {$preset['name']} (sudah ada)</>");
                 $skipped++;
+
                 continue;
             }
 
@@ -88,9 +93,9 @@ class ImportPaymentPresets extends Command
 
         $this->newLine();
         $this->info("Selesai: {$imported} diimpor, {$skipped} dilewati.");
-        $this->line("Total provider: <fg=yellow>" . Provider::where('property_id', $property->id)->where('integration_type', 'payment')->count() . "</>");
-        $this->line("");
-        $this->line("Selanjutnya: isi API Key + Secret di halaman admin, lalu aktifkan provider.");
+        $this->line('Total provider: <fg=yellow>'.Provider::where('property_id', $property->id)->where('integration_type', 'payment')->count().'</>');
+        $this->line('');
+        $this->line('Selanjutnya: isi API Key + Secret di halaman admin, lalu aktifkan provider.');
 
         return self::SUCCESS;
     }

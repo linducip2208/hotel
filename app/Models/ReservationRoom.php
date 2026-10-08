@@ -18,9 +18,28 @@ class ReservationRoom extends Model
         'per_night_rates' => 'array',
     ];
 
-    public function reservation() { return $this->belongsTo(Reservation::class); }
-    public function roomType() { return $this->belongsTo(RoomType::class); }
-    public function ratePlan() { return $this->belongsTo(RatePlan::class); }
-    public function room() { return $this->belongsTo(Room::class); }
-    public function guests() { return $this->hasMany(ReservationGuest::class); }
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class);
+    }
+
+    public function roomType()
+    {
+        return $this->belongsTo(RoomType::class);
+    }
+
+    public function ratePlan()
+    {
+        return $this->belongsTo(RatePlan::class);
+    }
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
+
+    public function guests()
+    {
+        return $this->hasMany(ReservationGuest::class);
+    }
 }

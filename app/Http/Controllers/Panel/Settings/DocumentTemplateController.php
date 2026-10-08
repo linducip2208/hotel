@@ -11,6 +11,7 @@ class DocumentTemplateController extends Controller
     public function index()
     {
         $templates = DocumentTemplate::where('property_id', app('current_property')->id)->paginate(50);
+
         return view('panel.settings.doc-templates', compact('templates'));
     }
 
@@ -26,6 +27,7 @@ class DocumentTemplateController extends Controller
             'is_default' => 'nullable|boolean',
         ]);
         DocumentTemplate::create($data + ['property_id' => app('current_property')->id, 'is_active' => true]);
+
         return back();
     }
 }

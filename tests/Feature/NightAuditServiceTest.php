@@ -31,7 +31,7 @@ beforeEach(function () {
 
     // COA accounts required by NightAuditService journal posting
     ChartOfAccount::create(['property_id' => $this->property->id, 'code' => '1-1100', 'name' => 'Piutang Tamu',    'type' => 'asset',     'normal_balance' => 'debit',  'is_active' => true]);
-    ChartOfAccount::create(['property_id' => $this->property->id, 'code' => '4-1010', 'name' => 'Pendapatan Kamar','type' => 'revenue',   'normal_balance' => 'credit', 'is_active' => true]);
+    ChartOfAccount::create(['property_id' => $this->property->id, 'code' => '4-1010', 'name' => 'Pendapatan Kamar', 'type' => 'revenue',   'normal_balance' => 'credit', 'is_active' => true]);
     ChartOfAccount::create(['property_id' => $this->property->id, 'code' => '4-2000', 'name' => 'Service Charge',  'type' => 'revenue',   'normal_balance' => 'credit', 'is_active' => true]);
     ChartOfAccount::create(['property_id' => $this->property->id, 'code' => '2-1100', 'name' => 'PB1 Payable',     'type' => 'liability', 'normal_balance' => 'credit', 'is_active' => true]);
 
@@ -42,37 +42,37 @@ beforeEach(function () {
 // Helper: create a checked-in reservation with folio for the audit date
 function naReservation(array $override = []): Reservation
 {
-    $p  = test()->property;
+    $p = test()->property;
     $rt = test()->rt;
     $rp = test()->rp;
-    $g  = test()->guest;
+    $g = test()->guest;
 
     $res = Reservation::create(array_merge([
-        'property_id'      => $p->id,
-        'ref'              => 'HMS-NA-' . uniqid(),
+        'property_id' => $p->id,
+        'ref' => 'HMS-NA-'.uniqid(),
         'primary_guest_id' => $g->id,
-        'status'           => 'checked_in',
-        'check_in'         => '2026-09-01',
-        'check_out'        => '2026-09-02',
-        'nights'           => 1,
-        'adults'           => 1,
+        'status' => 'checked_in',
+        'check_in' => '2026-09-01',
+        'check_out' => '2026-09-02',
+        'nights' => 1,
+        'adults' => 1,
     ], $override));
 
     ReservationRoom::create([
         'reservation_id' => $res->id,
-        'room_type_id'   => $rt->id,
-        'rate_plan_id'   => $rp->id,
-        'check_in'       => '2026-09-01',
-        'check_out'      => '2026-09-02',
-        'subtotal'       => 500000,
+        'room_type_id' => $rt->id,
+        'rate_plan_id' => $rp->id,
+        'check_in' => '2026-09-01',
+        'check_out' => '2026-09-02',
+        'subtotal' => 500000,
     ]);
 
     Folio::create([
-        'property_id'    => $p->id,
+        'property_id' => $p->id,
         'reservation_id' => $res->id,
-        'folio_no'       => 'F-NA-' . $res->id,
-        'type'           => 'guest',
-        'status'         => 'open',
+        'folio_no' => 'F-NA-'.$res->id,
+        'type' => 'guest',
+        'status' => 'open',
     ]);
 
     return $res;
@@ -91,7 +91,7 @@ it('posts room charge to folio for checked_in reservation', function () {
 
     $this->svc->run($this->property, new DateTime($this->auditDate));
 
-    $folio  = $res->folios()->first();
+    $folio = $res->folios()->first();
     $charge = $folio->charges()->where('category', 'room')->first();
 
     expect($charge)->not->toBeNull()
@@ -115,7 +115,7 @@ it('posts balanced aggregate journal entry for room revenue', function () {
 });
 
 it('is idempotent — second run returns existing completed audit', function () {
-    $first  = $this->svc->run($this->property, new DateTime($this->auditDate));
+    $first = $this->svc->run($this->property, new DateTime($this->auditDate));
     $second = $this->svc->run($this->property, new DateTime($this->auditDate));
 
     expect($first->id)->toBe($second->id)
@@ -124,14 +124,14 @@ it('is idempotent — second run returns existing completed audit', function () 
 
 it('marks confirmed reservation as no_show when check_in equals audit date', function () {
     $noShow = Reservation::create([
-        'property_id'      => $this->property->id,
-        'ref'              => 'HMS-NS-' . uniqid(),
+        'property_id' => $this->property->id,
+        'ref' => 'HMS-NS-'.uniqid(),
         'primary_guest_id' => $this->guest->id,
-        'status'           => 'confirmed',
-        'check_in'         => $this->auditDate,
-        'check_out'        => '2026-09-02',
-        'nights'           => 1,
-        'adults'           => 1,
+        'status' => 'confirmed',
+        'check_in' => $this->auditDate,
+        'check_out' => '2026-09-02',
+        'nights' => 1,
+        'adults' => 1,
     ]);
 
     $this->svc->run($this->property, new DateTime($this->auditDate));
@@ -144,7 +144,7 @@ it('stores occupancy KPI in summary', function () {
     Inventory::create([
         'property_id' => $this->property->id,
         'room_type_id' => $this->rt->id,
-        'date'        => $this->auditDate,
+        'date' => $this->auditDate,
         'total' => 10, 'sold' => 4, 'blocked' => 0, 'out_of_order' => 0,
     ]);
 

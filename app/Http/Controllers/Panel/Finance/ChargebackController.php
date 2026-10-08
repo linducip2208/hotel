@@ -100,8 +100,8 @@ class ChargebackController extends Controller
     public function deleteEvidence($chargebackId, $evidenceId)
     {
         $evidence = ChargebackEvidence::findOrFail($evidenceId);
-        if (file_exists(storage_path('app/' . $evidence->file_path))) {
-            unlink(storage_path('app/' . $evidence->file_path));
+        if (file_exists(storage_path('app/'.$evidence->file_path))) {
+            unlink(storage_path('app/'.$evidence->file_path));
         }
         $evidence->delete();
 

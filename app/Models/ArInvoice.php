@@ -23,8 +23,23 @@ class ArInvoice extends Model
         'balance' => 'decimal:2',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function arAccount() { return $this->belongsTo(ArAccount::class); }
-    public function lines() { return $this->hasMany(ArInvoiceLine::class, 'invoice_id'); }
-    public function payments() { return $this->hasMany(ArPayment::class, 'invoice_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function arAccount()
+    {
+        return $this->belongsTo(ArAccount::class);
+    }
+
+    public function lines()
+    {
+        return $this->hasMany(ArInvoiceLine::class, 'invoice_id');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(ArPayment::class, 'invoice_id');
+    }
 }

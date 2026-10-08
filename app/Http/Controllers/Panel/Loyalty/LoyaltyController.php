@@ -17,6 +17,7 @@ class LoyaltyController extends Controller
     {
         $members = LoyaltyMember::where('property_id', app('current_property')->id)
             ->with('guest', 'tier')->paginate(50);
+
         return view('panel.loyalty.members', compact('members'));
     }
 
@@ -24,12 +25,14 @@ class LoyaltyController extends Controller
     {
         $guest = Guest::where('property_id', app('current_property')->id)->findOrFail($request->input('guest_id'));
         $svc->enroll($guest);
+
         return back();
     }
 
     public function tiers()
     {
         $tiers = LoyaltyTier::where('property_id', app('current_property')->id)->orderBy('points_threshold')->get();
+
         return view('panel.loyalty.tiers', compact('tiers'));
     }
 
@@ -42,6 +45,7 @@ class LoyaltyController extends Controller
             'rate_discount_pct' => 'nullable|numeric',
         ]);
         LoyaltyTier::create($data + ['property_id' => app('current_property')->id]);
+
         return back();
     }
 
@@ -49,6 +53,7 @@ class LoyaltyController extends Controller
     {
         $vouchers = GiftVoucher::where('property_id', app('current_property')->id)
             ->orderByDesc('issued_at')->paginate(50);
+
         return view('panel.loyalty.vouchers', compact('vouchers'));
     }
 
@@ -71,6 +76,7 @@ class LoyaltyController extends Controller
             'status' => 'active',
             'issued_at' => now(),
         ]);
+
         return back();
     }
 }

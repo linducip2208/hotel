@@ -20,6 +20,7 @@ class ApprovalService
             'expires_at' => now()->addHours($expiresInHours),
         ]);
         $this->audit->record('approval.requested', $req, ['action_type' => $actionType]);
+
         return $req;
     }
 

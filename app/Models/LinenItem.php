@@ -15,8 +15,15 @@ class LinenItem extends Model
         'last_audit_at' => 'datetime',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function transactions() { return $this->hasMany(LinenTransaction::class, 'linen_item_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(LinenTransaction::class, 'linen_item_id');
+    }
 
     public function getParLevelAttribute(): int
     {
@@ -25,8 +32,13 @@ class LinenItem extends Model
 
     public function getStatusAttribute(): string
     {
-        if ($this->current_stock <= $this->initial_stock) return 'deficit';
-        if ($this->current_stock < $this->par_level) return 'low';
+        if ($this->current_stock <= $this->initial_stock) {
+            return 'deficit';
+        }
+        if ($this->current_stock < $this->par_level) {
+            return 'low';
+        }
+
         return 'healthy';
     }
 }

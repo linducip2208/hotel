@@ -18,7 +18,18 @@ class HkTask extends Model
         'photos' => 'array',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function room() { return $this->belongsTo(Room::class); }
-    public function assignee() { return $this->belongsTo(User::class, 'assignee_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
+
+    public function assignee()
+    {
+        return $this->belongsTo(User::class, 'assignee_id');
+    }
 }

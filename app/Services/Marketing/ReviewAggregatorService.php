@@ -2,8 +2,9 @@
 
 namespace App\Services\Marketing;
 
-use App\Models\Review;
 use App\Models\Property;
+use App\Models\Provider;
+use App\Models\Review;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 
@@ -18,7 +19,7 @@ class ReviewAggregatorService
 
     public function pullGoogleReviews(Property $property): array
     {
-        $provider = \App\Models\Provider::where('property_id', $property->id)
+        $provider = Provider::where('property_id', $property->id)
             ->where('integration_type', 'review')
             ->where('api_format', 'google_places')
             ->where('is_active', true)->first();

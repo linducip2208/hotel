@@ -2,11 +2,11 @@
 
 use App\Http\Controllers\Portal\AuthController;
 use App\Http\Controllers\Portal\DashboardController;
-use App\Http\Controllers\Portal\OrderController;
 use App\Http\Controllers\Portal\GuestAppController;
-use App\Http\Controllers\Portal\MyBookingController;
-use App\Http\Controllers\Portal\RoomServiceController;
 use App\Http\Controllers\Portal\GuestRequestController;
+use App\Http\Controllers\Portal\MyBookingController;
+use App\Http\Controllers\Portal\OrderController;
+use App\Http\Controllers\Portal\RoomServiceController;
 use Illuminate\Support\Facades\Route;
 
 Route::name('customer.')->group(function () {

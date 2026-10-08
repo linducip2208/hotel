@@ -4,137 +4,128 @@ namespace App\Services\Fo;
 
 use App\Models\Property;
 use App\Models\Reservation;
+use App\Models\ReservationRoom;
 use App\Models\Room;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
+/**
+ * Preference-scored room assignment.
+ *
+ * Works on the REAL data model: assignment targets are `reservation_rooms`
+ * rows (a reservation can have many rooms) and room attributes actually
+ * present in the schema (floor, view, roomType.bed_config, hk_status).
+ */
 class RoomAssignmentAiService
 {
-    public function assignOptimal(Reservation $reservation): ?Room
-    {
-        $available = Room::where('property_id', $reservation->property_id)
-            ->where('room_type_id', $reservation->room_type_id)
-            ->where('fo_status', 'vacant')
-            ->where('hk_status', 'clean')
-            ->where('is_active', true)
-            ->get();
+    public function __construct(protected RoomAssignmentService $assignmentService) {}
 
-        if ($available->isEmpty()) {
+    /**
+     * Pick the best free room for one reservation-room row.
+     */
+    public function assignOptimal(ReservationRoom $rr): ?Room
+    {
+        $reservation = $rr->reservation;
+        if (! $reservation) {
             return null;
         }
 
-        $profile = $reservation->primaryGuest?->profile;
+        $candidates = $this->assignmentService->getAvailableRooms(
+            $reservation->property_id,
+            $rr->room_type_id,
+            Carbon::parse($rr->check_in),
+            Carbon::parse($rr->check_out),
+        );
+
+        if ($candidates->isEmpty()) {
+            return null;
+        }
+
         $scores = [];
-
-        foreach ($available as $room) {
-            $score = 0;
-
-            if ($profile) {
-                if ($room->floor == $profile->preferred_floor) {
-                    $score += 20;
-                }
-                if ($room->roomType?->bed_config == $profile->preferred_bed_type) {
-                    $score += 20;
-                }
-            }
-
-            if ($room->distance_to_elevator <= 20) {
-                $score += 15;
-            } elseif ($room->distance_to_elevator <= 50) {
-                $score += 10;
-            }
-
-            switch ($room->view) {
-                case 'ocean': $score += 15; break;
-                case 'pool':  $score += 10; break;
-                case 'garden': $score += 8; break;
-                default: $score += 5;
-            }
-
-            if ($room->near_elevator && ($profile?->isHighValue() ?? false)) {
-                $score -= 10;
-            }
-
-            $lastCheckout = Reservation::where('room_id', $room->id)
-                ->where('status', 'checked_out')
-                ->latest('check_out')
-                ->first();
-            if ($lastCheckout && $lastCheckout->check_out && $lastCheckout->check_out->diffInDays(now()) > 3) {
-                $score += 10;
-            }
-
-            if ($reservation->group_block_id) {
-                $groupRooms = \App\Models\GroupBlockRoom::where('group_block_id', $reservation->group_block_id)
-                    ->where('room_type_id', $reservation->room_type_id)
-                    ->pluck('room_id');
-                $nearGroupRoom = Room::whereIn('id', $groupRooms)
-                    ->where('floor', $room->floor)
-                    ->exists();
-                if ($nearGroupRoom) {
-                    $score += 20;
-                }
-            }
-
-            $scores[$room->id] = $score;
+        foreach ($candidates as $room) {
+            $scores[$room->id] = $this->getAssignmentScore($room, $rr);
         }
 
         arsort($scores);
-        $bestRoomId = array_key_first($scores);
 
-        return $available->find($bestRoomId);
+        return $candidates->firstWhere('id', array_key_first($scores));
     }
 
+    /**
+     * Batch auto-assign every unassigned reservation room arriving on a date.
+     *
+     * @return array<int, int> reservation_room_id => room_id
+     */
     public function batchAssign(Property $property, string $date): array
     {
-        $reservations = Reservation::where('property_id', $property->id)
-            ->whereDate('check_in', $date)
-            ->whereIn('status', ['confirmed', 'tentative'])
+        $unassigned = ReservationRoom::query()
+            ->whereHas('reservation', fn ($q) => $q
+                ->where('property_id', $property->id)
+                ->whereIn('status', ['confirmed', 'tentative'])
+                ->whereDate('check_in', '<=', $date))
             ->whereNull('room_id')
-            ->with('primaryGuest.profile')
-            ->orderByDesc('created_at')
+            ->with('reservation.primaryGuest.profile')
+            ->orderBy('check_in')
             ->get();
 
         $assigned = [];
-        $scores = [];
 
-        foreach ($reservations as $res) {
-            $room = $this->assignOptimal($res);
-            if ($room) {
-                $res->update(['room_id' => $room->id]);
-                $room->update(['fo_status' => 'occupied']);
-                $assigned[$res->id] = $scores[$room->id] ?? 0;
+        DB::transaction(function () use ($unassigned, &$assigned) {
+            foreach ($unassigned as $rr) {
+                $room = $this->assignOptimal($rr);
+                if (! $room) {
+                    continue;
+                }
+
+                $rr->update(['room_id' => $room->id]);
+
+                // A future arrival holds the room, it is not occupied yet.
+                $status = $rr->reservation->status === 'checked_in' ? 'occupied' : 'reserved';
+                $room->update(['fo_status' => $status]);
+
+                $assigned[$rr->id] = $room->id;
             }
-        }
+        });
 
         return $assigned;
     }
 
-    public function getAssignmentScore(Room $room, Reservation $reservation): int
+    /**
+     * Preference score for a room against a reservation-room row.
+     * Only uses columns that actually exist in the schema.
+     */
+    public function getAssignmentScore(Room $room, ReservationRoom $rr): int
     {
-        $profile = $reservation->primaryGuest?->profile;
+        $reservation = $rr->reservation;
+        $profile = $reservation?->primaryGuest?->profile;
         $score = 0;
 
         if ($profile) {
-            if ($room->floor == $profile->preferred_floor) $score += 20;
-            if ($room->roomType?->bed_config == $profile->preferred_bed_type) $score += 20;
+            if ($profile->preferred_floor !== null && $room->floor == $profile->preferred_floor) {
+                $score += 20;
+            }
+            if ($profile->preferred_bed_type && $room->roomType?->bed_config === $profile->preferred_bed_type) {
+                $score += 20;
+            }
         }
 
-        if ($room->distance_to_elevator <= 20) $score += 15;
-        elseif ($room->distance_to_elevator <= 50) $score += 10;
-
-        switch ($room->view) {
-            case 'ocean': $score += 15; break;
-            case 'pool':  $score += 10; break;
-            case 'garden': $score += 8; break;
-            default: $score += 5;
+        // View preference via guest preferences JSON if set.
+        $preferredView = $reservation?->primaryGuest?->preferences['preferred_view'] ?? null;
+        if ($preferredView && $room->view === $preferredView) {
+            $score += 15;
         }
 
-        if ($room->near_elevator && ($profile?->isHighValue() ?? false)) $score -= 10;
+        // Cleanliness readiness.
+        $score += match ($room->hk_status) {
+            'inspected' => 10,
+            'clean' => 8,
+            'dirty' => -20,
+            default => 0,
+        };
 
-        $lastCheckout = Reservation::where('room_id', $room->id)
-            ->where('status', 'checked_out')
-            ->latest('check_out')
-            ->first();
-        if ($lastCheckout && $lastCheckout->check_out && $lastCheckout->check_out->diffInDays(now()) > 3) $score += 10;
+        // Slightly prefer lower room numbers for deterministic ordering.
+        $score += max(0, 50 - (int) $room->number) * 0.1;
 
-        return max(0, $score);
+        return (int) round(max(0, $score));
     }
 }

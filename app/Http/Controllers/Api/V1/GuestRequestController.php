@@ -25,19 +25,19 @@ class GuestRequestController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'guest_id'      => 'nullable|exists:guests,id',
-            'reservation_id'=> 'nullable|exists:reservations,id',
-            'room_id'       => 'nullable|exists:rooms,id',
-            'category'      => 'required|string',
-            'description'   => 'required|string',
-            'priority'      => 'in:low,normal,high,urgent',
+            'guest_id' => 'nullable|exists:guests,id',
+            'reservation_id' => 'nullable|exists:reservations,id',
+            'room_id' => 'nullable|exists:rooms,id',
+            'category' => 'required|string',
+            'description' => 'required|string',
+            'priority' => 'in:low,normal,high,urgent',
         ]);
 
         $request = GuestRequest::create([
             ...$data,
             'property_id' => $request->user()->property->id,
-            'status'      => 'open',
-            'opened_at'   => now(),
+            'status' => 'open',
+            'opened_at' => now(),
         ]);
 
         return response()->json($request, 201);
@@ -49,10 +49,11 @@ class GuestRequestController extends Controller
         $guestRequest = GuestRequest::where('property_id', $property->id)->findOrFail($id);
         $data = $request->validate([
             'assignee_id' => 'nullable|exists:users,id',
-            'status'      => 'in:open,in_progress,resolved,cancelled',
-            'priority'    => 'in:low,normal,high,urgent',
+            'status' => 'in:open,in_progress,resolved,cancelled',
+            'priority' => 'in:low,normal,high,urgent',
         ]);
         $guestRequest->update($data);
+
         return response()->json($guestRequest);
     }
 
@@ -61,6 +62,7 @@ class GuestRequestController extends Controller
         $property = $request->user()->property;
         $guestRequest = GuestRequest::where('property_id', $property->id)->findOrFail($id);
         $guestRequest->markResolved($request->notes);
+
         return response()->json($guestRequest);
     }
 }

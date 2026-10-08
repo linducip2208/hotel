@@ -4,9 +4,7 @@ namespace App\Services\Pricing;
 
 use App\Models\DynamicPricingLog;
 use App\Models\DynamicPricingRule;
-use App\Models\Inventory;
 use App\Models\Property;
-use App\Models\Rate;
 use App\Models\RateOverride;
 use App\Services\Rms\DemandForecaster;
 use Carbon\Carbon;
@@ -20,7 +18,7 @@ use Carbon\Carbon;
 class DynamicPricingService
 {
     public function __construct(
-        private DemandForecaster   $forecaster,
+        private DemandForecaster $forecaster,
         private OpenPricingService $openPricing,
     ) {}
 
@@ -43,7 +41,7 @@ class DynamicPricingService
 
         foreach ($rules as $rule) {
             $lookahead = max(1, $rule->lookahead_days);
-            $forecast  = $this->forecaster->forecast(
+            $forecast = $this->forecaster->forecast(
                 $property,
                 $today->copy()->addDay(),
                 $today->copy()->addDays($lookahead)
@@ -75,27 +73,27 @@ class DynamicPricingService
 
                     RateOverride::updateOrCreate(
                         [
-                            'property_id'   => $property->id,
-                            'room_type_id'  => $rtId,
-                            'channel_id'    => $rule->channel_id,
+                            'property_id' => $property->id,
+                            'room_type_id' => $rtId,
+                            'channel_id' => $rule->channel_id,
                             'override_date' => $day['date'],
                         ],
                         [
-                            'price'  => $newPrice,
+                            'price' => $newPrice,
                             'source' => 'dynamic',
                         ]
                     );
 
                     DynamicPricingLog::create([
-                        'property_id'     => $property->id,
-                        'rule_id'         => $rule->id,
-                        'target_date'     => $day['date'],
-                        'room_type_id'    => $rtId,
-                        'channel_id'      => $rule->channel_id,
-                        'price_before'    => $current['price'],
-                        'price_after'     => $newPrice,
-                        'trigger_reason'  => "{$rule->trigger_metric} {$rule->operator} {$metric}",
-                        'metrics_snapshot'=> $day,
+                        'property_id' => $property->id,
+                        'rule_id' => $rule->id,
+                        'target_date' => $day['date'],
+                        'room_type_id' => $rtId,
+                        'channel_id' => $rule->channel_id,
+                        'price_before' => $current['price'],
+                        'price_after' => $newPrice,
+                        'trigger_reason' => "{$rule->trigger_metric} {$rule->operator} {$metric}",
+                        'metrics_snapshot' => $day,
                     ]);
 
                     $count++;
@@ -111,35 +109,39 @@ class DynamicPricingService
     private function extractMetric(array $day, string $metric, Carbon $today, string $targetDate): float
     {
         return match ($metric) {
-            'occupancy_pct'   => (float) ($day['forecast_occupancy_pct'] ?? 0),
+            'occupancy_pct' => (float) ($day['forecast_occupancy_pct'] ?? 0),
             'days_to_arrival' => (float) $today->diffInDays(Carbon::parse($targetDate)),
-            default           => 0,
+            default => 0,
         };
     }
 
     private function matchesThreshold(DynamicPricingRule $rule, float $value): bool
     {
         return match ($rule->operator) {
-            'gte'     => $value >= $rule->threshold_low,
-            'lte'     => $value <= $rule->threshold_low,
+            'gte' => $value >= $rule->threshold_low,
+            'lte' => $value <= $rule->threshold_low,
             'between' => $value >= $rule->threshold_low && $value <= ($rule->threshold_high ?? PHP_FLOAT_MAX),
-            default   => false,
+            default => false,
         };
     }
 
     private function calculateNewPrice(float $current, DynamicPricingRule $rule): float
     {
-        $val   = (float) $rule->action_value;
+        $val = (float) $rule->action_value;
         $price = match ($rule->action) {
-            'pct_increase'    => $current * (1 + $val / 100),
-            'pct_decrease'    => $current * (1 - $val / 100),
-            'fixed_increase'  => $current + $val,
-            'fixed_decrease'  => $current - $val,
-            default           => $current,
+            'pct_increase' => $current * (1 + $val / 100),
+            'pct_decrease' => $current * (1 - $val / 100),
+            'fixed_increase' => $current + $val,
+            'fixed_decrease' => $current - $val,
+            default => $current,
         };
 
-        if ($rule->min_price_floor)   { $price = max($price, (float) $rule->min_price_floor); }
-        if ($rule->max_price_ceiling) { $price = min($price, (float) $rule->max_price_ceiling); }
+        if ($rule->min_price_floor) {
+            $price = max($price, (float) $rule->min_price_floor);
+        }
+        if ($rule->max_price_ceiling) {
+            $price = min($price, (float) $rule->max_price_ceiling);
+        }
 
         return round($price, 0);
     }

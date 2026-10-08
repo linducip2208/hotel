@@ -4,6 +4,7 @@ namespace App\Services\Pos;
 
 use App\Models\MenuPerformance;
 use App\Models\MenuRecipe;
+use App\Models\PosOrderItem;
 use App\Models\Property;
 use Carbon\Carbon;
 
@@ -27,7 +28,7 @@ class MenuEngineeringService
         $totalRevenue = $performances->sum('total_revenue');
 
         $avgMargin = $recipes->isNotEmpty()
-            ? $recipes->avg(fn($r) => $r->selling_price > 0 ? round((($r->selling_price - $r->food_cost) / $r->selling_price) * 100, 2) : 0)
+            ? $recipes->avg(fn ($r) => $r->selling_price > 0 ? round((($r->selling_price - $r->food_cost) / $r->selling_price) * 100, 2) : 0)
             : 0;
 
         $avgPopularity = $totalUnitsSold > 0 && $recipes->isNotEmpty()
@@ -62,10 +63,10 @@ class MenuEngineeringService
 
         return [
             'items' => $results,
-            'stars' => array_values(array_filter($results, fn($r) => $r['quadrant'] === 'star')),
-            'plowhorses' => array_values(array_filter($results, fn($r) => $r['quadrant'] === 'plowhorse')),
-            'puzzles' => array_values(array_filter($results, fn($r) => $r['quadrant'] === 'puzzle')),
-            'dogs' => array_values(array_filter($results, fn($r) => $r['quadrant'] === 'dog')),
+            'stars' => array_values(array_filter($results, fn ($r) => $r['quadrant'] === 'star')),
+            'plowhorses' => array_values(array_filter($results, fn ($r) => $r['quadrant'] === 'plowhorse')),
+            'puzzles' => array_values(array_filter($results, fn ($r) => $r['quadrant'] === 'puzzle')),
+            'dogs' => array_values(array_filter($results, fn ($r) => $r['quadrant'] === 'dog')),
             'avg_margin' => $avgMargin,
             'avg_popularity' => $avgPopularity,
         ];
@@ -76,9 +77,16 @@ class MenuEngineeringService
         $highMargin = $margin >= $avgMargin;
         $highPopularity = $popularity >= $avgPopularity;
 
-        if ($highMargin && $highPopularity) return 'star';
-        if (!$highMargin && $highPopularity) return 'plowhorse';
-        if ($highMargin && !$highPopularity) return 'puzzle';
+        if ($highMargin && $highPopularity) {
+            return 'star';
+        }
+        if (! $highMargin && $highPopularity) {
+            return 'plowhorse';
+        }
+        if ($highMargin && ! $highPopularity) {
+            return 'puzzle';
+        }
+
         return 'dog';
     }
 
@@ -92,7 +100,7 @@ class MenuEngineeringService
         $totalUnits = 0;
         foreach ($recipes as $recipe) {
             $unitsSold = $recipe->menuItem
-                ? \App\Models\PosOrderItem::whereHas('order', fn($q) => $q->where('property_id', $property->id)
+                ? PosOrderItem::whereHas('order', fn ($q) => $q->where('property_id', $property->id)
                     ->whereBetween('created_at', [$start, $end])
                     ->where('status', 'settled'))
                     ->where('menu_item_id', $recipe->menu_item_id)
@@ -103,7 +111,7 @@ class MenuEngineeringService
 
         foreach ($recipes as $recipe) {
             $unitsSold = $recipe->menuItem
-                ? \App\Models\PosOrderItem::whereHas('order', fn($q) => $q->where('property_id', $property->id)
+                ? PosOrderItem::whereHas('order', fn ($q) => $q->where('property_id', $property->id)
                     ->whereBetween('created_at', [$start, $end])
                     ->where('status', 'settled'))
                     ->where('menu_item_id', $recipe->menu_item_id)

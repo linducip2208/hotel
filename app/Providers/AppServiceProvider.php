@@ -2,6 +2,11 @@
 
 namespace App\Providers;
 
+use App\Console\Commands\Audit\CheckpointCommand;
+use App\Console\Commands\Audit\VerifyChainCommand;
+use App\Console\Commands\Tenant\LifecycleCommand;
+use App\Http\Controllers\Admin\SystemController;
+use App\Models\Property;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -22,12 +27,18 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
+        // Apply persisted SaaS feature-flag overrides over config defaults.
+        $overrides = SystemController::overrides();
+        if ($overrides !== []) {
+            config(['hotel.features' => array_merge(config('hotel.features', []), $overrides)]);
+        }
+
         $this->configureRateLimiters();
 
         $this->commands([
-            \App\Console\Commands\Tenant\LifecycleCommand::class,
-            \App\Console\Commands\Audit\VerifyChainCommand::class,
-            \App\Console\Commands\Audit\CheckpointCommand::class,
+            LifecycleCommand::class,
+            VerifyChainCommand::class,
+            CheckpointCommand::class,
         ]);
 
         // Share current property to every public/panel view so layouts never
@@ -35,7 +46,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer(['public.*', 'panel.*'], function ($view) {
             $property = app()->bound('current_property')
                 ? app('current_property')
-                : \App\Models\Property::orderBy('id')->first();
+                : Property::orderBy('id')->first();
 
             $view->with([
                 'property' => $view->getData()['property'] ?? $property,

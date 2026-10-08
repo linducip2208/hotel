@@ -28,7 +28,7 @@ class LinenService
             switch ($data['transaction_type']) {
                 case 'issue':
                     if ($category->current_stock < $quantity) {
-                        throw new \RuntimeException('Stok tidak mencukupi. Tersedia: ' . $category->current_stock);
+                        throw new \RuntimeException('Stok tidak mencukupi. Tersedia: '.$category->current_stock);
                     }
                     $category->decrement('current_stock', $quantity);
                     break;
@@ -111,6 +111,7 @@ class LinenService
             'returned_date' => today()->toDateString(),
             'condition' => request()->input('condition', $assignment->condition),
         ]);
+
         return $assignment;
     }
 

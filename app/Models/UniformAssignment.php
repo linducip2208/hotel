@@ -17,7 +17,18 @@ class UniformAssignment extends Model
         'returned_date' => 'date',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function employee() { return $this->belongsTo(Employee::class); }
-    public function linenCategory() { return $this->belongsTo(LinenCategory::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
+
+    public function linenCategory()
+    {
+        return $this->belongsTo(LinenCategory::class);
+    }
 }

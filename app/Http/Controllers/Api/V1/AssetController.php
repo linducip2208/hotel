@@ -44,11 +44,11 @@ class AssetController extends Controller
     public function createWorkOrder(Request $request, WorkOrderService $svc)
     {
         $validated = $request->validate([
-            'asset_id'    => 'nullable|integer|exists:assets,id',
-            'room_id'     => 'nullable|integer|exists:rooms,id',
-            'type'        => 'required|string|max:50',
-            'priority'    => 'nullable|in:low,normal,high,urgent',
-            'title'       => 'required|string|max:255',
+            'asset_id' => 'nullable|integer|exists:assets,id',
+            'room_id' => 'nullable|integer|exists:rooms,id',
+            'type' => 'required|string|max:50',
+            'priority' => 'nullable|in:low,normal,high,urgent',
+            'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'assigned_to' => 'nullable|integer|exists:employees,id',
         ]);
@@ -61,16 +61,16 @@ class AssetController extends Controller
     public function updateWorkOrder(Request $request, int $id, WorkOrderService $svc)
     {
         $validated = $request->validate([
-            'action'     => 'required|in:start,complete,verify',
+            'action' => 'required|in:start,complete,verify',
             'resolution' => 'nullable|string|max:500',
         ]);
 
         $wo = WorkOrder::where('property_id', $this->property()->id)->findOrFail($id);
 
         match ($validated['action']) {
-            'start'    => $svc->start($wo, $request->user()?->id),
+            'start' => $svc->start($wo, $request->user()?->id),
             'complete' => $svc->complete($wo, $validated['resolution'] ?? null),
-            'verify'   => $svc->verify($wo),
+            'verify' => $svc->verify($wo),
         };
 
         return response()->json($wo->fresh());

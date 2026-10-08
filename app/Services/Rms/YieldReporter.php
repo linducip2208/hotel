@@ -2,7 +2,6 @@
 
 namespace App\Services\Rms;
 
-use App\Models\Inventory;
 use App\Models\Property;
 use App\Models\Reservation;
 use Carbon\Carbon;

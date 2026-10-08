@@ -19,6 +19,7 @@ class Pb1Calculator
             })
             ->orderByDesc('effective_from')
             ->first();
+
         return $rec ? (float) $rec->rate : 10.0;
     }
 

@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Services\Pricing;
 
 use App\Models\ChannelParityAlert;
+use App\Models\ChannelRoomMapping;
 use App\Models\DynamicPricingLog;
 use App\Models\Rate;
+use App\Models\RatePlan;
 use Illuminate\Support\Facades\Log;
 
 final class ParityAutoSuggestService
@@ -79,13 +81,32 @@ final class ParityAutoSuggestService
 
         if ($action === 'manual_review') {
             Log::info("Parity alert {$alert->id} requires manual review.");
+
             return false;
         }
 
         if ($action === 'update_rate') {
+            // Map through the channel's active room mapping so we update the
+            // real BAR rate plan for this room type — never a placeholder ID.
+            $mapping = ChannelRoomMapping::where('channel_id', $alert->channel_id)
+                ->where('room_type_id', $alert->room_type_id)
+                ->where('is_active', true)
+                ->first();
+
+            $ratePlanId = $mapping?->rate_plan_id
+                ?? RatePlan::where('property_id', $alert->property_id)->where('is_active', true)->orderBy('id')->value('id');
+
+            if (! $ratePlanId) {
+                Log::warning("Parity alert {$alert->id} auto-fix aborted: no rate plan mapping.");
+
+                return false;
+            }
+
             Rate::updateOrCreate(
                 [
-                    'rate_plan_id' => 0, // would need actual rate_plan_id mapping
+                    'property_id' => $alert->property_id,
+                    'room_type_id' => $alert->room_type_id,
+                    'rate_plan_id' => $ratePlanId,
                     'date' => $alert->check_date?->toDateString(),
                 ],
                 ['amount' => $alert->channel_rate]
@@ -111,6 +132,7 @@ final class ParityAutoSuggestService
 
         if ($action === 'fix_mapping') {
             Log::info("Parity alert {$alert->id} flagged for mapping fix. Cannot auto-resolve mapping issues.");
+
             return false;
         }
 

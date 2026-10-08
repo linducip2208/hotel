@@ -2,6 +2,8 @@
 
 namespace App\Support;
 
+use Illuminate\Support\Str;
+
 /**
  * Static reference data untuk pSEO generation.
  * 250+ cities × 120+ landmarks × 80+ neighborhoods = 15,000+ indexed pages.
@@ -11,294 +13,294 @@ class SeoData
     /** 250+ kota di Indonesia (slug → display). */
     public const CITIES = [
         // ── Aceh ──
-        'banda-aceh'      => 'Banda Aceh',
-        'sabang'          => 'Sabang',
-        'lhokseumawe'     => 'Lhokseumawe',
-        'langsa'          => 'Langsa',
-        'takengon'        => 'Takengon',
+        'banda-aceh' => 'Banda Aceh',
+        'sabang' => 'Sabang',
+        'lhokseumawe' => 'Lhokseumawe',
+        'langsa' => 'Langsa',
+        'takengon' => 'Takengon',
         // ── Sumatera Utara ──
-        'medan'           => 'Medan',
-        'sibolga'         => 'Sibolga',
+        'medan' => 'Medan',
+        'sibolga' => 'Sibolga',
         'pematangsiantar' => 'Pematangsiantar',
         'padangsidimpuan' => 'Padangsidimpuan',
-        'gunungsitoli'    => 'Gunungsitoli',
-        'balige'          => 'Balige',
-        'parapat'         => 'Parapat',
-        'toba'            => 'Danau Toba',
-        'berastagi'       => 'Berastagi',
+        'gunungsitoli' => 'Gunungsitoli',
+        'balige' => 'Balige',
+        'parapat' => 'Parapat',
+        'toba' => 'Danau Toba',
+        'berastagi' => 'Berastagi',
         // ── Sumatera Barat ──
-        'padang'          => 'Padang',
-        'bukittinggi'     => 'Bukittinggi',
-        'payakumbuh'      => 'Payakumbuh',
-        'solok'           => 'Solok',
-        'sawahlunto'      => 'Sawahlunto',
-        'batusangkar'     => 'Batusangkar',
-        'pariaman'        => 'Pariaman',
+        'padang' => 'Padang',
+        'bukittinggi' => 'Bukittinggi',
+        'payakumbuh' => 'Payakumbuh',
+        'solok' => 'Solok',
+        'sawahlunto' => 'Sawahlunto',
+        'batusangkar' => 'Batusangkar',
+        'pariaman' => 'Pariaman',
         // ── Riau ──
-        'pekanbaru'       => 'Pekanbaru',
-        'dumai'           => 'Dumai',
-        'bengkalis'       => 'Bengkalis',
-        'rengat'          => 'Rengat',
+        'pekanbaru' => 'Pekanbaru',
+        'dumai' => 'Dumai',
+        'bengkalis' => 'Bengkalis',
+        'rengat' => 'Rengat',
         // ── Kepulauan Riau ──
-        'batam'           => 'Batam',
-        'tanjung-pinang'  => 'Tanjung Pinang',
-        'bintan'          => 'Bintan',
-        'karimun'         => 'Karimun',
+        'batam' => 'Batam',
+        'tanjung-pinang' => 'Tanjung Pinang',
+        'bintan' => 'Bintan',
+        'karimun' => 'Karimun',
         // ── Jambi ──
-        'jambi'           => 'Jambi',
-        'sungai-penuh'    => 'Sungai Penuh',
+        'jambi' => 'Jambi',
+        'sungai-penuh' => 'Sungai Penuh',
         // ── Sumatera Selatan ──
-        'palembang'       => 'Palembang',
-        'lubuklinggau'    => 'Lubuklinggau',
-        'pagaralam'       => 'Pagaralam',
-        'lahat'           => 'Lahat',
-        'baturaja'        => 'Baturaja',
+        'palembang' => 'Palembang',
+        'lubuklinggau' => 'Lubuklinggau',
+        'pagaralam' => 'Pagaralam',
+        'lahat' => 'Lahat',
+        'baturaja' => 'Baturaja',
         // ── Bengkulu ──
-        'bengkulu'        => 'Bengkulu',
-        'curup'           => 'Curup',
-        'manna'           => 'Manna',
+        'bengkulu' => 'Bengkulu',
+        'curup' => 'Curup',
+        'manna' => 'Manna',
         // ── Lampung ──
-        'lampung'         => 'Bandar Lampung',
-        'metro'           => 'Metro',
-        'kalianda'        => 'Kalianda',
-        'pringsewu'       => 'Pringsewu',
-        'kotabumi'        => 'Kotabumi',
+        'lampung' => 'Bandar Lampung',
+        'metro' => 'Metro',
+        'kalianda' => 'Kalianda',
+        'pringsewu' => 'Pringsewu',
+        'kotabumi' => 'Kotabumi',
         // ── Bangka Belitung ──
-        'pangkal-pinang'  => 'Pangkal Pinang',
-        'belitung'        => 'Belitung',
-        'tanjung-pandan'  => 'Tanjung Pandan',
-        'manggar'         => 'Manggar',
+        'pangkal-pinang' => 'Pangkal Pinang',
+        'belitung' => 'Belitung',
+        'tanjung-pandan' => 'Tanjung Pandan',
+        'manggar' => 'Manggar',
         // ── Banten ──
-        'serang'          => 'Serang',
-        'cilegon'         => 'Cilegon',
-        'anyer'           => 'Anyer',
-        'carita'          => 'Carita',
-        'pandeglang'      => 'Pandeglang',
-        'tangerang'       => 'Tangerang',
-        'tangerang-selatan'=> 'Tangerang Selatan',
-        'bsd'             => 'BSD City',
+        'serang' => 'Serang',
+        'cilegon' => 'Cilegon',
+        'anyer' => 'Anyer',
+        'carita' => 'Carita',
+        'pandeglang' => 'Pandeglang',
+        'tangerang' => 'Tangerang',
+        'tangerang-selatan' => 'Tangerang Selatan',
+        'bsd' => 'BSD City',
         // ── DKI Jakarta ──
-        'jakarta'         => 'Jakarta',
+        'jakarta' => 'Jakarta',
         // ── Jawa Barat ──
-        'bandung'         => 'Bandung',
-        'bogor'           => 'Bogor',
-        'depok'           => 'Depok',
-        'bekasi'          => 'Bekasi',
-        'sukabumi'        => 'Sukabumi',
-        'cirebon'         => 'Cirebon',
-        'tasikmalaya'     => 'Tasikmalaya',
-        'garut'           => 'Garut',
-        'cianjur'         => 'Cianjur',
-        'purwakarta'      => 'Purwakarta',
-        'subang'          => 'Subang',
-        'sumedang'        => 'Sumedang',
-        'majalengka'      => 'Majalengka',
-        'indramayu'       => 'Indramayu',
-        'kuningan'        => 'Kuningan',
-        'pangandaran'     => 'Pangandaran',
-        'ciamis'          => 'Ciamis',
-        'cipanas'         => 'Cipanas',
-        'lembang'         => 'Lembang',
-        'ciwidey'         => 'Ciwidey',
-        'karawang'        => 'Karawang',
+        'bandung' => 'Bandung',
+        'bogor' => 'Bogor',
+        'depok' => 'Depok',
+        'bekasi' => 'Bekasi',
+        'sukabumi' => 'Sukabumi',
+        'cirebon' => 'Cirebon',
+        'tasikmalaya' => 'Tasikmalaya',
+        'garut' => 'Garut',
+        'cianjur' => 'Cianjur',
+        'purwakarta' => 'Purwakarta',
+        'subang' => 'Subang',
+        'sumedang' => 'Sumedang',
+        'majalengka' => 'Majalengka',
+        'indramayu' => 'Indramayu',
+        'kuningan' => 'Kuningan',
+        'pangandaran' => 'Pangandaran',
+        'ciamis' => 'Ciamis',
+        'cipanas' => 'Cipanas',
+        'lembang' => 'Lembang',
+        'ciwidey' => 'Ciwidey',
+        'karawang' => 'Karawang',
         // ── Jawa Tengah ──
-        'semarang'        => 'Semarang',
-        'solo'            => 'Solo',
-        'magelang'        => 'Magelang',
-        'salatiga'        => 'Salatiga',
-        'pekalongan'      => 'Pekalongan',
-        'kudus'           => 'Kudus',
-        'purwokerto'      => 'Purwokerto',
-        'tegal'           => 'Tegal',
-        'brebes'          => 'Brebes',
-        'pemalang'        => 'Pemalang',
-        'batang'          => 'Batang',
-        'kendal'          => 'Kendal',
-        'jepara'          => 'Jepara',
-        'demak'           => 'Demak',
-        'pati'            => 'Pati',
-        'rembang'         => 'Rembang',
-        'blora'           => 'Blora',
-        'wonosobo'        => 'Wonosobo',
-        'temanggung'      => 'Temanggung',
-        'klaten'          => 'Klaten',
-        'boyolali'        => 'Boyolali',
-        'karanganyar'     => 'Karanganyar',
-        'sragen'          => 'Sragen',
-        'purwodadi'       => 'Purwodadi',
-        'ungaran'         => 'Ungaran',
-        'ambarawa'        => 'Ambarawa',
-        'dieng'           => 'Dataran Tinggi Dieng',
+        'semarang' => 'Semarang',
+        'solo' => 'Solo',
+        'magelang' => 'Magelang',
+        'salatiga' => 'Salatiga',
+        'pekalongan' => 'Pekalongan',
+        'kudus' => 'Kudus',
+        'purwokerto' => 'Purwokerto',
+        'tegal' => 'Tegal',
+        'brebes' => 'Brebes',
+        'pemalang' => 'Pemalang',
+        'batang' => 'Batang',
+        'kendal' => 'Kendal',
+        'jepara' => 'Jepara',
+        'demak' => 'Demak',
+        'pati' => 'Pati',
+        'rembang' => 'Rembang',
+        'blora' => 'Blora',
+        'wonosobo' => 'Wonosobo',
+        'temanggung' => 'Temanggung',
+        'klaten' => 'Klaten',
+        'boyolali' => 'Boyolali',
+        'karanganyar' => 'Karanganyar',
+        'sragen' => 'Sragen',
+        'purwodadi' => 'Purwodadi',
+        'ungaran' => 'Ungaran',
+        'ambarawa' => 'Ambarawa',
+        'dieng' => 'Dataran Tinggi Dieng',
         // ── D.I. Yogyakarta ──
-        'yogyakarta'      => 'Yogyakarta',
-        'sleman'          => 'Sleman',
-        'bantul'          => 'Bantul',
-        'gunung-kidul'    => 'Gunung Kidul',
-        'kulon-progo'     => 'Kulon Progo',
+        'yogyakarta' => 'Yogyakarta',
+        'sleman' => 'Sleman',
+        'bantul' => 'Bantul',
+        'gunung-kidul' => 'Gunung Kidul',
+        'kulon-progo' => 'Kulon Progo',
         // ── Jawa Timur ──
-        'surabaya'        => 'Surabaya',
-        'malang'          => 'Malang',
-        'batu'            => 'Kota Batu',
-        'kediri'          => 'Kediri',
-        'madiun'          => 'Madiun',
-        'banyuwangi'      => 'Banyuwangi',
-        'jember'          => 'Jember',
-        'blitar'          => 'Blitar',
-        'probolinggo'     => 'Probolinggo',
-        'pasuruan'        => 'Pasuruan',
-        'mojokerto'       => 'Mojokerto',
-        'sidoarjo'        => 'Sidoarjo',
-        'gresik'          => 'Gresik',
-        'lamongan'        => 'Lamongan',
-        'tuban'           => 'Tuban',
-        'bojonegoro'      => 'Bojonegoro',
-        'nganjuk'         => 'Nganjuk',
-        'jombang'         => 'Jombang',
-        'ponorogo'        => 'Ponorogo',
-        'pacitan'         => 'Pacitan',
-        'trenggalek'      => 'Trenggalek',
-        'tulungagung'     => 'Tulungagung',
-        'lumajang'        => 'Lumajang',
-        'situbondo'       => 'Situbondo',
-        'bondowoso'       => 'Bondowoso',
-        'sampang'         => 'Sampang',
-        'pamekasan'       => 'Pamekasan',
-        'sumenep'         => 'Sumenep',
-        'bangkalan'       => 'Bangkalan',
+        'surabaya' => 'Surabaya',
+        'malang' => 'Malang',
+        'batu' => 'Kota Batu',
+        'kediri' => 'Kediri',
+        'madiun' => 'Madiun',
+        'banyuwangi' => 'Banyuwangi',
+        'jember' => 'Jember',
+        'blitar' => 'Blitar',
+        'probolinggo' => 'Probolinggo',
+        'pasuruan' => 'Pasuruan',
+        'mojokerto' => 'Mojokerto',
+        'sidoarjo' => 'Sidoarjo',
+        'gresik' => 'Gresik',
+        'lamongan' => 'Lamongan',
+        'tuban' => 'Tuban',
+        'bojonegoro' => 'Bojonegoro',
+        'nganjuk' => 'Nganjuk',
+        'jombang' => 'Jombang',
+        'ponorogo' => 'Ponorogo',
+        'pacitan' => 'Pacitan',
+        'trenggalek' => 'Trenggalek',
+        'tulungagung' => 'Tulungagung',
+        'lumajang' => 'Lumajang',
+        'situbondo' => 'Situbondo',
+        'bondowoso' => 'Bondowoso',
+        'sampang' => 'Sampang',
+        'pamekasan' => 'Pamekasan',
+        'sumenep' => 'Sumenep',
+        'bangkalan' => 'Bangkalan',
         // ── Bali ──
-        'denpasar'        => 'Denpasar',
-        'ubud'            => 'Ubud',
-        'kuta'            => 'Kuta',
-        'seminyak'        => 'Seminyak',
-        'canggu'          => 'Canggu',
-        'sanur'           => 'Sanur',
-        'nusa-dua'        => 'Nusa Dua',
-        'jimbaran'        => 'Jimbaran',
-        'singaraja'       => 'Singaraja',
-        'tabanan'         => 'Tabanan',
-        'gianyar'         => 'Gianyar',
-        'klungkung'       => 'Klungkung',
-        'karangasem'      => 'Karangasem',
-        'bangli'          => 'Bangli',
-        'bali'            => 'Bali',
-        'uluwatu'         => 'Uluwatu',
+        'denpasar' => 'Denpasar',
+        'ubud' => 'Ubud',
+        'kuta' => 'Kuta',
+        'seminyak' => 'Seminyak',
+        'canggu' => 'Canggu',
+        'sanur' => 'Sanur',
+        'nusa-dua' => 'Nusa Dua',
+        'jimbaran' => 'Jimbaran',
+        'singaraja' => 'Singaraja',
+        'tabanan' => 'Tabanan',
+        'gianyar' => 'Gianyar',
+        'klungkung' => 'Klungkung',
+        'karangasem' => 'Karangasem',
+        'bangli' => 'Bangli',
+        'bali' => 'Bali',
+        'uluwatu' => 'Uluwatu',
         // ── Nusa Tenggara Barat ──
-        'mataram'         => 'Mataram',
-        'lombok'          => 'Lombok',
-        'praya'           => 'Praya',
-        'selong'          => 'Selong',
-        'sumbawa'         => 'Sumbawa',
-        'bima'            => 'Bima',
-        'dompu'           => 'Dompu',
-        'gili-trawangan'  => 'Gili Trawangan',
-        'senggigi'        => 'Senggigi',
-        'kuta-lombok'     => 'Kuta Lombok',
-        'mandalika'       => 'Mandalika',
+        'mataram' => 'Mataram',
+        'lombok' => 'Lombok',
+        'praya' => 'Praya',
+        'selong' => 'Selong',
+        'sumbawa' => 'Sumbawa',
+        'bima' => 'Bima',
+        'dompu' => 'Dompu',
+        'gili-trawangan' => 'Gili Trawangan',
+        'senggigi' => 'Senggigi',
+        'kuta-lombok' => 'Kuta Lombok',
+        'mandalika' => 'Mandalika',
         // ── Nusa Tenggara Timur ──
-        'kupang'          => 'Kupang',
-        'labuan-bajo'     => 'Labuan Bajo',
-        'ende'            => 'Ende',
-        'maumere'         => 'Maumere',
-        'ruteng'          => 'Ruteng',
-        'bajawa'          => 'Bajawa',
-        'waingapu'        => 'Waingapu',
-        'waikabubak'      => 'Waikabubak',
-        'kalabahi'        => 'Kalabahi',
-        'atambua'         => 'Atambua',
-        'soe'             => 'Soe',
-        'kefamenanu'      => 'Kefamenanu',
-        'larantuka'       => 'Larantuka',
-        'rotenao'         => 'Rote Ndao',
+        'kupang' => 'Kupang',
+        'labuan-bajo' => 'Labuan Bajo',
+        'ende' => 'Ende',
+        'maumere' => 'Maumere',
+        'ruteng' => 'Ruteng',
+        'bajawa' => 'Bajawa',
+        'waingapu' => 'Waingapu',
+        'waikabubak' => 'Waikabubak',
+        'kalabahi' => 'Kalabahi',
+        'atambua' => 'Atambua',
+        'soe' => 'Soe',
+        'kefamenanu' => 'Kefamenanu',
+        'larantuka' => 'Larantuka',
+        'rotenao' => 'Rote Ndao',
         // ── Kalimantan Barat ──
-        'pontianak'       => 'Pontianak',
-        'singkawang'      => 'Singkawang',
-        'sambas'          => 'Sambas',
-        'sintang'          => 'Sintang',
-        'ketapang'        => 'Ketapang',
+        'pontianak' => 'Pontianak',
+        'singkawang' => 'Singkawang',
+        'sambas' => 'Sambas',
+        'sintang' => 'Sintang',
+        'ketapang' => 'Ketapang',
         // ── Kalimantan Tengah ──
-        'palangkaraya'    => 'Palangkaraya',
-        'pangkalan-bun'   => 'Pangkalan Bun',
-        'sampit'          => 'Sampit',
-        'kuala-kapuas'    => 'Kuala Kapuas',
+        'palangkaraya' => 'Palangkaraya',
+        'pangkalan-bun' => 'Pangkalan Bun',
+        'sampit' => 'Sampit',
+        'kuala-kapuas' => 'Kuala Kapuas',
         // ── Kalimantan Selatan ──
-        'banjarmasin'     => 'Banjarmasin',
-        'martapura'       => 'Martapura',
-        'kandangan'       => 'Kandangan',
-        'barabai'         => 'Barabai',
-        'pelaihari'       => 'Pelaihari',
-        'kotabaru'        => 'Kotabaru',
+        'banjarmasin' => 'Banjarmasin',
+        'martapura' => 'Martapura',
+        'kandangan' => 'Kandangan',
+        'barabai' => 'Barabai',
+        'pelaihari' => 'Pelaihari',
+        'kotabaru' => 'Kotabaru',
         // ── Kalimantan Timur ──
-        'samarinda'       => 'Samarinda',
-        'balikpapan'      => 'Balikpapan',
-        'bontang'         => 'Bontang',
-        'sangatta'        => 'Sangatta',
-        'tenggarong'      => 'Tenggarong',
-        'penajam'         => 'Penajam',
+        'samarinda' => 'Samarinda',
+        'balikpapan' => 'Balikpapan',
+        'bontang' => 'Bontang',
+        'sangatta' => 'Sangatta',
+        'tenggarong' => 'Tenggarong',
+        'penajam' => 'Penajam',
         // ── Kalimantan Utara ──
-        'tarakan'         => 'Tarakan',
-        'nunukan'         => 'Nunukan',
-        'tanjung-selor'   => 'Tanjung Selor',
-        'malinau'         => 'Malinau',
+        'tarakan' => 'Tarakan',
+        'nunukan' => 'Nunukan',
+        'tanjung-selor' => 'Tanjung Selor',
+        'malinau' => 'Malinau',
         // ── Sulawesi Selatan ──
-        'makassar'        => 'Makassar',
-        'parepare'        => 'Parepare',
-        'palopo'          => 'Palopo',
-        'watampone'       => 'Watampone',
-        'bulukumba'       => 'Bulukumba',
-        'rantepao'        => 'Rantepao',
-        'tanatoraja'      => 'Tana Toraja',
-        'selayar'         => 'Selayar',
+        'makassar' => 'Makassar',
+        'parepare' => 'Parepare',
+        'palopo' => 'Palopo',
+        'watampone' => 'Watampone',
+        'bulukumba' => 'Bulukumba',
+        'rantepao' => 'Rantepao',
+        'tanatoraja' => 'Tana Toraja',
+        'selayar' => 'Selayar',
         // ── Sulawesi Barat ──
-        'mamuju'          => 'Mamuju',
+        'mamuju' => 'Mamuju',
         'polewali-mandar' => 'Polewali Mandar',
-        'majene'          => 'Majene',
+        'majene' => 'Majene',
         // ── Sulawesi Tengah ──
-        'palu'            => 'Palu',
-        'poso'            => 'Poso',
-        'luwuk'           => 'Luwuk',
-        'toli-toli'       => 'Toli-Toli',
-        'donggala'        => 'Donggala',
-        'ampana'          => 'Ampana',
+        'palu' => 'Palu',
+        'poso' => 'Poso',
+        'luwuk' => 'Luwuk',
+        'toli-toli' => 'Toli-Toli',
+        'donggala' => 'Donggala',
+        'ampana' => 'Ampana',
         // ── Sulawesi Tenggara ──
-        'kendari'         => 'Kendari',
-        'bau-bau'         => 'Bau-Bau',
-        'kolaka'          => 'Kolaka',
-        'raha'            => 'Raha',
+        'kendari' => 'Kendari',
+        'bau-bau' => 'Bau-Bau',
+        'kolaka' => 'Kolaka',
+        'raha' => 'Raha',
         // ── Sulawesi Utara ──
-        'manado'          => 'Manado',
-        'bitung'          => 'Bitung',
-        'tomohon'         => 'Tomohon',
-        'kotamobagu'      => 'Kotamobagu',
-        'tahuna'          => 'Tahuna',
+        'manado' => 'Manado',
+        'bitung' => 'Bitung',
+        'tomohon' => 'Tomohon',
+        'kotamobagu' => 'Kotamobagu',
+        'tahuna' => 'Tahuna',
         // ── Gorontalo ──
-        'gorontalo'       => 'Gorontalo',
-        'limboto'         => 'Limboto',
+        'gorontalo' => 'Gorontalo',
+        'limboto' => 'Limboto',
         // ── Maluku ──
-        'ambon'           => 'Ambon',
-        'masohi'          => 'Masohi',
-        'tual'            => 'Tual',
-        'namlea'          => 'Namlea',
+        'ambon' => 'Ambon',
+        'masohi' => 'Masohi',
+        'tual' => 'Tual',
+        'namlea' => 'Namlea',
         // ── Maluku Utara ──
-        'ternate'         => 'Ternate',
-        'tidore'          => 'Tidore',
-        'tobelo'          => 'Tobelo',
-        'sofifi'          => 'Sofifi',
+        'ternate' => 'Ternate',
+        'tidore' => 'Tidore',
+        'tobelo' => 'Tobelo',
+        'sofifi' => 'Sofifi',
         // ── Papua ──
-        'jayapura'        => 'Jayapura',
-        'timika'          => 'Timika',
-        'merauke'         => 'Merauke',
-        'biak'            => 'Biak',
-        'sarmi'           => 'Sarmi',
+        'jayapura' => 'Jayapura',
+        'timika' => 'Timika',
+        'merauke' => 'Merauke',
+        'biak' => 'Biak',
+        'sarmi' => 'Sarmi',
         // ── Papua Barat ──
-        'manokwari'       => 'Manokwari',
-        'fakfak'          => 'Fakfak',
-        'kaimana'         => 'Kaimana',
-        'bintuni'         => 'Bintuni',
+        'manokwari' => 'Manokwari',
+        'fakfak' => 'Fakfak',
+        'kaimana' => 'Kaimana',
+        'bintuni' => 'Bintuni',
         // ── Papua Barat Daya ──
-        'sorong'          => 'Sorong',
-        'raja-ampat'      => 'Raja Ampat',
+        'sorong' => 'Sorong',
+        'raja-ampat' => 'Raja Ampat',
         // ── Papua Pegunungan ──
-        'wamena'          => 'Wamena',
+        'wamena' => 'Wamena',
     ];
 
     /** 150+ landmark / destinasi wisata dengan koordinat. */
@@ -323,7 +325,7 @@ class SeoData
         ['nusa-penida',            'Nusa Penida',             'Klungkung',  'Bali',             -8.7278, 115.5444],
         ['besakih',                'Pura Besakih',            'Karangasem', 'Bali',             -8.3739, 115.4492],
         ['bedugul',                'Bedugul & Danau Beratan', 'Tabanan',    'Bali',             -8.2760, 115.1675],
-        ['tegalalang',             'Tegallalang Rice Terrace','Gianyar',    'Bali',             -8.4316, 115.2789],
+        ['tegalalang',             'Tegallalang Rice Terrace', 'Gianyar',    'Bali',             -8.4316, 115.2789],
         ['jimbaran-bay',           'Teluk Jimbaran',          'Badung',     'Bali',             -8.7820, 115.1553],
         ['padang-padang-beach',    'Pantai Padang Padang',    'Badung',     'Bali',             -8.8909, 115.0906],
         ['goa-gajah',              'Goa Gajah',               'Gianyar',    'Bali',             -8.5227, 115.2898],
@@ -334,19 +336,19 @@ class SeoData
         ['scbd',                   'SCBD Sudirman',           'Jakarta',    'DKI Jakarta',      -6.2255, 106.8090],
         ['soekarno-hatta-airport', 'Bandara Soekarno-Hatta',  'Tangerang',  'Banten',           -6.1256, 106.6558],
         ['ancol',                  'Taman Impian Jaya Ancol', 'Jakarta',    'DKI Jakarta',      -6.1249, 106.8411],
-        ['tmii',                   'Taman Mini Indonesia Indah','Jakarta',  'DKI Jakarta',      -6.3016, 106.8969],
+        ['tmii',                   'Taman Mini Indonesia Indah', 'Jakarta',  'DKI Jakarta',      -6.3016, 106.8969],
         ['gbk',                    'Gelora Bung Karno',       'Jakarta',    'DKI Jakarta',      -6.2186, 106.8023],
         ['grand-indonesia',        'Grand Indonesia Mall',    'Jakarta',    'DKI Jakarta',      -6.1940, 106.8228],
         ['pik',                    'Pantai Indah Kapuk',      'Jakarta',    'DKI Jakarta',      -6.1085, 106.7542],
         ['kebun-raya-bogor',       'Kebun Raya Bogor',        'Bogor',      'Jawa Barat',       -6.6024, 106.8007],
         // ── Bandung ──
         ['bandung-paris-van-java', 'Paris Van Java Mall',      'Bandung',    'Jawa Barat',       -6.8915, 107.5870],
-        ['lembang',                'Lembang',                 'Bandung Barat','Jawa Barat',     -6.8120, 107.6173],
+        ['lembang',                'Lembang',                 'Bandung Barat', 'Jawa Barat',     -6.8120, 107.6173],
         ['kawah-putih',            'Kawah Putih',             'Ciwidey',    'Jawa Barat',       -7.1668, 107.4014],
         ['gedung-sate',            'Gedung Sate',             'Bandung',    'Jawa Barat',       -6.9025, 107.6188],
         ['braga',                  'Jalan Braga',             'Bandung',    'Jawa Barat',       -6.9178, 107.6092],
         ['trans-studio-bandung',   'Trans Studio Bandung',    'Bandung',    'Jawa Barat',       -6.9285, 107.6360],
-        ['tangkuban-perahu',       'Gunung Tangkuban Perahu', 'Bandung Barat','Jawa Barat',     -6.7698, 107.5998],
+        ['tangkuban-perahu',       'Gunung Tangkuban Perahu', 'Bandung Barat', 'Jawa Barat',     -6.7698, 107.5998],
         ['ciwidey',                'Ciwidey',                 'Ciwidey',    'Jawa Barat',       -7.0926, 107.4258],
         // ── Surabaya ──
         ['surabaya-tunjungan',     'Tunjungan Plaza',         'Surabaya',   'Jawa Timur',       -7.2625, 112.7376],
@@ -362,7 +364,7 @@ class SeoData
         ['museum-angkut',          'Museum Angkut',           'Batu',       'Jawa Timur',       -7.8805, 112.5238],
         ['coban-rondo',            'Air Terjun Coban Rondo',  'Batu',       'Jawa Timur',       -7.8656, 112.5048],
         // ── Jawa Timur ──
-        ['bromo',                  'Gunung Bromo',            'Probolinggo','Jawa Timur',       -7.9425, 112.9530],
+        ['bromo',                  'Gunung Bromo',            'Probolinggo', 'Jawa Timur',       -7.9425, 112.9530],
         ['ijen',                   'Kawah Ijen',              'Banyuwangi', 'Jawa Timur',       -8.0586, 114.2419],
         ['semeru',                 'Gunung Semeru',           'Lumajang',   'Jawa Timur',       -8.1077, 112.9261],
         ['baluran',                'Taman Nasional Baluran',  'Situbondo',  'Jawa Timur',       -7.8365, 114.3607],
@@ -370,44 +372,44 @@ class SeoData
         ['lawang-sewu',            'Lawang Sewu',             'Semarang',   'Jawa Tengah',      -6.9840, 110.4092],
         ['kota-lama-semarang',     'Kota Lama Semarang',      'Semarang',   'Jawa Tengah',      -6.9679, 110.4271],
         ['candi-gedong-songo',     'Candi Gedong Songo',      'Semarang',   'Jawa Tengah',      -7.1941, 110.3429],
-        ['tawangmangu',            'Tawangmangu',             'Karanganyar','Jawa Tengah',      -7.6746, 111.1307],
+        ['tawangmangu',            'Tawangmangu',             'Karanganyar', 'Jawa Tengah',      -7.6746, 111.1307],
         ['karimunjawa',            'Karimunjawa',             'Jepara',     'Jawa Tengah',      -5.8230, 110.4620],
         ['dieng-plateau',          'Dataran Tinggi Dieng',    'Wonosobo',   'Jawa Tengah',      -7.2145, 109.8688],
-        ['candi-sukuh',            'Candi Sukuh',             'Karanganyar','Jawa Tengah',      -7.6266, 111.1311],
+        ['candi-sukuh',            'Candi Sukuh',             'Karanganyar', 'Jawa Tengah',      -7.6266, 111.1311],
         ['telaga-warna',           'Telaga Warna Dieng',      'Wonosobo',   'Jawa Tengah',      -7.2120, 109.9030],
         // ── Lombok ──
-        ['mount-rinjani',          'Gunung Rinjani',          'Lombok Utara','Nusa Tenggara Barat', -8.4115, 116.4574],
-        ['gili-trawangan-port',    'Pelabuhan Gili Trawangan','Lombok Utara','Nusa Tenggara Barat', -8.3520, 116.0420],
-        ['mandalika',              'KEK Mandalika',           'Lombok Tengah','Nusa Tenggara Barat',-8.9080, 116.2920],
-        ['gili-meno',              'Gili Meno',               'Lombok Utara','Nusa Tenggara Barat', -8.3493, 116.0552],
-        ['gili-air',               'Gili Air',                'Lombok Utara','Nusa Tenggara Barat', -8.3580, 116.0809],
+        ['mount-rinjani',          'Gunung Rinjani',          'Lombok Utara', 'Nusa Tenggara Barat', -8.4115, 116.4574],
+        ['gili-trawangan-port',    'Pelabuhan Gili Trawangan', 'Lombok Utara', 'Nusa Tenggara Barat', -8.3520, 116.0420],
+        ['mandalika',              'KEK Mandalika',           'Lombok Tengah', 'Nusa Tenggara Barat', -8.9080, 116.2920],
+        ['gili-meno',              'Gili Meno',               'Lombok Utara', 'Nusa Tenggara Barat', -8.3493, 116.0552],
+        ['gili-air',               'Gili Air',                'Lombok Utara', 'Nusa Tenggara Barat', -8.3580, 116.0809],
         // ── Labuan Bajo ──
-        ['komodo',                 'Pulau Komodo',            'Manggarai Barat','Nusa Tenggara Timur', -8.5557, 119.4523],
-        ['pink-beach',             'Pink Beach Komodo',       'Manggarai Barat','Nusa Tenggara Timur', -8.6020, 119.4880],
-        ['padar-island',           'Pulau Padar',             'Manggarai Barat','Nusa Tenggara Timur', -8.6565, 119.5736],
-        ['manta-point',            'Manta Point',             'Manggarai Barat','Nusa Tenggara Timur', -8.7500, 119.4500],
-        ['rangko-cave',            'Goa Rangko',              'Manggarai Barat','Nusa Tenggara Timur', -8.4710, 119.8840],
+        ['komodo',                 'Pulau Komodo',            'Manggarai Barat', 'Nusa Tenggara Timur', -8.5557, 119.4523],
+        ['pink-beach',             'Pink Beach Komodo',       'Manggarai Barat', 'Nusa Tenggara Timur', -8.6020, 119.4880],
+        ['padar-island',           'Pulau Padar',             'Manggarai Barat', 'Nusa Tenggara Timur', -8.6565, 119.5736],
+        ['manta-point',            'Manta Point',             'Manggarai Barat', 'Nusa Tenggara Timur', -8.7500, 119.4500],
+        ['rangko-cave',            'Goa Rangko',              'Manggarai Barat', 'Nusa Tenggara Timur', -8.4710, 119.8840],
         // ── Sumatera ──
         ['toba-lake',              'Danau Toba',              'Toba',       'Sumatera Utara',    2.6540,  98.7682],
-        ['bukit-tinggi-jam-gadang','Jam Gadang',              'Bukittinggi','Sumatera Barat',   -0.3050, 100.3692],
+        ['bukit-tinggi-jam-gadang', 'Jam Gadang',              'Bukittinggi', 'Sumatera Barat',   -0.3050, 100.3692],
         ['lembah-harau',           'Lembah Harau',            'Payakumbuh', 'Sumatera Barat',   -0.1250, 100.6300],
         ['pantai-padang',          'Pantai Air Manis',        'Padang',     'Sumatera Barat',   -0.8915, 100.3460],
         ['danau-maninjau',         'Danau Maninjau',          'Agam',       'Sumatera Barat',   -0.3120, 100.2250],
         ['ampera-bridge',          'Jembatan Ampera',         'Palembang',  'Sumatera Selatan', -2.9880, 104.7640],
         ['pulau-belitung',         'Pantai Tanjung Tinggi',   'Belitung',   'Bangka Belitung',  -2.5020, 107.6450],
-        ['lampung-krakatau',       'Gunung Anak Krakatau',    'Lampung Selatan','Lampung',      -6.1000, 105.4230],
+        ['lampung-krakatau',       'Gunung Anak Krakatau',    'Lampung Selatan', 'Lampung',      -6.1000, 105.4230],
         ['mesjid-raya-medan',      'Masjid Raya Medan',       'Medan',      'Sumatera Utara',    3.5750,  98.6872],
         ['istana-maimun',          'Istana Maimun',           'Medan',      'Sumatera Utara',    3.5756,  98.6831],
         // ── Kalimantan ──
         ['derawan',                'Kepulauan Derawan',       'Berau',      'Kalimantan Timur',  2.2858, 118.2441],
-        ['pasar-terapung',         'Pasar Terapung Banjarmasin','Banjarmasin','Kalimantan Selatan',-3.3186, 114.5901],
+        ['pasar-terapung',         'Pasar Terapung Banjarmasin', 'Banjarmasin', 'Kalimantan Selatan', -3.3186, 114.5901],
         ['khatulistiwa',           'Tugu Khatulistiwa',       'Pontianak',  'Kalimantan Barat',  0.0000, 109.3333],
         // ── Sulawesi ──
-        ['tanatoraja-toraja',      'Tana Toraja',             'Tana Toraja','Sulawesi Selatan',-3.0760, 119.8660],
+        ['tanatoraja-toraja',      'Tana Toraja',             'Tana Toraja', 'Sulawesi Selatan', -3.0760, 119.8660],
         ['bunaken',                'Taman Laut Bunaken',      'Manado',     'Sulawesi Utara',    1.6230, 124.7610],
         ['losari-beach',           'Pantai Losari',           'Makassar',   'Sulawesi Selatan', -5.1360, 119.4073],
         ['fort-rotterdam',         'Benteng Rotterdam',       'Makassar',   'Sulawesi Selatan', -5.1337, 119.4036],
-        ['wakatobi',               'Taman Nasional Wakatobi', 'Wakatobi',   'Sulawesi Tenggara',-5.7600, 123.6700],
+        ['wakatobi',               'Taman Nasional Wakatobi', 'Wakatobi',   'Sulawesi Tenggara', -5.7600, 123.6700],
         // ── Papua ──
         ['raja-ampat-piaynemo',    'Pulau Piaynemo',          'Raja Ampat', 'Papua Barat',       0.5787, 130.2761],
         ['sentani-lake',           'Danau Sentani',           'Jayapura',   'Papua',            -2.5800, 140.5150],
@@ -417,12 +419,12 @@ class SeoData
         ['pulau-seribu',           'Kepulauan Seribu',        'Jakarta',    'DKI Jakarta',      -5.6000, 106.5500],
         ['puncak',                 'Puncak Bogor',            'Bogor',      'Jawa Barat',       -6.7000, 106.9833],
         ['curug-cilember',         'Curug Cilember',          'Bogor',      'Jawa Barat',       -6.6900, 106.9650],
-        ['pantai-pangandaran',     'Pantai Pangandaran',      'Pangandaran','Jawa Barat',       -7.6900, 108.6600],
-        ['green-canyon',           'Green Canyon Pangandaran','Pangandaran','Jawa Barat',       -7.7100, 108.4800],
+        ['pantai-pangandaran',     'Pantai Pangandaran',      'Pangandaran', 'Jawa Barat',       -7.6900, 108.6600],
+        ['green-canyon',           'Green Canyon Pangandaran', 'Pangandaran', 'Jawa Barat',       -7.7100, 108.4800],
         ['curug-sewu',             'Curug Sewu',              'Kendal',     'Jawa Tengah',      -6.9100, 110.1000],
-        ['owabong',                'Owabong Waterpark',       'Purbalingga','Jawa Tengah',      -7.2800, 109.3700],
+        ['owabong',                'Owabong Waterpark',       'Purbalingga', 'Jawa Tengah',      -7.2800, 109.3700],
         ['jcc',                    'JCC Senayan',             'Jakarta',    'DKI Jakarta',      -6.2148, 106.8064],
-        ['ice-bsd',                'ICE BSD',                 'Tangerang Selatan','Banten',    -6.2980, 106.6500],
+        ['ice-bsd',                'ICE BSD',                 'Tangerang Selatan', 'Banten',    -6.2980, 106.6500],
         ['jiexpo',                 'JIExpo Kemayoran',        'Jakarta',    'DKI Jakarta',      -6.1460, 106.8510],
         ['masjid-istiqlal',        'Masjid Istiqlal',         'Jakarta',    'DKI Jakarta',      -6.1698, 106.8318],
         ['pura-besakih',           'Pura Besakih',            'Karangasem', 'Bali',             -8.3739, 115.4492],
@@ -439,11 +441,11 @@ class SeoData
         ['beachwalk',              'Beachwalk Mall',          'Badung',     'Bali',             -8.7180, 115.1689],
         ['bali-galleria',          'Bali Galleria Mall',      'Badung',     'Bali',             -8.7262, 115.2384],
         ['summarecon-bekasi',      'Summarecon Mall Bekasi',  'Bekasi',     'Jawa Barat',       -6.2380, 106.9940],
-        ['aeon-bsd',               'AEON Mall BSD',           'Tangerang Selatan','Banten',     -6.2980, 106.6640],
+        ['aeon-bsd',               'AEON Mall BSD',           'Tangerang Selatan', 'Banten',     -6.2980, 106.6640],
         // ── Universities ──
         ['universitas-indonesia',  'Universitas Indonesia',   'Depok',      'Jawa Barat',       -6.3610, 106.8200],
         ['ugm',                    'Universitas Gadjah Mada', 'Yogyakarta', 'D.I. Yogyakarta',  -7.7714, 110.3778],
-        ['itb',                    'Institut Teknologi Bandung','Bandung',  'Jawa Barat',       -6.8915, 107.6107],
+        ['itb',                    'Institut Teknologi Bandung', 'Bandung',  'Jawa Barat',       -6.8915, 107.6107],
         ['unair',                  'Universitas Airlangga',   'Surabaya',   'Jawa Timur',       -7.2700, 112.7580],
         ['universitas-brawijaya',  'Universitas Brawijaya',   'Malang',     'Jawa Timur',       -7.9570, 112.6135],
         ['universitas-udayana',    'Universitas Udayana',     'Badung',     'Bali',             -8.6700, 115.2187],
@@ -458,29 +460,29 @@ class SeoData
         // ── Stadiums ──
         ['gelora-bung-karno',      'Gelora Bung Karno',       'Jakarta',    'DKI Jakarta',      -6.2186, 106.8023],
         ['gelora-bung-tomo',       'Gelora Bung Tomo',        'Surabaya',   'Jawa Timur',       -7.2290, 112.6190],
-        ['jis',                    'Jakarta International Stadium','Jakarta','DKI Jakarta',     -6.1240, 106.8560],
+        ['jis',                    'Jakarta International Stadium', 'Jakarta', 'DKI Jakarta',     -6.1240, 106.8560],
         ['maguwoharjo',            'Stadion Maguwoharjo',     'Sleman',     'D.I. Yogyakarta',  -7.7760, 110.4150],
         ['kanjuruhan',             'Stadion Kanjuruhan',      'Malang',     'Jawa Timur',       -8.1520, 112.5710],
         // ── Convention Centers ──
         ['jcc-senayan',            'JCC Senayan',             'Jakarta',    'DKI Jakarta',      -6.2148, 106.8064],
         ['ji-expo',                'JIExpo Kemayoran',        'Jakarta',    'DKI Jakarta',      -6.1460, 106.8510],
-        ['ice-bsd-city',           'ICE BSD',                 'Tangerang Selatan','Banten',     -6.2980, 106.6500],
+        ['ice-bsd-city',           'ICE BSD',                 'Tangerang Selatan', 'Banten',     -6.2980, 106.6500],
         ['bcck',                   'Balai Sidang Jakarta',    'Jakarta',    'DKI Jakarta',      -6.2140, 106.8040],
         // ── Religious Sites ──
         ['masjid-istiqlal-jakarta', 'Masjid Istiqlal',         'Jakarta',    'DKI Jakarta',      -6.1698, 106.8318],
         ['gereja-katedral',        'Gereja Katedral',         'Jakarta',    'DKI Jakarta',      -6.1690, 106.8328],
         ['masjid-agung-demak',     'Masjid Agung Demak',      'Demak',      'Jawa Tengah',      -6.8970, 110.6360],
-        ['masjid-istiqlal-semarang','Masjid Agung Semarang',  'Semarang',   'Jawa Tengah',      -6.9900, 110.4220],
-        ['masjid-raya-medan-landmark','Masjid Raya Medan',    'Medan',      'Sumatera Utara',    3.5750,  98.6872],
+        ['masjid-istiqlal-semarang', 'Masjid Agung Semarang',  'Semarang',   'Jawa Tengah',      -6.9900, 110.4220],
+        ['masjid-raya-medan-landmark', 'Masjid Raya Medan',    'Medan',      'Sumatera Utara',    3.5750,  98.6872],
         // ── Natural Attractions ──
         ['curug-lawe',             'Curug Lawe',              'Semarang',   'Jawa Tengah',      -7.1200, 110.3600],
         ['telaga-sarangan',        'Telaga Sarangan',         'Magetan',    'Jawa Timur',       -7.6740, 111.2150],
         ['ranu-kumbolo',           'Ranu Kumbolo',            'Lumajang',   'Jawa Timur',       -8.0420, 112.9100],
         ['danau-linow',            'Danau Linow',             'Tomohon',    'Sulawesi Utara',    1.2800, 124.8530],
         ['danau-kaco',             'Danau Kaco',              'Kerinci',    'Jambi',            -2.0960, 101.4960],
-        ['gumuk-pasir',            'Gumuk Pasir Parangkusumo','Bantul',     'D.I. Yogyakarta',  -8.0300, 110.3200],
-        ['air-terjun-madakaripura','Air Terjun Madakaripura', 'Probolinggo','Jawa Timur',       -7.7870, 112.9840],
-        ['pantai-ora',             'Pantai Ora',              'Maluku Tengah','Maluku',         -2.8120, 129.5740],
+        ['gumuk-pasir',            'Gumuk Pasir Parangkusumo', 'Bantul',     'D.I. Yogyakarta',  -8.0300, 110.3200],
+        ['air-terjun-madakaripura', 'Air Terjun Madakaripura', 'Probolinggo', 'Jawa Timur',       -7.7870, 112.9840],
+        ['pantai-ora',             'Pantai Ora',              'Maluku Tengah', 'Maluku',         -2.8120, 129.5740],
         ['pulau-derawan-landmark', 'Kepulauan Derawan',       'Berau',      'Kalimantan Timur',  2.2858, 118.2441],
         // ── Historical / Cultural Sites ──
         ['candi-mendut',           'Candi Mendut',            'Magelang',   'Jawa Tengah',      -7.6040, 110.2290],
@@ -493,90 +495,90 @@ class SeoData
 
     /** 80+ neighborhood slug per kota besar. */
     public const NEIGHBORHOODS = [
-        'jakarta'   => [
+        'jakarta' => [
             'kemang', 'menteng', 'sudirman', 'kuningan', 'kelapa-gading', 'pondok-indah',
             'pluit', 'sunter', 'cempaka-putih', 'rawamangun', 'pulo-gadung', 'cakung',
             'duren-sawit', 'kramat-jati', 'pasar-minggu', 'jagakarsa', 'cilandak',
             'kebayoran-baru', 'palmerah', 'grogol', 'taman-sari', 'cengkareng',
             'kalideres', 'tebet', 'manggarai', 'senayan', 'tharmin', 'pancoran',
         ],
-        'bandung'   => [
+        'bandung' => [
             'dago', 'cihampelas', 'riau', 'pasteur', 'setiabudi', 'lembang',
             'ciumbuleit', 'sukajadi', 'kiaracondong', 'buah-batu', 'antapani',
             'cibiru', 'ujungberung', 'gedung-sate', 'braga', 'cicaheum',
         ],
-        'surabaya'  => [
+        'surabaya' => [
             'tunjungan', 'gubeng', 'darmo', 'rungkut', 'pakuwon', 'sukolilo',
             'manyar', 'kenjeran', 'dukuh-pakis', 'wonokromo', 'wonocolo',
             'gayungan', 'gunung-anyar', 'mulyorejo', 'tambaksari', 'sawahan',
         ],
-        'yogyakarta'=> [
+        'yogyakarta' => [
             'malioboro', 'prawirotaman', 'tugu', 'sleman', 'bantul', 'kaliurang',
             'kotagede', 'pakualaman', 'gondokusuman', 'ngaglik', 'depok-sleman',
             'godean', 'kasihan', 'ngemplak',
         ],
-        'denpasar'  => ['sanur', 'renon', 'kuta', 'legian'],
-        'ubud'      => ['monkey-forest', 'penestanan', 'tegallalang', 'sayn', 'kedewatan'],
-        'seminyak'  => ['oberoi', 'petitenget', 'kerobokan', 'double-six', 'batubelig'],
-        'canggu'    => ['echo-beach', 'berawa', 'pererenan', 'nelayan', 'batu-bolong'],
-        'kuta'      => ['kuta-square', 'legian', 'tuban', 'kartika-plaza'],
-        'sanur'     => ['sindhu', 'semawang', 'mertasari'],
-        'nusa-dua'  => ['btcd', 'tanjung-benoa', 'sawangan'],
-        'jimbaran'  => ['jimbaran-bay', 'kedonganan', 'bukit-jimbaran'],
-        'uluwatu'   => ['pecatu', 'bingin', 'balangan', 'ungasan'],
-        'medan'     => [
+        'denpasar' => ['sanur', 'renon', 'kuta', 'legian'],
+        'ubud' => ['monkey-forest', 'penestanan', 'tegallalang', 'sayn', 'kedewatan'],
+        'seminyak' => ['oberoi', 'petitenget', 'kerobokan', 'double-six', 'batubelig'],
+        'canggu' => ['echo-beach', 'berawa', 'pererenan', 'nelayan', 'batu-bolong'],
+        'kuta' => ['kuta-square', 'legian', 'tuban', 'kartika-plaza'],
+        'sanur' => ['sindhu', 'semawang', 'mertasari'],
+        'nusa-dua' => ['btcd', 'tanjung-benoa', 'sawangan'],
+        'jimbaran' => ['jimbaran-bay', 'kedonganan', 'bukit-jimbaran'],
+        'uluwatu' => ['pecatu', 'bingin', 'balangan', 'ungasan'],
+        'medan' => [
             'polonia', 'medan-baru', 'medan-petisah', 'medan-sunggal', 'medan-johor',
             'medan-tembung', 'helvetia', 'medan-marelan', 'medan-area',
         ],
-        'semarang'  => [
+        'semarang' => [
             'simpang-lima', 'tembalang', 'kota-lama', 'candi', 'pedurungan',
             'banyumanik', 'semarang-barat', 'semarang-utara', 'gayamsari',
         ],
-        'solo'      => ['solo-baru', 'jebres', 'laweyan', 'banjarsari', 'pasar-kliwon'],
-        'malang'    => ['batu', 'klojen', 'soekarno-hatta', 'bledug', 'lowokwaru', 'sukun'],
-        'makassar'  => [
+        'solo' => ['solo-baru', 'jebres', 'laweyan', 'banjarsari', 'pasar-kliwon'],
+        'malang' => ['batu', 'klojen', 'soekarno-hatta', 'bledug', 'lowokwaru', 'sukun'],
+        'makassar' => [
             'panakkukang', 'losari', 'tanjung-bunga', 'rappocini', 'tamalate',
             'biringkanaya', 'mariso', 'ujung-pandang', 'wajo',
         ],
-        'lombok'    => ['senggigi', 'kuta-lombok', 'mandalika', 'bangsal', 'teluk-nare'],
+        'lombok' => ['senggigi', 'kuta-lombok', 'mandalika', 'bangsal', 'teluk-nare'],
         'palembang' => ['ilir-barat', 'ilir-timur', 'seberang-ulu', 'sako', 'sukarami'],
-        'batam'     => ['nagoya', 'batam-center', 'sekapang', 'nongsa', 'bengkong'],
-        'bali'      => [
+        'batam' => ['nagoya', 'batam-center', 'sekapang', 'nongsa', 'bengkong'],
+        'bali' => [
             'kuta', 'seminyak', 'canggu', 'ubud', 'sanur', 'nusa-dua', 'jimbaran',
             'uluwatu', 'amed', 'candidasa', 'lovina', 'pemuteran',
         ],
         'pekanbaru' => ['panam', 'marpoyan', 'sukajadi', 'tampan', 'limat-puluh', 'payung-sekaki'],
-        'padang'    => ['padang-barat', 'padang-timur', 'padang-selatan', 'padang-utara', 'lubuk-begalung'],
+        'padang' => ['padang-barat', 'padang-timur', 'padang-selatan', 'padang-utara', 'lubuk-begalung'],
         'pontianak' => ['pontianak-barat', 'pontianak-timur', 'pontianak-selatan', 'pontianak-utara', 'kubu-raya'],
-        'banjarmasin'=> ['banjarmasin-tengah', 'banjarmasin-barat', 'banjarmasin-timur', 'banjarmasin-selatan', 'banjarmasin-utara'],
+        'banjarmasin' => ['banjarmasin-tengah', 'banjarmasin-barat', 'banjarmasin-timur', 'banjarmasin-selatan', 'banjarmasin-utara'],
         'samarinda' => ['samarinda-ilir', 'samarinda-ulu', 'sungai-pinang', 'loa-janan', 'palaran'],
         'balikpapan' => ['balikpapan-selatan', 'balikpapan-timur', 'balikpapan-barat', 'balikpapan-utara', 'balikpapan-tengah'],
-        'manado'    => ['wenang', 'tuminting', 'singkil', 'tikala', 'sario', 'malalayang', 'bunaken-kepulauan'],
-        'ambon'     => ['sirimau', 'nusaniwe', 'teluk-ambon', 'baguala', 'leitimur-selatan'],
-        'jayapura'  => ['jayapura-selatan', 'jayapura-utara', 'abepura', 'muara-tami', 'heram'],
-        'kupang'    => ['kelapa-lima', 'oebobo', 'maulafa', 'alak', 'kota-lama-kupang'],
-        'bengkulu'  => ['gading-cempaka', 'ratu-samban', 'ratu-agung', 'muara-bangkahulu', 'teluk-segara'],
-        'jambi'     => ['telanaipura', 'pasar-jambi', 'danau-teluk', 'kotabaru-jambi', 'alam-barajo'],
-        'palu'      => ['palu-timur', 'palu-selatan', 'palu-barat', 'palu-utara', 'tatanga'],
-        'kendari'   => ['kendari-barat', 'mandonga', 'poasia', 'baruga', 'puwatu', 'kadia'],
+        'manado' => ['wenang', 'tuminting', 'singkil', 'tikala', 'sario', 'malalayang', 'bunaken-kepulauan'],
+        'ambon' => ['sirimau', 'nusaniwe', 'teluk-ambon', 'baguala', 'leitimur-selatan'],
+        'jayapura' => ['jayapura-selatan', 'jayapura-utara', 'abepura', 'muara-tami', 'heram'],
+        'kupang' => ['kelapa-lima', 'oebobo', 'maulafa', 'alak', 'kota-lama-kupang'],
+        'bengkulu' => ['gading-cempaka', 'ratu-samban', 'ratu-agung', 'muara-bangkahulu', 'teluk-segara'],
+        'jambi' => ['telanaipura', 'pasar-jambi', 'danau-teluk', 'kotabaru-jambi', 'alam-barajo'],
+        'palu' => ['palu-timur', 'palu-selatan', 'palu-barat', 'palu-utara', 'tatanga'],
+        'kendari' => ['kendari-barat', 'mandonga', 'poasia', 'baruga', 'puwatu', 'kadia'],
         'gorontalo' => ['kota-timur', 'kota-barat', 'kota-selatan', 'dungingi', 'hulonthalangi'],
-        'ternate'   => ['ternate-selatan', 'ternate-utara', 'motikota', 'pulau-ternate', 'batang-dua'],
-        'sorong'    => ['sorong-barat', 'sorong-timur', 'sorong-manoi', 'sorong-klaurung', 'malaimsimsa'],
-        'labuan-bajo'=> ['labuan-bajo-kota', 'batu-cermin', 'wae-kelambu', 'gorontalo-labuan', 'macang-tanggong'],
+        'ternate' => ['ternate-selatan', 'ternate-utara', 'motikota', 'pulau-ternate', 'batang-dua'],
+        'sorong' => ['sorong-barat', 'sorong-timur', 'sorong-manoi', 'sorong-klaurung', 'malaimsimsa'],
+        'labuan-bajo' => ['labuan-bajo-kota', 'batu-cermin', 'wae-kelambu', 'gorontalo-labuan', 'macang-tanggong'],
         'tangerang' => ['karawaci', 'ciledug', 'cipondoh', 'pinang', 'larangan', 'batuceper'],
-        'cirebon'   => ['kejaksan', 'kesambi', 'pekalipan', 'harjamukti', 'lemahwungkuk'],
-        'tasikmalaya'=> ['cihideung', 'tawang', 'mangkubumi', 'indihiang', 'cibeureum'],
-        'banyuwangi'=> ['banyuwangi-kota', 'rogojampi', 'glenmore', 'genteng', 'cluring'],
-        'jember'    => ['sumbersari', 'kaliwates', 'patrang', 'ajung', 'rambipuji'],
+        'cirebon' => ['kejaksan', 'kesambi', 'pekalipan', 'harjamukti', 'lemahwungkuk'],
+        'tasikmalaya' => ['cihideung', 'tawang', 'mangkubumi', 'indihiang', 'cibeureum'],
+        'banyuwangi' => ['banyuwangi-kota', 'rogojampi', 'glenmore', 'genteng', 'cluring'],
+        'jember' => ['sumbersari', 'kaliwates', 'patrang', 'ajung', 'rambipuji'],
         'pandeglang' => ['pandeglang-kota', 'carita', 'labuan', 'panimbang', 'munjul'],
-        'bogor'     => [
+        'bogor' => [
             'bogor-tengah', 'bogor-barat', 'bogor-utara', 'bogor-timur', 'bogor-selatan',
             'tanah-sareal', 'ciomas', 'cibinong', 'sukaraja', 'puncak',
         ],
-        'depok'     => ['margonda', 'beji', 'pancoran-mas', 'sawangan', 'cimanggis', 'limo', 'cinere'],
-        'bekasi'    => ['bekasi-timur', 'bekasi-barat', 'bekasi-utara', 'bekasi-selatan', 'rawalumbu', 'pondok-gede', 'jatiasih'],
-        'batam'     => ['nagoya', 'batam-center', 'sekapang', 'nongsa', 'bengkong'],
-        'bintan'    => ['tanjung-pinang-kota', 'teluk-sebong', 'bintan-timur', 'gunung-kijang', 'lagoi'],
+        'depok' => ['margonda', 'beji', 'pancoran-mas', 'sawangan', 'cimanggis', 'limo', 'cinere'],
+        'bekasi' => ['bekasi-timur', 'bekasi-barat', 'bekasi-utara', 'bekasi-selatan', 'rawalumbu', 'pondok-gede', 'jatiasih'],
+        'batam' => ['nagoya', 'batam-center', 'sekapang', 'nongsa', 'bengkong'],
+        'bintan' => ['tanjung-pinang-kota', 'teluk-sebong', 'bintan-timur', 'gunung-kijang', 'lagoi'],
     ];
 
     /** Kategori "best-{category}". */
@@ -641,11 +643,18 @@ class SeoData
         'ijen', 'dieng', 'tanah-lot', 'uluwatu', 'jimbaran',
     ];
 
-    public static function eventYears(): array { $y = (int) date('Y'); return [$y - 1, $y, $y + 1]; }
+    public static function eventYears(): array
+    {
+        $y = (int) date('Y');
+
+        return [$y - 1, $y, $y + 1];
+    }
+
     public const MONTHS = [
         'januari', 'februari', 'maret', 'april', 'mei', 'juni',
         'juli', 'agustus', 'september', 'oktober', 'november', 'desember',
     ];
+
     public const SEARCH_OCCASIONS = ['honeymoon', 'family', 'business', 'romantic', 'backpacker', 'budget', 'luxury', 'staycation', 'workation', 'wedding', 'weekend-getaway'];
 
     /** Top 50 cities for combinatorial compare. */
@@ -668,6 +677,7 @@ class SeoData
                 $pairs[] = [$c1, $c2];
             }
         }
+
         return $pairs;
     }
 
@@ -687,11 +697,19 @@ class SeoData
                 }
             }
         }
+
         return $combos;
     }
 
-    public static function cityName(string $slug): ?string { return self::CITIES[$slug] ?? null; }
-    public static function isCity(string $slug): bool { return array_key_exists($slug, self::CITIES); }
+    public static function cityName(string $slug): ?string
+    {
+        return self::CITIES[$slug] ?? null;
+    }
+
+    public static function isCity(string $slug): bool
+    {
+        return array_key_exists($slug, self::CITIES);
+    }
 
     // ═══ URL generators for sitemap ═══
 
@@ -702,10 +720,17 @@ class SeoData
             $urls[] = "/hotels-in-{$city}";
             $urls[] = "/best-time-to-visit-{$city}";
             $urls[] = "/pet-friendly-hotels-{$city}";
-            foreach (self::years() as $y) { $urls[] = "/best-hotels-{$city}-{$y}"; }
-            foreach (self::PRICE_TIERS as $p) { $urls[] = "/hotels-under-{$p}-{$city}"; }
-            foreach (self::NEIGHBORHOODS[$city] ?? [] as $n) { $urls[] = "/hotels-in-{$city}-{$n}"; }
+            foreach (self::years() as $y) {
+                $urls[] = "/best-hotels-{$city}-{$y}";
+            }
+            foreach (self::PRICE_TIERS as $p) {
+                $urls[] = "/hotels-under-{$p}-{$city}";
+            }
+            foreach (self::NEIGHBORHOODS[$city] ?? [] as $n) {
+                $urls[] = "/hotels-in-{$city}-{$n}";
+            }
         }
+
         return $urls;
     }
 
@@ -713,8 +738,11 @@ class SeoData
     {
         $urls = [];
         foreach (self::STARS as $star) {
-            foreach (array_keys(self::CITIES) as $city) { $urls[] = "/hotel-{$star}-bintang-{$city}"; }
+            foreach (array_keys(self::CITIES) as $city) {
+                $urls[] = "/hotel-{$star}-bintang-{$city}";
+            }
         }
+
         return $urls;
     }
 
@@ -725,6 +753,7 @@ class SeoData
             $urls[] = "/hotel-murah-{$city}";
             $urls[] = "/hotel-termurah-di-{$city}";
         }
+
         return $urls;
     }
 
@@ -736,6 +765,7 @@ class SeoData
                 $urls[] = "/hotel-{$city}-di-bawah-{$p}";
             }
         }
+
         return $urls;
     }
 
@@ -745,6 +775,7 @@ class SeoData
         foreach (self::priceRanges() as [$city, $min, $max]) {
             $urls[] = "/hotel-{$city}-{$min}-{$max}-ribu";
         }
+
         return $urls;
     }
 
@@ -755,6 +786,7 @@ class SeoData
             $urls[] = "/hotel-{$city}-dekat-bandara";
             $urls[] = "/hotel-{$city}-dekat-stasiun";
         }
+
         return $urls;
     }
 
@@ -762,8 +794,11 @@ class SeoData
     {
         $urls = [];
         foreach (array_keys(self::CITIES) as $city) {
-            foreach (self::AMENITIES as $a) { $urls[] = "/hotel-{$city}-{$a}"; }
+            foreach (self::AMENITIES as $a) {
+                $urls[] = "/hotel-{$city}-{$a}";
+            }
         }
+
         return $urls;
     }
 
@@ -776,8 +811,11 @@ class SeoData
     {
         $urls = [];
         foreach (['penginapan', 'apartemen', 'villa', 'guesthouse'] as $t) {
-            foreach (array_keys(self::CITIES) as $city) { $urls[] = "/{$t}-{$city}"; }
+            foreach (array_keys(self::CITIES) as $city) {
+                $urls[] = "/{$t}-{$city}";
+            }
         }
+
         return $urls;
     }
 
@@ -788,6 +826,7 @@ class SeoData
             $urls[] = "/tips-memilih-hotel-{$city}";
             $urls[] = "/panduan-wisata-{$city}";
         }
+
         return $urls;
     }
 
@@ -795,8 +834,11 @@ class SeoData
     {
         $urls = [];
         foreach (array_keys(self::CITIES) as $city) {
-            foreach (self::MONTHS as $month) { $urls[] = "/cuaca-{$city}-bulan-{$month}"; }
+            foreach (self::MONTHS as $month) {
+                $urls[] = "/cuaca-{$city}-bulan-{$month}";
+            }
         }
+
         return $urls;
     }
 
@@ -804,8 +846,11 @@ class SeoData
     {
         $urls = [];
         foreach (array_keys(self::CITIES) as $city) {
-            foreach (self::eventYears() as $year) { $urls[] = "/event-{$city}-{$year}"; }
+            foreach (self::eventYears() as $year) {
+                $urls[] = "/event-{$city}-{$year}";
+            }
         }
+
         return $urls;
     }
 
@@ -813,8 +858,11 @@ class SeoData
     {
         $urls = [];
         foreach (self::SEARCH_OCCASIONS as $occ) {
-            foreach (array_keys(self::CITIES) as $city) { $urls[] = "/rekomendasi-hotel-{$occ}-{$city}"; }
+            foreach (array_keys(self::CITIES) as $city) {
+                $urls[] = "/rekomendasi-hotel-{$occ}-{$city}";
+            }
         }
+
         return $urls;
     }
 
@@ -822,8 +870,11 @@ class SeoData
     {
         $urls = [];
         foreach (self::NEIGHBORHOODS as $city => $neighborhoods) {
-            foreach ($neighborhoods as $n) { $urls[] = "/area-{$n}-{$city}"; }
+            foreach ($neighborhoods as $n) {
+                $urls[] = "/area-{$n}-{$city}";
+            }
         }
+
         return $urls;
     }
 
@@ -834,6 +885,7 @@ class SeoData
             $urls[] = "/hotel-populer-di-{$city}";
             $urls[] = "/hotel-baru-di-{$city}";
         }
+
         return $urls;
     }
 
@@ -841,10 +893,11 @@ class SeoData
     {
         $urls = [];
         foreach (self::LANDMARKS as [$slug, , $city]) {
-            $citySlug = \Illuminate\Support\Str::slug($city);
+            $citySlug = Str::slug($city);
             $urls[] = "/things-to-do-near-{$slug}";
             $urls[] = "/{$citySlug}-hotels-near-{$slug}";
         }
+
         return $urls;
     }
 
@@ -853,8 +906,11 @@ class SeoData
         $urls = [];
         foreach (self::CATEGORIES as $c) {
             $urls[] = "/best-{$c}";
-            foreach (self::years() as $y) { $urls[] = "/best-{$c}-{$y}"; }
+            foreach (self::years() as $y) {
+                $urls[] = "/best-{$c}-{$y}";
+            }
         }
+
         return $urls;
     }
 
@@ -862,8 +918,11 @@ class SeoData
     {
         $urls = [];
         foreach (self::VILLA_FEATURES as $f) {
-            foreach (array_keys(self::CITIES) as $loc) { $urls[] = "/villas-with-{$f}-{$loc}"; }
+            foreach (array_keys(self::CITIES) as $loc) {
+                $urls[] = "/villas-with-{$f}-{$loc}";
+            }
         }
+
         return $urls;
     }
 
@@ -878,6 +937,7 @@ class SeoData
                 $urls[] = "/harga-kamar-{$rt}-{$city}";
             }
         }
+
         return $urls;
     }
 
@@ -889,6 +949,7 @@ class SeoData
                 $urls[] = "/hotel-untuk-{$gt}-{$city}";
             }
         }
+
         return $urls;
     }
 
@@ -900,6 +961,7 @@ class SeoData
                 $urls[] = "/hotel-{$city}-musim-{$s}";
             }
         }
+
         return $urls;
     }
 
@@ -911,6 +973,7 @@ class SeoData
                 $urls[] = "/hotel-{$city}-liburan-{$h}";
             }
         }
+
         return $urls;
     }
 
@@ -922,6 +985,7 @@ class SeoData
                 $urls[] = "/hotel-{$city}-jarak-{$d}-km-dari-pusat";
             }
         }
+
         return $urls;
     }
 
@@ -933,6 +997,7 @@ class SeoData
                 $urls[] = "/hotel-dekat-{$lm}-jarak-{$d}";
             }
         }
+
         return $urls;
     }
 
@@ -951,6 +1016,7 @@ class SeoData
                 $urls[] = "/{$prefix}-{$city}-{$suffix}";
             }
         }
+
         return $urls;
     }
 
@@ -960,6 +1026,7 @@ class SeoData
         foreach (self::compareCities() as [$c1, $c2]) {
             $urls[] = "/bandingkan-{$c1}-vs-{$c2}";
         }
+
         return $urls;
     }
 
@@ -967,19 +1034,23 @@ class SeoData
     {
         $urls = [];
         foreach (self::NEIGHBORHOODS as $city => $neighborhoods) {
-            if (count($neighborhoods) < 2) continue;
+            if (count($neighborhoods) < 2) {
+                continue;
+            }
             foreach ($neighborhoods as $i => $n1) {
                 foreach (array_slice($neighborhoods, $i + 1, 4) as $n2) {
                     $urls[] = "/bandingkan-hotel-{$city}-{$n1}-vs-{$n2}";
                 }
             }
         }
+
         return $urls;
     }
 
     public static function years(): array
     {
         $year = (int) date('Y');
+
         return [$year, $year + 1];
     }
 
@@ -1214,6 +1285,7 @@ class SeoData
                 $urls[] = "/{$kw}-{$city}";
             }
         }
+
         return $urls;
     }
 
@@ -1226,6 +1298,7 @@ class SeoData
                 $urls[] = "/harga-{$kw}-mulai-{$p}";
             }
         }
+
         return $urls;
     }
 
@@ -1240,6 +1313,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1264,6 +1338,7 @@ class SeoData
                 $urls[] = "/{$kw}-{$city}-murah";
             }
         }
+
         return $urls;
     }
 
@@ -1276,6 +1351,7 @@ class SeoData
                 $urls[] = "/jasa-pembuatan-{$kw}-{$city}";
             }
         }
+
         return $urls;
     }
 
@@ -1288,6 +1364,7 @@ class SeoData
                 $urls[] = "/paket-{$kw}-{$city}";
             }
         }
+
         return $urls;
     }
 
@@ -1301,6 +1378,7 @@ class SeoData
                 $urls[] = "/{$kw1}-vs-{$kw2}";
             }
         }
+
         return $urls;
     }
 
@@ -1316,6 +1394,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1328,6 +1407,7 @@ class SeoData
                 $urls[] = "/hotel-{$city}-dengan-{$f}";
             }
         }
+
         return $urls;
     }
 
@@ -1340,6 +1420,7 @@ class SeoData
                 $urls[] = "/hotel-{$city}-{$f1}-dan-{$f2}";
             }
         }
+
         return $urls;
     }
 
@@ -1356,6 +1437,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1371,6 +1453,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1384,6 +1467,7 @@ class SeoData
                 $urls[] = "/bandingkan-hotel-{$c1}-vs-{$c2}";
             }
         }
+
         return $urls;
     }
 
@@ -1400,6 +1484,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1412,6 +1497,7 @@ class SeoData
                 $urls[] = "/hotel-di-{$d}-{$city}";
             }
         }
+
         return $urls;
     }
 
@@ -1428,6 +1514,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1443,6 +1530,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1458,6 +1546,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1474,6 +1563,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1482,13 +1572,14 @@ class SeoData
     {
         $urls = [];
         $priceTiers = ['100rb', '150rb', '200rb', '250rb', '300rb', '350rb', '400rb',
-                       '450rb', '500rb', '600rb', '700rb', '750rb', '800rb', '900rb',
-                       '1jt', '1-5jt', '2jt', '2-5jt', '3jt', '5jt', '7-5jt', '10jt'];
+            '450rb', '500rb', '600rb', '700rb', '750rb', '800rb', '900rb',
+            '1jt', '1-5jt', '2jt', '2-5jt', '3jt', '5jt', '7-5jt', '10jt'];
         foreach ($priceTiers as $p) {
             foreach (array_keys(self::CITIES) as $city) {
                 $urls[] = "/hotel-{$city}-harga-{$p}";
             }
         }
+
         return $urls;
     }
 
@@ -1500,12 +1591,13 @@ class SeoData
     {
         $urls = [];
         $topics = ['booking', 'promo', 'refund', 'check-in', 'fasilitas', 'lokasi',
-                   'review', 'cancel', 'upgrade', 'parkir', 'sarapan', 'pemandangan'];
+            'review', 'cancel', 'upgrade', 'parkir', 'sarapan', 'pemandangan'];
         foreach ($topics as $topic) {
             foreach (array_keys(self::CITIES) as $city) {
                 $urls[] = "/tips-{$topic}-hotel-{$city}";
             }
         }
+
         return $urls;
     }
 
@@ -1522,6 +1614,7 @@ class SeoData
                 $urls[] = "/source-code/{$kw}-{$city}";
             }
         }
+
         return $urls;
     }
 
@@ -1546,6 +1639,7 @@ class SeoData
                 $urls[] = "/{$pat}-{$city}-murah";
             }
         }
+
         return $urls;
     }
 
@@ -1574,6 +1668,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1583,14 +1678,14 @@ class SeoData
         $urls = [];
         $allCities = array_keys(self::CITIES);
         $hotelTypes = ['bintang', 'melati', 'butik', 'resor', 'kota', 'pantai',
-                       'gunung', 'bisnis', 'keluarga', 'romantis', 'mewah', 'hemat',
-                       'syariah', 'modern', 'tradisional', 'internasional', 'lokal',
-                       'kapsul', 'hostel', 'motel', 'guest-house', 'homestay', 'villa',
-                       'apartment', 'losmen', 'penginapan'];
+            'gunung', 'bisnis', 'keluarga', 'romantis', 'mewah', 'hemat',
+            'syariah', 'modern', 'tradisional', 'internasional', 'lokal',
+            'kapsul', 'hostel', 'motel', 'guest-house', 'homestay', 'villa',
+            'apartment', 'losmen', 'penginapan'];
         $tripTypes = ['liburan', 'bisnis', 'honeymoon', 'family-trip', 'backpacking',
-                      'staycation', 'workation', 'short-trip', 'long-stay', 'transit',
-                      'weekend', 'study-tour', 'company-gathering', 'reuni', 'outing',
-                      'romantic-getaway', 'adventure', 'spiritual', 'culinary', 'belanja'];
+            'staycation', 'workation', 'short-trip', 'long-stay', 'transit',
+            'weekend', 'study-tour', 'company-gathering', 'reuni', 'outing',
+            'romantic-getaway', 'adventure', 'spiritual', 'culinary', 'belanja'];
 
         foreach ($hotelTypes as $ht) {
             foreach ($allCities as $city) {
@@ -1654,6 +1749,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1673,6 +1769,7 @@ class SeoData
                 $urls[] = "/{$ap}-{$city}";
             }
         }
+
         return $urls;
     }
 
@@ -1682,8 +1779,8 @@ class SeoData
         $urls = [];
         $allCities = array_keys(self::CITIES);
         $pricePoints = ['100rb', '150rb', '200rb', '250rb', '300rb', '350rb', '400rb',
-                        '450rb', '500rb', '600rb', '750rb', '800rb', '1jt', '1-5jt',
-                        '2jt', '2-5jt', '3jt', '5jt'];
+            '450rb', '500rb', '600rb', '750rb', '800rb', '1jt', '1-5jt',
+            '2jt', '2-5jt', '3jt', '5jt'];
         $prefixes = ['hotel-dibawah', 'penginapan-dibawah', 'villa-dibawah', 'apartemen-dibawah'];
         foreach ($prefixes as $p) {
             foreach ($allCities as $city) {
@@ -1692,6 +1789,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1708,6 +1806,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1726,6 +1825,7 @@ class SeoData
                 $urls[] = "/{$label}-{$city}";
             }
         }
+
         return $urls;
     }
 
@@ -1744,6 +1844,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1760,6 +1861,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1777,6 +1879,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1794,6 +1897,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1808,6 +1912,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1822,6 +1927,7 @@ class SeoData
                 $urls[] = "/liburan-{$c1}-atau-{$c2}";
             }
         }
+
         return $urls;
     }
 
@@ -1838,6 +1944,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1851,6 +1958,7 @@ class SeoData
                 $urls[] = "/penginapan-{$occ}-di-{$city}";
             }
         }
+
         return $urls;
     }
 
@@ -1871,6 +1979,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1879,13 +1988,14 @@ class SeoData
     {
         $urls = [];
         $tags = ['murah', 'mahal', 'terbaik', 'termewah', 'terhemat', 'eksklusif',
-                 'premium', 'standar', 'ekonomis', 'nyaman', 'bersih', 'aman'];
+            'premium', 'standar', 'ekonomis', 'nyaman', 'bersih', 'aman'];
         foreach ($tags as $tag) {
             foreach (array_keys(self::CITIES) as $city) {
                 $urls[] = "/hotel-{$tag}-{$city}";
                 $urls[] = "/hotel-{$city}-{$tag}";
             }
         }
+
         return $urls;
     }
 
@@ -1902,6 +2012,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1920,6 +2031,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1928,7 +2040,7 @@ class SeoData
     {
         $urls = [];
         $hotelTypes = ['butik', 'resor', 'bisnis', 'keluarga', 'mewah', 'hemat',
-                       'syariah', 'modern', 'tradisional', 'kapsul', 'hostel', 'motel'];
+            'syariah', 'modern', 'tradisional', 'kapsul', 'hostel', 'motel'];
         foreach ($hotelTypes as $ht) {
             foreach (self::DISTRICTS as $city => $districts) {
                 foreach (array_slice($districts, 0, 5) as $d) {
@@ -1936,6 +2048,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1952,6 +2065,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1964,6 +2078,7 @@ class SeoData
                 $urls[] = "/{$kw}-{$city}";
             }
         }
+
         return $urls;
     }
 
@@ -1979,6 +2094,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -1993,6 +2109,7 @@ class SeoData
                 $urls[] = "/hotel-{$c1}-vs-hotel-{$c2}";
             }
         }
+
         return $urls;
     }
 
@@ -2001,13 +2118,14 @@ class SeoData
     {
         $urls = [];
         $qualities = ['terbaik', 'ternyaman', 'terbersih', 'teraman', 'terlengkap',
-                      'termewah', 'terpopuler', 'terfavorit', 'rekomendasi'];
+            'termewah', 'terpopuler', 'terfavorit', 'rekomendasi'];
         foreach ($qualities as $q) {
             foreach (array_keys(self::CITIES) as $city) {
                 $urls[] = "/hotel-{$q}-{$city}";
                 $urls[] = "/hotel-{$city}-{$q}";
             }
         }
+
         return $urls;
     }
 
@@ -2017,7 +2135,7 @@ class SeoData
         $urls = [];
         $years = self::eventYears();
         $qualities = ['terbaik', 'ternyaman', 'terbersih', 'teraman', 'terlengkap',
-                      'termewah', 'terpopuler', 'terfavorit', 'rekomendasi'];
+            'termewah', 'terpopuler', 'terfavorit', 'rekomendasi'];
         $hotelTypes = ['butik', 'resor', 'bisnis', 'keluarga', 'mewah', 'hemat', 'syariah'];
         foreach ($qualities as $q) {
             foreach ($hotelTypes as $ht) {
@@ -2028,6 +2146,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -2042,6 +2161,7 @@ class SeoData
                 $urls[] = "/hotel-{$city}-fasilitas-{$f}";
             }
         }
+
         return $urls;
     }
 
@@ -2056,6 +2176,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -2071,6 +2192,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -2085,6 +2207,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -2100,6 +2223,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -2115,6 +2239,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -2135,6 +2260,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -2149,6 +2275,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -2165,6 +2292,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 
@@ -2180,6 +2308,7 @@ class SeoData
                 }
             }
         }
+
         return $urls;
     }
 }

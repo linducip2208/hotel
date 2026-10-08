@@ -16,16 +16,17 @@ class StockController extends Controller
             ->where('is_active', true)
             ->orderBy('name')
             ->get();
+
         return response()->json($items);
     }
 
     public function storeItem(Request $request)
     {
         $data = $request->validate([
-            'code'          => 'required|string|max:50',
-            'name'          => 'required|string|max:200',
-            'unit'          => 'required|string|max:20',
-            'category'      => 'nullable|string',
+            'code' => 'required|string|max:50',
+            'name' => 'required|string|max:200',
+            'unit' => 'required|string|max:20',
+            'category' => 'nullable|string',
             'reorder_point' => 'nullable|numeric|min:0',
         ]);
 
@@ -33,8 +34,8 @@ class StockController extends Controller
             ...$data,
             'property_id' => $request->user()->property->id,
             'current_qty' => 0,
-            'average_cost'=> 0,
-            'is_active'   => true,
+            'average_cost' => 0,
+            'is_active' => true,
         ]);
 
         return response()->json($item, 201);
@@ -48,6 +49,7 @@ class StockController extends Controller
             ->with('performedBy')
             ->orderByDesc('moved_at')
             ->paginate(30);
+
         return response()->json($movements);
     }
 
@@ -57,20 +59,20 @@ class StockController extends Controller
         $item = StockItem::where('property_id', $property->id)->findOrFail($itemId);
 
         $data = $request->validate([
-            'type'      => 'required|in:in,out,adjustment,waste',
-            'qty'       => 'required|numeric',
+            'type' => 'required|in:in,out,adjustment,waste',
+            'qty' => 'required|numeric',
             'unit_cost' => 'nullable|numeric|min:0',
-            'notes'     => 'nullable|string',
+            'notes' => 'nullable|string',
         ]);
 
         $movement = StockMovement::create([
-            'stock_item_id'       => $item->id,
-            'type'                => $data['type'],
-            'qty'                 => $data['qty'],
-            'unit_cost'           => $data['unit_cost'] ?? $item->average_cost,
-            'notes'               => $data['notes'] ?? null,
-            'performed_by_user_id'=> $request->user()->id,
-            'moved_at'            => now(),
+            'stock_item_id' => $item->id,
+            'type' => $data['type'],
+            'qty' => $data['qty'],
+            'unit_cost' => $data['unit_cost'] ?? $item->average_cost,
+            'notes' => $data['notes'] ?? null,
+            'performed_by_user_id' => $request->user()->id,
+            'moved_at' => now(),
         ]);
 
         // Recalculate running stock

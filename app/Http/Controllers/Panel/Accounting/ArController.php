@@ -11,12 +11,14 @@ class ArController extends Controller
     {
         $invoices = ArInvoice::where('property_id', app('current_property')->id)
             ->orderByDesc('issued_at')->paginate(50);
+
         return view('panel.accounting.ar.index', compact('invoices'));
     }
 
     public function show(int $id)
     {
         $invoice = ArInvoice::with('lines', 'payments')->findOrFail($id);
+
         return view('panel.accounting.ar.show', compact('invoice'));
     }
 }

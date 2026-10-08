@@ -3,25 +3,27 @@
 namespace App\Services;
 
 use App\Models\Guest;
-use App\Models\GuestProfile;
 use App\Models\GuestPreferenceHistory;
-use App\Models\RoomType;
+use App\Models\GuestProfile;
 use App\Models\Reservation;
-use App\Models\ReservationRoom;
+use App\Models\Room;
+use App\Models\RoomType;
 
 class GuestPreferenceEngine
 {
     public function learnFromReservation(Reservation $reservation): void
     {
         $guest = Guest::find($reservation->primary_guest_id);
-        if (!$guest) return;
+        if (! $guest) {
+            return;
+        }
 
         $preferences = $guest->preferences ?? [];
         $confidence = $guest->preference_confidence ?? [];
 
         foreach ($reservation->reservationRooms as $rr) {
             if ($rr->room_id) {
-                $room = \App\Models\Room::find($rr->room_id);
+                $room = Room::find($rr->room_id);
                 if ($room) {
                     $this->recordPreference(
                         $reservation->property_id,
@@ -96,10 +98,10 @@ class GuestPreferenceEngine
         );
 
         $prefs = $guest->preferences ?? [];
-        if (!empty($prefs['preferred_floor'])) {
+        if (! empty($prefs['preferred_floor'])) {
             $profile->preferred_floor = $prefs['preferred_floor'];
         }
-        if (!empty($prefs['preferred_bed_type'])) {
+        if (! empty($prefs['preferred_bed_type'])) {
             $profile->preferred_bed_type = $prefs['preferred_bed_type'];
         }
 
@@ -109,7 +111,9 @@ class GuestPreferenceEngine
     public function suggestRoomAssignment(Reservation $reservation): array
     {
         $guest = Guest::with('profile')->find($reservation->primary_guest_id);
-        if (!$guest) return [];
+        if (! $guest) {
+            return [];
+        }
 
         $suggestions = [];
         $prefs = $guest->preferences ?? [];
@@ -118,7 +122,7 @@ class GuestPreferenceEngine
         $requestedRoomTypeId = $reservation->reservationRooms()->first()?->room_type_id;
 
         // Preferred floor
-        if (!empty($prefs['preferred_floor']) || $profile?->preferred_floor) {
+        if (! empty($prefs['preferred_floor']) || $profile?->preferred_floor) {
             $floor = $profile?->preferred_floor ?? $prefs['preferred_floor'];
             $suggestions['preferred_floor'] = [
                 'value' => $floor,
@@ -145,7 +149,9 @@ class GuestPreferenceEngine
         $results = ['applied' => [], 'ignored' => []];
 
         $guest = Guest::find($reservation->primary_guest_id);
-        if (!$guest || empty($guest->preference_confidence)) return $results;
+        if (! $guest || empty($guest->preference_confidence)) {
+            return $results;
+        }
 
         foreach ($guest->preference_confidence as $key => $conf) {
             if ($conf >= 0.7) {

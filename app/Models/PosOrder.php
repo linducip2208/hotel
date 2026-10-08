@@ -21,12 +21,43 @@ class PosOrder extends Model
         'paid_total' => 'decimal:2',
     ];
 
-    public function outlet()      { return $this->belongsTo(PosOutlet::class, 'outlet_id'); }
-    public function property()    { return $this->belongsTo(Property::class); }
-    public function table()       { return $this->belongsTo(PosTable::class, 'table_id'); }
-    public function items()       { return $this->hasMany(PosOrderItem::class, 'order_id'); }
-    public function payments()    { return $this->hasMany(PosOrderPayment::class, 'order_id'); }
-    public function folio()       { return $this->belongsTo(Folio::class); }
-    public function reservation() { return $this->belongsTo(Reservation::class); }
-    public function server()      { return $this->belongsTo(User::class, 'server_id'); }
+    public function outlet()
+    {
+        return $this->belongsTo(PosOutlet::class, 'outlet_id');
+    }
+
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function table()
+    {
+        return $this->belongsTo(PosTable::class, 'table_id');
+    }
+
+    public function items()
+    {
+        return $this->hasMany(PosOrderItem::class, 'order_id');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(PosOrderPayment::class, 'order_id');
+    }
+
+    public function folio()
+    {
+        return $this->belongsTo(Folio::class);
+    }
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class);
+    }
+
+    public function server()
+    {
+        return $this->belongsTo(User::class, 'server_id');
+    }
 }

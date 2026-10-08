@@ -26,6 +26,7 @@ class ReviewReplyGenerator
 
         try {
             $r = $adapter->chat($messages, options: ['max_tokens' => 400, 'temperature' => 0.6]);
+
             return ['ok' => $r['ok'] ?? false, 'reply' => $r['content'] ?? null];
         } catch (\Throwable $e) {
             return ['ok' => false, 'error' => $e->getMessage()];

@@ -17,7 +17,18 @@ class IotEnergyLog extends Model
         'log_date' => 'date',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function room() { return $this->belongsTo(Room::class); }
-    public function device() { return $this->belongsTo(IotDevice::class, 'iot_device_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
+
+    public function device()
+    {
+        return $this->belongsTo(IotDevice::class, 'iot_device_id');
+    }
 }

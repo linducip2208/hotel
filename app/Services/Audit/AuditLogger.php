@@ -39,6 +39,7 @@ class AuditLogger
             });
         } catch (\Throwable $e) {
             Log::channel('audit')->error('Audit log failed: '.$e->getMessage());
+
             return null;
         }
     }

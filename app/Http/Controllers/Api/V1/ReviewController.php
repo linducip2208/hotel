@@ -30,6 +30,7 @@ class ReviewController extends Controller
         $property = $request->user()->property;
         $review = Review::where('property_id', $property->id)->findOrFail($id);
         $review->update(['is_published' => true]);
+
         return response()->json($review);
     }
 
@@ -38,6 +39,7 @@ class ReviewController extends Controller
         $property = $request->user()->property;
         $review = Review::where('property_id', $property->id)->findOrFail($id);
         $review->update(['is_published' => false]);
+
         return response()->json($review);
     }
 
@@ -46,6 +48,7 @@ class ReviewController extends Controller
         $property = $request->user()->property;
         $review = Review::where('property_id', $property->id)->findOrFail($id);
         $draft = $this->generator->generateReply($review, $property);
+
         return response()->json(['draft' => $draft]);
     }
 }

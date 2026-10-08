@@ -15,6 +15,13 @@ class OwnerDocument extends Model
         'uploaded_at' => 'datetime',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function owner() { return $this->belongsTo(User::class, 'owner_user_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_user_id');
+    }
 }

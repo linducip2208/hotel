@@ -25,7 +25,7 @@ class LostAndFoundController extends Controller
             ->paginate(25);
 
         $statusCounts = LostAndFound::where('property_id', $propertyId)
-            ->selectRaw("status, count(*) as total")
+            ->selectRaw('status, count(*) as total')
             ->groupBy('status')
             ->pluck('total', 'status');
 
@@ -43,13 +43,13 @@ class LostAndFoundController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'description'    => 'required|string|max:500',
+            'description' => 'required|string|max:500',
             'found_location' => 'nullable|string|max:200',
-            'found_date'     => 'required|date',
-            'found_by'       => 'nullable|string|max:100',
-            'room_id'        => 'nullable|exists:rooms,id',
-            'photo'          => 'nullable|image|max:5120',
-            'notes'          => 'nullable|string|max:1000',
+            'found_date' => 'required|date',
+            'found_by' => 'nullable|string|max:100',
+            'room_id' => 'nullable|exists:rooms,id',
+            'photo' => 'nullable|image|max:5120',
+            'notes' => 'nullable|string|max:1000',
         ]);
 
         if ($request->hasFile('photo')) {
@@ -89,12 +89,12 @@ class LostAndFoundController extends Controller
         $item = LostAndFound::where('property_id', app('current_property')->id)->findOrFail($id);
 
         $data = $request->validate([
-            'description'    => 'required|string|max:500',
+            'description' => 'required|string|max:500',
             'found_location' => 'nullable|string|max:200',
-            'found_date'     => 'required|date',
-            'room_id'        => 'nullable|exists:rooms,id',
-            'photo'          => 'nullable|image|max:5120',
-            'notes'          => 'nullable|string|max:1000',
+            'found_date' => 'required|date',
+            'room_id' => 'nullable|exists:rooms,id',
+            'photo' => 'nullable|image|max:5120',
+            'notes' => 'nullable|string|max:1000',
         ]);
 
         if ($request->hasFile('photo')) {
@@ -116,14 +116,14 @@ class LostAndFoundController extends Controller
 
         $data = $request->validate([
             'claimed_by_guest_id' => 'nullable|exists:guests,id',
-            'notes'               => 'nullable|string|max:500',
+            'notes' => 'nullable|string|max:500',
         ]);
 
         $item->update([
-            'status'              => 'claimed',
+            'status' => 'claimed',
             'claimed_by_guest_id' => $data['claimed_by_guest_id'] ?? null,
-            'claimed_date'        => now(),
-            'notes'               => $data['notes'] ?? $item->notes,
+            'claimed_date' => now(),
+            'notes' => $data['notes'] ?? $item->notes,
         ]);
 
         return back()->with('success', 'Item marked as claimed.');
@@ -134,7 +134,7 @@ class LostAndFoundController extends Controller
         $item = LostAndFound::where('property_id', app('current_property')->id)->findOrFail($id);
 
         $item->update([
-            'status'       => 'returned',
+            'status' => 'returned',
             'claimed_date' => now(),
         ]);
 

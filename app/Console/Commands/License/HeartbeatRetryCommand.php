@@ -9,6 +9,7 @@ use Illuminate\Console\Command;
 class HeartbeatRetryCommand extends Command
 {
     protected $signature = 'license:heartbeat-retry';
+
     protected $description = 'Retry heartbeat if last success > 24h ago';
 
     public function handle(LicenseManager $manager): int
@@ -24,6 +25,7 @@ class HeartbeatRetryCommand extends Command
 
         $result = $manager->heartbeat();
         $this->line($result['ok'] ? 'Heartbeat retry OK.' : 'Heartbeat retry failed.');
+
         return self::SUCCESS;
     }
 }

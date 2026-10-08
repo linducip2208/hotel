@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
-use App\Models\RateScraperTarget;
 use App\Models\RateScraperAlert;
+use App\Models\RateScraperTarget;
 use App\Services\Rms\RateScraperService;
 use Illuminate\Http\Request;
 
@@ -14,7 +14,7 @@ class RateScraperController extends Controller
     {
         $property = app('current_property');
         $targets = RateScraperTarget::where('property_id', $property->id)
-            ->with(['logs' => fn($q) => $q->latest()->limit(5)])
+            ->with(['logs' => fn ($q) => $q->latest()->limit(5)])
             ->get();
         $alerts = RateScraperAlert::where('property_id', $property->id)
             ->where('is_read', false)
@@ -33,6 +33,7 @@ class RateScraperController extends Controller
             'ota_urls' => json_decode($request->input('ota_urls', '{}'), true),
             'room_type_mapping' => json_decode($request->input('room_type_mapping', '{}'), true),
         ]));
+
         return back()->with('success', 'Kompetitor ditambahkan.');
     }
 
@@ -44,12 +45,14 @@ class RateScraperController extends Controller
             $target->ota_urls = json_decode($request->ota_urls, true);
             $target->save();
         }
+
         return back()->with('success', 'Target diupdate.');
     }
 
     public function destroyTarget($id)
     {
         RateScraperTarget::findOrFail($id)->delete();
+
         return back()->with('success', 'Target dihapus.');
     }
 
@@ -57,6 +60,7 @@ class RateScraperController extends Controller
     {
         $target = RateScraperTarget::findOrFail($id);
         $results = $service->scrapeTarget($target);
+
         return back()->with('success', "Berhasil scrape {$target->name}.");
     }
 
@@ -64,7 +68,8 @@ class RateScraperController extends Controller
     {
         $property = app('current_property');
         $results = $service->scrapeAll($property->id);
-        return back()->with('success', "Berhasil scrape " . count($results) . " target.");
+
+        return back()->with('success', 'Berhasil scrape '.count($results).' target.');
     }
 
     public function alerts()
@@ -73,6 +78,7 @@ class RateScraperController extends Controller
         $alerts = RateScraperAlert::where('property_id', $property->id)
             ->latest()
             ->paginate(30);
+
         return view('panel.rms.scraper.alerts', compact('property', 'alerts'));
     }
 
@@ -80,6 +86,7 @@ class RateScraperController extends Controller
     {
         $alert = RateScraperAlert::findOrFail($id);
         $alert->update(['is_read' => true, 'read_at' => now()]);
+
         return response()->json(['ok' => true]);
     }
 }

@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 class LifecycleCommand extends Command
 {
     protected $signature = 'tenant:lifecycle';
+
     protected $description = 'Run tenant lifecycle: trial countdown, suspend past_due, churn after 90d';
 
     public function handle(TenantLifecycleService $svc): int
@@ -16,6 +17,7 @@ class LifecycleCommand extends Command
         foreach ($stats as $k => $v) {
             $this->line("  $k: $v");
         }
+
         return self::SUCCESS;
     }
 }

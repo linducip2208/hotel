@@ -9,7 +9,6 @@ use App\Models\Plan;
 use App\Models\Tenant;
 use App\Services\Tenancy\TenantDatabaseManager;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class TenantController extends Controller
 {
@@ -66,7 +65,7 @@ class TenantController extends Controller
             try {
                 $this->dbManager->provision($tenant);
             } catch (\Throwable $e) {
-                return back()->with('warning', 'Tenant created but provisioning failed: ' . $e->getMessage());
+                return back()->with('warning', 'Tenant created but provisioning failed: '.$e->getMessage());
             }
         }
 
@@ -88,7 +87,7 @@ class TenantController extends Controller
 
         $validated = $request->validate([
             'company_name' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'string', 'alpha_dash', 'max:64', 'unique:tenants,slug,' . $tenant->id],
+            'slug' => ['required', 'string', 'alpha_dash', 'max:64', 'unique:tenants,slug,'.$tenant->id],
             'owner_name' => ['required', 'string', 'max:255'],
             'owner_email' => ['required', 'email', 'max:255'],
             'owner_phone' => ['nullable', 'string', 'max:30'],
@@ -113,7 +112,7 @@ class TenantController extends Controller
             try {
                 $this->dbManager->destroy($tenant);
             } catch (\Throwable $e) {
-                return back()->with('error', 'Failed to destroy database: ' . $e->getMessage());
+                return back()->with('error', 'Failed to destroy database: '.$e->getMessage());
             }
         }
 
@@ -155,10 +154,10 @@ class TenantController extends Controller
         try {
             $this->dbManager->provision($tenant);
         } catch (\Throwable $e) {
-            return back()->with('error', 'Provisioning failed: ' . $e->getMessage());
+            return back()->with('error', 'Provisioning failed: '.$e->getMessage());
         }
 
-        return back()->with('success', 'Tenant database provisioned: ' . $tenant->database_name);
+        return back()->with('success', 'Tenant database provisioned: '.$tenant->database_name);
     }
 
     public function impersonate(string $id)

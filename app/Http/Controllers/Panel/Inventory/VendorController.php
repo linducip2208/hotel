@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Panel\Inventory;
 
 use App\Http\Controllers\Controller;
+use App\Models\PurchaseOrder;
 use App\Models\Vendor;
 use App\Models\VendorContract;
-use App\Models\PurchaseOrder;
 use Illuminate\Http\Request;
 
 class VendorController extends Controller
@@ -17,8 +17,8 @@ class VendorController extends Controller
         if ($search = $request->query('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('contact_person', 'like', "%{$search}%")
-                  ->orWhere('category', 'like', "%{$search}%");
+                    ->orWhere('contact_person', 'like', "%{$search}%")
+                    ->orWhere('category', 'like', "%{$search}%");
             });
         }
 
@@ -142,7 +142,7 @@ class VendorController extends Controller
     public function toggleActive(int $id)
     {
         $vendor = Vendor::where('property_id', app('current_property')->id)->findOrFail($id);
-        $vendor->update(['is_active' => !$vendor->is_active]);
+        $vendor->update(['is_active' => ! $vendor->is_active]);
 
         return back()->with('success', 'Status vendor diubah.');
     }

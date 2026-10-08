@@ -9,6 +9,7 @@ use Illuminate\Console\Command;
 class BootstrapCommand extends Command
 {
     protected $signature = 'license:bootstrap {--force : Regenerate fingerprint and install_id}';
+
     protected $description = 'Generate install_id and device fingerprint for first-time install';
 
     public function handle(FingerprintGenerator $gen): int
@@ -16,10 +17,11 @@ class BootstrapCommand extends Command
         $local = LocalLicense::firstOrCreate(['id' => 1], ['status' => 'unpaired']);
 
         if ($local->fingerprint && ! $this->option('force')) {
-            $this->info("License already bootstrapped.");
+            $this->info('License already bootstrapped.');
             $this->line("  install_id  : {$local->install_id}");
             $this->line("  fingerprint : {$local->fingerprint}");
             $this->line("  status      : {$local->status}");
+
             return self::SUCCESS;
         }
 
@@ -31,11 +33,12 @@ class BootstrapCommand extends Command
             'status' => 'unpaired',
         ])->save();
 
-        $this->info("Bootstrap complete.");
+        $this->info('Bootstrap complete.');
         $this->line("  install_id  : {$installId}");
         $this->line("  fingerprint : {$fingerprint}");
         $this->line('');
-        $this->line("Next: open /setup/wizard in browser to pair license.");
+        $this->line('Next: open /setup/wizard in browser to pair license.');
+
         return self::SUCCESS;
     }
 }

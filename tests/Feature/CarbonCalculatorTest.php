@@ -23,7 +23,7 @@ it('calculates carbon footprint for 2-night stay', function () {
         'reservation_id' => $r->id, 'room_type_id' => $rt->id, 'rate_plan_id' => $rp->id,
         'check_in' => now(), 'check_out' => now()->addDays(2), 'subtotal' => 1000000,
     ]);
-    $cf = (new CarbonCalculator())->estimateForReservation($r->fresh('rooms'));
+    $cf = (new CarbonCalculator)->estimateForReservation($r->fresh('rooms'));
     expect((float) $cf->energy_kwh)->toEqual(60.0);
     expect((float) $cf->co2e_kg)->toBeGreaterThan(50);
 });

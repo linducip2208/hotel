@@ -23,6 +23,7 @@ class SentimentAnalyzer
         try {
             $r = $adapter->chat($messages, options: ['max_tokens' => 5, 'temperature' => 0]);
             $reply = strtolower(trim($r['content'] ?? 'neutral'));
+
             return in_array($reply, ['positive', 'neutral', 'negative']) ? $reply : 'neutral';
         } catch (\Throwable $e) {
             return 'neutral';

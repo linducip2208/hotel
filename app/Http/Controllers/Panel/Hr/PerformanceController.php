@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Panel\Hr;
 
 use App\Http\Controllers\Controller;
-use App\Models\PerformanceReview;
+use App\Models\AttendanceLog;
 use App\Models\Employee;
+use App\Models\PerformanceReview;
 use Illuminate\Http\Request;
 
 final class PerformanceController extends Controller
@@ -79,11 +80,11 @@ final class PerformanceController extends Controller
         $employee = Employee::findOrFail($request->input('employee_id'));
         $start = now()->subMonths(6);
 
-        $attendanceCount = \App\Models\AttendanceLog::where('employee_id', $employee->id)
+        $attendanceCount = AttendanceLog::where('employee_id', $employee->id)
             ->where('date', '>=', $start)->count();
-        $presentCount = \App\Models\AttendanceLog::where('employee_id', $employee->id)
+        $presentCount = AttendanceLog::where('employee_id', $employee->id)
             ->where('date', '>=', $start)->where('status', 'present')->count();
-        $lateCount = \App\Models\AttendanceLog::where('employee_id', $employee->id)
+        $lateCount = AttendanceLog::where('employee_id', $employee->id)
             ->where('date', '>=', $start)->where('status', 'late')->count();
 
         $attendanceScore = $attendanceCount > 0 ? round(($presentCount / $attendanceCount) * 5, 1) : 3;
@@ -93,7 +94,7 @@ final class PerformanceController extends Controller
 
         return response()->json([
             'employee' => $employee->full_name,
-            'period' => $start->toDateString() . ' to ' . now()->toDateString(),
+            'period' => $start->toDateString().' to '.now()->toDateString(),
             'scores' => [
                 'attendance' => $attendanceScore,
                 'punctuality' => $punctualityScore,
@@ -133,6 +134,7 @@ final class PerformanceController extends Controller
         ]);
 
         $review->update($data);
+
         return redirect()->route('panel.hr.performance.index')->with('success', 'Review updated.');
     }
 
@@ -140,6 +142,7 @@ final class PerformanceController extends Controller
     {
         $review = PerformanceReview::where('property_id', app('current_property')->id)->findOrFail($id);
         $review->delete();
+
         return redirect()->route('panel.hr.performance.index')->with('success', 'Review deleted.');
     }
 

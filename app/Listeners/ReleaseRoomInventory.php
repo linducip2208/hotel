@@ -20,8 +20,8 @@ final class ReleaseRoomInventory implements ShouldQueue
         ReservationRoom::where('reservation_id', $reservation->id)
             ->whereNotIn('status', ['cancelled', 'released'])
             ->update([
-                'status'       => 'released',
-                'released_at'  => now(),
+                'status' => 'released',
+                'released_at' => now(),
             ]);
     }
 }

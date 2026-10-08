@@ -31,15 +31,17 @@ class ParityController extends Controller
     public function checkNow(Request $request)
     {
         $property = $request->user()->property;
-        $count    = $this->monitor->checkAndAlert($property);
+        $count = $this->monitor->checkAndAlert($property);
+
         return response()->json(['alerts_created' => $count]);
     }
 
     public function acknowledge(Request $request, int $id)
     {
         $property = $request->user()->property;
-        $alert    = ChannelParityAlert::where('property_id', $property->id)->findOrFail($id);
+        $alert = ChannelParityAlert::where('property_id', $property->id)->findOrFail($id);
         $this->monitor->acknowledge($alert, $request->user()->id, $request->input('notes'));
+
         return response()->json($alert->fresh());
     }
 
@@ -47,12 +49,13 @@ class ParityController extends Controller
     {
         $request->validate([
             'action' => 'required|string|max:500',
-            'notes'  => 'nullable|string|max:1000',
+            'notes' => 'nullable|string|max:1000',
         ]);
 
         $property = $request->user()->property;
-        $alert    = ChannelParityAlert::where('property_id', $property->id)->findOrFail($id);
+        $alert = ChannelParityAlert::where('property_id', $property->id)->findOrFail($id);
         $this->monitor->resolve($alert, $request->user()->id, $request->action, $request->notes);
+
         return response()->json($alert->fresh());
     }
 }

@@ -13,12 +13,14 @@ class LicenseController extends Controller
     {
         $local = LocalLicense::current();
         $status = $manager->status();
+
         return view('panel.settings.license', compact('local', 'status'));
     }
 
     public function refresh(LicenseManager $manager)
     {
         $manager->heartbeat();
+
         return back();
     }
 

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Panel\Marketing;
 
 use App\Http\Controllers\Controller;
-use App\Models\Property;
 use App\Services\Marketing\WhatsAppBlastService;
 use Illuminate\Http\Request;
 
@@ -26,6 +25,7 @@ class WhatsAppBlastController extends Controller
             'Halo {name}, kami rindu Anda! Sudah {stays} kali menginap bersama kami. Ada penawaran spesial untuk tamu setia.',
             'Selamat {name}! Anda terpilih mendapat voucher spa gratis saat menginap berikutnya. Info lengkap hubungi kami.',
         ];
+
         return view('panel.marketing.whatsapp-blast', compact('property', 'provider', 'segments', 'templates'));
     }
 
@@ -33,6 +33,7 @@ class WhatsAppBlastController extends Controller
     {
         $property = app('current_property');
         $guests = $this->blast->getTargetedGuests($property, $request->only(['segment', 'min_stays', 'min_ltv']));
+
         return response()->json(['count' => count($guests), 'guests' => $guests]);
     }
 
@@ -54,6 +55,7 @@ class WhatsAppBlastController extends Controller
     {
         $request->validate(['phone' => 'required|string', 'message' => 'required|string']);
         $result = $this->blast->send($request->phone, $request->message, app('current_property'));
+
         return back()->with($result['status'] === 'ok' ? 'success' : 'error', $result['message'] ?? 'Terjadi kesalahan.');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\AbandonedCart;
 use App\Models\NotificationLog;
+use App\Services\Integrations\ProviderRegistry;
 use App\Services\Notifications\NotificationDispatcher;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -18,6 +19,7 @@ class SendAbandonedCartReminderJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 3;
+
     public int $backoff = 60;
 
     public function __construct(
@@ -45,7 +47,7 @@ class SendAbandonedCartReminderJob implements ShouldQueue
         $html = $this->buildEmailHtml($recoveryUrl);
 
         try {
-            $adapter = app(\App\Services\Integrations\ProviderRegistry::class)
+            $adapter = app(ProviderRegistry::class)
                 ->forFeature(null, 'mail_transactional');
 
             if ($adapter) {
@@ -75,7 +77,7 @@ class SendAbandonedCartReminderJob implements ShouldQueue
         foreach ($items as $item) {
             $label = $item['name'] ?? $item['room_type'] ?? 'Room';
             $price = $item['price'] ?? $item['total_price'] ?? 0;
-            $itemsHtml .= "<li>{$label} — Rp " . number_format((float) $price, 0, ',', '.') . "</li>";
+            $itemsHtml .= "<li>{$label} — Rp ".number_format((float) $price, 0, ',', '.').'</li>';
         }
 
         return <<<HTML

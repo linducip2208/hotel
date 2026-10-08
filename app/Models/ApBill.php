@@ -24,8 +24,23 @@ class ApBill extends Model
         'balance' => 'decimal:2',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function supplier() { return $this->belongsTo(ApSupplier::class, 'supplier_id'); }
-    public function lines() { return $this->hasMany(ApBillLine::class, 'bill_id'); }
-    public function payments() { return $this->hasMany(ApPayment::class, 'bill_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(ApSupplier::class, 'supplier_id');
+    }
+
+    public function lines()
+    {
+        return $this->hasMany(ApBillLine::class, 'bill_id');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(ApPayment::class, 'bill_id');
+    }
 }

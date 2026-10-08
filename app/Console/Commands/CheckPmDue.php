@@ -10,6 +10,7 @@ use Illuminate\Console\Command;
 class CheckPmDue extends Command
 {
     protected $signature = 'pm:check-due';
+
     protected $description = 'Periksa jadwal preventive maintenance yang overdue dan kirim notifikasi';
 
     public function handle(PmService $svc): int

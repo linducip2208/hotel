@@ -18,6 +18,7 @@ class NightAuditController extends Controller
         $audits = NightAudit::where('property_id', $property->id)
             ->orderByDesc('audit_date')
             ->paginate(30);
+
         return response()->json($audits);
     }
 
@@ -26,6 +27,7 @@ class NightAuditController extends Controller
         $request->validate(['date' => 'required|date_format:Y-m-d']);
         $property = $request->user()->property;
         $audit = $this->svc->run($property, new DateTime($request->date), $request->user()->id);
+
         return response()->json($audit, 201);
     }
 
@@ -33,6 +35,7 @@ class NightAuditController extends Controller
     {
         $property = $request->user()->property;
         $audit = NightAudit::where('property_id', $property->id)->findOrFail($id);
+
         return response()->json($audit);
     }
 }

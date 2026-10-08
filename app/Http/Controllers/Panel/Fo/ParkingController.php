@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Panel\Fo;
 
 use App\Http\Controllers\Controller;
+use App\Models\Folio;
 use App\Models\Guest;
 use App\Models\ParkingRecord;
-use App\Models\ParkingSlot;
 use App\Models\Reservation;
 use App\Services\Fo\ParkingService;
 use Illuminate\Http\Request;
@@ -64,10 +64,11 @@ class ParkingController extends Controller
         $service->checkOut($record->id);
 
         if ($request->has('folio_id') && $record->total_charge > 0) {
-            $folio = \App\Models\Folio::where('property_id', app('current_property')->id)
+            $folio = Folio::where('property_id', app('current_property')->id)
                 ->find($request->folio_id);
             if ($folio) {
                 $service->chargeToFolio($record, $folio);
+
                 return back()->with('success', 'Kendaraan keluar dan biaya dibebankan ke folio.');
             }
         }

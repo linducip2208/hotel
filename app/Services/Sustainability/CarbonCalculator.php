@@ -9,8 +9,11 @@ class CarbonCalculator
 {
     // Indonesia grid emission factor ~0.85 kg CO2e/kWh (2024 estimate)
     public const KWH_PER_ROOM_NIGHT = 30;
+
     public const WATER_LITERS_PER_NIGHT = 250;
+
     public const WASTE_KG_PER_NIGHT = 1.2;
+
     public const GRID_CO2_FACTOR = 0.85;
 
     public function estimateForReservation(Reservation $r): CarbonFootprint

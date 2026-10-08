@@ -15,7 +15,18 @@ class IotCommand extends Model
         'payload' => 'array',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function device() { return $this->belongsTo(IotDevice::class, 'iot_device_id'); }
-    public function triggeredByUser() { return $this->belongsTo(User::class, 'triggered_by_user_id'); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function device()
+    {
+        return $this->belongsTo(IotDevice::class, 'iot_device_id');
+    }
+
+    public function triggeredByUser()
+    {
+        return $this->belongsTo(User::class, 'triggered_by_user_id');
+    }
 }

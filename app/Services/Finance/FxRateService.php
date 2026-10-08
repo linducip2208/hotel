@@ -19,7 +19,7 @@ class FxRateService
 
     public function fetchLive(string $base = 'IDR'): array
     {
-        return Cache::remember('fx_rates_' . $base, 3600, function () use ($base) {
+        return Cache::remember('fx_rates_'.$base, 3600, function () use ($base) {
             try {
                 $resp = $this->http->get("https://open.er-api.com/v6/latest/{$base}");
                 $data = json_decode((string) $resp->getBody(), true);
@@ -44,6 +44,7 @@ class FxRateService
                 return $rates;
             } catch (\Exception $e) {
                 \Log::error("FX rate fetch failed: {$e->getMessage()}");
+
                 return [];
             }
         });
@@ -53,6 +54,7 @@ class FxRateService
     {
         $rates = $this->fetchLive($from);
         $rate = $rates[$to] ?? 1;
+
         return round($amount * $rate, 2);
     }
 
@@ -70,6 +72,7 @@ class FxRateService
                 'base' => $base,
             ];
         }
+
         return $card;
     }
 

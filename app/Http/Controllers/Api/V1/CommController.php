@@ -31,6 +31,7 @@ class CommController extends Controller
         $thread = MessageThread::where('property_id', $this->property()->id)
             ->with('messages', 'guest')
             ->findOrFail($id);
+
         return response()->json($thread);
     }
 
@@ -41,6 +42,7 @@ class CommController extends Controller
         ]);
 
         $thread = MessageThread::where('property_id', $this->property()->id)->findOrFail($id);
+
         return response()->json($svc->reply($thread, $validated['body'], $request->user()?->id), 201);
     }
 
@@ -48,8 +50,8 @@ class CommController extends Controller
     {
         $validated = $request->validate([
             'channel' => 'required|in:email,whatsapp,sms,web_chat,ota_message',
-            'from'    => 'required|string|max:100',
-            'body'    => 'required|string',
+            'from' => 'required|string|max:100',
+            'body' => 'required|string',
             'context' => 'nullable|array',
         ]);
 

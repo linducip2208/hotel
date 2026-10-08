@@ -32,15 +32,15 @@ final class SendWelcomeMessage implements ShouldQueue
         $dispatcher->welcomeGuest($guest);
 
         NotificationLog::create([
-            'property_id'     => $guest->property_id,
-            'channel'         => 'mail',
-            'event'           => 'welcome_guest',
-            'recipient'       => $guest->email,
+            'property_id' => $guest->property_id,
+            'channel' => 'mail',
+            'event' => 'welcome_guest',
+            'recipient' => $guest->email,
             'notifiable_type' => get_class($guest),
-            'notifiable_id'   => $guest->id,
-            'status'          => 'sent',
+            'notifiable_id' => $guest->id,
+            'status' => 'sent',
             'idempotency_key' => $key,
-            'sent_at'         => now(),
+            'sent_at' => now(),
         ]);
     }
 }

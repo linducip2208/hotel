@@ -3,8 +3,6 @@
 namespace App\Services\Hk;
 
 use App\Models\LostFoundItem;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class LostFoundService
@@ -17,8 +15,8 @@ class LostFoundService
             ->when($filters['category'] ?? null, fn ($q, $c) => $q->where('category', $c))
             ->when($filters['search'] ?? null, fn ($q, $t) => $q->where(function ($qq) use ($t) {
                 $qq->where('name', 'like', "%{$t}%")
-                   ->orWhere('item_number', 'like', "%{$t}%")
-                   ->orWhere('location_found', 'like', "%{$t}%");
+                    ->orWhere('item_number', 'like', "%{$t}%")
+                    ->orWhere('location_found', 'like', "%{$t}%");
             }))
             ->when($filters['date_from'] ?? null, fn ($q, $d) => $q->whereDate('found_at', '>=', $d))
             ->when($filters['date_to'] ?? null, fn ($q, $d) => $q->whereDate('found_at', '<=', $d))
@@ -29,7 +27,7 @@ class LostFoundService
     public function statusCounts(int $propertyId): array
     {
         return LostFoundItem::where('property_id', $propertyId)
-            ->selectRaw("status, count(*) as total")
+            ->selectRaw('status, count(*) as total')
             ->groupBy('status')
             ->pluck('total', 'status')
             ->toArray();
@@ -41,7 +39,7 @@ class LostFoundService
         $data['found_by_user_id'] = $userId;
         $data['item_number'] = LostFoundItem::generateItemNumber();
 
-        if (!empty($data['photos_upload'])) {
+        if (! empty($data['photos_upload'])) {
             $paths = [];
             foreach ($data['photos_upload'] as $file) {
                 $paths[] = $file->store('lost-found', 'public');
@@ -57,7 +55,7 @@ class LostFoundService
     {
         $item = LostFoundItem::where('property_id', $propertyId)->findOrFail($id);
 
-        if (!empty($data['photos_upload'])) {
+        if (! empty($data['photos_upload'])) {
             $paths = $data['photos'] ?? [];
             foreach ($data['photos_upload'] as $file) {
                 $paths[] = $file->store('lost-found', 'public');
@@ -67,6 +65,7 @@ class LostFoundService
         unset($data['photos_upload']);
 
         $item->update($data);
+
         return $item;
     }
 
@@ -74,11 +73,12 @@ class LostFoundService
     {
         $item = LostFoundItem::where('property_id', $propertyId)->findOrFail($id);
         $item->update([
-            'status'               => 'claimed',
-            'claimed_at'           => now(),
-            'claimed_by_guest_id'  => $data['claimed_by_guest_id'] ?? null,
-            'claim_verified_by'    => $data['claim_verified_by'] ?? null,
+            'status' => 'claimed',
+            'claimed_at' => now(),
+            'claimed_by_guest_id' => $data['claimed_by_guest_id'] ?? null,
+            'claim_verified_by' => $data['claim_verified_by'] ?? null,
         ]);
+
         return $item;
     }
 
@@ -86,6 +86,7 @@ class LostFoundService
     {
         $item = LostFoundItem::where('property_id', $propertyId)->findOrFail($id);
         $item->update(['status' => 'disposed']);
+
         return $item;
     }
 
@@ -93,6 +94,7 @@ class LostFoundService
     {
         $item = LostFoundItem::where('property_id', $propertyId)->findOrFail($id);
         $item->update(['status' => 'donated']);
+
         return $item;
     }
 
@@ -100,9 +102,10 @@ class LostFoundService
     {
         $item = LostFoundItem::where('property_id', $propertyId)->findOrFail($id);
         $item->update([
-            'status'     => 'returned',
+            'status' => 'returned',
             'claimed_at' => now(),
         ]);
+
         return $item;
     }
 
@@ -116,9 +119,10 @@ class LostFoundService
     public function getExpiringItems(int $propertyId, int $days = 7): array
     {
         $threshold = now()->addDays($days);
+
         return LostFoundItem::where('property_id', $propertyId)
             ->where('status', 'found')
-            ->whereRaw("DATE_ADD(found_at, INTERVAL disposal_days DAY) <= ?", [$threshold])
+            ->whereRaw('DATE_ADD(found_at, INTERVAL disposal_days DAY) <= ?', [$threshold])
             ->orderBy('found_at')
             ->get()
             ->toArray();

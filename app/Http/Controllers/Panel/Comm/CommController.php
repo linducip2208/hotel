@@ -15,6 +15,7 @@ class CommController extends Controller
     {
         $threads = MessageThread::where('property_id', app('current_property')->id)
             ->with('guest')->orderByDesc('last_message_at')->paginate(50);
+
         return view('panel.comm.inbox', compact('threads'));
     }
 
@@ -22,6 +23,7 @@ class CommController extends Controller
     {
         $thread = MessageThread::with('messages', 'guest', 'reservation')->findOrFail($id);
         $thread->update(['unread_count' => 0]);
+
         return view('panel.comm.thread', compact('thread'));
     }
 
@@ -29,12 +31,14 @@ class CommController extends Controller
     {
         $thread = MessageThread::where('property_id', app('current_property')->id)->findOrFail($id);
         $svc->reply($thread, $request->input('body'), $request->user()?->id);
+
         return back();
     }
 
     public function templates()
     {
         $templates = MessageTemplate::where('property_id', app('current_property')->id)->paginate(50);
+
         return view('panel.comm.templates', compact('templates'));
     }
 
@@ -48,6 +52,7 @@ class CommController extends Controller
             'locale' => 'nullable|string',
         ]);
         MessageTemplate::create($data + ['property_id' => app('current_property')->id]);
+
         return back();
     }
 
@@ -56,6 +61,7 @@ class CommController extends Controller
         $campaigns = MarketingCampaign::where('property_id', app('current_property')->id)
             ->with('template')->orderByDesc('id')->paginate(50);
         $templates = MessageTemplate::where('property_id', app('current_property')->id)->where('is_active', true)->get();
+
         return view('panel.comm.campaigns', compact('campaigns', 'templates'));
     }
 
@@ -68,6 +74,7 @@ class CommController extends Controller
             'scheduled_at' => 'nullable|date',
         ]);
         MarketingCampaign::create($data + ['property_id' => app('current_property')->id, 'status' => 'draft']);
+
         return back();
     }
 }

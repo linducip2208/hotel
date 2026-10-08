@@ -34,6 +34,7 @@ class MrrCalculator
         $churned = Tenant::whereNotNull('churned_at')
             ->where('churned_at', '>=', now()->subDays($daysWindow))->count();
         $total = Tenant::whereIn('status', ['active', 'churned', 'suspended'])->count();
+
         return $total > 0 ? round(($churned / $total) * 100, 2) : 0;
     }
 }

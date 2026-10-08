@@ -2,11 +2,12 @@
 
 namespace App\Services\Revenue;
 
+use App\Models\Folio;
+use App\Models\FolioCharge;
 use App\Models\Package;
-use App\Models\PackageItem;
+use App\Models\PackageCustomization;
 use App\Models\Reservation;
 use App\Models\ReservationPackage;
-use App\Models\PackageCustomization;
 
 class DynamicPackageService
 {
@@ -77,11 +78,11 @@ class DynamicPackageService
 
         // Add to folio if active
         if ($reservation->status === 'checked_in') {
-            $folio = \App\Models\Folio::where('reservation_id', $reservationId)
+            $folio = Folio::where('reservation_id', $reservationId)
                 ->where('status', 'open')
                 ->first();
             if ($folio) {
-                \App\Models\FolioCharge::create([
+                FolioCharge::create([
                     'folio_id' => $folio->id,
                     'property_id' => $reservation->property_id,
                     'category' => 'package',
@@ -101,7 +102,9 @@ class DynamicPackageService
     public function getDynamicOptions(int $packageId): array
     {
         $package = Package::findOrFail($packageId);
-        if (!$package->is_dynamic) return [];
+        if (! $package->is_dynamic) {
+            return [];
+        }
 
         return $package->dynamic_options ?? [];
     }
@@ -111,7 +114,7 @@ class DynamicPackageService
         $package = Package::findOrFail($packageId);
         $base = (float) $package->base_price;
 
-        if (!$package->is_dynamic) {
+        if (! $package->is_dynamic) {
             return ['min' => $base, 'max' => $base];
         }
 

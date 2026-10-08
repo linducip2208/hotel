@@ -17,7 +17,18 @@ class RestaurantTable extends Model
         'min_spend' => 'decimal:2',
     ];
 
-    public function property() { return $this->belongsTo(Property::class); }
-    public function outlet() { return $this->belongsTo(PosOutlet::class); }
-    public function reservations() { return $this->hasMany(TableReservation::class); }
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function outlet()
+    {
+        return $this->belongsTo(PosOutlet::class);
+    }
+
+    public function reservations()
+    {
+        return $this->hasMany(TableReservation::class);
+    }
 }

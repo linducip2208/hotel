@@ -15,7 +15,7 @@ class PpmScheduler
             ->where('is_active', true)
             ->whereDate('next_due_at', '<=', now()->addDays($daysAhead)->toDateString())
             ->each(function (PreventiveMaintenanceSchedule $s) use (&$count) {
-                $svc = new WorkOrderService();
+                $svc = new WorkOrderService;
                 $svc->create([
                     'property_id' => $s->property_id,
                     'asset_id' => $s->asset_id,
@@ -29,6 +29,7 @@ class PpmScheduler
                 ]);
                 $count++;
             });
+
         return $count;
     }
 
